@@ -1,42 +1,41 @@
-// function parseArticles (node) {
-//     const childNodes = [].slice.call(node.childNodes);
-//
-//     // if (childNodes.length > 0) {
-//     //
-//     // }
-//     return childNodes.map(childNode => childNode.textContent.trim()).filter(text => text.length > 10);
-//     // const silblingsNodes = this.toArray(node.childNodes)
-// }
-//
-// function findLinks (node) {
-//
-//     if (node.nodeName.toUpperCase() === 'A') {
-//         return node.getAttribute('href');
-//     }
-//
-//     const childNodes = [].slice.call(node.childNodes);
-//
-//     if (childNodes.length === 0) {
-//         return [];
-//     }
-//     // is a a element
-//     // or dig deeper
-//
-//     return childNodes.map(childNode => findLinks(childNode)).filter(link => link.length).reduce((previousValue, currentValue, accumulator) => {
-//
-//     });
-//     // const silblingsNodes = this.toArray(node.childNodes)
-// }
-
 function findCandidatesFromRoot () {
-    const candidates = [];
-    findCandidates(document.getElementsByTagName('body').item(0), candidates, []);
-    console.log(candidates);
+    return findCandidates(document.getElementsByTagName('body').item(0), []);
 }
 
-function hasFeaturesOfArticle (node) {
-
+function scoreCandidateGroups(candidateGroups) {
+    return candidateGroups.map(candidates => {
+        return {
+            size: candidates
+                .map(candidate => {
+                    return candidate.offsetWidth * candidate.offsetHeight
+                })
+                .reduce((sum, area) => {return sum + area}, 0) / candidates.length,
+            candidates: candidates
+        }
+    });
 }
+
+function findArticles () {
+    const candidateGroups = findCandidatesFromRoot();
+
+    const scoredCandidateGroups = scoreCandidateGroups(candidateGroups)
+        .filter(group => group.size > 0)
+        .sort(group => group.size);
+
+    if (scoredCandidateGroups.length > 1) {
+        console.warn(`found ${scoredCandidateGroups.length} candidates, taking largest`)
+    }
+
+    if (scoredCandidateGroups.length === 0) {
+        console.warn(`found ${scoredCandidateGroups.length} candidates, aborting`);
+        return;
+    }
+
+    const candidate = scoredCandidateGroups[0];
+//    generate models
+//    score models
+}
+
 
 function extractHrefs (node, maxDepth) {
     if (maxDepth === 0) {
@@ -80,9 +79,9 @@ function findTextNodes (node) {
 
 }
 
-function findCandidates (node, candidateGroups, ignoredNodes) {
+function findCandidates (node, ignoredNodes) {
     // self
-
+    const canditateGroup = [];
     if (looksLikeAnArticle(node) && ignoredNodes.indexOf(node) === -1) {
 
         const neighbors = [].slice.call(node.parentNode.children).filter(sibling => sibling !== node);
@@ -93,24 +92,21 @@ function findCandidates (node, candidateGroups, ignoredNodes) {
         const articleNeighbors = similarNeighbors.filter(neighbor => looksLikeAnArticle(neighbor));
 
         if (articleNeighbors.length > 2) {
-            console.log('candidate', node);
-            candidateGroups.push([node, ...articleNeighbors]);
+            canditateGroup.push([node, ...articleNeighbors]);
             ignoredNodes.push(node);
             ignoredNodes.push(...articleNeighbors);
         }
     }
 
     // children
-    [].slice.call(node.children).map(childNode => findCandidates(childNode, candidateGroups, ignoredNodes));
+    const childCanditateGroup = [].slice.call(node.children)
+        .map(childNode => findCandidates(childNode, ignoredNodes))
+        .flat(1);
+
+    childCanditateGroup.push(...canditateGroup);
+    return childCanditateGroup;
 }
 
-function findSameSiblings() {
-
-}
-
-function findTexts() {
-
-}
 
 function scoreModels() {
 
