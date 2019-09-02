@@ -1,11 +1,15 @@
+function getDocumentRoot() {
+    return document.getElementsByTagName('body').item(0);
+}
+
 function findCandidatesFromRoot () {
-    return findCandidates(document.getElementsByTagName('body').item(0), []);
+    return findCandidates(getDocumentRoot(), []);
 }
 
 function scoreCandidateGroups(candidateGroups) {
     return candidateGroups.map(candidates => {
         return {
-            score: candidates
+            size: candidates
                 .map(candidate => {
                     return candidate.offsetWidth * candidate.offsetHeight
                 })
@@ -15,66 +19,103 @@ function scoreCandidateGroups(candidateGroups) {
     });
 }
 
+function addPath(nodes, context) {
+    return nodes.map(linkNode => {
+        return {
+            node: linkNode,
+            path: getRelativePath(linkNode, context)
+        }
+    });
+}
+
+function findBestLink(firstCandidateNode, otherCandidateNodes) {
+    const linkNodes = addPath(findHrefNodes(firstCandidateNode), firstCandidateNode);
+
+    // fink link that exists in every candidate
+    return linkNodes
+        .find(linkNode => {
+            return otherCandidateNodes.every(candidateNode => candidateNode.querySelector(linkNode.path));
+        });
+}
+
+function findBestTitle(firstCandidatesTextNodes, otherCandidateNodes) {
+    const titleNodes = firstCandidatesTextNodes;
+
+    return titleNodes
+        .find(titleNode => {
+            return otherCandidateNodes.every(candidateNode => candidateNode.querySelector(titleNode.path));
+        });
+}
+
+function findBestDescription(firstCandidatesTextNodes, otherCandidateNodes) {
+    const descriptionNodes = firstCandidatesTextNodes;
+
+    return descriptionNodes
+        .find(descriptionNode => {
+            return otherCandidateNodes.every(candidateNode => candidateNode.querySelector(descriptionNode.path));
+        });
+}
+
 function findArticles () {
     const candidateGroups = findCandidatesFromRoot();
+    console.log(`Found ${candidateGroups.length} groups of candidates`, candidateGroups);
 
     const scoredCandidateGroups = scoreCandidateGroups(candidateGroups)
-        .filter(group => group.score > 0)
-        .sort(group => group.score);
+        .filter(group => group.size > 0)
+        .sort(group => group.size);
 
-    if (scoredCandidateGroups.length > 1) {
-        console.warn(`found ${scoredCandidateGroups.length} candidates, taking largest`)
-    }
+    console.log(`Filtered ${candidateGroups.length - scoredCandidateGroups.length} hidden groups, remaining ${scoredCandidateGroups.length}`, scoredCandidateGroups);
 
     if (scoredCandidateGroups.length === 0) {
         console.warn(`found ${scoredCandidateGroups.length} candidates, aborting`);
         return;
     }
+    if (scoredCandidateGroups.length > 1) {
+        console.warn(`found ${scoredCandidateGroups.length} candidates, taking largest`)
+    }
 
-    const candidateGroup = scoredCandidateGroups[0];
-//    generate models
+    const candidateGroup = scoredCandidateGroups[0]; // todo should iterate through all
 
     const firstCandidateNode = candidateGroup.candidates[0];
+    const pathToArticle = getRelativePath(firstCandidateNode, getDocumentRoot());
 
-// find link
-    const linkNodes = findHrefNodes(firstCandidateNode)
-        .map(node => {
-            return {size: node.offsetHeight * node.offsetWidth, node};
-        })
-        .map((wrapper => wrapper.node));
+    console.log(`Testing candidate group with path ${pathToArticle}`);
 
     // test path in other candidates
     const otherCandidateNodes = candidateGroup.candidates.filter(candidateNode => candidateNode !== firstCandidateNode);
 
-    // fink link that exists in every candidate
-    const bestLink = linkNodes.map(linkNode => {
-            return {
-                node: linkNode,
-                path: getRelativePath(linkNode, firstCandidateNode)
-            }
-        })
-        .find(link => {
-        return otherCandidateNodes.every(candidateNode => candidateNode.querySelector(link.path));
-        });
+    // find link
+    const bestLink = findBestLink(firstCandidateNode, otherCandidateNodes);
 
-    console.log('bestLink', bestLink);
+    console.log('Found link', bestLink);
 
     // find title
-    // const textNodes = findTextNodes(firstCandidateNode);
-    // console.log(textNodes);
+    const textNodes = addPath(findTextNodes(firstCandidateNode), firstCandidateNode);
 
-    // find desc that is if possible not title
+    if (textNodes.length === 0) {
+        throw new Error('No text nodes found');
+    }
 
+    const bestTitle = findBestTitle(textNodes, otherCandidateNodes);
+    const bestDescription = findBestDescription(textNodes, otherCandidateNodes);
 
-//    score models
-    return candidateGroup;
+    return {
+        article: pathToArticle,
+        title: bestTitle.path,
+        description: bestDescription.path,
+        link: bestLink.path
+    };
 }
 
 function getRelativePath(node, context) {
-    let path = node.tagName;
+    let path = node.tagName; // tagName for text nodes is undefined
     while(node.parentNode !== context) {
         node = node.parentNode;
-        path = `${node.tagName}>${path}`;
+        if (typeof(path) === 'undefined') {
+            path = node.tagName;
+        } else {
+            path = `${node.tagName}>${path}`;
+        }
     }
     return path;
 }
@@ -157,19 +198,4 @@ function findCandidates (node, ignoredNodes) {
 
     childCanditateGroup.push(...canditateGroup);
     return childCanditateGroup;
-}
-
-
-function scoreModels() {
-
-    // hard
-    minTextNodeCount = 1
-    minLinkNodeCount = 1
-
-    // soft
-    titleLen = 10;
-    bodyLen = 100;
-    linksCount = 1;
-
-
 }
