@@ -5,7 +5,7 @@ function findCandidatesFromRoot () {
 function scoreCandidateGroups(candidateGroups) {
     return candidateGroups.map(candidates => {
         return {
-            size: candidates
+            score: candidates
                 .map(candidate => {
                     return candidate.offsetWidth * candidate.offsetHeight
                 })
@@ -19,8 +19,8 @@ function findArticles () {
     const candidateGroups = findCandidatesFromRoot();
 
     const scoredCandidateGroups = scoreCandidateGroups(candidateGroups)
-        .filter(group => group.size > 0)
-        .sort(group => group.size);
+        .filter(group => group.score > 0)
+        .sort(group => group.score);
 
     if (scoredCandidateGroups.length > 1) {
         console.warn(`found ${scoredCandidateGroups.length} candidates, taking largest`)
@@ -31,11 +31,63 @@ function findArticles () {
         return;
     }
 
-    const candidate = scoredCandidateGroups[0];
+    const candidateGroup = scoredCandidateGroups[0];
 //    generate models
+
+    const firstCandidateNode = candidateGroup.candidates[0];
+
+// find link
+    const linkNodes = findHrefNodes(firstCandidateNode)
+        .map(node => {
+            return {size: node.offsetHeight * node.offsetWidth, node};
+        })
+        .map((wrapper => wrapper.node));
+
+    // test path in other candidates
+    const otherCandidateNodes = candidateGroup.candidates.filter(candidateNode => candidateNode !== firstCandidateNode);
+
+    // fink link that exists in every candidate
+    const bestLink = linkNodes.map(linkNode => {
+            return {
+                node: linkNode,
+                path: getRelativePath(linkNode, firstCandidateNode)
+            }
+        })
+        .find(link => {
+        return otherCandidateNodes.every(candidateNode => candidateNode.querySelector(link.path));
+        });
+
+    console.log('bestLink', bestLink);
+
+    // find title
+    // const textNodes = findTextNodes(firstCandidateNode);
+    // console.log(textNodes);
+
+    // find desc that is if possible not title
+
+
 //    score models
+    return candidateGroup;
 }
 
+function getRelativePath(node, context) {
+    let path = node.tagName;
+    while(node.parentNode !== context) {
+        node = node.parentNode;
+        path = `${node.tagName}>${path}`;
+    }
+    return path;
+}
+
+
+function findHrefNodes (node) {
+    if (node.tagName === 'A' && node.getAttribute('href')) {
+        return node;
+    }
+    return [].slice.call(node.children)
+        .map(childNode => findHrefNodes(childNode))
+        .flat(1);
+}
 
 function extractHrefs (node, maxDepth) {
     if (maxDepth === 0) {
