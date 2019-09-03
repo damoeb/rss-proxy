@@ -18,26 +18,11 @@ module.exports = function (document, console) {
     return findCandidates(getDocumentRoot(), []);
   }
 
-  // function scoreCandidateGroups(candidateGroups) {
-  //   return candidateGroups.map(candidates => {
-  //     return {
-  //       size: candidates
-  //         .map(candidate => {
-  //           return candidate.offsetWidth * candidate.offsetHeight
-  //         })
-  //         .reduce((sum, area) => {
-  //           return sum + area
-  //         }, 0) / candidates.length,
-  //       candidates: candidates
-  //     }
-  //   });
-  // }
-
   function addPath(nodes, context) {
-    return nodes.map(linkNode => {
+    return nodes.map(node => {
       return {
-        node: linkNode,
-        path: getRelativePath(linkNode, context)
+        node: node,
+        path: getRelativePath(node, context)
       }
     });
   }
@@ -47,6 +32,7 @@ module.exports = function (document, console) {
 
     // fink link that exists in every candidate
     return linkNodes
+      .filter(linkNode => linkNode.node.textContent.trim().length > 0)
       .find(linkNode => {
         return otherCandidateNodes.every(candidateNode => candidateNode.querySelector(linkNode.path));
       });
@@ -57,21 +43,77 @@ module.exports = function (document, console) {
 
     return titleNodes
       .find(titleNode => {
-        return otherCandidateNodes.every(candidateNode => candidateNode.querySelector(titleNode.path));
+        console.log(`Testing title-node ${titleNode.path}`);
+        if (titleNode.path) {
+          return otherCandidateNodes.every(candidateNode => candidateNode.querySelector(titleNode.path));
+        } else {
+          console.log('title-node is candiate');
+          return true;
+        }
       });
   }
 
   function findBestDescription(textNodes, otherCandidateNodes) {
-    const descriptionNodes = textNodes.length > 1 ? textNodes.filter((val, index) => index !== 0) : textNodes;
+    // todo description can be a markup node,
+    const descriptionNodes = textNodes.length > 1 ? textNodes.filter((val, index) => index !== 0).concat([textNodes[0]]) : textNodes;
     return descriptionNodes
       .find(descriptionNode => {
-        return otherCandidateNodes.every(candidateNode => candidateNode.querySelector(descriptionNode.path));
+        if (descriptionNode.path) {
+          console.log(`Testing description-node ${descriptionNode.path}`);
+          return otherCandidateNodes.every(candidateNode => candidateNode.querySelector(descriptionNode.path));
+        } else {
+          console.log('description-node is candiate');
+          return true;
+        }
       });
   }
 
-  function mergeRules(list) {
+  this.mergePaths = (paths) => {
+    return paths.map(path => path.split('>')).reduce((unifiedPath, path) => {
+      if (unifiedPath.length === 0) {
+        return path;
+      }
+
+      const newUnifiedPath = [];
+      for(let i=0; i<Math.min(unifiedPath.length, path.length); i++) {
+        if (unifiedPath[i] === path[i]) {
+          newUnifiedPath.push(path[i]);
+        } else {
+          newUnifiedPath.push('')
+        }
+      }
+
+      return newUnifiedPath;
+
+    }, []).join(' ');
+  };
+
+  this.mergeRules = (list) => {
     // todo merge article paths, by removing classNames if feature-paths match
-    return list;
+    return list.map(articleRule => {
+      const {rules} = articleRule;
+      articleRule.id = [rules.articleTagName, rules.title, rules.description, rules.link].join('/');
+      return articleRule;
+    }).reduce((mergedList, articleRule) => {
+
+      const mergedRule = mergedList.find(mergedRule => mergedRule.id === articleRule.id);
+      if (mergedRule) {
+        const {rules, stats} = mergedRule;
+        // todo fix rules
+        rules.article = this.mergePaths([rules.article, articleRule.rules.article]);
+        stats.articleCount = stats.articleCount + articleRule.stats.articleCount;
+      } else {
+        delete articleRule.id;
+        mergedList.push(articleRule);
+      }
+
+      return mergedList;
+    }, []);
+  };
+
+  function getScore(stats) {
+    // todo implement
+    return stats.articleCount;
   }
 
   this.findArticleRules = () => {
@@ -86,7 +128,7 @@ module.exports = function (document, console) {
       console.warn(`found ${candidateGroups.length} candidates, taking largest`)
     }
 
-    return mergeRules(
+    return this.mergeRules(
       candidateGroups
         .map(candidates => {
 
@@ -116,6 +158,7 @@ module.exports = function (document, console) {
           return {
             rules: {
               article: pathToArticle,
+              articleTagName: firstCandidateNode.tagName,
               title: bestTitle.path,
               description: bestDescription.path,
               link: bestLink.path
@@ -126,16 +169,19 @@ module.exports = function (document, console) {
           };
         }))
       .map(candidateGroup => {
+        const stats = {
+          articleCount: candidateGroup.stats.articleCount,
+          avgTitleWordCount: avgWordCount(selectAll(getDocumentRoot(), candidateGroup.rules.article + '>' + candidateGroup.rules.title)),
+          avgDescriptionWordCount: avgWordCount(selectAll(getDocumentRoot(), candidateGroup.rules.article + '>' + candidateGroup.rules.description)),
+          titleDiffersDescription: candidateGroup.rules.title !== candidateGroup.rules.description
+        };
         return {
           rules: candidateGroup.rules,
-          stats: {
-            articleCount: candidateGroup.stats.articleCount,
-            avgTitleWordCount: avgWordCount(selectAll(getDocumentRoot(), candidateGroup.rules.article + '>' + candidateGroup.rules.title)),
-            avgDescriptionWordCount: avgWordCount(selectAll(getDocumentRoot(), candidateGroup.rules.article + '>' + candidateGroup.rules.description)),
-            titleDiffersDescription: candidateGroup.rules.title !== candidateGroup.rules.description
-          }
+          stats,
+          score: getScore(stats)
         }
-      });
+      })
+      .sort((a, b) => {return b.score - a.score});
   };
 
   function getTagName(node) {
@@ -148,6 +194,7 @@ module.exports = function (document, console) {
   }
 
   function getRelativePath(node, context) {
+    console.log(`getting path of ${node} in ${context}`);
     let path = node.tagName; // tagName for text nodes is undefined
     while (node.parentNode !== context) {
       node = node.parentNode;
@@ -182,7 +229,7 @@ module.exports = function (document, console) {
     const minTitleWordCount = 3;
     const textNodes = [];
 
-    if (node.cloneNode().textContent.trim().split(' ').length > minTitleWordCount) {
+    if (['SCRIPT', 'STYLE'].indexOf(node.tagName) === -1 && node.nodeName !== '#comment' && node.cloneNode().textContent.trim().split(' ').length > minTitleWordCount) {
       textNodes.push(node);
     }
 

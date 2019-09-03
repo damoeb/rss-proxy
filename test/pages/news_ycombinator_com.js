@@ -15,10 +15,12 @@ describe('news_ycombinator_com', () => {
       rules:
         {
           article: 'CENTER>TABLE>TBODY>TR>TD>TABLE.itemlist>TBODY>TR',
+          articleTagName: 'TR',
           title: 'TD.title>A.storylink',
           description: 'TD.title>A.storylink',
           link: 'TD.title>A'
         },
+      score: 30,
       stats:
         {
           articleCount: 30,

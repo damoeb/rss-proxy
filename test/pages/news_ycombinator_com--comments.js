@@ -3,7 +3,7 @@ const testHelper = require('./test-helper');
 
 const Parser = require('../../app/parser');
 
-describe.skip('news_ycombinator_com--comments', () => {
+describe('news_ycombinator_com--comments', () => {
   it('works', () => {
 
     const document = testHelper.getDocumetOfHtmlFile('test/pages/news_ycombinator_com--comments.html');
@@ -12,21 +12,22 @@ describe.skip('news_ycombinator_com--comments', () => {
     const rules = parser.findArticleRules();
 
     expect(rules[0]).to.eql({
-      rules:
-        {
-          article: 'CENTER>TABLE>TBODY>TR>TD>TABLE.itemlist>TBODY>TR',
-          title: 'TD.title>A.storylink',
-          description: 'TD.title>A.storylink',
-          link: 'TD.title>A'
+        rules: {
+          article: 'CENTER>TABLE>TBODY>TR>TD>TABLE.comment-tree>TBODY>TR',
+          articleTagName: 'TR',
+          title: 'TD>TABLE>TBODY>TR>TD.default>DIV.comment>SPAN.commtext',
+          description: 'TD>TABLE>TBODY>TR>TD.default>DIV.comment>SPAN.commtext',
+          link: 'TD>TABLE>TBODY>TR>TD.default>DIV>SPAN.comhead>A'
         },
-      stats:
-        {
+        stats: {
           articleCount: 30,
-          avgTitleWordCount: 7.9,
-          avgDescriptionWordCount: 7.9,
+          avgTitleWordCount: 61.36666666666667,
+          avgDescriptionWordCount: 61.36666666666667,
           titleDiffersDescription: false
-        }
-    });
+        },
+        score: 30
+      }
+    );
 
   });
 });

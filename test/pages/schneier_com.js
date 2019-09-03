@@ -4,12 +4,14 @@ const testHelper = require('./test-helper');
 const Parser = require('../../app/parser');
 
 describe('schneier_com', () => {
-  it.only('works', () => {
+  it.skip('works', () => {
 
     const document = testHelper.getDocumetOfHtmlFile('test/pages/schneier_com.html');
 
     const parser = new Parser(document, testHelper.getMockConsole(true));
     const rules = parser.findArticleRules();
+
+    console.log(rules);
 
     expect(rules[0]).to.eql({
       rules:

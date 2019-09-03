@@ -14,10 +14,12 @@ describe('mozilla-blog', () => {
     expect(rules[0]).to.eql({
       "rules": {
         "article": "DIV.site-wrap>MAIN>DIV.content.posts-grid.hfeed>ARTICLE",
+        articleTagName: "ARTICLE",
         "description": "DIV.entry-summary>P",
         "link": "HEADER.entry-header>A",
         "title": "HEADER.entry-header>A.entry-link>H2.entry-title"
       },
+      score: 12,
       "stats": {
         "articleCount": 12,
         "avgDescriptionWordCount": 33,

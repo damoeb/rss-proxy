@@ -11,23 +11,21 @@ describe('derstandard_at', () => {
     const parser = new Parser(document, testHelper.getMockConsole());
     const rules = parser.findArticleRules();
 
-    // todo wait for merge-function
     expect(rules[0]).to.eql({
-        rules:
-          {
-            article:
-              'HEADER.site--header-next>DIV>SECTION.site-guide-next>DIV.js-site-portal-nav-root>DIV>NAV',
-            title: 'DIV.hud-item>A>P',
-            description: 'DIV.hud-item>A>P',
-            link: 'DIV.hud-item>A'
-          },
-        stats:
-          {
-            articleCount: 4,
-            avgTitleWordCount: 4.8,
-            avgDescriptionWordCount: 4.8,
-            titleDiffersDescription: false
-          }
+        rules: {
+          article: 'MAIN>DIV.layout>SECTION>ARTICLE',
+          articleTagName: 'ARTICLE',
+          title: 'A.teaser-inner>HEADER>H1.teaser-title',
+          description: 'A.teaser-inner>HEADER>P.teaser-subtitle',
+          link: 'A'
+        },
+        stats: {
+          articleCount: 24,
+          avgTitleWordCount: 7.289940828402367,
+          avgDescriptionWordCount: 16.597633136094675,
+          titleDiffersDescription: true
+        },
+        score: 24
       }
     );
 
