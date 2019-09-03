@@ -1,22 +1,12 @@
 const {expect} = require('chai');
 const testHelper = require('./test-helper');
 
-const Parser = require('../app/parser');
-
-if (!Array.prototype.flat) {
-  Object.defineProperty(Array.prototype, 'flat', {
-    value: function (depth = 1) {
-      return this.reduce(function (flat, toFlatten) {
-        return flat.concat((Array.isArray(toFlatten) && (depth > 1)) ? toFlatten.flat(depth - 1) : toFlatten);
-      }, []);
-    }
-  });
-}
+const Parser = require('../../app/parser');
 
 describe('mozilla-blog', () => {
   it('works', () => {
 
-    const document = testHelper.getDocumetOfHtmlFile('test/mozilla-blog.html');
+    const document = testHelper.getDocumetOfHtmlFile('test/pages/mozilla-blog.html');
 
     const parser = new Parser(document, testHelper.getMockConsole());
     const rules = parser.findArticleRules();
