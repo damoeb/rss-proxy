@@ -1,7 +1,9 @@
-module.exports = function(document) {
+module.exports = function (document, console) {
 
   function avgWordCount(nodes) {
-    return nodes.map(node => node.textContent.trim().split(' ').length).reduce((totalWordCount, wordCount) => {return totalWordCount + wordCount}, 0) / nodes.length;
+    return nodes.map(node => node.textContent.trim().split(' ').length).reduce((totalWordCount, wordCount) => {
+      return totalWordCount + wordCount
+    }, 0) / nodes.length;
   }
 
   function selectAll(contextNode, query) {
@@ -16,20 +18,20 @@ module.exports = function(document) {
     return findCandidates(getDocumentRoot(), []);
   }
 
-  function scoreCandidateGroups(candidateGroups) {
-    return candidateGroups.map(candidates => {
-      return {
-        size: candidates
-          .map(candidate => {
-            return candidate.offsetWidth * candidate.offsetHeight
-          })
-          .reduce((sum, area) => {
-            return sum + area
-          }, 0) / candidates.length,
-        candidates: candidates
-      }
-    });
-  }
+  // function scoreCandidateGroups(candidateGroups) {
+  //   return candidateGroups.map(candidates => {
+  //     return {
+  //       size: candidates
+  //         .map(candidate => {
+  //           return candidate.offsetWidth * candidate.offsetHeight
+  //         })
+  //         .reduce((sum, area) => {
+  //           return sum + area
+  //         }, 0) / candidates.length,
+  //       candidates: candidates
+  //     }
+  //   });
+  // }
 
   function addPath(nodes, context) {
     return nodes.map(linkNode => {
@@ -67,75 +69,92 @@ module.exports = function(document) {
       });
   }
 
+  function mergeRules(list) {
+    // todo merge article paths, by removing classNames if feature-paths match
+    return list;
+  }
+
   this.findArticleRules = () => {
     const candidateGroups = findCandidatesFromRoot();
     console.log(`Found ${candidateGroups.length} groups of candidates`, candidateGroups);
 
-    const scoredCandidateGroups = scoreCandidateGroups(candidateGroups)
-      // .filter(group => group.size > 0)
-      .sort(group => (-1) * group.candidates.length);
-
-    console.log(`Filtered ${candidateGroups.length - scoredCandidateGroups.length} hidden groups, remaining ${scoredCandidateGroups.length}`, scoredCandidateGroups);
-
-    if (scoredCandidateGroups.length === 0) {
-      console.warn(`found ${scoredCandidateGroups.length} candidates, aborting`);
+    if (candidateGroups.length === 0) {
+      console.warn(`found ${candidateGroups.length} candidates, aborting`);
       return;
     }
-    if (scoredCandidateGroups.length > 1) {
-      console.warn(`found ${scoredCandidateGroups.length} candidates, taking largest`)
+    if (candidateGroups.length > 1) {
+      console.warn(`found ${candidateGroups.length} candidates, taking largest`)
     }
 
-    return scoredCandidateGroups
-      .map(candidateGroup => {
+    return mergeRules(
+      candidateGroups
+        .map(candidates => {
 
-        const firstCandidateNode = candidateGroup.candidates[0];
-        const pathToArticle = getRelativePath(firstCandidateNode, getDocumentRoot());
+          const firstCandidateNode = candidates[0];
+          const pathToArticle = getRelativePath(firstCandidateNode, getDocumentRoot());
 
-        console.log(`Testing candidate group with path ${pathToArticle}`);
+          console.log(`Testing candidate group with path ${pathToArticle}`);
 
-        // test path in other candidates
-        const otherCandidateNodes = candidateGroup.candidates.filter(candidateNode => candidateNode !== firstCandidateNode);
+          // test path in other candidates
+          const otherCandidateNodes = candidates.filter(candidateNode => candidateNode !== firstCandidateNode);
 
-        // find link
-        const bestLink = findBestLink(firstCandidateNode, otherCandidateNodes);
+          // find link
+          const bestLink = findBestLink(firstCandidateNode, otherCandidateNodes);
 
-        console.log('Found link', bestLink.node.getAttribute('href'));
+          console.log('Found link', bestLink.node.getAttribute('href'));
 
-        // find title
-        const textNodes = addPath(findTextNodes(firstCandidateNode), firstCandidateNode);
+          // find title
+          const textNodes = addPath(findTextNodes(firstCandidateNode), firstCandidateNode);
 
-        if (textNodes.length === 0) {
-          throw new Error('No text nodes found');
-        }
-
-        const bestTitle = findBestTitle(textNodes, otherCandidateNodes);
-        const bestDescription = findBestDescription(textNodes, otherCandidateNodes);
-
-        return {
-          rules: {
-            article: pathToArticle,
-            title: bestTitle.path,
-            description: bestDescription.path,
-            link: bestLink.path
-          },
-          stats: {
-            articleCount: candidateGroup.candidates.length,
-            avgTitleWordCount: avgWordCount(selectAll(getDocumentRoot(), pathToArticle + '>' + bestTitle.path)),
-            avgDescriptionWordCount: avgWordCount(selectAll(getDocumentRoot(), pathToArticle + '>' + bestDescription.path)),
-            titleDiffersDescription: bestTitle.path !== bestDescription.path
+          if (textNodes.length === 0) {
+            throw new Error('No text nodes found');
           }
-        };
+
+          const bestTitle = findBestTitle(textNodes, otherCandidateNodes);
+          const bestDescription = findBestDescription(textNodes, otherCandidateNodes);
+
+          return {
+            rules: {
+              article: pathToArticle,
+              title: bestTitle.path,
+              description: bestDescription.path,
+              link: bestLink.path
+            },
+            stats: {
+              articleCount: candidates.length
+            }
+          };
+        }))
+      .map(candidateGroup => {
+        return {
+          rules: candidateGroup.rules,
+          stats: {
+            articleCount: candidateGroup.stats.articleCount,
+            avgTitleWordCount: avgWordCount(selectAll(getDocumentRoot(), candidateGroup.rules.article + '>' + candidateGroup.rules.title)),
+            avgDescriptionWordCount: avgWordCount(selectAll(getDocumentRoot(), candidateGroup.rules.article + '>' + candidateGroup.rules.description)),
+            titleDiffersDescription: candidateGroup.rules.title !== candidateGroup.rules.description
+          }
+        }
       });
   };
+
+  function getTagName(node) {
+    const classList = Array.from(node.classList)
+      .filter(cn => cn.match('[0-9]+') === null);
+    if (classList.length > 0) {
+      return `${node.tagName}.${classList.join('.')}`;
+    }
+    return node.tagName;
+  }
 
   function getRelativePath(node, context) {
     let path = node.tagName; // tagName for text nodes is undefined
     while (node.parentNode !== context) {
       node = node.parentNode;
       if (typeof (path) === 'undefined') {
-        path = node.tagName;
+        path = getTagName(node);
       } else {
-        path = `${node.tagName}>${path}`;
+        path = `${getTagName(node)}>${path}`;
       }
     }
     return path;
@@ -150,7 +169,7 @@ module.exports = function(document) {
   }
 
   function looksLikeAnArticle(node) {
-    if(node === getDocumentRoot()) {
+    if (node === getDocumentRoot()) {
       return false;
     }
     const hasLinks = findHrefNodes(node).length > 0;

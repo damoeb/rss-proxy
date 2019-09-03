@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="be223c1e-fb57-4edb-9549-acf979246252" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/test-helper.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/derstandard_at.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/derstandard_at.test.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/parser.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/parser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mozilla-blog.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/mozilla-blog.test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/mozilla-blog.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/mozilla-blog.test.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,26 +25,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/parser.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="353">
-              <caret line="124" column="76" selection-start-line="124" selection-start-column="76" selection-end-line="124" selection-end-column="76" />
+            <state>
+              <caret column="43" selection-start-column="43" selection-end-column="43" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/mozilla-blog.test.js">
+        <entry file="file://$PROJECT_DIR$/package.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+            <state relative-caret-position="270">
+              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
+        <entry file="file://$PROJECT_DIR$/test/mozilla-blog.test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="5" selection-start-column="5" selection-end-column="5" />
+            <state relative-caret-position="420">
+              <caret line="28" column="42" lean-forward="true" selection-start-line="28" selection-start-column="42" selection-end-line="28" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -59,8 +61,61 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/mozilla-blog.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-8">
-              <caret line="17" column="39" selection-start-line="17" selection-start-column="39" selection-end-line="17" selection-end-column="39" />
+            <state relative-caret-position="15">
+              <caret line="32" column="5" selection-end-line="1086" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/derstandard_at.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="538">
+              <caret line="4802" selection-start-line="4802" selection-end-line="4802" />
+              <folding>
+                <element signature="e#1434#1439#0" expanded="true" />
+                <element signature="n#style#0;n#iframe#0;n#noscript#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="e#38321#38329#0" expanded="true" />
+                <element signature="e#42368#42373#0" expanded="true" />
+                <element signature="e#43280#43285#0" expanded="true" />
+                <element signature="e#50095#50100#0" expanded="true" />
+                <element signature="e#50282#50287#0" expanded="true" />
+                <element signature="e#50477#50482#0" expanded="true" />
+                <element signature="e#50593#50598#0" expanded="true" />
+                <element signature="n#style#0;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#path#0;n#symbol#0;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#1;n#path#0;n#symbol#0;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#path#0;n#symbol#1;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#g#0;n#symbol#2;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#path#0;n#symbol#3;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#path#0;n#symbol#4;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#path#0;n#symbol#5;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="e#172980#172985#0" expanded="true" />
+                <element signature="e#194517#194522#0" expanded="true" />
+                <element signature="e#229877#229882#0" expanded="true" />
+                <element signature="e#230017#230022#0" expanded="true" />
+                <element signature="e#230092#230097#0" expanded="true" />
+                <element signature="e#230177#230182#0" expanded="true" />
+                <element signature="e#238143#238148#0" expanded="true" />
+                <element signature="e#274277#274282#0" expanded="true" />
+                <element signature="e#274370#274375#0" expanded="true" />
+                <element signature="e#280571#280576#0" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#section#0;n#section#14;n#div#0;n#main#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="e#285799#285804#0" expanded="true" />
+                <element signature="e#285978#285983#0" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#section#0;n#section#15;n#div#0;n#main#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="e#320526#320531#0" expanded="true" />
+                <element signature="e#326848#326853#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/derstandard_at.test.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -92,6 +147,8 @@
       <find>textNodes</find>
       <find>uniquer</find>
       <find>uniq</find>
+      <find>findBestTitle</find>
+      <find>findArticleRules</find>
     </findStrings>
     <replaceStrings>
       <replace>score</replace>
@@ -110,10 +167,14 @@
         <option value="$PROJECT_DIR$/app/Mozilla Blog.html" />
         <option value="$PROJECT_DIR$/.editorconfig" />
         <option value="$PROJECT_DIR$/test/mozilla-blog.js" />
-        <option value="$PROJECT_DIR$/app/parser.js" />
         <option value="$PROJECT_DIR$/test/test-helper.js" />
-        <option value="$PROJECT_DIR$/test/mozilla-blog.test.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/test/mozilla-blog.html" />
+        <option value="$PROJECT_DIR$/test/derstandard_at.html" />
+        <option value="$PROJECT_DIR$/test/derstandard_at.test.js" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/test/mozilla-blog.test.js" />
+        <option value="$PROJECT_DIR$/app/parser.js" />
       </list>
     </option>
   </component>
@@ -162,12 +223,15 @@
     <property name="editor.config.ad.shown" value="true" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/.nvm/versions/node/v10.15.3/bin" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/test" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/test" />
       <recent name="$PROJECT_DIR$/app" />
@@ -209,7 +273,7 @@
       <workItem from="1566795554777" duration="2402000" />
       <workItem from="1567018607051" duration="833000" />
       <workItem from="1567089826625" duration="1076000" />
-      <workItem from="1567161416459" duration="32136000" />
+      <workItem from="1567161416459" duration="35661000" />
     </task>
     <task id="LOCAL-00001" summary="find articles">
       <created>1567323868854</created>
@@ -246,17 +310,23 @@
       <option name="project" value="LOCAL" />
       <updated>1567450181384</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="first test works">
+      <created>1567503664160</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1567503664160</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="38580000" />
+    <option name="totallyTimeSpent" value="42105000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-4" y="0" width="1928" height="1048" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25825346" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.25825346" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -273,7 +343,7 @@
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.32899022" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="11" visible="true" weight="0.32899022" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="11" visible="true" weight="0.32899022" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -323,30 +393,14 @@
     <MESSAGE value="get title/desc" />
     <MESSAGE value="reformatting" />
     <MESSAGE value="prepare test setup" />
-    <option name="LAST_COMMIT_MESSAGE" value="prepare test setup" />
+    <MESSAGE value="first test works" />
+    <option name="LAST_COMMIT_MESSAGE" value="first test works" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/.editorconfig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" column="2" selection-start-line="12" selection-start-column="2" selection-end-line="12" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/mozilla-blog.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-8">
-          <caret line="17" column="39" selection-start-line="17" selection-start-column="39" selection-end-line="17" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/parser.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="124" column="76" selection-start-line="124" selection-start-column="76" selection-end-line="124" selection-end-column="76" />
         </state>
       </provider>
     </entry>
@@ -357,17 +411,87 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/mozilla-blog.test.js">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+        <state relative-caret-position="15">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/test/mozilla-blog.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="32" column="5" selection-end-line="1086" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/derstandard_at.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="538">
+          <caret line="4802" selection-start-line="4802" selection-end-line="4802" />
+          <folding>
+            <element signature="e#1434#1439#0" expanded="true" />
+            <element signature="n#style#0;n#iframe#0;n#noscript#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="e#38321#38329#0" expanded="true" />
+            <element signature="e#42368#42373#0" expanded="true" />
+            <element signature="e#43280#43285#0" expanded="true" />
+            <element signature="e#50095#50100#0" expanded="true" />
+            <element signature="e#50282#50287#0" expanded="true" />
+            <element signature="e#50477#50482#0" expanded="true" />
+            <element signature="e#50593#50598#0" expanded="true" />
+            <element signature="n#style#0;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#0;n#symbol#0;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#1;n#path#0;n#symbol#0;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#0;n#symbol#1;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#g#0;n#symbol#2;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#0;n#symbol#3;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#0;n#symbol#4;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#path#0;n#symbol#5;n#svg#0;n#section#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="e#172980#172985#0" expanded="true" />
+            <element signature="e#194517#194522#0" expanded="true" />
+            <element signature="e#229877#229882#0" expanded="true" />
+            <element signature="e#230017#230022#0" expanded="true" />
+            <element signature="e#230092#230097#0" expanded="true" />
+            <element signature="e#230177#230182#0" expanded="true" />
+            <element signature="e#238143#238148#0" expanded="true" />
+            <element signature="e#274277#274282#0" expanded="true" />
+            <element signature="e#274370#274375#0" expanded="true" />
+            <element signature="e#280571#280576#0" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#section#0;n#section#14;n#div#0;n#main#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="e#285799#285804#0" expanded="true" />
+            <element signature="e#285978#285983#0" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#section#0;n#section#15;n#div#0;n#main#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="e#320526#320531#0" expanded="true" />
+            <element signature="e#326848#326853#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/derstandard_at.test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/parser.js">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret column="5" selection-start-column="5" selection-end-column="5" />
+          <caret column="43" selection-start-column="43" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/mozilla-blog.test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="28" column="42" lean-forward="true" selection-start-line="28" selection-start-column="42" selection-end-line="28" selection-end-column="42" />
         </state>
       </provider>
     </entry>

@@ -14,30 +14,28 @@ if (!Array.prototype.flat) {
 }
 
 describe('mozilla-blog', () => {
-  describe('#indexOf()', () => {
-    it('should return -1 when the value is not present', () => {
+  it('works', () => {
 
-      const document = testHelper.getDocumetOfHtmlFile('test/mozilla-blog.html');
+    const document = testHelper.getDocumetOfHtmlFile('test/mozilla-blog.html');
 
-      const parser = new Parser(document);
-      const rules = parser.findArticleRules();
+    const parser = new Parser(document, testHelper.getMockConsole());
+    const rules = parser.findArticleRules();
 
-      expect(rules[0]).to.eql({
-        "rules": {
-          "article": "DIV>MAIN>DIV>ARTICLE",
-          "description": "DIV>P",
-          "link": "HEADER>A",
-          "title": "HEADER>A>H2"
-        },
-        "stats": {
-          "articleCount": 12,
-          "avgDescriptionWordCount": 33,
-          "avgTitleWordCount": 10.833333333333334,
-          "titleDiffersDescription": true
-        }
-        }
-      );
+    expect(rules[0]).to.eql({
+      "rules": {
+        "article": "DIV.site-wrap>MAIN>DIV.content.posts-grid.hfeed>ARTICLE",
+        "description": "DIV.entry-summary>P",
+        "link": "HEADER.entry-header>A",
+        "title": "HEADER.entry-header>A.entry-link>H2.entry-title"
+      },
+      "stats": {
+        "articleCount": 12,
+        "avgDescriptionWordCount": 33,
+        "avgTitleWordCount": 10.833333333333334,
+        "titleDiffersDescription": true
+      }
+      }
+    );
 
-    });
   });
 });
