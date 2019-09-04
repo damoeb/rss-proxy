@@ -69,7 +69,7 @@ module.exports = function (document, console) {
   }
 
   function findBestDescription(textNodes, otherCandidateNodes) {
-    // todo description can be a markup node,
+    // todo description is the entire candiate-content, just without the title
     const descriptionNodes = textNodes.length > 1 ? textNodes.filter((val, index) => index !== 0).concat([textNodes[0]]) : textNodes;
     return descriptionNodes
       .find(descriptionNode => {
@@ -105,25 +105,31 @@ module.exports = function (document, console) {
 
   this.mergeRules = (list) => {
     // todo merge article paths, by removing classNames if feature-paths match
-    return list.map(articleRule => {
-      const {rules} = articleRule;
-      articleRule.id = [rules.articleTagName, rules.title, rules.description, rules.link].join('/');
-      return articleRule;
-    }).reduce((mergedList, articleRule) => {
+    return list
+      .map(articleRule => {
+        const {rules} = articleRule;
+        articleRule.id = [rules.articleTagName, rules.title, rules.description, rules.link].join('/');
+        return articleRule;
+      })
+      .reduce((mergedList, articleRule) => {
 
-      const mergedRule = mergedList.find(mergedRule => mergedRule.id === articleRule.id);
-      if (mergedRule) {
-        const {rules, stats} = mergedRule;
-        // todo fix rules
-        rules.article = this.mergePaths([rules.article, articleRule.rules.article]);
-        stats.articleCount = stats.articleCount + articleRule.stats.articleCount;
-      } else {
-        delete articleRule.id;
-        mergedList.push(articleRule);
-      }
+        const mergedRule = mergedList.find(mergedRule => mergedRule.id === articleRule.id);
+        if (mergedRule) {
+          const {rules, stats} = mergedRule;
+          // todo fix rules
+          rules.article = this.mergePaths([rules.article, articleRule.rules.article]);
+          stats.articleCount = stats.articleCount + articleRule.stats.articleCount;
 
-      return mergedList;
-    }, []);
+          mergedRule.mergeCount += 1;
+
+        } else {
+          articleRule.mergeCount = 1;
+          // delete articleRule.id;
+          mergedList.push(articleRule);
+        }
+
+        return mergedList;
+      }, []);
   };
 
   function getScore(stats) {

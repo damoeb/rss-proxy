@@ -24,10 +24,10 @@ describe('parser', () => {
       'MAIN>DIV.layout>SECTION.theme-gesundheit>ARTICLE',
       'MAIN>DIV.layout>SECTION.theme-videosection>ARTICLE',
       'MAIN>DIV.layout>SECTION.theme-zukunft>ARTICLE']);
-    expect(mergedPath).to.eql('MAIN DIV.layout  ARTICLE');
+    expect(mergedPath).to.eql('MAIN>DIV>SECTION>ARTICLE');
   });
 
-  it.skip('#mergeRules', () => {
+  it.only('#mergeRules', () => {
     const merged = parser.mergeRules(unmergedRules);
     console.log(merged);
   });
