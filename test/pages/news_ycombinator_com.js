@@ -12,7 +12,7 @@ describe('news_ycombinator_com', () => {
     parser = new Parser(document, testHelper.getMockConsole());
   });
 
-  it('works', () => {
+  it('#findArticleRules works', () => {
 
     const rules = parser.findArticleRules();
 

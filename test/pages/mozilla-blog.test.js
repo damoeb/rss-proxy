@@ -12,7 +12,7 @@ describe('mozilla-blog', () => {
     parser = new Parser(document, testHelper.getMockConsole());
   });
 
-  it('works', () => {
+  it('#findArticleRules works', () => {
 
     const rules = parser.findArticleRules();
 

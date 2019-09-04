@@ -4,7 +4,7 @@ const testHelper = require('./test-helper');
 const Parser = require('../../app/parser');
 
 describe('news_ycombinator_com--comments', () => {
-  it('works', () => {
+  it('#findArticleRules works', () => {
 
     const document = testHelper.getDocumetOfHtmlFile('test/pages/news_ycombinator_com--comments.html');
 

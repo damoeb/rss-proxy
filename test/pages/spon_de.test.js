@@ -4,7 +4,7 @@ const testHelper = require('./test-helper');
 const Parser = require('../../app/parser');
 
 describe('spon_de', () => {
-  it.skip('works', () => {
+  it.skip('#findArticleRules works', () => {
 
     const document = testHelper.getDocumetOfHtmlFile('test/pages/spon_de.html');
 
