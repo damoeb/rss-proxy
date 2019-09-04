@@ -7,7 +7,7 @@ module.exports = function (document, console) {
   }
 
   function selectAll(contextNode, query) {
-    return [].slice.call(contextNode.querySelectorAll(query));
+    return Array.from(contextNode.querySelectorAll(query));
   }
 
   function getDocumentRoot() {
@@ -17,6 +17,21 @@ module.exports = function (document, console) {
   function findCandidatesFromRoot() {
     return findCandidates(getDocumentRoot(), []);
   }
+
+  this.findArticles = () => {
+    const rules = this.findArticleRules();
+
+    const bestRule = rules[0].rules;
+
+    return Array.from(document.querySelectorAll(bestRule.article)).map((articleNode) => {
+      return {
+        title: selectAll(articleNode, bestRule.title)[0].textContent,
+        // todo absolute link
+        link: selectAll(articleNode, bestRule.link)[0].getAttribute('href'),
+        description: selectAll(articleNode, bestRule.description)[0].textContent
+      }
+    });
+  };
 
   function addPath(nodes, context) {
     return nodes.map(node => {
@@ -142,6 +157,10 @@ module.exports = function (document, console) {
 
           // find link
           const bestLink = findBestLink(firstCandidateNode, otherCandidateNodes);
+          if (!bestLink) {
+            // throw new Error('No text nodes found');
+            return undefined;
+          }
 
           console.log('Found link', bestLink.node.getAttribute('href'));
 
@@ -149,11 +168,17 @@ module.exports = function (document, console) {
           const textNodes = addPath(findTextNodes(firstCandidateNode), firstCandidateNode);
 
           if (textNodes.length === 0) {
-            throw new Error('No text nodes found');
+            // throw new Error('No text nodes found');
+            return undefined;
           }
 
           const bestTitle = findBestTitle(textNodes, otherCandidateNodes);
           const bestDescription = findBestDescription(textNodes, otherCandidateNodes);
+
+          if (!bestTitle) {
+            // throw new Error('No title node found');
+            return undefined;
+          }
 
           return {
             rules: {
@@ -167,7 +192,8 @@ module.exports = function (document, console) {
               articleCount: candidates.length
             }
           };
-        }))
+        })
+        .filter(candidateGroup => candidateGroup))
       .map(candidateGroup => {
         const stats = {
           articleCount: candidateGroup.stats.articleCount,

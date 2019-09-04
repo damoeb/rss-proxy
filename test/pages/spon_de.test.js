@@ -11,7 +11,7 @@ describe('spon_de', () => {
     const parser = new Parser(document, testHelper.getMockConsole());
     const rules = parser.findArticleRules();
 
-    console.log(rules[0]);
+    // console.log(rules[0]);
     expect(rules[0]).to.eql({
         rules:
           {
