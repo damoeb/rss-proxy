@@ -12,6 +12,10 @@ describe('derstandard_at', () => {
      parser = new Parser(document, testHelper.getMockConsole());
   });
 
+  it.skip('#findArticleRules works', () => {
+    parser.findCandidatesFromRoot();
+  });
+
   it('#findArticleRules works', () => {
 
     const rules = parser.findArticleRules();

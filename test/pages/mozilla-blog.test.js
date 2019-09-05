@@ -16,8 +16,6 @@ describe('mozilla-blog', () => {
 
     const rules = parser.findArticleRules();
 
-    console.log(rules[0]);
-
     expect(rules[0]).to.eql({
         rules: {
           article: 'DIV.site-wrap>ASIDE.can-stick>DIV.content>DIV.categories>DIV.category>UL.category-posts>LI',

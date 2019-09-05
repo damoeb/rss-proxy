@@ -19,9 +19,9 @@ module.exports = function (document, console) {
     return document.getElementsByTagName('body').item(0);
   }
 
-  function findCandidatesFromRoot() {
+  this.findCandidatesFromRoot = () => {
     return findCandidates(getDocumentRoot(), []);
-  }
+  };
 
   this.findArticles = () => {
     const rules = this.findArticleRules();
@@ -170,7 +170,7 @@ module.exports = function (document, console) {
   // }
 
   this.findArticleRules = () => {
-    const candidateGroups = findCandidatesFromRoot();
+    const candidateGroups = this.findCandidatesFromRoot();
     console.log(`Found ${candidateGroups.length} groups of candidates`, candidateGroups);
 
     if (candidateGroups.length === 0) {
@@ -273,20 +273,24 @@ module.exports = function (document, console) {
     return path;
   }
 
-  function findHrefNodes(node) {
+  function findHrefNodes(node, depth) {
+    if (depth === 0) {
+      return [];
+    }
     if (node.tagName === 'A' && node.getAttribute('href')) {
       return node;
     }
-    return [].slice.call(node.children)
-      .map(childNode => findHrefNodes(childNode)).flat(1);
+    return Array.from(node.children).map(childNode => findHrefNodes(childNode, depth-1))
+      .flat(1);
   }
 
   function looksLikeAnArticle(node) {
     if (node === getDocumentRoot()) {
       return false;
     }
-    const hasLinks = findHrefNodes(node).length > 0;
-    const hasTexts = findTextNodes(node).length > 0;
+    const maxDepth = 7;
+    const hasLinks = findHrefNodes(node, maxDepth).length > 0;
+    const hasTexts = findTextNodes(node, maxDepth).length > 0;
     return hasLinks && hasTexts;
   }
 
@@ -299,7 +303,7 @@ module.exports = function (document, console) {
       textNodes.push(node);
     }
 
-    const childTextNodes = [].slice.call(node.childNodes)
+    const childTextNodes = Array.from(node.childNodes)
       .map(childNode => findTextNodes(childNode))
       .flat(1);
 
@@ -312,9 +316,9 @@ module.exports = function (document, console) {
   function findCandidates(node, ignoredNodes) {
     // self
     const canditateGroup = [];
-    if (looksLikeAnArticle(node) && ignoredNodes.indexOf(node) === -1) {
+    if (ignoredNodes.indexOf(node) === -1 && looksLikeAnArticle(node)) {
 
-      const neighbors = [].slice.call(node.parentNode.children).filter(sibling => sibling !== node);
+      const neighbors = Array.from(node.parentNode.children).filter(sibling => sibling !== node);
 
       const similarNeighbors = neighbors.filter(neighbor => neighbor.tagName === node.tagName
         && neighbor.attributes.length === node.attributes.length);
@@ -329,7 +333,7 @@ module.exports = function (document, console) {
     }
 
     // children
-    const childCanditateGroup = [].slice.call(node.children)
+    const childCanditateGroup = Array.from(node.children)
       .map(childNode => findCandidates(childNode, ignoredNodes))
       .flat(1);
 

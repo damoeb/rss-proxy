@@ -40,8 +40,6 @@ describe('news_ycombinator_com', () => {
 
     const articles = parser.findArticles();
 
-    console.log(articles);
-
     expect(articles[0]).to.eql({
       title: 'Off-Grid, Solar-Powered, Zero-Battery Refrigerator',
       link: 'https://www.notechmagazine.com/2019/09/off-grid-solar-powered-zero-battery-refrigerator.html',
