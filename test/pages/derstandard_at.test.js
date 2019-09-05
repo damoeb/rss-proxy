@@ -25,12 +25,12 @@ describe('derstandard_at', () => {
           link: 'A'
         },
         stats: {
-          articleCount: 24,
+          articleCount: 117,
           avgTitleWordCount: 7.289940828402367,
           avgDescriptionWordCount: 16.597633136094675,
           titleDiffersDescription: true
         },
-        score: 24
+        score: 117
       }
     );
 

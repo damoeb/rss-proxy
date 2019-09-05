@@ -36,7 +36,7 @@ describe('gohugo_io', () => {
 
   });
 
-  it('#findArticles works', () => {
+  it.skip('#findArticles works', () => {
 
     const articles = parser.findArticles();
 

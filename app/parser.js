@@ -6,8 +6,13 @@ module.exports = function (document, console) {
     }, 0) / nodes.length;
   }
 
-  function selectAll(contextNode, query) {
-    return Array.from(contextNode.querySelectorAll(query));
+  function selectAll(contextNode, selector) {
+    const matches = Array.from(contextNode.querySelectorAll(selector));
+    if (matches.length === 0) {
+      throw new Error(`Cannot find selector ${selector} in html ${contextNode.outerHTML}`);
+    }
+
+    return matches;
   }
 
   function getDocumentRoot() {
@@ -23,14 +28,21 @@ module.exports = function (document, console) {
 
     const bestRule = rules[0].rules;
 
-    return Array.from(document.querySelectorAll(bestRule.article)).map((articleNode) => {
-      return {
-        title: selectAll(articleNode, bestRule.title)[0].textContent,
-        // todo absolute link
-        link: selectAll(articleNode, bestRule.link)[0].getAttribute('href'),
-        description: selectAll(articleNode, bestRule.description)[0].textContent
-      }
-    });
+    return Array.from(document.querySelectorAll(bestRule.article))
+      .map((articleNode) => {
+        try {
+          return {
+            title: selectAll(articleNode, bestRule.title)[0].textContent,
+            // todo absolute link
+            link: selectAll(articleNode, bestRule.link)[0].getAttribute('href'),
+            description: selectAll(articleNode, bestRule.description)[0].textContent
+          }
+        } catch (e) {
+          // ignore, cause some selectors may return empty-results cause the article-selector is not specific enough
+          return undefined
+        }
+      })
+      .filter(article => article);
   };
 
   function addPath(nodes, context) {
@@ -69,7 +81,7 @@ module.exports = function (document, console) {
   }
 
   function findBestDescription(textNodes, otherCandidateNodes) {
-    // todo description is the entire candiate-content, just without the title
+    // todo try to find explicit node d, if d == candidate or is null take the entire textContent of candidate and remove the title string
     const descriptionNodes = textNodes.length > 1 ? textNodes.filter((val, index) => index !== 0).concat([textNodes[0]]) : textNodes;
     return descriptionNodes
       .find(descriptionNode => {
@@ -94,48 +106,68 @@ module.exports = function (document, console) {
         if (unifiedPath[i] === path[i]) {
           newUnifiedPath.push(path[i]);
         } else {
-          newUnifiedPath.push('')
+          const tagName = path[i].replace(/\..*$/,'');
+          if (unifiedPath[i].replace(/\..*$/,'') === tagName) {
+            newUnifiedPath.push(tagName);
+          } else {
+            newUnifiedPath.push('*');
+          }
         }
       }
 
       return newUnifiedPath;
 
-    }, []).join(' ');
+    }, []).join('>');
   };
 
   this.mergeRules = (list) => {
-    // todo merge article paths, by removing classNames if feature-paths match
-    return list
+    const groupedByRuleId = list
+
+      // add ruleId
       .map(articleRule => {
         const {rules} = articleRule;
-        articleRule.id = [rules.articleTagName, rules.title, rules.description, rules.link].join('/');
+        articleRule.ruleId = [rules.articleTagName, rules.title, rules.description, rules.link].join('/');
         return articleRule;
       })
-      .reduce((mergedList, articleRule) => {
+      // group by
+      .reduce((id2rules, currentRule) => {
 
-        const mergedRule = mergedList.find(mergedRule => mergedRule.id === articleRule.id);
-        if (mergedRule) {
-          const {rules, stats} = mergedRule;
-          // todo fix rules
-          rules.article = this.mergePaths([rules.article, articleRule.rules.article]);
-          stats.articleCount = stats.articleCount + articleRule.stats.articleCount;
-
-          mergedRule.mergeCount += 1;
-
-        } else {
-          articleRule.mergeCount = 1;
-          // delete articleRule.id;
-          mergedList.push(articleRule);
+        if (!id2rules[currentRule.ruleId]) {
+          id2rules[currentRule.ruleId] = [];
         }
 
-        return mergedList;
-      }, []);
+        id2rules[currentRule.ruleId].push(currentRule);
+
+        return id2rules;
+      }, {});
+
+    return Object.values(groupedByRuleId).map(rules => {
+      const path = this.mergePaths(rules.map(rule => rule.rules.article));
+
+      const mergedRule = rules[0];
+      mergedRule.rules.article = path;
+      mergedRule.stats.articleCount = rules.map(rule => rule.stats.articleCount).reduce((sum, count) => {
+        sum += count;
+        return sum;
+      }, 0);
+
+      return mergedRule;
+    });
   };
 
   function getScore(stats) {
     // todo implement
     return stats.articleCount;
   }
+
+  // function getDescriptions(articleNodes, titlePath) {
+  //   return articleNodes
+  //     // .map(articleNode => articleNode.cloneNode(true))
+  //     .map(articleNode => {
+  //     articleNode.querySelector(titlePath).replaceWith(document.createElement("span"));
+  //     return articleNode.textContent.trim();
+  //   });
+  // }
 
   this.findArticleRules = () => {
     const candidateGroups = findCandidatesFromRoot();
@@ -152,52 +184,54 @@ module.exports = function (document, console) {
     return this.mergeRules(
       candidateGroups
         .map(candidates => {
+          try {
+            const firstCandidateNode = candidates[0];
+            const pathToArticle = getRelativePath(firstCandidateNode, getDocumentRoot());
 
-          const firstCandidateNode = candidates[0];
-          const pathToArticle = getRelativePath(firstCandidateNode, getDocumentRoot());
+            console.log(`Testing candidate group with path ${pathToArticle}`);
 
-          console.log(`Testing candidate group with path ${pathToArticle}`);
+            // test path in other candidates
+            const otherCandidateNodes = candidates.filter(candidateNode => candidateNode !== firstCandidateNode);
 
-          // test path in other candidates
-          const otherCandidateNodes = candidates.filter(candidateNode => candidateNode !== firstCandidateNode);
-
-          // find link
-          const bestLink = findBestLink(firstCandidateNode, otherCandidateNodes);
-          if (!bestLink) {
-            // throw new Error('No text nodes found');
-            return undefined;
-          }
-
-          console.log('Found link', bestLink.node.getAttribute('href'));
-
-          // find title
-          const textNodes = addPath(findTextNodes(firstCandidateNode), firstCandidateNode);
-
-          if (textNodes.length === 0) {
-            // throw new Error('No text nodes found');
-            return undefined;
-          }
-
-          const bestTitle = findBestTitle(textNodes, otherCandidateNodes);
-          const bestDescription = findBestDescription(textNodes, otherCandidateNodes);
-
-          if (!bestTitle) {
-            // throw new Error('No title node found');
-            return undefined;
-          }
-
-          return {
-            rules: {
-              article: pathToArticle,
-              articleTagName: firstCandidateNode.tagName,
-              title: bestTitle.path,
-              description: bestDescription.path,
-              link: bestLink.path
-            },
-            stats: {
-              articleCount: candidates.length
+            // find link
+            const bestLink = findBestLink(firstCandidateNode, otherCandidateNodes);
+            if (!bestLink) {
+              // throw new Error('No text nodes found');
+              return undefined;
             }
-          };
+
+            console.log('Found link', bestLink.node.getAttribute('href'));
+
+            // find title
+            const textNodes = addPath(findTextNodes(firstCandidateNode), firstCandidateNode);
+
+            if (textNodes.length === 0) {
+              throw new Error(`No text nodes found in ${firstCandidateNode.node}`);
+            }
+
+            const bestTitle = findBestTitle(textNodes, otherCandidateNodes);
+            const bestDescription = findBestDescription(textNodes, otherCandidateNodes);
+
+            if (!bestTitle) {
+              throw new Error('No title node found');
+            }
+
+            return {
+              rules: {
+                article: pathToArticle,
+                articleTagName: firstCandidateNode.tagName,
+                title: bestTitle.path,
+                description: bestDescription.path,
+                link: bestLink.path
+              },
+              stats: {
+                articleCount: candidates.length
+              }
+            };
+          } catch (e) {
+            console.warn(e);
+            return undefined;
+          }
         })
         .filter(candidateGroup => candidateGroup))
       .map(candidateGroup => {

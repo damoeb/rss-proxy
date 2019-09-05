@@ -1,6 +1,7 @@
 const {expect} = require('chai');
 const Parser = require('../app/parser');
 const unmergedRules = require('./fixtures/unmerged-rules');
+const mergedRules = require('./fixtures/merged-rules');
 
 describe('parser', () => {
   let parser;
@@ -24,11 +25,11 @@ describe('parser', () => {
       'MAIN>DIV.layout>SECTION.theme-gesundheit>ARTICLE',
       'MAIN>DIV.layout>SECTION.theme-videosection>ARTICLE',
       'MAIN>DIV.layout>SECTION.theme-zukunft>ARTICLE']);
-    expect(mergedPath).to.eql('MAIN>DIV>SECTION>ARTICLE');
+    expect(mergedPath).to.eql('MAIN>DIV.layout>SECTION>ARTICLE');
   });
 
-  it.only('#mergeRules', () => {
+  it('#mergeRules', () => {
     const merged = parser.mergeRules(unmergedRules);
-    console.log(merged);
+    expect(merged).to.eql(mergedRules);
   });
 });

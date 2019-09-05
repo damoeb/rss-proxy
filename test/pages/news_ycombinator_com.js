@@ -36,17 +36,17 @@ describe('news_ycombinator_com', () => {
     });
   });
 
-  it.skip('#findArticles works', () => {
+  it('#findArticles works', () => {
 
     const articles = parser.findArticles();
 
     console.log(articles);
 
     expect(articles[0]).to.eql({
-      title: 'Mozilla takes action to protect users in Kazakhstan',
-      link: 'https://blog.mozilla.org/blog/2019/08/21/mozilla-takes-action-to-protect-users-in-kazakhstan/',
-      description: 'Today, Mozilla and Google took action to protect the online security and privacy of individuals in Kazakhstan. Together the companies deployed technical solutions within Firefox and Chrome to block the … Read more'
-    });
+      title: 'Off-Grid, Solar-Powered, Zero-Battery Refrigerator',
+      link: 'https://www.notechmagazine.com/2019/09/off-grid-solar-powered-zero-battery-refrigerator.html',
+      description: 'Off-Grid, Solar-Powered, Zero-Battery Refrigerator'
+    },);
 
   });
 

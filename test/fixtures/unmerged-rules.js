@@ -12,8 +12,7 @@ module.exports = [
       avgTitleWordCount: 7.289940828402367,
       avgDescriptionWordCount: 16.597633136094675,
       titleDiffersDescription: true
-    },
-    score: 24
+    }
   },
   {
     rules: {
@@ -28,8 +27,7 @@ module.exports = [
       avgTitleWordCount: 7.289940828402367,
       avgDescriptionWordCount: 7.289940828402367,
       titleDiffersDescription: false
-    },
-    score: 19
+    }
   },
   {
     rules: {
@@ -44,8 +42,7 @@ module.exports = [
       avgTitleWordCount: 6.714285714285714,
       avgDescriptionWordCount: 13.904761904761905,
       titleDiffersDescription: true
-    },
-    score: 14
+    }
   },
   {
     rules: {
@@ -60,8 +57,7 @@ module.exports = [
       avgTitleWordCount: 8.6,
       avgDescriptionWordCount: 14.6,
       titleDiffersDescription: true
-    },
-    score: 10
+    }
   },
   {
     rules: {
@@ -76,8 +72,7 @@ module.exports = [
       avgTitleWordCount: 8.272727272727273,
       avgDescriptionWordCount: 16.272727272727273,
       titleDiffersDescription: true
-    },
-    score: 9
+    }
   },
   {
     rules: {
@@ -92,8 +87,7 @@ module.exports = [
       avgTitleWordCount: 6.285714285714286,
       avgDescriptionWordCount: 17.571428571428573,
       titleDiffersDescription: true
-    },
-    score: 7
+    }
   },
   {
     rules: {
@@ -108,8 +102,7 @@ module.exports = [
       avgTitleWordCount: 17.428571428571427,
       avgDescriptionWordCount: 17.428571428571427,
       titleDiffersDescription: false
-    },
-    score: 7
+    }
   },
   {
     rules: {
@@ -124,8 +117,7 @@ module.exports = [
       avgTitleWordCount: 20,
       avgDescriptionWordCount: 20,
       titleDiffersDescription: false
-    },
-    score: 7
+    }
   },
   {
     rules: {
@@ -140,8 +132,7 @@ module.exports = [
       avgTitleWordCount: 6.571428571428571,
       avgDescriptionWordCount: 15.714285714285714,
       titleDiffersDescription: true
-    },
-    score: 7
+    }
   },
   {
     rules: {
@@ -156,8 +147,7 @@ module.exports = [
       avgTitleWordCount: 5.076923076923077,
       avgDescriptionWordCount: 14.23076923076923,
       titleDiffersDescription: true
-    },
-    score: 7
+    }
   },
   {
     rules: {
@@ -172,8 +162,7 @@ module.exports = [
       avgTitleWordCount: 9.285714285714286,
       avgDescriptionWordCount: 14.571428571428571,
       titleDiffersDescription: true
-    },
-    score: 7
+    }
   },
   {
     rules: {
@@ -188,8 +177,7 @@ module.exports = [
       avgTitleWordCount: 8.571428571428571,
       avgDescriptionWordCount: 12.571428571428571,
       titleDiffersDescription: true
-    },
-    score: 7
+    }
   },
   {
     rules: {
@@ -204,8 +192,7 @@ module.exports = [
       avgTitleWordCount: 7.714285714285714,
       avgDescriptionWordCount: 14.428571428571429,
       titleDiffersDescription: true
-    },
-    score: 7
+    }
   },
   {
     rules: {
@@ -220,8 +207,7 @@ module.exports = [
       avgTitleWordCount: 7.714285714285714,
       avgDescriptionWordCount: 19.428571428571427,
       titleDiffersDescription: true
-    },
-    score: 6
+    }
   },
   {
     rules: {
@@ -236,8 +222,7 @@ module.exports = [
       avgTitleWordCount: 4.8,
       avgDescriptionWordCount: 4.8,
       titleDiffersDescription: false
-    },
-    score: 4
+    }
   },
   {
     rules: {
@@ -252,8 +237,7 @@ module.exports = [
       avgTitleWordCount: 16.597633136094675,
       avgDescriptionWordCount: 16.597633136094675,
       titleDiffersDescription: false
-    },
-    score: 4
+    }
   },
   {
     rules: {
@@ -268,8 +252,7 @@ module.exports = [
       avgTitleWordCount: 5.75,
       avgDescriptionWordCount: 21,
       titleDiffersDescription: true
-    },
-    score: 4
+    }
   },
   {
     rules: {
@@ -284,8 +267,7 @@ module.exports = [
       avgTitleWordCount: 7.555555555555555,
       avgDescriptionWordCount: 18,
       titleDiffersDescription: true
-    },
-    score: 4
+    }
   },
   {
     rules: {
@@ -300,7 +282,6 @@ module.exports = [
       avgTitleWordCount: 6.5,
       avgDescriptionWordCount: 21.75,
       titleDiffersDescription: true
-    },
-    score: 4
+    }
   }
 ]
