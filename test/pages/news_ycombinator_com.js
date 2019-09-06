@@ -16,23 +16,12 @@ describe('news_ycombinator_com', () => {
 
     const rules = parser.findArticleRules();
 
-    expect(rules[0]).to.eql({
-      rules:
-        {
-          article: 'CENTER>TABLE>TBODY>TR>TD>TABLE.itemlist>TBODY>TR',
-          articleTagName: 'TR',
-          title: 'TD.title>A.storylink',
-          description: 'TD.title>A.storylink',
-          link: 'TD.title>A'
-        },
-      score: 30,
-      stats:
-        {
-          articleCount: 30,
-          avgTitleWordCount: 7.9,
-          avgDescriptionWordCount: 7.9,
-          titleDiffersDescription: false
-        }
+    expect(rules[0].rules).to.eql({
+        article: 'CENTER>TABLE>TBODY>TR>TD>TABLE.itemlist>TBODY>TR',
+        articleTagName: 'TR',
+        title: 'TD.title>A.storylink',
+        description: 'TD.title>A.storylink',
+        link: 'TD.title>A'
     });
   });
 

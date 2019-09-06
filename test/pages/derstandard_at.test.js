@@ -20,21 +20,12 @@ describe('derstandard_at', () => {
 
     const rules = parser.findArticleRules();
 
-    expect(rules[0]).to.eql({
-        rules: {
-          article: 'MAIN>DIV.layout>SECTION>ARTICLE',
-          articleTagName: 'ARTICLE',
-          title: 'A.teaser-inner>HEADER>H1.teaser-title',
-          description: 'A.teaser-inner>HEADER>P.teaser-subtitle',
-          link: 'A'
-        },
-        stats: {
-          articleCount: 117,
-          avgTitleWordCount: 7.289940828402367,
-          avgDescriptionWordCount: 16.597633136094675,
-          titleDiffersDescription: true
-        },
-        score: 117
+    expect(rules[0].rules).to.eql({
+        article: 'MAIN>DIV.layout>SECTION>ARTICLE',
+        articleTagName: 'ARTICLE',
+        title: 'A.teaser-inner>HEADER>H1.teaser-title',
+        description: 'A.teaser-inner>HEADER>P.teaser-subtitle',
+        link: 'A'
       }
     );
 

@@ -16,21 +16,12 @@ describe('gohugo_io', () => {
 
     const rules = parser.findArticleRules();
 
-    expect(rules[0]).to.eql({
-        rules: {
-          article: 'MAIN.content-with-sidebar>DIV>DIV.flex.flex-wrap>SECTION.flex-ns.flex-wrap.justify-between.v-top>DIV',
-          articleTagName: 'DIV',
-          title: 'DIV.bg-white.gray>H1.near-black>A.link.primary-color.dim',
-          description: 'DIV.bg-white.gray>DIV.lh-copy.links',
-          link: 'DIV.bg-white.gray>H1.near-black>A'
-        },
-        stats: {
-          articleCount: 95,
-          avgTitleWordCount: 4.347368421052631,
-          avgDescriptionWordCount: 18.073684210526316,
-          titleDiffersDescription: true
-        },
-        score: 95
+    expect(rules[0].rules).to.eql({
+        article: 'MAIN.content-with-sidebar>DIV>DIV.flex.flex-wrap>SECTION.flex-ns.flex-wrap.justify-between.v-top>DIV',
+        articleTagName: 'DIV',
+        title: 'DIV.bg-white.gray>H1.near-black>A.link.primary-color.dim',
+        description: 'DIV.bg-white.gray>DIV.lh-copy.links',
+        link: 'DIV.bg-white.gray>H1.near-black>A'
       }
     );
 

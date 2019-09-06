@@ -273,14 +273,12 @@ module.exports = function (document, console) {
     return path;
   }
 
-  function findHrefNodes(node, depth) {
-    if (depth === 0) {
-      return [];
-    }
+  function findHrefNodes(node) {
     if (node.tagName === 'A' && node.getAttribute('href')) {
       return node;
     }
-    return Array.from(node.children).map(childNode => findHrefNodes(childNode, depth-1))
+    return Array.from(node.children)
+      .map(childNode => findHrefNodes(childNode))
       .flat(1);
   }
 
@@ -288,18 +286,19 @@ module.exports = function (document, console) {
     if (node === getDocumentRoot()) {
       return false;
     }
-    const maxDepth = 7;
-    const hasLinks = findHrefNodes(node, maxDepth).length > 0;
-    const hasTexts = findTextNodes(node, maxDepth).length > 0;
-    return hasLinks && hasTexts;
+    // todo abort if found one\
+    // todo an href usually contains a textnode too
+    return findHrefNodes(node).length > 0 && findTextNodes(node).length > 0;
   }
 
   function findTextNodes(node) {
 
-    const minTitleWordCount = 3;
+    const minTitleWordCount = 5;
     const textNodes = [];
 
-    if (['SCRIPT', 'STYLE'].indexOf(node.tagName) === -1 && node.nodeName !== '#comment' && node.cloneNode().textContent.trim().split(' ').length > minTitleWordCount) {
+    if (['SCRIPT', 'STYLE'].indexOf(node.tagName) === -1
+      && node.nodeName !== '#comment'
+      && node.cloneNode().textContent.trim().split(' ').length > minTitleWordCount) {
       textNodes.push(node);
     }
 
@@ -307,10 +306,9 @@ module.exports = function (document, console) {
       .map(childNode => findTextNodes(childNode))
       .flat(1);
 
-    childTextNodes.push(...textNodes);
+    textNodes.push(...childTextNodes);
 
-    return childTextNodes;
-
+    return textNodes;
   }
 
   function findCandidates(node, ignoredNodes) {

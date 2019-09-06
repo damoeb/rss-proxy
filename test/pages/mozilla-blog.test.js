@@ -16,21 +16,12 @@ describe('mozilla-blog', () => {
 
     const rules = parser.findArticleRules();
 
-    expect(rules[0]).to.eql({
-        rules: {
-          article: 'DIV.site-wrap>ASIDE.can-stick>DIV.content>DIV.categories>DIV.category>UL.category-posts>LI',
-          articleTagName: 'LI',
-          title: 'DIV.post-mini>A.entry-link>H5.entry-title',
-          description: 'DIV.post-mini>A.entry-link>H5.entry-title',
-          link: 'DIV.post-mini>A'
-        },
-        stats: {
-          articleCount: 40,
-          avgTitleWordCount: 9.15,
-          avgDescriptionWordCount: 9.15,
-          titleDiffersDescription: false
-        },
-        score: 40
+    expect(rules[0].rules).to.eql({
+        article: 'DIV.site-wrap>ASIDE.can-stick>DIV.content>DIV.categories>DIV.category>UL.category-posts>LI',
+        articleTagName: 'LI',
+        title: 'DIV.post-mini>A.entry-link>H5.entry-title',
+        description: 'DIV.post-mini>A.entry-link>H5.entry-title',
+        link: 'DIV.post-mini>A'
       }
     );
 
