@@ -32,10 +32,10 @@ module.exports = function (document, console) {
       .map((articleNode) => {
         try {
           return {
-            title: selectAll(articleNode, bestRule.title)[0].textContent,
+            title: selectAll(articleNode, bestRule.title)[0].textContent.trim(),
             // todo absolute link
             link: selectAll(articleNode, bestRule.link)[0].getAttribute('href'),
-            description: selectAll(articleNode, bestRule.description)[0].textContent
+            description: selectAll(articleNode, bestRule.description)[0].textContent.trim()
           }
         } catch (e) {
           // ignore, cause some selectors may return empty-results cause the article-selector is not specific enough
