@@ -12,7 +12,7 @@ describe('nature_com', () => {
     parser = new Parser(document, testHelper.getMockConsole());
   });
 
-  it.only('#findArticles works', () => {
+  it('#findArticles works', () => {
 
     const articles = parser.findArticles();
 

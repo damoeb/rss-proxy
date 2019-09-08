@@ -2,6 +2,8 @@ const {expect} = require('chai');
 const Parser = require('../app/parser');
 const unmergedRules = require('./fixtures/unmerged-rules');
 const mergedRules = require('./fixtures/merged-rules');
+const testHelper = require('./pages/test-helper');
+
 
 describe('parser', () => {
   let parser;
@@ -31,5 +33,26 @@ describe('parser', () => {
   it('#mergeRules', () => {
     const merged = parser.mergeRules(unmergedRules);
     expect(merged).to.eql(mergedRules);
+  });
+
+  describe('text-nodes', () => {
+
+    let textNodes;
+    let root;
+
+    beforeEach(() => {
+      const document = testHelper.getDocumetOfHtmlFile('test/fixtures/nested-text-nodes.html');
+      root = document.querySelector('body');
+      textNodes = parser.findTextNodes(root);
+    });
+
+    it('#findTextNodes', () => {
+      expect(textNodes.length).to.eql(41);
+    });
+
+    it.only('#findCommonParent', () => {
+      expect(parser.findCommonParent(textNodes, root)).to.eql('DIV.post-body');
+    });
+
   });
 });

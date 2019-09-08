@@ -1,16 +1,20 @@
 module.exports = function (document, console) {
 
+  function toWords(text) {
+    return text.trim().split(' ').filter(word => word.length > 0);
+  }
+
   function avgWordCount(nodes) {
-    return nodes.map(node => node.textContent.trim().split(' ').length).reduce((totalWordCount, wordCount) => {
+    return nodes.map(node => toWords(node.textContent.trim()).length).reduce((totalWordCount, wordCount) => {
       return totalWordCount + wordCount
     }, 0) / nodes.length;
   }
 
   function selectAll(contextNode, selector) {
     const matches = Array.from(contextNode.querySelectorAll(selector));
-    if (matches.length === 0) {
-      throw new Error(`Cannot find selector ${selector} in html ${contextNode.outerHTML}`);
-    }
+    // if (matches.length === 0) {
+    //   throw new Error(`Cannot find selector ${selector} in html ${contextNode.outerHTML}`);
+    // }
 
     return matches;
   }
@@ -20,7 +24,7 @@ module.exports = function (document, console) {
   }
 
   this.findCandidatesFromRoot = () => {
-    return findCandidates(getDocumentRoot(), []);
+    return this.findCandidates(getDocumentRoot(), []);
   };
 
   this.findArticles = () => {
@@ -31,11 +35,15 @@ module.exports = function (document, console) {
     return Array.from(document.querySelectorAll(bestRule.article))
       .map((articleNode) => {
         try {
+          const title = selectAll(articleNode, bestRule.title)[0].textContent.trim();
+          // todo find text then find common parent that is not article
+          const descriptions = bestRule.description ? selectAll(articleNode, bestRule.description)[0].textContent.trim() : articleNode.textContent.trim().replace(title, '');
+
           return {
-            title: selectAll(articleNode, bestRule.title)[0].textContent.trim(),
+            title,
             // todo absolute link
             link: selectAll(articleNode, bestRule.link)[0].getAttribute('href'),
-            description: selectAll(articleNode, bestRule.description)[0].textContent.trim()
+            description: descriptions
           }
         } catch (e) {
           // ignore, cause some selectors may return empty-results cause the article-selector is not specific enough
@@ -45,17 +53,17 @@ module.exports = function (document, console) {
       .filter(article => article);
   };
 
-  function addPath(nodes, context) {
+  this.addPath = (nodes, context) => {
     return nodes.map(node => {
       return {
         node: node,
-        path: getRelativePath(node, context)
+        path: this.getRelativePath(node, context)
       }
     });
-  }
+  };
 
-  function findBestLink(firstCandidateNode, otherCandidateNodes) {
-    const linkNodes = addPath(findHrefNodes(firstCandidateNode), firstCandidateNode);
+  this.findBestLink = (firstCandidateNode, otherCandidateNodes) => {
+    const linkNodes = this.addPath(findHrefNodes(firstCandidateNode), firstCandidateNode);
 
     // fink link that exists in every candidate
     return linkNodes
@@ -80,11 +88,11 @@ module.exports = function (document, console) {
       });
   }
 
-  function findBestDescription(textNodes, otherCandidateNodes) {
+  function findBestDescription(textNodes, titleNode, otherCandidateNodes) {
     // todo try to find explicit node d, if d == candidate or is null take the entire textContent of candidate and remove the title string
-    const descriptionNodes = textNodes.length > 1 ? textNodes.filter((val, index) => index !== 0).concat([textNodes[0]]) : textNodes;
+    const descriptionNodes = textNodes.filter((textNode) => !textNode.node.isSameNode(titleNode.node));
     return descriptionNodes
-      .find(descriptionNode => {
+      .filter(descriptionNode => {
         if (descriptionNode.path) {
           console.log(`Testing description-node ${descriptionNode.path}`);
           return otherCandidateNodes.every(candidateNode => candidateNode.querySelector(descriptionNode.path));
@@ -160,15 +168,6 @@ module.exports = function (document, console) {
     return stats.articleCount;
   }
 
-  // function getDescriptions(articleNodes, titlePath) {
-  //   return articleNodes
-  //     // .map(articleNode => articleNode.cloneNode(true))
-  //     .map(articleNode => {
-  //     articleNode.querySelector(titlePath).replaceWith(document.createElement("span"));
-  //     return articleNode.textContent.trim();
-  //   });
-  // }
-
   this.findArticleRules = () => {
     const candidateGroups = this.findCandidatesFromRoot();
     console.log(`Found ${candidateGroups.length} groups of candidates`, candidateGroups);
@@ -186,7 +185,7 @@ module.exports = function (document, console) {
         .map(candidates => {
           try {
             const firstCandidateNode = candidates[0];
-            const pathToArticle = getRelativePath(firstCandidateNode, getDocumentRoot());
+            const pathToArticle = this.getRelativePath(firstCandidateNode, getDocumentRoot());
 
             console.log(`Testing candidate group with path ${pathToArticle}`);
 
@@ -194,7 +193,7 @@ module.exports = function (document, console) {
             const otherCandidateNodes = candidates.filter(candidateNode => candidateNode !== firstCandidateNode);
 
             // find link
-            const bestLink = findBestLink(firstCandidateNode, otherCandidateNodes);
+            const bestLink = this.findBestLink(firstCandidateNode, otherCandidateNodes);
             if (!bestLink) {
               // throw new Error('No text nodes found');
               return undefined;
@@ -203,14 +202,15 @@ module.exports = function (document, console) {
             console.log('Found link', bestLink.node.getAttribute('href'));
 
             // find title
-            const textNodes = addPath(findTextNodes(firstCandidateNode), firstCandidateNode);
+            const nodes = this.findTextNodes(firstCandidateNode, 5);
+            const textNodes = this.addPath(nodes, firstCandidateNode);
 
             if (textNodes.length === 0) {
               throw new Error(`No text nodes found in ${firstCandidateNode.node}`);
             }
 
             const bestTitle = findBestTitle(textNodes, otherCandidateNodes);
-            const bestDescription = findBestDescription(textNodes, otherCandidateNodes);
+            const bestDescriptionPath = this.findCommonParent(nodes.filter(node => !node.isSameNode(bestTitle.node)), firstCandidateNode);
 
             if (!bestTitle) {
               throw new Error('No title node found');
@@ -221,7 +221,7 @@ module.exports = function (document, console) {
                 article: pathToArticle,
                 articleTagName: firstCandidateNode.tagName,
                 title: bestTitle.path,
-                description: bestDescription.path,
+                description: bestDescriptionPath,
                 link: bestLink.path
               },
               stats: {
@@ -259,7 +259,27 @@ module.exports = function (document, console) {
     return node.tagName;
   }
 
-  function getRelativePath(node, context) {
+  this.findCommonParent = (nodes, root) => {
+    if (nodes.length === 0) {
+      return;
+    }
+    if (nodes.length === 1) {
+      return nodes[0];
+    }
+    const paths = nodes.map(node => this.getRelativePath(node, root)).map(path => path.split('>'));
+
+    const firstPath = paths[0];
+
+    let pos = 0;
+    while (paths.every(path => path[pos] === firstPath[pos])) {
+      pos++;
+    }
+
+    return firstPath.filter((el,index) => index < pos).join('>');
+
+  };
+
+  this.getRelativePath = (node, context) => {
     console.log(`getting path of ${node} in ${context}`);
     let path = node.tagName; // tagName for text nodes is undefined
     while (node.parentNode !== context) {
@@ -282,28 +302,27 @@ module.exports = function (document, console) {
       .flat(1);
   }
 
-  function looksLikeAnArticle(node) {
+  this.looksLikeAnArticle = (node) => {
     if (node === getDocumentRoot()) {
       return false;
     }
     // todo abort if found one\
     // todo an href usually contains a textnode too
-    return findHrefNodes(node).length > 0 && findTextNodes(node).length > 0;
+    return findHrefNodes(node).length > 0 && this.findTextNodes(node, 3).length > 0;
   }
 
-  function findTextNodes(node) {
+  this.findTextNodes = (node, minTitleWordCount=1) => {
 
-    const minTitleWordCount = 5;
     const textNodes = [];
 
     if (['SCRIPT', 'STYLE'].indexOf(node.tagName) === -1
       && node.nodeName !== '#comment'
-      && node.cloneNode().textContent.trim().split(' ').length > minTitleWordCount) {
+      && toWords(node.cloneNode().textContent).length >= minTitleWordCount) {
       textNodes.push(node);
     }
 
     const childTextNodes = Array.from(node.childNodes)
-      .map(childNode => findTextNodes(childNode))
+      .map(childNode => this.findTextNodes(childNode, minTitleWordCount))
       .flat(1);
 
     textNodes.push(...childTextNodes);
@@ -311,17 +330,17 @@ module.exports = function (document, console) {
     return textNodes;
   }
 
-  function findCandidates(node, ignoredNodes) {
+  this.findCandidates = (node, ignoredNodes) => {
     // self
     const canditateGroup = [];
-    if (ignoredNodes.indexOf(node) === -1 && looksLikeAnArticle(node)) {
+    if (ignoredNodes.indexOf(node) === -1 && this.looksLikeAnArticle(node)) {
 
       const neighbors = Array.from(node.parentNode.children).filter(sibling => sibling !== node);
 
       const similarNeighbors = neighbors.filter(neighbor => neighbor.tagName === node.tagName
         && neighbor.attributes.length === node.attributes.length);
 
-      const articleNeighbors = similarNeighbors.filter(neighbor => looksLikeAnArticle(neighbor));
+      const articleNeighbors = similarNeighbors.filter(neighbor => this.looksLikeAnArticle(neighbor));
 
       if (articleNeighbors.length > 2) {
         canditateGroup.push([node, ...articleNeighbors]);
@@ -332,7 +351,7 @@ module.exports = function (document, console) {
 
     // children
     const childCanditateGroup = Array.from(node.children)
-      .map(childNode => findCandidates(childNode, ignoredNodes))
+      .map(childNode => this.findCandidates(childNode, ignoredNodes))
       .flat(1);
 
     childCanditateGroup.push(...canditateGroup);

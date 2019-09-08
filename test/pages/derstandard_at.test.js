@@ -20,6 +20,8 @@ describe('derstandard_at', () => {
 
     const rules = parser.findArticleRules();
 
+    console.log(rules[0]);
+
     expect(rules[0].rules).to.eql({
         article: 'MAIN>DIV.layout>SECTION>ARTICLE',
         articleTagName: 'ARTICLE',
@@ -34,6 +36,8 @@ describe('derstandard_at', () => {
   it('#findArticles works', () => {
 
     const articles = parser.findArticles();
+
+    console.log(articles[0]);
 
     expect(articles[0]).to.eql({
       title: 'Von blauen Netzwerken und schwarzen Rächern im Innenministerium ',

@@ -3,20 +3,22 @@ const testHelper = require('./test-helper');
 
 const Parser = require('../../app/parser');
 
-describe('mozilla-blog', () => {
+describe('developers_googleblog_com', () => {
 
   let document, parser;
 
   beforeEach(() => {
-    document = testHelper.getDocumetOfHtmlFile('test/pages/mozilla-blog.html');
+    document = testHelper.getDocumetOfHtmlFile('test/pages/developers_googleblog_com.html');
     parser = new Parser(document, testHelper.getMockConsole());
   });
 
-  it('#findArticleRules works', () => {
+  it.only('#findArticleRules works', () => {
 
     const rules = parser.findArticleRules();
 
-    expect(rules[0].rules).to.eql({
+    console.log(rules);
+
+    expect(rules[1].rules).to.eql({
         article: 'DIV.site-wrap>ASIDE.can-stick>DIV.content>DIV.categories>DIV.category>UL.category-posts>LI',
         articleTagName: 'LI',
         title: 'DIV.post-mini>A.entry-link>H5.entry-title',
@@ -27,7 +29,7 @@ describe('mozilla-blog', () => {
 
   });
 
-  it('#findArticles works', () => {
+  it.skip('#findArticles works', () => {
 
     const articles = parser.findArticles();
 
