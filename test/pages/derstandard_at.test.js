@@ -12,15 +12,14 @@ describe('derstandard_at', () => {
      parser = new Parser(document, testHelper.getMockConsole());
   });
 
-  it.skip('#findArticleRules works', () => {
-    parser.findCandidatesFromRoot();
-  });
+  // it.skip('#findArticleRules works', () => {
+  //   // todo improve speed
+  //   parser.findCandidatesFromRoot();
+  // });
 
   it('#findArticleRules works', () => {
 
     const rules = parser.findArticleRules();
-
-    console.log(rules[0]);
 
     expect(rules[0].rules).to.eql({
         article: 'MAIN>DIV.layout>SECTION>ARTICLE',
@@ -37,12 +36,10 @@ describe('derstandard_at', () => {
 
     const articles = parser.findArticles();
 
-    console.log(articles[0]);
-
     expect(articles[0]).to.eql({
-      title: 'Von blauen Netzwerken und schwarzen Rächern im Innenministerium ',
+      title: 'Von blauen Netzwerken und schwarzen Rächern im Innenministerium',
       link: '/story/2000108150923/von-blaue-netzwerken-und-schwarzen-raechern-im-innenministerium',
-      description: 'Aus dem Innenministerium dringen immer mehr Details zu Umfärbungen in der Ära Kickl – die FPÖ vermutet "schwarze Netzwerke" hinter den Leaks '
+      description: 'Aus dem Innenministerium dringen immer mehr Details zu Umfärbungen in der Ära Kickl – die FPÖ vermutet "schwarze Netzwerke" hinter den Leaks'
     });
 
   });

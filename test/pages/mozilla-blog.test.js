@@ -12,21 +12,6 @@ describe('mozilla-blog', () => {
     parser = new Parser(document, testHelper.getMockConsole());
   });
 
-  it('#findArticleRules works', () => {
-
-    const rules = parser.findArticleRules();
-
-    expect(rules[0].rules).to.eql({
-        article: 'DIV.site-wrap>ASIDE.can-stick>DIV.content>DIV.categories>DIV.category>UL.category-posts>LI',
-        articleTagName: 'LI',
-        title: 'DIV.post-mini>A.entry-link>H5.entry-title',
-        description: 'DIV.post-mini>A.entry-link>H5.entry-title',
-        link: 'DIV.post-mini>A'
-      }
-    );
-
-  });
-
   it('#findArticles works', () => {
 
     const articles = parser.findArticles();

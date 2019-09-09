@@ -8,7 +8,7 @@ const testHelper = require('./pages/test-helper');
 describe('parser', () => {
   let parser;
   beforeEach(() => {
-    parser = new Parser(null, console);
+    parser = new Parser(null, testHelper.getMockConsole());
   });
 
   it('#mergePath', () => {
@@ -50,8 +50,8 @@ describe('parser', () => {
       expect(textNodes.length).to.eql(41);
     });
 
-    it.only('#findCommonParent', () => {
-      expect(parser.findCommonParent(textNodes, root)).to.eql('DIV.post-body');
+    it('#findCommonParent', () => {
+      expect(parser.findCommonParentPath(textNodes, root)).to.eql('DIV.post-body');
     });
 
   });

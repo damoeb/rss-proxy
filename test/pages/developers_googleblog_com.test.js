@@ -12,20 +12,19 @@ describe('developers_googleblog_com', () => {
     parser = new Parser(document, testHelper.getMockConsole());
   });
 
-  it.only('#findArticleRules works', () => {
+  it('#findArticleRules works', () => {
 
     const rules = parser.findArticleRules();
 
-    console.log(rules);
+    // console.log(rules);
 
-    expect(rules[1].rules).to.eql({
-        article: 'DIV.site-wrap>ASIDE.can-stick>DIV.content>DIV.categories>DIV.category>UL.category-posts>LI',
-        articleTagName: 'LI',
-        title: 'DIV.post-mini>A.entry-link>H5.entry-title',
-        description: 'DIV.post-mini>A.entry-link>H5.entry-title',
-        link: 'DIV.post-mini>A'
-      }
-    );
+    expect(rules[0].rules).to.eql({
+      article: 'DIV.cols-wrapper.loading>DIV.col-main-wrapper>DIV.col-main>DIV.section>DIV.widget.Blog>DIV',
+      articleTagName: 'DIV',
+      title: 'H2.title>A',
+      description: 'DIV.post-body>DIV.post-content',
+      link: 'H2.title>A'
+    });
 
   });
 
