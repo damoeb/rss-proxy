@@ -22,7 +22,7 @@ describe('developers_googleblog_com', () => {
       article: 'DIV.cols-wrapper.loading>DIV.col-main-wrapper>DIV.col-main>DIV.section>DIV.widget.Blog>DIV',
       articleTagName: 'DIV',
       title: 'H2.title>A',
-      description: 'DIV.post-body>DIV.post-content',
+      description: '',
       link: 'H2.title>A'
     });
 

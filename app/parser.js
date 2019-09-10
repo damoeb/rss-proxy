@@ -27,6 +27,10 @@ module.exports = function (document, console) {
     return this.findCandidates(getDocumentRoot(), []);
   };
 
+  function resolveDescription(descriptionPath, articleNode, titleText) {
+    return descriptionPath ? selectAll(articleNode, descriptionPath)[0].textContent.trim() : articleNode.textContent.trim().replace(titleText, '');
+  }
+
   this.findArticles = () => {
     const rules = this.findArticleRules();
 
@@ -37,7 +41,7 @@ module.exports = function (document, console) {
         try {
           const title = selectAll(articleNode, bestRule.title)[0].textContent.trim();
           // todo find text then find common parent that is not article
-          const descriptions = bestRule.description ? selectAll(articleNode, bestRule.description)[0].textContent.trim() : articleNode.textContent.trim().replace(title, '');
+          const descriptions = resolveDescription(bestRule.description, articleNode, title);
 
           return {
             title,
@@ -75,7 +79,7 @@ module.exports = function (document, console) {
 
   function findBestTitle(textNodes, otherCandidateNodes) {
     const titleNodes = textNodes;
-
+    // todo this logic is crap
     return titleNodes
       .find(titleNode => {
         console.log(`Testing title-node ${titleNode.path}`);
@@ -87,21 +91,6 @@ module.exports = function (document, console) {
         }
       });
   }
-
-  // function findBestDescription(textNodes, titleNode, otherCandidateNodes) {
-  //   // todo try to find explicit node d, if d == candidate or is null take the entire textContent of candidate and remove the title string
-  //   const descriptionNodes = textNodes.filter((textNode) => !textNode.node.isSameNode(titleNode.node));
-  //   return descriptionNodes
-  //     .filter(descriptionNode => {
-  //       if (descriptionNode.path) {
-  //         console.log(`Testing description-node ${descriptionNode.path}`);
-  //         return otherCandidateNodes.every(candidateNode => candidateNode.querySelector(descriptionNode.path));
-  //       } else {
-  //         console.log('description-node is candiate');
-  //         return true;
-  //       }
-  //     });
-  // }
 
   this.mergePaths = (paths) => {
     return paths.map(path => path.split('>')).reduce((unifiedPath, path) => {
@@ -167,9 +156,9 @@ module.exports = function (document, console) {
     // article count
     const scoreArticleCount = Math.log(stats.articleCount) / 10;
     // desc word count
-    const scoreDescriptionWordCount = stats.avgDescriptionWordCount > 3 ? 0.3 : 0;
+    const scoreDescriptionWordCount = stats.avgDescriptionWordCount > 10 ? 0.6 : 0;
     // title word count
-    const scoreTitleWordCount = stats.avgTitleWordCount > 3 ? 0.3 : 0;
+    const scoreTitleWordCount = stats.avgTitleWordCount > 3 ? 0.6 : 0;
     // title differs
     const scoreTittleDiffers = stats.titleDiffersDescription ? 0.3: 0;
 
@@ -178,14 +167,11 @@ module.exports = function (document, console) {
 
   this.findArticleRules = () => {
     const candidateGroups = this.findCandidatesFromRoot();
-    console.log(`Found ${candidateGroups.length} groups of candidates`, candidateGroups);
+    console.log(`Found ${candidateGroups.length} groups of candidates`);
 
     if (candidateGroups.length === 0) {
-      console.warn(`found ${candidateGroups.length} candidates, aborting`);
+      console.warn(`Aborting, found ${candidateGroups.length} candidates`);
       return;
-    }
-    if (candidateGroups.length > 1) {
-      console.warn(`found ${candidateGroups.length} candidates, taking largest`)
     }
 
     return this.mergeRules(
@@ -195,27 +181,26 @@ module.exports = function (document, console) {
             const firstCandidateNode = candidates[0];
             const pathToArticle = this.getRelativePath(firstCandidateNode, getDocumentRoot());
 
-            console.log(`Testing candidate group with path ${pathToArticle}`);
+            console.log(`Testing candidate group ${pathToArticle}`);
 
             // test path in other candidates
             const otherCandidateNodes = candidates.filter(candidateNode => candidateNode !== firstCandidateNode);
 
             // find link
-            const bestLink = this.findBestLink(firstCandidateNode, otherCandidateNodes);
-            if (!bestLink) {
-              // throw new Error('No text nodes found');
-              return undefined;
+            const bestLinkPathNode = this.findBestLink(firstCandidateNode, otherCandidateNodes);
+            if (!bestLinkPathNode) {
+              throw new Error('No link found');
             }
 
-            console.log('Found link', bestLink.node.getAttribute('href'));
+            console.log('Found link', bestLinkPathNode.path);
 
             // find title
-            const textNodes = this.findTextNodes(firstCandidateNode, 5);
+            const textNodes = this.findTextNodes(firstCandidateNode, 4);
             // const textNodes = this.addPath(nodes, firstCandidateNode);
             //
-            // if (textNodes.length === 0) {
-            //   throw new Error(`No text nodes found in ${firstCandidateNode.node}`);
-            // }
+            if (textNodes.length === 0) {
+              throw new Error('No text nodes found');
+            }
 
             const bestTitle = findBestTitle(this.addPath(textNodes, firstCandidateNode), otherCandidateNodes);
             const bestDescriptionPath = this.findCommonParentPath(textNodes.filter(node => !node.isSameNode(bestTitle.node)), firstCandidateNode);
@@ -230,23 +215,24 @@ module.exports = function (document, console) {
                 articleTagName: firstCandidateNode.tagName,
                 title: bestTitle.path,
                 description: bestDescriptionPath,
-                link: bestLink.path
+                link: bestLinkPathNode.path
               },
               stats: {
                 articleCount: candidates.length
               }
             };
           } catch (e) {
-            console.warn(e);
+            console.warn(e.message);
             return undefined;
           }
         })
         .filter(candidateGroup => candidateGroup))
       .map(candidateGroup => {
+        const avgTitleWordCount = avgWordCount(selectAll(getDocumentRoot(), candidateGroup.rules.article + '>' + candidateGroup.rules.title));
         const stats = {
           articleCount: candidateGroup.stats.articleCount,
-          avgTitleWordCount: avgWordCount(selectAll(getDocumentRoot(), candidateGroup.rules.article + '>' + candidateGroup.rules.title)),
-          avgDescriptionWordCount: candidateGroup.rules.description ? avgWordCount(selectAll(getDocumentRoot(), candidateGroup.rules.article + '>' + candidateGroup.rules.description)) : 0,
+          avgTitleWordCount,
+          avgDescriptionWordCount: candidateGroup.rules.description ? avgWordCount(selectAll(getDocumentRoot(), candidateGroup.rules.article + '>' + candidateGroup.rules.description)) : avgWordCount(selectAll(getDocumentRoot(), candidateGroup.rules.article)) - avgTitleWordCount,
           titleDiffersDescription: candidateGroup.rules.title !== candidateGroup.rules.description
         };
         return {
@@ -288,7 +274,7 @@ module.exports = function (document, console) {
   };
 
   this.getRelativePath = (node, context) => {
-    console.log(`getting path of ${node} in ${context}`);
+    // console.log(`getting path of ${node} in ${context}`);
     let path = node.tagName; // tagName for text nodes is undefined
     while (node.parentNode !== context) {
       node = node.parentNode;

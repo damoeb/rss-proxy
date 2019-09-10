@@ -9,10 +9,10 @@ describe('news_ycombinator_com', () => {
 
   beforeEach(() => {
     document = testHelper.getDocumetOfHtmlFile('test/pages/news_ycombinator_com.html');
-    parser = new Parser(document, testHelper.getMockConsole());
+    parser = new Parser(document, console);
   });
 
-  it.only('#findArticleRules works', () => {
+  it.skip('#findArticleRules works', () => {
 
     const rules = parser.findArticleRules();
 
