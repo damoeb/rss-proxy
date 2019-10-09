@@ -1,7 +1,7 @@
 const {expect} = require('chai');
 const testHelper = require('./test-helper');
 
-const Parser = require('../../app/parser');
+const Parser2 = require('../../app/parser2');
 
 describe('nature_com', () => {
 
@@ -9,12 +9,12 @@ describe('nature_com', () => {
 
   beforeEach(() => {
     document = testHelper.getDocumetOfHtmlFile('test/pages/nature_com.html');
-    parser = new Parser(document, testHelper.getMockConsole());
+    parser = new Parser2(document, testHelper.getMockConsole());
   });
 
   it('#findArticles works', () => {
 
-    const articles = parser.findArticles();
+    const articles = parser.getArticles();
 
     expect(articles[0]).to.eql({
       title: 'First-ever picture of a black hole scoops US$3-million prize',

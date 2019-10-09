@@ -2,6 +2,7 @@ const {expect} = require('chai');
 const testHelper = require('./test-helper');
 
 const Parser = require('../../app/parser');
+const Parser2 = require('../../app/parser2');
 
 describe('derstandard_at', () => {
 
@@ -9,32 +10,12 @@ describe('derstandard_at', () => {
 
   beforeEach(() => {
     document = testHelper.getDocumetOfHtmlFile('test/pages/derstandard_at.html');
-     parser = new Parser(document, testHelper.getMockConsole());
-  });
-
-  // it.skip('#findArticleRules works', () => {
-  //   // todo improve speed
-  //   parser.findCandidatesFromRoot();
-  // });
-
-  it('#findArticleRules works', () => {
-
-    const rules = parser.findArticleRules();
-
-    expect(rules[0].rules).to.eql({
-        article: 'MAIN>DIV.layout>SECTION>ARTICLE',
-        articleTagName: 'ARTICLE',
-        title: 'A.teaser-inner>HEADER>H1.teaser-title',
-        description: 'A.teaser-inner>HEADER>P.teaser-subtitle',
-        link: 'A'
-      }
-    );
-
+     parser = new Parser2(document, testHelper.getMockConsole());
   });
 
   it('#findArticles works', () => {
 
-    const articles = parser.findArticles();
+    const articles = parser.getArticles();
 
     expect(articles[0]).to.eql({
       title: 'Von blauen Netzwerken und schwarzen Rächern im Innenministerium',

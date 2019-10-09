@@ -1,7 +1,7 @@
 const {expect} = require('chai');
 const testHelper = require('./test-helper');
 
-const Parser = require('../../app/parser');
+const Parser2 = require('../../app/parser2');
 
 describe('news_ycombinator_com', () => {
 
@@ -9,7 +9,7 @@ describe('news_ycombinator_com', () => {
 
   beforeEach(() => {
     document = testHelper.getDocumetOfHtmlFile('test/pages/news_ycombinator_com.html');
-    parser = new Parser(document, console);
+    parser = new Parser2(document, console);
   });
 
   it.skip('#findArticleRules works', () => {
@@ -25,9 +25,9 @@ describe('news_ycombinator_com', () => {
     });
   });
 
-  it.skip('#findArticles works', () => {
+  it.only('#findArticles works', () => {
 
-    const articles = parser.findArticles();
+    const articles = parser.getArticles();
 
     expect(articles[0]).to.eql({
       title: 'Off-Grid, Solar-Powered, Zero-Battery Refrigerator',

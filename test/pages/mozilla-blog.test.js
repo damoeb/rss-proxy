@@ -1,7 +1,7 @@
 const {expect} = require('chai');
 const testHelper = require('./test-helper');
 
-const Parser = require('../../app/parser');
+const Parser2 = require('../../app/parser2');
 
 describe('mozilla-blog', () => {
 
@@ -9,12 +9,12 @@ describe('mozilla-blog', () => {
 
   beforeEach(() => {
     document = testHelper.getDocumetOfHtmlFile('test/pages/mozilla-blog.html');
-    parser = new Parser(document, testHelper.getMockConsole());
+    parser = new Parser2(document, testHelper.getMockConsole());
   });
 
   it('#findArticles works', () => {
 
-    const articles = parser.findArticles();
+    const articles = parser.getArticles();
 
     expect(articles[0]).to.eql({
       title: 'Mozilla takes action to protect users in Kazakhstan',

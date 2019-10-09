@@ -303,7 +303,7 @@ module.exports = function (document, console) {
     // todo abort if found one\
     // todo an href usually contains a textnode too
     return findHrefNodes(node).length > 0 && this.findTextNodes(node, 3).length > 0;
-  }
+  };
 
   this.findTextNodes = (node, minTitleWordCount=1) => {
 

@@ -31,30 +31,40 @@ module.exports = function (document, console) {
   };
 
   this.findArticleContext = (nodeElements, root) => {
-    let path = [];
-    let currentNode = nodeElements[0].element.parentNode;
-    while(!currentNode.isSameNode(root)) {
-      path.push(currentNode);
-      currentNode = currentNode.parentNode;
+    let currentNodes = nodeElements.map(nodeElement => nodeElement.element);
+    while(true) {
+      let parentNodes = currentNodes.map(currentNode => currentNode.parentNode);
+      // todo all parent nodes are the same
+      if (parentNodes[0].isSameNode(parentNodes[1])) {
+        break;
+      }
+      currentNodes = parentNodes;
     }
-    path.reverse();
-
-    let pos = 0;
-    while (nodeElements.every(nodeElement => this.isParentOf(path[pos], nodeElement.element))) {
-      pos++;
-    }
-
-    const nthparent = path.length - pos -1;
+    // let path = [];
+    // let currentNode = nodeElements[0].element.parentNode;
+    // while(!currentNode.isSameNode(root)) {
+    //   path.push(currentNode);
+    //   currentNode = currentNode.parentNode;
+    // }
+    // path.reverse();
+    //
+    // let pos = 0;
+    // while (nodeElements.every(nodeElement => this.isParentOf(path[pos], nodeElement.element))) {
+    //   pos++;
+    // }
+    //
+    // const nthparent = path.length - pos;
+    // const nthparent = 1;
 
     // return path.filter((val, index) => index <= pos + 1).map(node => node.tagName).join('>');
 
-    return nodeElements.map(nodeElement => {
+    return nodeElements.map((nodeElement, index) => {
       const link = nodeElement.element;
-      let context = link;
-      let walkup = nthparent;
-      while(walkup-- > 0) {
-        context = context.parentNode;
-      }
+      const context = currentNodes[index];
+      // let walkup = nthparent;
+      // while(walkup-- > 0) {
+      //   context = context.parentNode;
+      // }
       return {
         linkElement: link,
         contextElement: context,
@@ -142,7 +152,7 @@ module.exports = function (document, console) {
           return this.toWords(otherTextNode.textContent);
         });
       const words = wordsOfNode.flat(1);
-      const variance = this.uniq(words).length/words.length;
+      const variance = this.uniq(words).length / words.length;
 
       const totalWordCountSum = wordsOfNode.map(words => words.length).reduce((sum, wordCount) => sum + wordCount, 0);
       const avgWordCount = totalWordCountSum / wordsOfNode.length;
@@ -171,7 +181,7 @@ module.exports = function (document, console) {
 
   this.findDescription = (group) => {
     // avg word count
-    const totalWordCount = group.articles.map(article => {
+    const articleWords = group.articles.map(article => {
       return group.commonTextNodePath
         .map(path => Array.from(article.contextElement.querySelectorAll(path))
           .map(textNode => textNode.textContent)
@@ -179,10 +189,15 @@ module.exports = function (document, console) {
         .flat(1)
         .map(text => this.toWords(text))
         .flat(1);
-    }).reduce((sum, articleWords) => {
+    });
+
+    const totalWordCount = articleWords.reduce((sum, articleWords) => {
       return sum + articleWords.length;
     }, 0);
-    group.stats.description = {avgWordCount: totalWordCount/group.articles.length};
+    group.stats.description = {
+      variance: this.uniq(articleWords.flat(1)).length / articleWords.flat(1).length,
+      avgWordCount: totalWordCount/group.articles.length
+    };
     return group;
   };
 
@@ -214,7 +229,8 @@ module.exports = function (document, console) {
     const rules =  relevantGroups
       .map(group => {
 
-      group.score = group.articles.length * (group.stats.title.avgWordCount + group.stats.description.avgWordCount);
+      group.score = group.stats.title.variance * group.stats.title.avgWordCount +
+        group.stats.description.variance * group.stats.description.avgWordCount;
 
       return group;
     })
@@ -223,11 +239,13 @@ module.exports = function (document, console) {
     const bestRule = rules[0];
     return Array.from(document.querySelectorAll(bestRule.path)).map(element => {
       return {
-        title: element.querySelector(bestRule.title.textNodePath).textContent,
+        title: element.querySelector(bestRule.title.textNodePath).textContent.trim(),
         link: element.querySelector(bestRule.link).getAttribute('href'),
         description: bestRule.commonTextNodePath.map(textNodePath => {
-          return Array.from(element.querySelectorAll(textNodePath)).map(textNode => textNode.textContent);
-        }).flat(1)
+          return Array.from(element.querySelectorAll(textNodePath)).map(textNode => textNode.textContent.trim());
+        })
+          .flat(1)
+          .filter(text => text.length > 2)
       }
     })
 
