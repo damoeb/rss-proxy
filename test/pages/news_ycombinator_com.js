@@ -14,7 +14,7 @@ describe('news_ycombinator_com', () => {
 
   it.skip('#findArticleRules works', () => {
 
-    const rules = parser.findArticleRules();
+    const rules = parser.getArticleRules();
 
     expect(rules[0].rules).to.eql({
         article: 'CENTER>TABLE>TBODY>TR>TD>TABLE.itemlist>TBODY>TR',
@@ -25,7 +25,7 @@ describe('news_ycombinator_com', () => {
     });
   });
 
-  it.only('#findArticles works', () => {
+  it.skip('#findArticles works', () => {
 
     const articles = parser.getArticles();
 

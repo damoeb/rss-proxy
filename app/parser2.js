@@ -5,7 +5,6 @@ module.exports = function (document, console) {
   };
 
   this.getRelativePath = (node, context, withClassNames) => {
-    // console.log(`getting path of ${node} in ${context}`);
     let path = node.tagName; // tagName for text nodes is undefined
     while (node.parentNode !== context) {
       node = node.parentNode;
@@ -22,17 +21,9 @@ module.exports = function (document, console) {
     return Array.from(document.getElementsByTagName('A'));
   };
 
-  this.isParentOf = function (potentialParent, node) {
-      let parent = node.parentNode;
-      while(parent!=null && !parent.isSameNode(potentialParent)) {
-        parent = parent.parentNode;
-      }
-      return parent!=null && parent.isSameNode(potentialParent);
-  };
-
   this.findArticleContext = (nodeElements, root) => {
     let currentNodes = nodeElements.map(nodeElement => nodeElement.element);
-    while(true) {
+    while (true) {
       let parentNodes = currentNodes.map(currentNode => currentNode.parentNode);
       // todo all parent nodes are the same
       if (parentNodes[0].isSameNode(parentNodes[1])) {
@@ -40,31 +31,10 @@ module.exports = function (document, console) {
       }
       currentNodes = parentNodes;
     }
-    // let path = [];
-    // let currentNode = nodeElements[0].element.parentNode;
-    // while(!currentNode.isSameNode(root)) {
-    //   path.push(currentNode);
-    //   currentNode = currentNode.parentNode;
-    // }
-    // path.reverse();
-    //
-    // let pos = 0;
-    // while (nodeElements.every(nodeElement => this.isParentOf(path[pos], nodeElement.element))) {
-    //   pos++;
-    // }
-    //
-    // const nthparent = path.length - pos;
-    // const nthparent = 1;
-
-    // return path.filter((val, index) => index <= pos + 1).map(node => node.tagName).join('>');
 
     return nodeElements.map((nodeElement, index) => {
       const link = nodeElement.element;
       const context = currentNodes[index];
-      // let walkup = nthparent;
-      // while(walkup-- > 0) {
-      //   context = context.parentNode;
-      // }
       return {
         linkElement: link,
         contextElement: context,
@@ -81,7 +51,7 @@ module.exports = function (document, console) {
     const textNodes = [];
     const walk = document.createTreeWalker(el, -1, null, false);
     let node;
-    while((node = walk.nextNode())) {
+    while ((node = walk.nextNode())) {
       if (node.cloneNode(false).textContent.trim().length > 0) {
         textNodes.push(node);
       }
@@ -96,21 +66,21 @@ module.exports = function (document, console) {
     const groupedTextNodes = textNodes
       .map(textNode => this.getRelativePath(textNode, referenceArticleNode))
       .reduce((map, pathToTextNode) => {
-      // check every article contains the path
-      const existsEverywhere = articles.every(article => {
-        const resolvedTextNode = article.contextElement.querySelector(pathToTextNode);
-        // article.commonTextNodes.push(resolvedTextNode);
-        return !pathToTextNode || resolvedTextNode !== null;
-      });
+        // check every article contains the path
+        const existsEverywhere = articles.every(article => {
+          const resolvedTextNode = article.contextElement.querySelector(pathToTextNode);
+          // article.commonTextNodes.push(resolvedTextNode);
+          return !pathToTextNode || resolvedTextNode !== null;
+        });
 
-      if (existsEverywhere) {
-        map.common.push(pathToTextNode);
-      } else {
-        map.notCommon.push(pathToTextNode);
-      }
-      return map;
+        if (existsEverywhere) {
+          map.common.push(pathToTextNode);
+        } else {
+          map.notCommon.push(pathToTextNode);
+        }
+        return map;
 
-    }, {common:[], notCommon:[]});
+      }, {common: [], notCommon: []});
 
     return {
       articles,
@@ -159,8 +129,12 @@ module.exports = function (document, console) {
 
       return {variance, avgWordCount, textNodePath};
     })
-      .filter((d) => { return d.avgWordCount > 3; })
-      .sort((a,b) => { return b.variance - a.variance; });
+      .filter((d) => {
+        return d.avgWordCount > 3;
+      })
+      .sort((a, b) => {
+        return b.variance - a.variance;
+      });
 
     if (sortedTitleNodes.length === 0) {
       throw new Error('No textNode found that looks like a title');
@@ -196,18 +170,18 @@ module.exports = function (document, console) {
     }, 0);
     group.stats.description = {
       variance: this.uniq(articleWords.flat(1)).length / articleWords.flat(1).length,
-      avgWordCount: totalWordCount/group.articles.length
+      avgWordCount: totalWordCount / group.articles.length
     };
     return group;
   };
 
-  this.getArticles = () => {
+  this.getArticleRules = () => {
     const body = this.getDocumentRoot();
     const linkElements = this.findLinks()
       .filter(element => this.toWords(element.textContent).length > 3)
       .map(element => {
-      return {element, path: this.getRelativePath(element, body)};
-    });
+        return {element, path: this.getRelativePath(element, body)};
+      });
     const linksGroupedByPath = linkElements.reduce((groups, linkPath) => {
       if (!groups[linkPath.path]) {
         groups[linkPath.path] = [];
@@ -226,17 +200,20 @@ module.exports = function (document, console) {
       // find description
       .map(articlesInGroup => this.findDescription(articlesInGroup));
 
-    const rules =  relevantGroups
+    return relevantGroups
       .map(group => {
 
-      group.score = group.stats.title.variance * group.stats.title.avgWordCount +
-        group.stats.description.variance * group.stats.description.avgWordCount;
+        group.score = group.stats.title.variance * group.stats.title.avgWordCount +
+          group.stats.description.variance * group.stats.description.avgWordCount;
 
-      return group;
-    })
+        return group;
+      })
       .sort((a, b) => b.score - a.score);
+  };
 
-    const bestRule = rules[0];
+  this.getArticles = () => {
+
+    const bestRule = this.getArticleRules()[0];
     return Array.from(document.querySelectorAll(bestRule.path)).map(element => {
       return {
         title: element.querySelector(bestRule.title.textNodePath).textContent.trim(),
