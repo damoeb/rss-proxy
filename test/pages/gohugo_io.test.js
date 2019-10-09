@@ -34,8 +34,15 @@ describe('gohugo_io', () => {
     expect(articles[0]).to.eql({
         title: 'Hugo 0.57.2: A couple of Bug Fixes',
         link: '/news/0.57.2-relnotes/',
-        description: 'This version fixes a couple of bugs introduced in 0.57.0.\n  Read More »'
-      }
+        "description": [
+          "August 17, 2019",
+          "Hugo 0.57.2: A couple of Bug Fixes",
+          "August 17, 2019Hugo 0.57.2: A couple of Bug FixesThis version fixes a couple of bugs introduced in 0.57.0.\n  Read More »",
+          "This version fixes a couple of bugs introduced in 0.57.0.\n  Read More »",
+          "Read More »"
+        ]
+
+  }
     );
 
   });

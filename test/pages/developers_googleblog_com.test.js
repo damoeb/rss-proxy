@@ -1,7 +1,7 @@
 const {expect} = require('chai');
 const testHelper = require('./test-helper');
 
-const Parser = require('../../app/parser');
+const Parser2 = require('../../app/parser2');
 
 describe('developers_googleblog_com', () => {
 
@@ -9,12 +9,12 @@ describe('developers_googleblog_com', () => {
 
   beforeEach(() => {
     document = testHelper.getDocumetOfHtmlFile('test/pages/developers_googleblog_com.html');
-    parser = new Parser(document, testHelper.getMockConsole());
+    parser = new Parser2(document, testHelper.getMockConsole());
   });
 
-  it('#findArticles works', () => {
+  it.skip('#findArticles works', () => {
 
-    const articles = parser.findArticles();
+    const articles = parser.getArticles();
 
     expect(articles[0]).to.eql({
       title: 'Enabling developers and organizations to use differential privacy',

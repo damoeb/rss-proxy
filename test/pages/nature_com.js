@@ -19,7 +19,14 @@ describe('nature_com', () => {
     expect(articles[0]).to.eql({
       title: 'First-ever picture of a black hole scoops US$3-million prize',
       link: '/articles/d41586-019-02659-5',
-      description: 'The Event Horizon Telescope team wins a Breakthrough Prize — one of six awards covering physics, the life sciences and mathematics.'
+      "description": [
+            "News",
+            "05 September 2019",
+            "First-ever picture of a black hole scoops US$3-million prize",
+            "The Event Horizon Telescope team wins a Breakthrough Prize — one of six awards covering physics, the life sciences and mathematics.",
+            "Zeeya Merali"
+          ]
+
     });
 
   });

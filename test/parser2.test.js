@@ -14,7 +14,7 @@ describe('parser2', () => {
   });
 
 
-  it.only('#findArticleContext', () => {
+  it('#findArticleContext', () => {
     const links = Array.from(document.querySelectorAll('.entry-header>A')).map(element => {return {element}});
     const contexts = parser2.findArticleContext(links, parser2.getDocumentRoot());
     expect(contexts[0].contextElementPath).to.eql('DIV>MAIN>DIV>ARTICLE');

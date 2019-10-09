@@ -213,19 +213,23 @@ module.exports = function (document, console) {
 
   this.getArticles = () => {
 
-    const bestRule = this.getArticleRules()[0];
+    const rules = this.getArticleRules();
+    const bestRule = rules[0];
     return Array.from(document.querySelectorAll(bestRule.path)).map(element => {
-      return {
-        title: element.querySelector(bestRule.title.textNodePath).textContent.trim(),
-        link: element.querySelector(bestRule.link).getAttribute('href'),
-        description: bestRule.commonTextNodePath.map(textNodePath => {
-          return Array.from(element.querySelectorAll(textNodePath)).map(textNode => textNode.textContent.trim());
-        })
-          .flat(1)
-          .filter(text => text.length > 2)
+      try {
+        return {
+          title: element.querySelector(bestRule.title.textNodePath).textContent.trim(),
+          link: element.querySelector(bestRule.link).getAttribute('href'),
+          description: bestRule.commonTextNodePath.map(textNodePath => {
+            return Array.from(element.querySelectorAll(textNodePath)).map(textNode => textNode.textContent.trim());
+          })
+            .flat(1)
+            .filter(text => text.length > 2)
+        }
+      } catch (err) {
+        return undefined;
       }
-    })
-
+    }).filter(article => article)
   };
 
   return this;

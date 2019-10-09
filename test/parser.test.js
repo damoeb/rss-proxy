@@ -5,7 +5,7 @@ const mergedRules = require('./fixtures/merged-rules');
 const testHelper = require('./pages/test-helper');
 
 
-describe('parser', () => {
+describe.skip('parser', () => {
   let parser;
   beforeEach(() => {
     parser = new Parser(null, testHelper.getMockConsole());
