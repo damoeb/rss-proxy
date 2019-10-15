@@ -1,10 +1,15 @@
 <div id="panels">
   <div id="editor">
     <label>Html</label>
-    <textarea [value]="html"></textarea>
+    <textarea [(ngModel)]="html"></textarea>
     <button (click)="parseHtml()">Parse HTML</button>
   </div>
-  <div [innerText]="json">
+  <div id="feed">
+    <select>
+      <option [value]="rule" *ngFor="let rule of rules" (change)="applyRule(rule)">{{rule}}</option>
+    </select>
+    <div [innerText]="json">
 
+    </div>
   </div>
 </div>

@@ -1,45 +1,45 @@
-interface ElementWithPath {
+export interface ElementWithPath {
   element: HTMLElement;
   path: string;
 }
 
-interface ArticleRule extends PartialArticlesWithDescription {
+export interface ArticleRule extends PartialArticlesWithDescription {
   score: number
 }
 
-interface PartialArticlesWithStructure {
+export interface PartialArticlesWithStructure {
   articles: Array<ArticleContext>;
   commonTextNodePath: Array<string>;
   notcommonTextNodePath: Array<string>;
   structureSimilarity: number
 }
 
-interface Stats {
+export interface Stats {
   title: any;
   description?: any;
 }
 
-interface StatsWrapper {
+export interface StatsWrapper {
   stats: Stats
 }
 
-interface Article {
+export interface Article {
   title: string;
   link: string;
   description?: Array<string>;
 }
 
-interface PartialArticlesWithTitle extends PartialArticlesWithStructure, StatsWrapper {
+export interface PartialArticlesWithTitle extends PartialArticlesWithStructure, StatsWrapper {
   path: string;
   linkPath: string;
   titlePath: string;
 }
 
-interface PartialArticlesWithDescription extends PartialArticlesWithTitle {
+export interface PartialArticlesWithDescription extends PartialArticlesWithTitle {
 
 }
 
-interface ArticleContext {
+export interface ArticleContext {
   linkElement: HTMLElement;
   contextElement: HTMLElement;
   contextElementPath: string
@@ -272,12 +272,17 @@ export class FeedParser {
 
     const rules = this.getArticleRules();
     const bestRule = rules[0];
-    return Array.from(this.document.querySelectorAll(bestRule.path)).map(element => {
+    return this.getArticle(bestRule);
+  }
+
+  public getArticle (rule: ArticleRule): Array<Article> {
+
+    return Array.from(this.document.querySelectorAll(rule.path)).map(element => {
       try {
         return {
-          title: element.querySelector(bestRule.titlePath).textContent.trim(),
-          link: element.querySelector(bestRule.linkPath).getAttribute('href'),
-          description: bestRule.commonTextNodePath.map(textNodePath => {
+          title: element.querySelector(rule.titlePath).textContent.trim(),
+          link: element.querySelector(rule.linkPath).getAttribute('href'),
+          description: rule.commonTextNodePath.map(textNodePath => {
             return Array.from(element.querySelectorAll(textNodePath)).map(textNode => textNode.textContent.trim());
           })
             .flat(1)
