@@ -3,8 +3,46 @@ interface ElementWithPath {
   path: string;
 }
 
-interface ArticleRule {
+interface ArticleRule extends PartialArticlesWithDescription {
+  score: number
+}
 
+interface PartialArticlesWithStructure {
+  articles: Array<ArticleContext>;
+  commonTextNodePath: Array<string>;
+  notcommonTextNodePath: Array<string>;
+  structureSimilarity: number
+}
+
+interface Stats {
+  title: any;
+  description?: any;
+}
+
+interface StatsWrapper {
+  stats: Stats
+}
+
+interface Article {
+  title: string;
+  link: string;
+  description?: Array<string>;
+}
+
+interface PartialArticlesWithTitle extends PartialArticlesWithStructure, StatsWrapper {
+  path: string;
+  linkPath: string;
+  titlePath: string;
+}
+
+interface PartialArticlesWithDescription extends PartialArticlesWithTitle {
+
+}
+
+interface ArticleContext {
+  linkElement: HTMLElement;
+  contextElement: HTMLElement;
+  contextElementPath: string
 }
 
 export class FeedParser {
@@ -18,7 +56,7 @@ export class FeedParser {
   private getRelativePath (node: HTMLElement, context:HTMLElement, withClassNames=false) {
     let path = node.tagName; // tagName for text nodes is undefined
     while (node.parentNode !== context) {
-      node = node.parentNode;
+      node = node.parentNode as HTMLElement;
       if (typeof (path) === 'undefined') {
         path = this.getTagName(node, withClassNames);
       } else {
@@ -32,21 +70,21 @@ export class FeedParser {
     return Array.from(this.document.getElementsByTagName('A')) as Array<HTMLElement>;
   }
 
-  private findArticleContext (nodeElements: Array<ElementWithPath>, root: HTMLElement) {
-    let currentNodes: Array<Node> = nodeElements.map(nodeElement => nodeElement.element);
+  private findArticleContext (nodeElements: Array<ElementWithPath>, root: HTMLElement): Array<ArticleContext> {
+    let currentNodes: Array<HTMLElement> = nodeElements.map(nodeElement => nodeElement.element);
     while (true) {
       let parentNodes = currentNodes.map(currentNode => currentNode.parentNode);
       // todo all parent nodes are the same
       if (parentNodes[0].isSameNode(parentNodes[1])) {
         break;
       }
-      currentNodes = parentNodes;
+      currentNodes = parentNodes as Array<HTMLElement>;
     }
 
     return nodeElements.map((nodeElement, index) => {
       const link = nodeElement.element;
       const context = currentNodes[index];
-      return {
+      return <ArticleContext> {
         linkElement: link,
         contextElement: context,
         contextElementPath: this.getRelativePath(context, root)
@@ -54,23 +92,23 @@ export class FeedParser {
     })
   }
 
-  private toWords (text) : Array<string> {
+  private toWords (text: string) : Array<string> {
     return text.trim().split(' ').filter(word => word.length > 0);
   }
 
-  private textNodesUnder (el) {
-    const textNodes = [];
+  private textNodesUnder (el: HTMLElement): Array<HTMLElement> {
+    const textNodes: Array<HTMLElement> = [];
     const walk = this.document.createTreeWalker(el, -1, null, false);
     let node;
     while ((node = walk.nextNode())) {
       if (node.cloneNode(false).textContent.trim().length > 0) {
-        textNodes.push(node);
+        textNodes.push(node as HTMLElement); // fixme check
       }
     }
     return textNodes;
   }
 
-  private findCommonTextNodes (articles) {
+  private findCommonTextNodes (articles: Array<ArticleContext>): PartialArticlesWithStructure {
     const referenceArticleNode = articles[0].contextElement;
     const textNodes = this.textNodesUnder(referenceArticleNode);
 
@@ -96,12 +134,13 @@ export class FeedParser {
     return {
       articles,
       commonTextNodePath: this.uniq(groupedTextNodes.common),
-      notcommonTextNodePath: this.uniq(groupedTextNodes.notCommon).filter(notCommonPath => !groupedTextNodes.common.some(commonPath => notCommonPath.startsWith(commonPath))),
+      notcommonTextNodePath: this.uniq(groupedTextNodes.notCommon)
+        .filter((notCommonPath: string) => !groupedTextNodes.common.some((commonPath: string) => notCommonPath.startsWith(commonPath))),
       structureSimilarity: groupedTextNodes.common.length / textNodes.length
     };
   }
 
-  private getTagName (node: HTMLElement, withClassNames) {
+  private getTagName (node: HTMLElement, withClassNames: boolean): string {
     if (!withClassNames) {
       return node.tagName;
     }
@@ -113,7 +152,7 @@ export class FeedParser {
     return node.tagName;
   }
 
-  private uniq (list) {
+  private uniq (list: Array<string>): Array<string> {
     return list.reduce((uniqList, item) => {
 
       if (uniqList.indexOf(item) === -1) {
@@ -124,9 +163,9 @@ export class FeedParser {
     }, [])
   }
 
-  private findTitle (group) {
+  private findTitle (group: PartialArticlesWithStructure): PartialArticlesWithTitle {
     const referenceArticle = group.articles[0];
-    const sortedTitleNodes = group.commonTextNodePath.map((textNodePath) => {
+    const sortedTitleNodePaths = group.commonTextNodePath.map((textNodePath) => {
       const wordsOfNode = group.articles
         .map(article => {
           const otherTextNode = article.contextElement.querySelector(textNodePath);
@@ -145,26 +184,27 @@ export class FeedParser {
       })
       .sort((a, b) => {
         return b.variance - a.variance;
-      });
+      })
+      .map(complexNode => complexNode.textNodePath);
 
-    if (sortedTitleNodes.length === 0) {
+    if (sortedTitleNodePaths.length === 0) {
       throw new Error('No textNode found that looks like a title');
     }
 
-    const titlePath = sortedTitleNodes[0];
+    const titlePath = sortedTitleNodePaths[0];
     return {
       stats: {title: titlePath},
       articles: group.articles,
       structureSimilarity: group.structureSimilarity,
       path: referenceArticle.contextElementPath,
-      link: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
-      title: titlePath,
+      linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
+      titlePath,
       commonTextNodePath: group.commonTextNodePath.filter(path => path !== titlePath),
       notcommonTextNodePath: group.notcommonTextNodePath
     }
   }
 
-  private findDescription (group) {
+  private findDescription (group: PartialArticlesWithTitle): PartialArticlesWithDescription {
     // avg word count
     const articleWords = group.articles.map(article => {
       return group.commonTextNodePath
@@ -203,9 +243,9 @@ export class FeedParser {
       }
       groups[linkPath.path].push(linkPath);
       return groups;
-    }, {});
+    }, {} as any);
 
-    const relevantGroups = (Object.values(linksGroupedByPath) as Array<Array<ElementWithPath>>)
+    const relevantGroups: Array<PartialArticlesWithDescription> = (Object.values(linksGroupedByPath) as Array<Array<ElementWithPath>>)
       .filter(linkElements => linkElements.length > 3)
       .map(linkElements => this.findArticleContext(linkElements, body))
       // find shared text nodes
@@ -218,23 +258,25 @@ export class FeedParser {
     return relevantGroups
       .map(group => {
 
-        group.score = group.stats.title.variance * group.stats.title.avgWordCount +
+        const rule = group as ArticleRule;
+
+        rule.score = group.stats.title.variance * group.stats.title.avgWordCount +
           group.stats.description.variance * group.stats.description.avgWordCount;
 
-        return group;
+        return rule;
       })
       .sort((a, b) => b.score - a.score);
   }
 
-  public getArticles () {
+  public getArticles (): Array<Article> {
 
     const rules = this.getArticleRules();
     const bestRule = rules[0];
     return Array.from(this.document.querySelectorAll(bestRule.path)).map(element => {
       try {
         return {
-          title: element.querySelector(bestRule.title.textNodePath).textContent.trim(),
-          link: element.querySelector(bestRule.link).getAttribute('href'),
+          title: element.querySelector(bestRule.titlePath).textContent.trim(),
+          link: element.querySelector(bestRule.linkPath).getAttribute('href'),
           description: bestRule.commonTextNodePath.map(textNodePath => {
             return Array.from(element.querySelectorAll(textNodePath)).map(textNode => textNode.textContent.trim());
           })
