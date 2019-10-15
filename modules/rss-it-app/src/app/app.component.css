@@ -1,0 +1,10 @@
+#panels {
+  display: flex;
+}
+#editor {
+  flex: 1;
+  background-color: black;
+}
+#feed {
+  flex: 1;
+}
