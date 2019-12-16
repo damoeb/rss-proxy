@@ -4,12 +4,14 @@
     <textarea [(ngModel)]="html"></textarea>
     <button (click)="parseHtml()">Parse HTML</button>
   </div>
-  <div id="feed">
-    <select>
-      <option [value]="rule" *ngFor="let rule of rules" (change)="applyRule(rule)">{{rule}}</option>
+  <div id="feed" style="overflow: auto">
+    <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule">
+      <option *ngFor="let rule of rules" [ngValue]="rule">{{ rule?.score }} {{ rule?.path }}</option>
     </select>
-    <div [innerText]="json">
-
+    <div>
+      <div>Score: {{currentRule?.score}}</div>
+      <div>Stats: {{currentRule?.stats | json}}</div>
+      <pre [innerText]="json"></pre>
     </div>
   </div>
 </div>

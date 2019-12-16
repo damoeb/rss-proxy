@@ -165,41 +165,41 @@ export class FeedParser {
 
   private findTitle (group: PartialArticlesWithStructure): PartialArticlesWithTitle {
     const referenceArticle = group.articles[0];
-    const sortedTitleNodePaths = group.commonTextNodePath.map((textNodePath) => {
-      const wordsOfNode = group.articles
-        .map(article => {
-          const otherTextNode = article.contextElement.querySelector(textNodePath);
-          return this.toWords(otherTextNode.textContent);
+    const sortedTitleNodes = group.commonTextNodePath.map((textNodePath) => {
+        const wordsOfNode = group.articles
+          .map(article => {
+            const otherTextNode = article.contextElement.querySelector(textNodePath);
+            return otherTextNode ? this.toWords(otherTextNode.textContent) : [];
+          });
+        const words = wordsOfNode.flat(1);
+        const variance = this.uniq(words).length / Math.max(words.length, 1);
+
+        const totalWordCountSum = wordsOfNode.map(words => words.length).reduce((sum, wordCount) => sum + wordCount, 0);
+        const avgWordCount = totalWordCountSum / wordsOfNode.length;
+
+        return {variance, avgWordCount, textNodePath};
+      })
+        .filter((d) => {
+          return d.avgWordCount > 3;
+        })
+        .sort((a, b) => {
+          return b.variance - a.variance;
         });
-      const words = wordsOfNode.flat(1);
-      const variance = this.uniq(words).length / words.length;
 
-      const totalWordCountSum = wordsOfNode.map(words => words.length).reduce((sum, wordCount) => sum + wordCount, 0);
-      const avgWordCount = totalWordCountSum / wordsOfNode.length;
-
-      return {variance, avgWordCount, textNodePath};
-    })
-      .filter((d) => {
-        return d.avgWordCount > 3;
-      })
-      .sort((a, b) => {
-        return b.variance - a.variance;
-      })
-      .map(complexNode => complexNode.textNodePath);
-
-    if (sortedTitleNodePaths.length === 0) {
-      throw new Error('No textNode found that looks like a title');
+    if (sortedTitleNodes.length === 0) {
+      // throw new Error('No textNode found that looks like a title');
+      return null;
     }
 
-    const titlePath = sortedTitleNodePaths[0];
+    const titlePath = sortedTitleNodes[0];
     return {
       stats: {title: titlePath},
       articles: group.articles,
       structureSimilarity: group.structureSimilarity,
       path: referenceArticle.contextElementPath,
       linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
-      titlePath,
-      commonTextNodePath: group.commonTextNodePath.filter(path => path !== titlePath),
+      titlePath: titlePath.textNodePath,
+      commonTextNodePath: group.commonTextNodePath.filter(path => path !== titlePath.textNodePath),
       notcommonTextNodePath: group.notcommonTextNodePath
     }
   }
@@ -220,7 +220,7 @@ export class FeedParser {
       return sum + articleWords.length;
     }, 0);
     group.stats.description = {
-      variance: this.uniq(articleWords.flat(1)).length / articleWords.flat(1).length,
+      variance: this.uniq(articleWords.flat(1)).length / Math.max(articleWords.flat(1).length, 1),
       avgWordCount: totalWordCount / group.articles.length
     };
     return group;
@@ -248,10 +248,19 @@ export class FeedParser {
     const relevantGroups: Array<PartialArticlesWithDescription> = (Object.values(linksGroupedByPath) as Array<Array<ElementWithPath>>)
       .filter(linkElements => linkElements.length > 3)
       .map(linkElements => this.findArticleContext(linkElements, body))
+      // .reduce((uniqList, item) => {
+      //
+      //   if (uniqList.filter(item => item.contextElementPath !== item.contextElementPath).length === 0) {
+      //     uniqList.push(item);
+      //   }
+      //
+      //   return uniqList;
+      // }, [])
       // find shared text nodes
       .map(articlesInGroup => this.findCommonTextNodes(articlesInGroup))
       // find title: title is the first text node that has in avg 3+ words and is wrapped by the link
       .map(articlesInGroup => this.findTitle(articlesInGroup))
+      .filter(value => value)
       // find description
       .map(articlesInGroup => this.findDescription(articlesInGroup));
 

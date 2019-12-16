@@ -12,6 +12,7 @@ export class AppComponent {
   json: string = '';
   rules: Array<ArticleRule>;
   private feedParser: FeedParser;
+  currentRule: ArticleRule;
 
   constructor() {
 
@@ -30,6 +31,13 @@ export class AppComponent {
   }
 
   applyRule(rule: ArticleRule) {
-    this.json = JSON.stringify(this.feedParser.getArticle(rule));
+    console.log('apply rule', rule);
+    this.currentRule = rule;
+    this.json = JSON.stringify(this.feedParser.getArticle(rule), null, 2);
+  }
+
+  applyRuleFromEvent(event: Event) {
+    console.log('apply rule', this.currentRule);
+    this.applyRule(this.currentRule);
   }
 }
