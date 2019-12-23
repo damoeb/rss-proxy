@@ -1,4 +1,4 @@
-export interface ElementWithPath {
+export interface LinkPointer {
   element: HTMLElement;
   path: string;
 }
@@ -14,9 +14,29 @@ export interface PartialArticlesWithStructure {
   structureSimilarity: number
 }
 
+export interface TitleFeatures {
+  variance: number
+  avgWordLength: number
+}
+
+export interface TitleRule {
+  features: TitleFeatures
+  textNodePath: string
+}
+
+interface DescriptionFeatures {
+  variance: number
+  avgWordCount: number
+}
+
+export interface DescriptionRule {
+  features: DescriptionFeatures
+  useCommonPaths: boolean
+}
+
 export interface Stats {
-  title: any;
-  description?: any;
+  title: TitleRule;
+  description?: DescriptionRule;
 }
 
 export interface StatsWrapper {
@@ -47,14 +67,15 @@ export interface ArticleContext {
 }
 
 export class FeedParser {
-  constructor(private document: HTMLDocument) {}
+  constructor(private document: HTMLDocument) {
+  }
 
 
-  private getDocumentRoot () : HTMLElement {
+  private getDocumentRoot(): HTMLElement {
     return this.document.getElementsByTagName('body').item(0);
   }
 
-  private getRelativePath (node: HTMLElement, context:HTMLElement, withClassNames=false) {
+  private getRelativePath(node: HTMLElement, context: HTMLElement, withClassNames = false) {
     let path = node.tagName; // tagName for text nodes is undefined
     while (node.parentNode !== context) {
       node = node.parentNode as HTMLElement;
@@ -67,37 +88,43 @@ export class FeedParser {
     return path;
   }
 
-  private findLinks () : Array<HTMLElement> {
+  private findLinks(): Array<HTMLElement> {
     return Array.from(this.document.getElementsByTagName('A')) as Array<HTMLElement>;
   }
 
-  private findArticleContext (nodeElements: Array<ElementWithPath>, root: HTMLElement): Array<ArticleContext> {
-    let currentNodes: Array<HTMLElement> = nodeElements.map(nodeElement => nodeElement.element);
+  private findArticleRootElement(currentElement: HTMLElement[]): HTMLElement[] {
     while (true) {
-      let parentNodes = currentNodes.map(currentNode => currentNode.parentNode);
+      let parentNodes = currentElement.map(currentNode => currentNode.parentNode);
       // todo all parent nodes are the same
       if (parentNodes[0].isSameNode(parentNodes[1])) {
         break;
       }
-      currentNodes = parentNodes as Array<HTMLElement>;
+      currentElement = parentNodes as Array<HTMLElement>;
     }
+    return currentElement;
+  }
 
-    return nodeElements.map((nodeElement, index) => {
-      const link = nodeElement.element;
-      const context = currentNodes[index];
+  private findArticleContexts(linkPointers: Array<LinkPointer>, root: HTMLElement): Array<ArticleContext> {
+    const linkElements = linkPointers.map(nodeElement => nodeElement.element);
+    const articleRootElements = this.findArticleRootElement(linkElements);
+
+    return linkPointers.map((nodeElement, index) => {
+      const linkElement = nodeElement.element;
+      const contextElement = articleRootElements[index];
       return <ArticleContext> {
-        linkElement: link,
-        contextElement: context,
-        contextElementPath: this.getRelativePath(context, root)
+        linkElement,
+        linkPath: this.getRelativePath(linkElement, contextElement),
+        contextElement,
+        contextElementPath: this.getRelativePath(contextElement, root)
       }
     })
   }
 
-  private toWords (text: string) : Array<string> {
+  private toWords(text: string): Array<string> {
     return text.trim().split(' ').filter(word => word.length > 0);
   }
 
-  private textNodesUnder (el: HTMLElement): Array<HTMLElement> {
+  private textNodesUnder(el: HTMLElement): Array<HTMLElement> {
     const textNodes: Array<HTMLElement> = [];
     const walk = this.document.createTreeWalker(el, -1, null, false);
     let node;
@@ -109,7 +136,8 @@ export class FeedParser {
     return textNodes;
   }
 
-  private findCommonTextNodes (articles: Array<ArticleContext>): PartialArticlesWithStructure {
+  private findCommonTextNodes(articles: Array<ArticleContext>): PartialArticlesWithStructure {
+
     const referenceArticleNode = articles[0].contextElement;
     const textNodes = this.textNodesUnder(referenceArticleNode);
 
@@ -132,16 +160,19 @@ export class FeedParser {
 
       }, {common: [], notCommon: []});
 
+    // remove paths that are children of common paths
+    const notCommon = groupedTextNodes.notCommon
+      .filter((notCommonPath: string) => !groupedTextNodes.common.some((commonPath: string) => notCommonPath.startsWith(commonPath)))
+
     return {
       articles,
-      commonTextNodePath: this.uniq(groupedTextNodes.common),
-      notCommonTextNodePath: this.uniq(groupedTextNodes.notCommon)
-        .filter((notCommonPath: string) => !groupedTextNodes.common.some((commonPath: string) => notCommonPath.startsWith(commonPath))),
+      commonTextNodePath: groupedTextNodes.common.filter(this.onlyUnique),
+      notCommonTextNodePath: notCommon,
       structureSimilarity: groupedTextNodes.common.length / textNodes.length
     };
   }
 
-  private getTagName (node: HTMLElement, withClassNames: boolean): string {
+  private getTagName(node: HTMLElement, withClassNames: boolean): string {
     if (!withClassNames) {
       return node.tagName;
     }
@@ -153,7 +184,7 @@ export class FeedParser {
     return node.tagName;
   }
 
-  private uniq (list: Array<string>): Array<string> {
+  private uniq(list: Array<string>): Array<string> {
     return list.reduce((uniqList, item) => {
 
       if (uniqList.indexOf(item) === -1) {
@@ -164,32 +195,21 @@ export class FeedParser {
     }, [])
   }
 
-  private findTitle (group: PartialArticlesWithStructure): PartialArticlesWithTitle {
-    const sortedTitleNodes = group.commonTextNodePath.map((textNodePath) => {
-        const wordsInTitle = group.articles
-          .map(article => {
-            const otherTextNode = article.contextElement.querySelector(textNodePath);
-            return otherTextNode ? this.toWords(otherTextNode.textContent) : [];
-          });
-        const words = wordsInTitle.flat(1);
-        const variance = words.filter(this.onlyUnique).length / Math.max(words.length, 1);
-
-        const totalWordLengthSum = wordsInTitle.map(words => words.length).reduce((sum, wordCount) => sum + wordCount, 0);
-        const avgWordLength = totalWordLengthSum / wordsInTitle.length;
-
-        return {variance, avgWordLength, textNodePath};
+  private findTitles(group: PartialArticlesWithStructure): PartialArticlesWithTitle {
+    const sortedTitleNodes: TitleRule[] = group.commonTextNodePath.map((textNodePath) => {
+      return {features: this.getTitleFeatures(group, textNodePath), textNodePath};
+    })
+      .filter((d) => {
+        return d.features.avgWordLength > 3;
       })
-        .filter((d) => {
-          return d.avgWordLength > 3;
-        })
-        .sort((a, b) => {
-          return b.variance - a.variance;
-        });
+      .sort((a, b) => {
+        return b.features.variance - a.features.variance;
+      });
 
     const referenceArticle = group.articles[0];
 
     if (sortedTitleNodes.length === 0) {
-      console.log(referenceArticle.contextElementPath + 'has not titles');
+      console.log(referenceArticle.contextElementPath + 'has no titles');
       // throw new Error('No textNode found that looks like a title');
       return null;
     }
@@ -216,34 +236,20 @@ export class FeedParser {
     return self.indexOf(value) === index;
   }
 
-  private findDescription (group: PartialArticlesWithTitle): PartialArticlesWithDescription {
-    // avg word count
-    const articleWords = group.articles.map(article => {
-      return group.commonTextNodePath
-        .map(path => Array.from(article.contextElement.querySelectorAll(path))
-          .map(textNode => textNode.textContent)
-        )
-        .flat(1)
-        .map(text => this.toWords(text))
-        .flat(1);
-    });
-
-    const totalWordCount = articleWords.reduce((sum, articleWords) => {
-      return sum + articleWords.length;
-    }, 0);
+  private findDescriptions(group: PartialArticlesWithTitle): PartialArticlesWithDescription {
     group.stats.description = {
-      variance: this.uniq(articleWords.flat(1)).length / Math.max(articleWords.flat(1).length, 1),
-      avgWordCount: totalWordCount / group.articles.length
+      features: this.getDescriptionFeatures(group),
+      useCommonPaths: true
     };
     return group;
   }
 
-  public getArticleRules (): Array<ArticleRule> {
+  public getArticleRules(): Array<ArticleRule> {
 
     const body = this.getDocumentRoot();
 
     // find links
-    const linkElements: Array<ElementWithPath> = this.findLinks()
+    const linkElements: Array<LinkPointer> = this.findLinks()
       .filter(element => this.toWords(element.textContent).length > 3)
       .map(element => {
         return {
@@ -262,37 +268,37 @@ export class FeedParser {
     }, {} as any);
 
 
-    const relevantGroups: Array<PartialArticlesWithDescription> = (Object.values(linksGroupedByPath) as Array<Array<ElementWithPath>>)
+    const relevantGroups: Array<PartialArticlesWithDescription> = (Object.values(linksGroupedByPath) as Array<Array<LinkPointer>>)
       .filter(linkElements => linkElements.length > 3)
-      .map(linkElements => this.findArticleContext(linkElements, body))
+      .map(linkElements => this.findArticleContexts(linkElements, body))
       .map(articlesInGroup => this.findCommonTextNodes(articlesInGroup))
       // find title: title is the first text node that has in avg 3+ words and is wrapped by the link
-      .map(articlesInGroup => this.findTitle(articlesInGroup))
+      .map(articlesInGroup => this.findTitles(articlesInGroup))
       .filter(value => value)
       // find description
-      .map(articlesInGroup => this.findDescription(articlesInGroup));
+      .map(articlesInGroup => this.findDescriptions(articlesInGroup));
 
     return relevantGroups
       .map(group => {
 
         const rule = group as ArticleRule;
 
-        rule.score = group.stats.title.variance * group.stats.title.avgWordCount +
-          group.stats.description.variance * group.stats.description.avgWordCount;
+        rule.score = group.stats.title.features.variance * group.stats.title.features.avgWordLength +
+          group.stats.description.features.variance * group.stats.description.features.avgWordCount;
 
         return rule;
       })
       .sort((a, b) => b.score - a.score);
   }
 
-  public getArticles (): Array<Article> {
+  public getArticles(): Array<Article> {
 
     const rules = this.getArticleRules();
     const bestRule = rules[0];
     return this.getArticlesByRule(bestRule);
   }
 
-  public getArticlesByRule (rule: ArticleRule): Array<Article> {
+  public getArticlesByRule(rule: ArticleRule): Array<Article> {
 
     return Array.from(this.document.querySelectorAll(rule.path)).map(element => {
       try {
@@ -311,5 +317,45 @@ export class FeedParser {
         return undefined;
       }
     }).filter(article => article)
+  }
+
+  private getTitleFeatures(group: PartialArticlesWithStructure, textNodePath: string): TitleFeatures {
+    const wordsInTitles = group.articles
+      .map(article => {
+        const otherTextNode = article.contextElement.querySelector(textNodePath);
+        if (!otherTextNode) {
+          throw new Error('Fatal! textNode does not exist');
+        }
+        return this.toWords(otherTextNode.textContent);
+      });
+    const words = wordsInTitles.flat(1);
+    const variance = words.filter(this.onlyUnique).length / Math.max(words.length, 1);
+
+    const totalWordLengthSum = wordsInTitles.map(words => words.length).reduce((sum, wordCount) => sum + wordCount, 0);
+    const avgWordLength = totalWordLengthSum / wordsInTitles.length;
+
+    return {variance, avgWordLength};
+  }
+
+  private getDescriptionFeatures(group: PartialArticlesWithTitle) {
+    // todo exclude title
+    const articleWords = group.articles.map(article => {
+      return group.commonTextNodePath
+        .map(path => Array.from(article.contextElement.querySelectorAll(path))
+          .map(textNode => textNode.textContent)
+        )
+        .flat(1)
+        .map(text => this.toWords(text))
+        .flat(1);
+    });
+
+    const totalWordCount = articleWords.reduce((sum, articleWords) => {
+      return sum + articleWords.length;
+    }, 0);
+
+    return {
+      variance: this.uniq(articleWords.flat(1)).length / Math.max(articleWords.flat(1).length, 1),
+      avgWordCount: totalWordCount / group.articles.length
+    };
   }
 }
