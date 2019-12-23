@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {ArticleRule, FeedParser} from "./feed-parser";
+import {Article, ArticleRule, FeedParser} from "./feed-parser";
 
 @Component({
   selector: 'app-root',
@@ -13,6 +13,7 @@ export class AppComponent {
   rules: Array<ArticleRule>;
   private feedParser: FeedParser;
   currentRule: ArticleRule;
+  articles: Array<Article>;
 
   constructor() {
 
@@ -33,7 +34,8 @@ export class AppComponent {
   applyRule(rule: ArticleRule) {
     console.log('apply rule', rule);
     this.currentRule = rule;
-    this.json = JSON.stringify(this.feedParser.getArticle(rule), null, 2);
+    this.articles = this.feedParser.getArticlesByRule(rule);
+    this.json = JSON.stringify(this.articles, null, 2);
   }
 
   applyRuleFromEvent(event: Event) {

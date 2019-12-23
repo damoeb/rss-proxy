@@ -10,7 +10,7 @@ export interface ArticleRule extends PartialArticlesWithDescription {
 export interface PartialArticlesWithStructure {
   articles: Array<ArticleContext>;
   commonTextNodePath: Array<string>;
-  notcommonTextNodePath: Array<string>;
+  notCommonTextNodePath: Array<string>;
   structureSimilarity: number
 }
 
@@ -41,6 +41,7 @@ export interface PartialArticlesWithDescription extends PartialArticlesWithTitle
 
 export interface ArticleContext {
   linkElement: HTMLElement;
+  // root of article
   contextElement: HTMLElement;
   contextElementPath: string
 }
@@ -134,7 +135,7 @@ export class FeedParser {
     return {
       articles,
       commonTextNodePath: this.uniq(groupedTextNodes.common),
-      notcommonTextNodePath: this.uniq(groupedTextNodes.notCommon)
+      notCommonTextNodePath: this.uniq(groupedTextNodes.notCommon)
         .filter((notCommonPath: string) => !groupedTextNodes.common.some((commonPath: string) => notCommonPath.startsWith(commonPath))),
       structureSimilarity: groupedTextNodes.common.length / textNodes.length
     };
@@ -164,44 +165,55 @@ export class FeedParser {
   }
 
   private findTitle (group: PartialArticlesWithStructure): PartialArticlesWithTitle {
-    const referenceArticle = group.articles[0];
     const sortedTitleNodes = group.commonTextNodePath.map((textNodePath) => {
-        const wordsOfNode = group.articles
+        const wordsInTitle = group.articles
           .map(article => {
             const otherTextNode = article.contextElement.querySelector(textNodePath);
             return otherTextNode ? this.toWords(otherTextNode.textContent) : [];
           });
-        const words = wordsOfNode.flat(1);
-        const variance = this.uniq(words).length / Math.max(words.length, 1);
+        const words = wordsInTitle.flat(1);
+        const variance = words.filter(this.onlyUnique).length / Math.max(words.length, 1);
 
-        const totalWordCountSum = wordsOfNode.map(words => words.length).reduce((sum, wordCount) => sum + wordCount, 0);
-        const avgWordCount = totalWordCountSum / wordsOfNode.length;
+        const totalWordLengthSum = wordsInTitle.map(words => words.length).reduce((sum, wordCount) => sum + wordCount, 0);
+        const avgWordLength = totalWordLengthSum / wordsInTitle.length;
 
-        return {variance, avgWordCount, textNodePath};
+        return {variance, avgWordLength, textNodePath};
       })
         .filter((d) => {
-          return d.avgWordCount > 3;
+          return d.avgWordLength > 3;
         })
         .sort((a, b) => {
           return b.variance - a.variance;
         });
 
+    const referenceArticle = group.articles[0];
+
     if (sortedTitleNodes.length === 0) {
+      console.log(referenceArticle.contextElementPath + 'has not titles');
       // throw new Error('No textNode found that looks like a title');
       return null;
     }
 
     const titlePath = sortedTitleNodes[0];
-    return {
-      stats: {title: titlePath},
-      articles: group.articles,
-      structureSimilarity: group.structureSimilarity,
-      path: referenceArticle.contextElementPath,
-      linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
-      titlePath: titlePath.textNodePath,
-      commonTextNodePath: group.commonTextNodePath.filter(path => path !== titlePath.textNodePath),
-      notcommonTextNodePath: group.notcommonTextNodePath
+    try {
+      return {
+        stats: {title: titlePath},
+        articles: group.articles,
+        structureSimilarity: group.structureSimilarity,
+        path: referenceArticle.contextElementPath,
+        linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
+        titlePath: titlePath.textNodePath,
+        commonTextNodePath: group.commonTextNodePath.filter(path => path !== titlePath.textNodePath),
+        notCommonTextNodePath: group.notCommonTextNodePath
+      }
+    } catch (e) {
+      console.error(e);
+      return null;
     }
+  }
+
+  private onlyUnique(value: string, index: number, self: string[]) {
+    return self.indexOf(value) === index;
   }
 
   private findDescription (group: PartialArticlesWithTitle): PartialArticlesWithDescription {
@@ -227,7 +239,10 @@ export class FeedParser {
   }
 
   public getArticleRules (): Array<ArticleRule> {
+
     const body = this.getDocumentRoot();
+
+    // find links
     const linkElements: Array<ElementWithPath> = this.findLinks()
       .filter(element => this.toWords(element.textContent).length > 3)
       .map(element => {
@@ -237,6 +252,7 @@ export class FeedParser {
         };
       });
 
+    // group links with similar path in document
     const linksGroupedByPath = linkElements.reduce((groups, linkPath) => {
       if (!groups[linkPath.path]) {
         groups[linkPath.path] = [];
@@ -245,18 +261,10 @@ export class FeedParser {
       return groups;
     }, {} as any);
 
+
     const relevantGroups: Array<PartialArticlesWithDescription> = (Object.values(linksGroupedByPath) as Array<Array<ElementWithPath>>)
       .filter(linkElements => linkElements.length > 3)
       .map(linkElements => this.findArticleContext(linkElements, body))
-      // .reduce((uniqList, item) => {
-      //
-      //   if (uniqList.filter(item => item.contextElementPath !== item.contextElementPath).length === 0) {
-      //     uniqList.push(item);
-      //   }
-      //
-      //   return uniqList;
-      // }, [])
-      // find shared text nodes
       .map(articlesInGroup => this.findCommonTextNodes(articlesInGroup))
       // find title: title is the first text node that has in avg 3+ words and is wrapped by the link
       .map(articlesInGroup => this.findTitle(articlesInGroup))
@@ -281,10 +289,10 @@ export class FeedParser {
 
     const rules = this.getArticleRules();
     const bestRule = rules[0];
-    return this.getArticle(bestRule);
+    return this.getArticlesByRule(bestRule);
   }
 
-  public getArticle (rule: ArticleRule): Array<Article> {
+  public getArticlesByRule (rule: ArticleRule): Array<Article> {
 
     return Array.from(this.document.querySelectorAll(rule.path)).map(element => {
       try {
@@ -292,7 +300,9 @@ export class FeedParser {
           title: element.querySelector(rule.titlePath).textContent.trim(),
           link: element.querySelector(rule.linkPath).getAttribute('href'),
           description: rule.commonTextNodePath.map(textNodePath => {
-            return Array.from(element.querySelectorAll(textNodePath)).map(textNode => textNode.textContent.trim());
+            return Array.from(element.querySelectorAll(textNodePath))
+              .map(textNode => textNode.textContent.trim())
+              .filter(this.onlyUnique);
           })
             .flat(1)
             .filter(text => text.length > 2)
