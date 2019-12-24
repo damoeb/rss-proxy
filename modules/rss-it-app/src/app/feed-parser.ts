@@ -11,7 +11,8 @@ export interface PartialArticlesWithStructure {
   articles: Array<ArticleContext>;
   commonTextNodePath: Array<string>;
   notCommonTextNodePath: Array<string>;
-  structureSimilarity: number
+  structureSimilarity: number,
+  rule: any
 }
 
 export interface TitleFeatures {
@@ -63,7 +64,7 @@ export interface ArticleContext {
   linkElement: HTMLElement;
   // root of article
   contextElement: HTMLElement;
-  contextElementPath: string
+  // contextElementPath: string
 }
 
 export class FeedParser {
@@ -104,19 +105,18 @@ export class FeedParser {
     return currentElement;
   }
 
-  private findArticleContexts(linkPointers: Array<LinkPointer>, root: HTMLElement): Array<ArticleContext> {
+  private findArticleContext(linkPointers: Array<LinkPointer>): Array<ArticleContext> {
     const linkElements = linkPointers.map(nodeElement => nodeElement.element);
     const articleRootElements = this.findArticleRootElement(linkElements);
 
     return linkPointers.map((nodeElement, index) => {
       const linkElement = nodeElement.element;
       const contextElement = articleRootElements[index];
-      return <ArticleContext> {
+      const articleContext: ArticleContext = {
         linkElement,
-        linkPath: this.getRelativePath(linkElement, contextElement),
         contextElement,
-        contextElementPath: this.getRelativePath(contextElement, root)
-      }
+      };
+      return articleContext;
     })
   }
 
@@ -124,9 +124,9 @@ export class FeedParser {
     return text.trim().split(' ').filter(word => word.length > 0);
   }
 
-  private textNodesUnder(el: HTMLElement): Array<HTMLElement> {
+  private findTextNodesInContext(context: HTMLElement): Array<HTMLElement> {
     const textNodes: Array<HTMLElement> = [];
-    const walk = this.document.createTreeWalker(el, -1, null, false);
+    const walk = this.document.createTreeWalker(context, -1, null, false);
     let node;
     while ((node = walk.nextNode())) {
       if (node.cloneNode(false).textContent.trim().length > 0) {
@@ -136,10 +136,11 @@ export class FeedParser {
     return textNodes;
   }
 
-  private findCommonTextNodes(articles: Array<ArticleContext>): PartialArticlesWithStructure {
+  private findCommonTextNodes(articles: Array<ArticleContext>, root: HTMLElement): PartialArticlesWithStructure {
 
-    const referenceArticleNode = articles[0].contextElement;
-    const textNodes = this.textNodesUnder(referenceArticleNode);
+    const referenceArticle = articles[0];
+    const referenceArticleNode = referenceArticle.contextElement;
+    const textNodes = this.findTextNodesInContext(referenceArticleNode);
 
     const groupedTextNodes = textNodes
       .map(textNode => this.getRelativePath(textNode, referenceArticleNode))
@@ -166,6 +167,10 @@ export class FeedParser {
 
     return {
       articles,
+      rule: {
+        linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
+        contextElementPath: this.getRelativePath(referenceArticle.contextElement, root)
+      },
       commonTextNodePath: groupedTextNodes.common.filter(this.onlyUnique),
       notCommonTextNodePath: notCommon,
       structureSimilarity: groupedTextNodes.common.length / textNodes.length
@@ -209,7 +214,7 @@ export class FeedParser {
     const referenceArticle = group.articles[0];
 
     if (sortedTitleNodes.length === 0) {
-      console.log(referenceArticle.contextElementPath + 'has no titles');
+      console.log(group.rule.contextElementPath + 'has no titles');
       // throw new Error('No textNode found that looks like a title');
       return null;
     }
@@ -219,8 +224,9 @@ export class FeedParser {
       return {
         stats: {title: titlePath},
         articles: group.articles,
+        rule: group.rule,
         structureSimilarity: group.structureSimilarity,
-        path: referenceArticle.contextElementPath,
+        path: group.rule.contextElementPath,
         linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
         titlePath: titlePath.textNodePath,
         commonTextNodePath: group.commonTextNodePath.filter(path => path !== titlePath.textNodePath),
@@ -270,8 +276,8 @@ export class FeedParser {
 
     const relevantGroups: Array<PartialArticlesWithDescription> = (Object.values(linksGroupedByPath) as Array<Array<LinkPointer>>)
       .filter(linkElements => linkElements.length > 3)
-      .map(linkElements => this.findArticleContexts(linkElements, body))
-      .map(articlesInGroup => this.findCommonTextNodes(articlesInGroup))
+      .map(linkElements => this.findArticleContext(linkElements))
+      .map(articlesInGroup => this.findCommonTextNodes(articlesInGroup, body))
       // find title: title is the first text node that has in avg 3+ words and is wrapped by the link
       .map(articlesInGroup => this.findTitles(articlesInGroup))
       .filter(value => value)
