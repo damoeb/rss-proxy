@@ -1,3 +1,5 @@
+import {group} from "@angular/animations";
+
 export interface LinkPointer {
   element: HTMLElement;
   path: string;
@@ -7,12 +9,18 @@ export interface ArticleRule extends PartialArticlesWithDescription {
   score: number
 }
 
+interface RawArticleRule {
+  contextElementPath: string
+  linkPath: string
+}
+
 export interface PartialArticlesWithStructure {
+  id: string
   articles: Array<ArticleContext>;
   commonTextNodePath: Array<string>;
   notCommonTextNodePath: Array<string>;
   structureSimilarity: number,
-  rule: any
+  rule: RawArticleRule
 }
 
 export interface TitleFeatures {
@@ -51,7 +59,6 @@ export interface Article {
 }
 
 export interface PartialArticlesWithTitle extends PartialArticlesWithStructure, StatsWrapper {
-  path: string;
   linkPath: string;
   titlePath: string;
 }
@@ -62,6 +69,7 @@ export interface PartialArticlesWithDescription extends PartialArticlesWithTitle
 
 export interface ArticleContext {
   linkElement: HTMLElement;
+  id: string;
   // root of article
   contextElement: HTMLElement;
   // contextElementPath: string
@@ -105,14 +113,19 @@ export class FeedParser {
     return currentElement;
   }
 
-  private findArticleContext(linkPointers: Array<LinkPointer>): Array<ArticleContext> {
+  private findArticleContext(linkPointers: Array<LinkPointer>, root: HTMLElement, index: number): Array<ArticleContext> {
     const linkElements = linkPointers.map(nodeElement => nodeElement.element);
     const articleRootElements = this.findArticleRootElement(linkElements);
 
-    return linkPointers.map((nodeElement, index) => {
-      const linkElement = nodeElement.element;
+    const id = this.getRelativePath(articleRootElements[0], root);
+    console.log(`context #${index} group ${linkPointers[0].path} gets id ${id}`);
+
+    return linkPointers.map((linkPointer, index) => {
+      const linkElement = linkPointer.element;
       const contextElement = articleRootElements[index];
+
       const articleContext: ArticleContext = {
+        id,
         linkElement,
         contextElement,
       };
@@ -136,10 +149,12 @@ export class FeedParser {
     return textNodes;
   }
 
-  private findCommonTextNodes(articles: Array<ArticleContext>, root: HTMLElement): PartialArticlesWithStructure {
+  private findCommonTextNodes(articles: Array<ArticleContext>, root: HTMLElement, index: number): PartialArticlesWithStructure {
 
     const referenceArticle = articles[0];
     const referenceArticleNode = referenceArticle.contextElement;
+    console.log(`common-nodes #${index} for ${referenceArticle.id}`);
+
     const textNodes = this.findTextNodesInContext(referenceArticleNode);
 
     const groupedTextNodes = textNodes
@@ -163,9 +178,10 @@ export class FeedParser {
 
     // remove paths that are children of common paths
     const notCommon = groupedTextNodes.notCommon
-      .filter((notCommonPath: string) => !groupedTextNodes.common.some((commonPath: string) => notCommonPath.startsWith(commonPath)))
+      .filter((notCommonPath: string) => !groupedTextNodes.common.some((commonPath: string) => notCommonPath.startsWith(commonPath)));
 
     return {
+      id: referenceArticle.id,
       articles,
       rule: {
         linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
@@ -200,7 +216,11 @@ export class FeedParser {
     }, [])
   }
 
-  private findTitles(group: PartialArticlesWithStructure): PartialArticlesWithTitle {
+  private findTitles(group: PartialArticlesWithStructure, index: number): PartialArticlesWithTitle {
+
+    console.log(`title #${index} for #${group.id}`);
+
+    // todo common path should use index or classes
     const sortedTitleNodes: TitleRule[] = group.commonTextNodePath.map((textNodePath) => {
       return {features: this.getTitleFeatures(group, textNodePath), textNodePath};
     })
@@ -214,26 +234,28 @@ export class FeedParser {
     const referenceArticle = group.articles[0];
 
     if (sortedTitleNodes.length === 0) {
-      console.log(group.rule.contextElementPath + 'has no titles');
+      console.log(`Drop ${group.id} - no titles found`);
       // throw new Error('No textNode found that looks like a title');
       return null;
     }
 
     const titlePath = sortedTitleNodes[0];
+    console.log(`group ${group.id} has title ${titlePath.textNodePath}`);
+
     try {
       return {
+        id: group.id,
         stats: {title: titlePath},
         articles: group.articles,
         rule: group.rule,
         structureSimilarity: group.structureSimilarity,
-        path: group.rule.contextElementPath,
         linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
         titlePath: titlePath.textNodePath,
         commonTextNodePath: group.commonTextNodePath.filter(path => path !== titlePath.textNodePath),
         notCommonTextNodePath: group.notCommonTextNodePath
       }
     } catch (e) {
-      console.error(e);
+      console.error('Cannot extract title', e);
       return null;
     }
   }
@@ -274,15 +296,32 @@ export class FeedParser {
     }, {} as any);
 
 
-    const relevantGroups: Array<PartialArticlesWithDescription> = (Object.values(linksGroupedByPath) as Array<Array<LinkPointer>>)
-      .filter(linkElements => linkElements.length > 3)
-      .map(linkElements => this.findArticleContext(linkElements))
-      .map(articlesInGroup => this.findCommonTextNodes(articlesInGroup, body))
+    const groups: Array<Array<LinkPointer>> = Object.values(linksGroupedByPath);
+
+    console.log(`${groups.length} link groups`);
+
+    const relevantGroups: Array<PartialArticlesWithDescription> = groups
+      .filter((linkElements, index) => {
+        const hasEnoughMembers = linkElements.length > 3;
+
+        if (hasEnoughMembers) {
+          console.log(`size #${index} keep ${linkElements[0].path} - ${linkElements.length} member`)
+        } else {
+          console.log(`size #${index} drop ${linkElements[0].path} - ${linkElements.length} member`)
+        }
+
+        return hasEnoughMembers;
+      })
+      .map((linkElements, index) => this.findArticleContext(linkElements, body, index))
+      .map((articlesInGroup, index) => this.findCommonTextNodes(articlesInGroup, body, index))
       // find title: title is the first text node that has in avg 3+ words and is wrapped by the link
-      .map(articlesInGroup => this.findTitles(articlesInGroup))
+      .map((articlesInGroup, index) => this.findTitles(articlesInGroup, index))
       .filter(value => value)
       // find description
       .map(articlesInGroup => this.findDescriptions(articlesInGroup));
+
+
+    console.log(`${relevantGroups.length} article rules`);
 
     return relevantGroups
       .map(group => {
@@ -306,7 +345,7 @@ export class FeedParser {
 
   public getArticlesByRule(rule: ArticleRule): Array<Article> {
 
-    return Array.from(this.document.querySelectorAll(rule.path)).map(element => {
+    return Array.from(this.document.querySelectorAll(rule.rule.contextElementPath)).map(element => {
       try {
         return {
           title: element.querySelector(rule.titlePath).textContent.trim(),
