@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "umd",
+    "outDir": "./test",
+    "types": [
+      "mocha",
+      "chai",
+      "node"
+    ],
+    "target": "es2015"
+  },
+  "include": [
+    "src/**/*.test.ts"
+  ]
+}

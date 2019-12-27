@@ -20,6 +20,7 @@ speed-measure-plugin*.json
 .classpath
 .c9/
 *.launch
+test
 .settings/
 *.sublime-workspace
 
