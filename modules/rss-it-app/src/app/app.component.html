@@ -6,7 +6,7 @@
   </div>
   <div id="feed" style="overflow: auto">
     <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule">
-      <option *ngFor="let rule of rules" [ngValue]="rule">{{ rule?.score }} {{ rule?.rule.contextElementPath }}</option>
+      <option *ngFor="let rule of rules" [ngValue]="rule">{{ rule?.score }} {{ rule?.id }}</option>
     </select>
     <div>
       <div>Score: {{currentRule?.score}}</div>

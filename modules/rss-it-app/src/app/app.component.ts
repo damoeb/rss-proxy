@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Article, ArticleRule, FeedParser} from "./feed-parser";
+import {Article, ArticleRule, FeedParser} from './feed-parser';
 
 @Component({
   selector: 'app-root',
@@ -8,8 +8,8 @@ import {Article, ArticleRule, FeedParser} from "./feed-parser";
 })
 export class AppComponent {
 
-  html: string = '';
-  json: string = '';
+  html = '';
+  json = '';
   rules: Array<ArticleRule>;
   private feedParser: FeedParser;
   currentRule: ArticleRule;

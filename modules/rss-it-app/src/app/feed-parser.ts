@@ -1,46 +1,44 @@
-import {group} from "@angular/animations";
-
 export interface LinkPointer {
   element: HTMLElement;
   path: string;
 }
 
 export interface ArticleRule extends PartialArticlesWithDescription {
-  score: number
+  score: number;
 }
 
 interface RawArticleRule {
-  contextElementPath: string
-  linkPath: string
+  contextElementPath: string;
+  linkPath: string;
 }
 
 export interface PartialArticlesWithStructure {
-  id: string
+  id: string;
   articles: Array<ArticleContext>;
   commonTextNodePath: Array<string>;
   notCommonTextNodePath: Array<string>;
-  structureSimilarity: number,
-  rule: RawArticleRule
+  structureSimilarity: number;
+  rule: RawArticleRule;
 }
 
 export interface TitleFeatures {
-  variance: number
-  avgWordLength: number
+  variance: number;
+  avgWordLength: number;
 }
 
 export interface TitleRule {
-  features: TitleFeatures
-  textNodePath: string
+  features: TitleFeatures;
+  textNodePath: string;
 }
 
 interface DescriptionFeatures {
-  variance: number
-  avgWordCount: number
+  variance: number;
+  avgWordCount: number;
 }
 
 export interface DescriptionRule {
-  features: DescriptionFeatures
-  useCommonPaths: boolean
+  features: DescriptionFeatures;
+  useCommonPaths: boolean;
 }
 
 export interface Stats {
@@ -49,7 +47,7 @@ export interface Stats {
 }
 
 export interface StatsWrapper {
-  stats: Stats
+  stats: Stats;
 }
 
 export interface Article {
@@ -64,7 +62,7 @@ export interface PartialArticlesWithTitle extends PartialArticlesWithStructure, 
 }
 
 export interface PartialArticlesWithDescription extends PartialArticlesWithTitle {
-
+  dummy?: boolean;
 }
 
 export interface ArticleContext {
@@ -103,7 +101,7 @@ export class FeedParser {
 
   private findArticleRootElement(currentElement: HTMLElement[]): HTMLElement[] {
     while (true) {
-      let parentNodes = currentElement.map(currentNode => currentNode.parentNode);
+      const parentNodes = currentElement.map(currentNode => currentNode.parentNode);
       // todo all parent nodes are the same
       if (parentNodes[0].isSameNode(parentNodes[1])) {
         break;
@@ -117,12 +115,12 @@ export class FeedParser {
     const linkElements = linkPointers.map(nodeElement => nodeElement.element);
     const articleRootElements = this.findArticleRootElement(linkElements);
 
-    const id = this.getRelativePath(articleRootElements[0], root);
-    console.log(`context #${index} group ${linkPointers[0].path} gets id ${id}`);
+    const id = linkPointers[0].path;
+    console.log(`context #${index} group ${id}`);
 
-    return linkPointers.map((linkPointer, index) => {
+    return linkPointers.map((linkPointer, linkPointerIndex) => {
       const linkElement = linkPointer.element;
-      const contextElement = articleRootElements[index];
+      const contextElement = articleRootElements[linkPointerIndex];
 
       const articleContext: ArticleContext = {
         id,
@@ -130,18 +128,31 @@ export class FeedParser {
         contextElement,
       };
       return articleContext;
-    })
+    });
   }
 
   private toWords(text: string): Array<string> {
     return text.trim().split(' ').filter(word => word.length > 0);
   }
 
-  private findTextNodesInContext(context: HTMLElement): Array<HTMLElement> {
+
+  /* todo merge nodes, the following should return p
+
+  <p>
+    wefwef
+    <a>wefwef</a>
+  </p>
+ */
+  public findTextNodesInContext(context: HTMLElement): Array<HTMLElement> {
     const textNodes: Array<HTMLElement> = [];
     const walk = this.document.createTreeWalker(context, -1, null, false);
-    let node;
-    while ((node = walk.nextNode())) {
+    while (true) {
+      const node = walk.nextNode();
+
+      if (!node) {
+        break;
+      }
+
       if (node.cloneNode(false).textContent.trim().length > 0) {
         textNodes.push(node as HTMLElement); // fixme check
       }
@@ -180,17 +191,23 @@ export class FeedParser {
     const notCommon = groupedTextNodes.notCommon
       .filter((notCommonPath: string) => !groupedTextNodes.common.some((commonPath: string) => notCommonPath.startsWith(commonPath)));
 
-    return {
-      id: referenceArticle.id,
-      articles,
-      rule: {
-        linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
-        contextElementPath: this.getRelativePath(referenceArticle.contextElement, root)
-      },
-      commonTextNodePath: groupedTextNodes.common.filter(this.onlyUnique),
-      notCommonTextNodePath: notCommon,
-      structureSimilarity: groupedTextNodes.common.length / textNodes.length
-    };
+    try {
+      return {
+        id: referenceArticle.id,
+        articles,
+        rule: {
+          linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
+          contextElementPath: this.getRelativePath(referenceArticle.contextElement, root)
+        },
+        commonTextNodePath: groupedTextNodes.common.filter(this.onlyUnique),
+        notCommonTextNodePath: notCommon,
+        structureSimilarity: groupedTextNodes.common.length / textNodes.length
+      };
+    } catch (e) {
+      console.log(`Dropping ${referenceArticle.id}`);
+      console.error(e);
+      return null;
+    }
   }
 
   private getTagName(node: HTMLElement, withClassNames: boolean): string {
@@ -213,36 +230,36 @@ export class FeedParser {
       }
 
       return uniqList;
-    }, [])
+    }, []);
   }
 
   private findTitles(group: PartialArticlesWithStructure, index: number): PartialArticlesWithTitle {
-
-    console.log(`title #${index} for #${group.id}`);
-
-    // todo common path should use index or classes
-    const sortedTitleNodes: TitleRule[] = group.commonTextNodePath.map((textNodePath) => {
-      return {features: this.getTitleFeatures(group, textNodePath), textNodePath};
-    })
-      .filter((d) => {
-        return d.features.avgWordLength > 3;
-      })
-      .sort((a, b) => {
-        return b.features.variance - a.features.variance;
-      });
-
-    const referenceArticle = group.articles[0];
-
-    if (sortedTitleNodes.length === 0) {
-      console.log(`Drop ${group.id} - no titles found`);
-      // throw new Error('No textNode found that looks like a title');
-      return null;
-    }
-
-    const titlePath = sortedTitleNodes[0];
-    console.log(`group ${group.id} has title ${titlePath.textNodePath}`);
-
     try {
+
+      console.log(`title #${index} for #${group.id}`);
+
+      // todo common path should use index or classes
+      const sortedTitleNodes: TitleRule[] = group.commonTextNodePath.map((textNodePath) => {
+        return {features: this.getTitleFeatures(group, textNodePath), textNodePath};
+      })
+        .filter((d) => {
+          return d.features.avgWordLength > 3;
+        })
+        .sort((a, b) => {
+          return b.features.variance - a.features.variance;
+        });
+
+      const referenceArticle = group.articles[0];
+
+      if (sortedTitleNodes.length === 0) {
+        console.log(`Drop ${group.id} - no titles found`);
+        // throw new Error('No textNode found that looks like a title');
+        return null;
+      }
+
+      const titlePath = sortedTitleNodes[0];
+      console.log(`group ${group.id} has title ${titlePath.textNodePath}`);
+
       return {
         id: group.id,
         stats: {title: titlePath},
@@ -253,7 +270,7 @@ export class FeedParser {
         titlePath: titlePath.textNodePath,
         commonTextNodePath: group.commonTextNodePath.filter(path => path !== titlePath.textNodePath),
         notCommonTextNodePath: group.notCommonTextNodePath
-      }
+      };
     } catch (e) {
       console.error('Cannot extract title', e);
       return null;
@@ -287,12 +304,12 @@ export class FeedParser {
       });
 
     // group links with similar path in document
-    const linksGroupedByPath = linkElements.reduce((groups, linkPath) => {
-      if (!groups[linkPath.path]) {
-        groups[linkPath.path] = [];
+    const linksGroupedByPath = linkElements.reduce((linksGroup, linkPath) => {
+      if (!linksGroup[linkPath.path]) {
+        linksGroup[linkPath.path] = [];
       }
-      groups[linkPath.path].push(linkPath);
-      return groups;
+      linksGroup[linkPath.path].push(linkPath);
+      return linksGroup;
     }, {} as any);
 
 
@@ -301,19 +318,20 @@ export class FeedParser {
     console.log(`${groups.length} link groups`);
 
     const relevantGroups: Array<PartialArticlesWithDescription> = groups
-      .filter((linkElements, index) => {
-        const hasEnoughMembers = linkElements.length > 3;
+      .filter((linkGroup, index) => {
+        const hasEnoughMembers = linkGroup.length > 3;
 
         if (hasEnoughMembers) {
-          console.log(`size #${index} keep ${linkElements[0].path} - ${linkElements.length} member`)
+          console.log(`size #${index} keep ${linkGroup[0].path} - ${linkGroup.length} member`);
         } else {
-          console.log(`size #${index} drop ${linkElements[0].path} - ${linkElements.length} member`)
+          console.log(`size #${index} drop ${linkGroup[0].path} - ${linkGroup.length} member`);
         }
 
         return hasEnoughMembers;
       })
-      .map((linkElements, index) => this.findArticleContext(linkElements, body, index))
+      .map((linkGroup, index) => this.findArticleContext(linkGroup, body, index))
       .map((articlesInGroup, index) => this.findCommonTextNodes(articlesInGroup, body, index))
+      .filter(value => value)
       // find title: title is the first text node that has in avg 3+ words and is wrapped by the link
       .map((articlesInGroup, index) => this.findTitles(articlesInGroup, index))
       .filter(value => value)
@@ -322,6 +340,7 @@ export class FeedParser {
 
 
     console.log(`${relevantGroups.length} article rules`);
+    relevantGroups.forEach(group => console.log(group.id));
 
     return relevantGroups
       .map(group => {
@@ -347,9 +366,15 @@ export class FeedParser {
 
     return Array.from(this.document.querySelectorAll(rule.rule.contextElementPath)).map(element => {
       try {
-        return {
-          title: element.querySelector(rule.titlePath).textContent.trim(),
-          link: element.querySelector(rule.linkPath).getAttribute('href'),
+        const titles = Array.from(element.querySelectorAll(rule.titlePath)).map(node => node.textContent.trim());
+        const link = element.querySelector(rule.linkPath).getAttribute('href');
+        if (titles.length === 0  || titles.join('').trim().length === 0 || !link) {
+          return undefined;
+        }
+
+        const article: Article = {
+          title: titles.join(' / '),
+          link,
           description: rule.commonTextNodePath.map(textNodePath => {
             return Array.from(element.querySelectorAll(textNodePath))
               .map(textNode => textNode.textContent.trim())
@@ -357,11 +382,12 @@ export class FeedParser {
           })
             .flat(1)
             .filter(text => text.length > 2)
-        }
+        };
+        return article;
       } catch (err) {
         return undefined;
       }
-    }).filter(article => article)
+    }).filter(article => article);
   }
 
   private getTitleFeatures(group: PartialArticlesWithStructure, textNodePath: string): TitleFeatures {
@@ -376,7 +402,7 @@ export class FeedParser {
     const words = wordsInTitles.flat(1);
     const variance = words.filter(this.onlyUnique).length / Math.max(words.length, 1);
 
-    const totalWordLengthSum = wordsInTitles.map(words => words.length).reduce((sum, wordCount) => sum + wordCount, 0);
+    const totalWordLengthSum = wordsInTitles.map(wordsInTitle => wordsInTitle.length).reduce((sum, wordCount) => sum + wordCount, 0);
     const avgWordLength = totalWordLengthSum / wordsInTitles.length;
 
     return {variance, avgWordLength};
@@ -394,8 +420,8 @@ export class FeedParser {
         .flat(1);
     });
 
-    const totalWordCount = articleWords.reduce((sum, articleWords) => {
-      return sum + articleWords.length;
+    const totalWordCount = articleWords.reduce((sum, words) => {
+      return sum + words.length;
     }, 0);
 
     return {
