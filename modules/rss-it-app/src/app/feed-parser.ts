@@ -16,8 +16,7 @@ export interface PartialArticlesWithStructure {
   id: string;
   articles: Array<ArticleContext>;
   commonTextNodePath: Array<string>;
-  notCommonTextNodePath: Array<string>;
-  structureSimilarity: number;
+  // notCommonTextNodePath: Array<string>;
   rule: RawArticleRule;
 }
 
@@ -73,6 +72,10 @@ export interface ArticleContext {
   // contextElementPath: string
 }
 
+export interface LinkGroup {
+  links: Array<LinkPointer>;
+}
+
 export class FeedParser {
   constructor(private document: HTMLDocument) {
   }
@@ -111,12 +114,13 @@ export class FeedParser {
     return currentElement;
   }
 
-  private findArticleContext(linkPointers: Array<LinkPointer>, root: HTMLElement, index: number): Array<ArticleContext> {
+  private findArticleContext(linkGroup: LinkGroup, root: HTMLElement, index: number): Array<ArticleContext> {
+    const linkPointers = linkGroup.links;
     const linkElements = linkPointers.map(nodeElement => nodeElement.element);
     const articleRootElements = this.findArticleRootElement(linkElements);
 
     const id = linkPointers[0].path;
-    console.log(`context #${index} group ${id} ${this.getRelativePath(articleRootElements[0], root, true)}`);
+    console.log(`context #${index} group ${id} ${this.getRelativePath(articleRootElements[0], root, false)}`);
 
     return linkPointers.map((linkPointer, linkPointerIndex) => {
       const linkElement = linkPointer.element;
@@ -174,30 +178,24 @@ export class FeedParser {
 
     const textNodes = this.findTextNodesInContext(referenceArticleNode);
 
-    const groupedTextNodes = textNodes
+    const commonTextNodes = textNodes
       .map(textNode => this.getRelativePath(textNode, referenceArticleNode))
-      .reduce((map, pathToTextNode) => {
+      .filter((pathToTextNode) => {
         // check every article contains the path
-        const existsEverywhere = articles.every(article => {
+        const existsEverywhere = articles.filter(article => {
           const resolvedTextNode = article.contextElement.querySelector(pathToTextNode);
           // article.commonTextNodes.push(resolvedTextNode);
           return !pathToTextNode || resolvedTextNode !== null;
-        });
+        }).length / articles.length;
 
-        if (existsEverywhere) {
-          console.log('+', pathToTextNode, 'exists everywhere');
-          map.common.push(pathToTextNode);
+        if (existsEverywhere >= 0.7) {
+          console.log(`+ ${ pathToTextNode } common node ${ existsEverywhere }%`);
+          return true;
         } else {
-          console.log('-', pathToTextNode, 'does not exists everywhere');
-          map.notCommon.push(pathToTextNode);
+          console.log(`- ${ pathToTextNode } not a common node ${ existsEverywhere }%`);
+          return false;
         }
-        return map;
-
-      }, {common: [], notCommon: []});
-
-    // remove paths that are children of common paths
-    const notCommon = groupedTextNodes.notCommon
-      .filter((notCommonPath: string) => !groupedTextNodes.common.some((commonPath: string) => notCommonPath.startsWith(commonPath)));
+      });
 
     try {
       return {
@@ -205,11 +203,9 @@ export class FeedParser {
         articles,
         rule: {
           linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
-          contextElementPath: this.getRelativePath(referenceArticle.contextElement, root, true)
+          contextElementPath: this.getRelativePath(referenceArticle.contextElement, root)
         },
-        commonTextNodePath: groupedTextNodes.common.filter(this.onlyUnique),
-        notCommonTextNodePath: notCommon,
-        structureSimilarity: groupedTextNodes.common.length / textNodes.length
+        commonTextNodePath: commonTextNodes.filter(this.onlyUnique),
       };
     } catch (e) {
       console.log(`Dropping ${referenceArticle.id}`);
@@ -273,11 +269,9 @@ export class FeedParser {
         stats: {title: titlePath},
         articles: group.articles,
         rule: group.rule,
-        structureSimilarity: group.structureSimilarity,
         linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
         titlePath: titlePath.textNodePath,
         commonTextNodePath: group.commonTextNodePath.filter(path => path !== titlePath.textNodePath),
-        notCommonTextNodePath: group.notCommonTextNodePath
       };
     } catch (e) {
       console.error('Cannot extract title', e);
@@ -294,6 +288,17 @@ export class FeedParser {
       features: this.getDescriptionFeatures(group),
       useCommonPaths: true
     };
+    group.commonTextNodePath = group.commonTextNodePath
+      .filter(textPath => !textPath.startsWith(group.titlePath))
+      // .sort((a, b) => a.length - b.length)
+      .reduce((commonTextNodePaths, textNodePath) => {
+
+        if (!textNodePath.endsWith('A') && !commonTextNodePaths.some(commonTextNodePath => textNodePath.startsWith(commonTextNodePath))) {
+          commonTextNodePaths.push(textNodePath);
+        }
+
+        return commonTextNodePaths;
+      }, []);
     return group;
   }
 
@@ -314,25 +319,25 @@ export class FeedParser {
     // group links with similar path in document
     const linksGroupedByPath = linkElements.reduce((linksGroup, linkPath) => {
       if (!linksGroup[linkPath.path]) {
-        linksGroup[linkPath.path] = [];
+        linksGroup[linkPath.path] = {links: []};
       }
-      linksGroup[linkPath.path].push(linkPath);
+      linksGroup[linkPath.path].links.push(linkPath);
       return linksGroup;
     }, {} as any);
 
 
-    const groups: Array<Array<LinkPointer>> = Object.values(linksGroupedByPath);
+    const groups: Array<LinkGroup> = Object.values(linksGroupedByPath);
 
     console.log(`${groups.length} link groups`);
 
     const relevantGroups: Array<PartialArticlesWithDescription> = groups
       .filter((linkGroup, index) => {
-        const hasEnoughMembers = linkGroup.length > 3;
+        const hasEnoughMembers = linkGroup.links.length > 3;
 
         if (hasEnoughMembers) {
-          console.log(`size #${index} keep ${linkGroup[0].path} - ${linkGroup.length} member`);
+          console.log(`size #${index} keep ${linkGroup.links[0].path} - ${linkGroup.links.length} member`);
         } else {
-          console.log(`size #${index} drop ${linkGroup[0].path} - ${linkGroup.length} member`);
+          console.log(`size #${index} drop ${linkGroup.links[0].path} - ${linkGroup.links.length} member`);
         }
 
         return hasEnoughMembers;
@@ -403,7 +408,7 @@ export class FeedParser {
       .map(article => {
         const otherTextNode = article.contextElement.querySelector(textNodePath);
         if (!otherTextNode) {
-          throw new Error('Fatal! textNode does not exist');
+          return [];
         }
         return this.toWords(otherTextNode.textContent);
       });
