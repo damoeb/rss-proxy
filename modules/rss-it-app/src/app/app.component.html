@@ -11,6 +11,9 @@
     <div>
       <div>Score: {{currentRule?.score}}</div>
       <div>Stats: {{currentRule?.stats | json}}</div>
+      <div>title: {{currentRule?.titlePath }}</div>
+      <div>link: {{currentRule?.linkPath }}</div>
+      <div>Common: {{currentRule?.commonTextNodePath }}</div>
       <div>{{ articles?.length }} articles</div>
       <pre [innerText]="json"></pre>
     </div>

@@ -116,7 +116,7 @@ export class FeedParser {
     const articleRootElements = this.findArticleRootElement(linkElements);
 
     const id = linkPointers[0].path;
-    console.log(`context #${index} group ${id}`);
+    console.log(`context #${index} group ${id} ${this.getRelativePath(articleRootElements[0], root, true)}`);
 
     return linkPointers.map((linkPointer, linkPointerIndex) => {
       const linkElement = linkPointer.element;
@@ -135,14 +135,6 @@ export class FeedParser {
     return text.trim().split(' ').filter(word => word.length > 0);
   }
 
-
-  /* todo merge nodes, the following should return p
-
-  <p>
-    wefwef
-    <a>wefwef</a>
-  </p>
- */
   public findTextNodesInContext(context: HTMLElement): Array<HTMLElement> {
     const textNodes: Array<HTMLElement> = [];
     const walk = this.document.createTreeWalker(context, -1, null, false);
@@ -153,10 +145,24 @@ export class FeedParser {
         break;
       }
 
-      if (node.cloneNode(false).textContent.trim().length > 0) {
-        textNodes.push(node as HTMLElement); // fixme check
+      const isTextNode = node.cloneNode(false).textContent.trim().length > 0;
+      const moreGeneralParentIsAlreadyPushed = textNodes.indexOf(node.parentElement) > -1;
+      if (isTextNode && !moreGeneralParentIsAlreadyPushed) {
+        textNodes.push(node as HTMLElement);
       }
     }
+
+    // generalize: if two nodes have a common parent that is different from context, then add this node too
+
+    // const generalizedTextNodes = [];
+    // for (let i = 0; i < textNodes.length; i++) {
+    //   generalizedTextNodes.push(textNodes[i]);
+    //   const parentTextNode = textNodes[i].parentElement;
+    //   for (let j = i + 1; j < textNodes.length; j++) {
+    //
+    //   }
+    // }
+
     return textNodes;
   }
 
@@ -179,8 +185,10 @@ export class FeedParser {
         });
 
         if (existsEverywhere) {
+          console.log('+', pathToTextNode, 'exists everywhere');
           map.common.push(pathToTextNode);
         } else {
+          console.log('-', pathToTextNode, 'does not exists everywhere');
           map.notCommon.push(pathToTextNode);
         }
         return map;
@@ -197,7 +205,7 @@ export class FeedParser {
         articles,
         rule: {
           linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
-          contextElementPath: this.getRelativePath(referenceArticle.contextElement, root)
+          contextElementPath: this.getRelativePath(referenceArticle.contextElement, root, true)
         },
         commonTextNodePath: groupedTextNodes.common.filter(this.onlyUnique),
         notCommonTextNodePath: notCommon,
