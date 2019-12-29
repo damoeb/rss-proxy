@@ -7,6 +7,11 @@ describe('FeedParser', () => {
 
   const toDocument = (markup: string): HTMLDocument => new JSDOM(markup).window.document;
 
+  it('unique', () => {
+    const feedParser = new FeedParser(null);
+
+  });
+
   it('findTextNodesInContext', () => {
     const markup = `<!DOCTYPE html>
 <html>

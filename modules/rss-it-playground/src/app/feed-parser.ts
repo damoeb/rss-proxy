@@ -16,18 +16,19 @@ export interface PartialArticlesWithStructure {
   id: string;
   articles: Array<ArticleContext>;
   commonTextNodePath: Array<string>;
-  // notCommonTextNodePath: Array<string>;
   rule: RawArticleRule;
 }
 
 export interface TitleFeatures {
   variance: number;
   avgWordLength: number;
+  hasHeaderInPath: boolean;
 }
 
 export interface TitleRule {
   features: TitleFeatures;
   textNodePath: string;
+  score?: number;
 }
 
 interface DescriptionFeatures {
@@ -69,7 +70,6 @@ export interface ArticleContext {
   id: string;
   // root of article
   contextElement: HTMLElement;
-  // contextElementPath: string
 }
 
 export interface LinkGroup {
@@ -156,17 +156,6 @@ export class FeedParser {
       }
     }
 
-    // generalize: if two nodes have a common parent that is different from context, then add this node too
-
-    // const generalizedTextNodes = [];
-    // for (let i = 0; i < textNodes.length; i++) {
-    //   generalizedTextNodes.push(textNodes[i]);
-    //   const parentTextNode = textNodes[i].parentElement;
-    //   for (let j = i + 1; j < textNodes.length; j++) {
-    //
-    //   }
-    // }
-
     return textNodes;
   }
 
@@ -244,13 +233,17 @@ export class FeedParser {
 
       // todo common path should use index or classes
       const sortedTitleNodes: TitleRule[] = group.commonTextNodePath.map((textNodePath) => {
-        return {features: this.getTitleFeatures(group, textNodePath), textNodePath};
+        return {features: this.getTitleFeatures(group, textNodePath), textNodePath} as TitleRule;
       })
-        .filter((d) => {
-          return d.features.avgWordLength > 3;
+        .map((title) => {
+          // score
+          title.score = (title.features.avgWordLength > 3 ? 1 : 0)
+          + (title.features.hasHeaderInPath ? 1 : 0)
+          + title.features.variance;
+          return title;
         })
         .sort((a, b) => {
-          return b.features.variance - a.features.variance;
+          return b.score - a.score;
         });
 
       const referenceArticle = group.articles[0];
@@ -271,7 +264,7 @@ export class FeedParser {
         rule: group.rule,
         linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
         titlePath: titlePath.textNodePath,
-        commonTextNodePath: group.commonTextNodePath.filter(path => path !== titlePath.textNodePath),
+        commonTextNodePath: group.commonTextNodePath.filter(path => path && path !== titlePath.textNodePath),
       };
     } catch (e) {
       console.error('Cannot extract title', e);
@@ -279,7 +272,7 @@ export class FeedParser {
     }
   }
 
-  private onlyUnique(value: string, index: number, self: string[]) {
+  public onlyUnique(value: string, index: number, self: string[]) {
     return self.indexOf(value) === index;
   }
 
@@ -418,7 +411,7 @@ export class FeedParser {
     const totalWordLengthSum = wordsInTitles.map(wordsInTitle => wordsInTitle.length).reduce((sum, wordCount) => sum + wordCount, 0);
     const avgWordLength = totalWordLengthSum / wordsInTitles.length;
 
-    return {variance, avgWordLength};
+    return {variance, avgWordLength, hasHeaderInPath: /h[0-9]|header/i.test(textNodePath)};
   }
 
   private getDescriptionFeatures(group: PartialArticlesWithTitle) {
