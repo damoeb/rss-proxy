@@ -53,7 +53,8 @@ export interface StatsWrapper {
 export interface Article {
   title: string;
   link: string;
-  description?: Array<string>;
+  summary?: Array<string>;
+  context?: string;
 }
 
 export interface PartialArticlesWithTitle extends PartialArticlesWithStructure, StatsWrapper {
@@ -171,17 +172,17 @@ export class FeedParser {
       .map(textNode => this.getRelativePath(textNode, referenceArticleNode))
       .filter((pathToTextNode) => {
         // check every article contains the path
-        const existsEverywhere = articles.filter(article => {
+        const frequency = articles.filter(article => {
           const resolvedTextNode = article.contextElement.querySelector(pathToTextNode);
           // article.commonTextNodes.push(resolvedTextNode);
           return !pathToTextNode || resolvedTextNode !== null;
         }).length / articles.length;
 
-        if (existsEverywhere >= 0.7) {
-          console.log(`+ ${ pathToTextNode } common node ${ existsEverywhere }%`);
+        if (frequency >= 0.7) {
+          console.log(`+ ${ pathToTextNode } common node, frequency= ${ frequency * 100 }%`);
           return true;
         } else {
-          console.log(`- ${ pathToTextNode } not a common node ${ existsEverywhere }%`);
+          console.log(`- ${ pathToTextNode } not a common node,frequency= ${ frequency * 100 }%`);
           return false;
         }
       });
@@ -273,6 +274,10 @@ export class FeedParser {
   }
 
   public onlyUnique(value: string, index: number, self: string[]) {
+    return self.indexOf(value) === index;
+  }
+
+  public filterSubpath(value: string, index: number, self: string[]) {
     return self.indexOf(value) === index;
   }
 
@@ -381,13 +386,14 @@ export class FeedParser {
         const article: Article = {
           title: titles.join(' / '),
           link,
-          description: rule.commonTextNodePath.map(textNodePath => {
+          context: element.outerHTML,
+          summary: rule.commonTextNodePath.map(textNodePath => {
             return Array.from(element.querySelectorAll(textNodePath))
-              .map(textNode => textNode.textContent.trim())
-              .filter(this.onlyUnique);
+              .map(textNode => textNode.textContent.trim());
           })
             .flat(1)
-            .filter(text => text.length > 2)
+            .filter(this.onlyUnique)
+            .filter(text => text.split(' ').length > 5)
         };
         return article;
       } catch (err) {

@@ -1,7 +1,9 @@
 <div id="panels">
   <div id="editor">
-    <label>Html</label>
-    <textarea [(ngModel)]="html"></textarea>
+    <input [(ngModel)]="url" type="url" placeholder="URL of website">
+    <button (click)="parseHtml()">Parse from URL</button>
+    <hr>
+    <textarea [(ngModel)]="html" placeholder="HTML markup of website"></textarea>
     <button (click)="parseHtml()">Parse HTML</button>
   </div>
   <div id="feed" style="overflow: auto">

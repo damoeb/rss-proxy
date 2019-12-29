@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Article, ArticleRule, FeedParser} from './feed-parser';
+import {Article, ArticleRule, FeedParser} from '../../../rss-it-core/src/feed-parser';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +14,7 @@ export class AppComponent {
   private feedParser: FeedParser;
   currentRule: ArticleRule;
   articles: Array<Article>;
+  url: string;
 
   constructor() {
 

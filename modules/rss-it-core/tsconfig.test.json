@@ -1,5 +1,4 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "umd",
     "outDir": "./test",
@@ -8,9 +7,10 @@
       "chai",
       "node"
     ],
-    "target": "es2015"
+    "target": "esnext"
   },
   "include": [
-    "src/**/*.test.ts"
+    "src/**/*.ts",
+    "test/**/*.test.ts"
   ]
 }

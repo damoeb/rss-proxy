@@ -1,0 +1,20 @@
+{
+  "name": "rss-it-library",
+  "version": "0.0.0",
+  "scripts": {
+    "test": "node ./node_modules/.bin/tsc --build tsconfig.test.json && node ./node_modules/.bin/mocha --timeout 5000 --recursive"
+  },
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@types/chai": "^4.2.7",
+    "@types/jsdom": "^12.2.4",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^8.9.5",
+    "chai": "^4.2.0",
+    "jsdom": "^15.2.1",
+    "mocha": "^6.2.2",
+    "tslint": "~5.15.0",
+    "typescript": "~3.5.3"
+  }
+}
