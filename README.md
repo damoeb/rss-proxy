@@ -7,7 +7,8 @@
 ![GitHub forks](https://img.shields.io/github/forks/scottydocs/README-template.md?style=social)
 ![Twitter Follow](https://img.shields.io/twitter/follow/scottydocs?style=social)
 
-RSS-Proxy is a tool that allows `<insert_target_audience>` to do create a RSS feed of almost any website.
+RSS-Proxy is a tool that allows `<insert_target_audience>` to do create an RSS feed of almost any website, 
+purely by analyzing just the DOM structure.
 
 Additional line of information text about what the project does. Your introduction should be around 2 or 3 sentences. Don't go overboard, people won't read it.
 
@@ -28,10 +29,7 @@ Linux and macOS:
 <install_command>
 ```
 
-Windows:
-```
-<install_command>
-```
+
 ## Using <project_name>
 
 To use <project_name>, follow these steps:
