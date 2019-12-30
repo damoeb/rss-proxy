@@ -54,7 +54,7 @@ export interface Article {
   title: string;
   link: string;
   summary?: string[];
-  context?: string;
+  content?: string;
 }
 
 export interface PartialArticlesWithTitle extends PartialArticlesWithStructure, StatsWrapper {
@@ -386,7 +386,7 @@ export class FeedParser {
         const article: Article = {
           title: titles.join(' / '),
           link,
-          context: element.outerHTML,
+          content: element.outerHTML,
           summary: rule.commonTextNodePath.map(textNodePath => {
             return Array.from(element.querySelectorAll(textNodePath))
               .map(textNode => textNode.textContent.trim());
