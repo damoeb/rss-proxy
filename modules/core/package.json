@@ -6,7 +6,6 @@
     "test": "rm -rf test/* && tsc --build tsconfig.test.json && mocha --timeout 5000 --recursive",
     "prepublish": "npm run build"
   },
-  "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {},
