@@ -1,6 +1,6 @@
 import * as request from 'request';
 import {JSDOM} from 'jsdom';
-import {FeedParser, Article} from 'rssproxy-core';
+import {FeedParser, Article} from '@rss-it/core';
 
 export interface MappedFeedResponse {
   articles: Article[]

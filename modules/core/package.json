@@ -1,5 +1,5 @@
 {
-  "name": "rss-proxy-core",
+  "name": "@rss-proxy/core",
   "version": "0.0.0",
   "scripts": {
     "build": "rm -rf dist && tsc",
@@ -7,7 +7,7 @@
     "prepublish": "npm run build"
   },
   "private": true,
-  "main": "dist/index.ts",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {},
   "devDependencies": {

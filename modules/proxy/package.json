@@ -1,5 +1,5 @@
 {
-  "name": "proxy-server",
+  "name": "@rss-it/proxy",
   "version": "0.0.0",
   "private": true,
   "dependencies": {
@@ -7,23 +7,21 @@
     "cors": "^2.8.5",
     "express": "^4.16.3",
     "lodash": "^4.17.10",
-    "puppeteer": "latest",
     "request": "^2.88.0",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.5",
     "winston": "^3.1.0",
-    "jsdom": "^15.2.1",
-    "rssproxy-core": "file:../core"
+    "jsdom": "^15.2.1"
   },
   "scripts": {
-    "docker:stop": "docker stop $(docker ps | grep rssproxy-dev | awk '{print $1}') &>/dev/null",
-    "build:dev": "cd docker/dev && docker build -t rssproxy-dev -f Dockerfile .",
-    "build:playground": "cd ../playground && npm run build",
-    "copy:playground": "rm -rf ./build/playground && mkdir -p ./build/playground && cp -r ../playground/dist/ ./docker/prod/.build-cache/public",
+    "docker:stop": "docker stop $(docker ps | grep rss-proxy-dev | awk '{print $1}') &>/dev/null",
+    "build:dev": "cd docker/dev && docker build -t rss-proxy-dev -f Dockerfile .",
+    "build:playground": "cd ../playground && npm run build -- --prod && npm pack",
+    "postbuild:playground": "cp -r ../playground/dist/@rss-it/playground/ ./dist/@rss-it/playground",
     "prebuild:prod": "npm run build:playground",
-    "build:server": "rm -rf build/server && tsc --outDir build/server",
-    "build:prod": "npm run build:server && rm -rf docker/prod/.build-cache && mkdir -p docker/prod/.build-cache && cp package.json docker/prod/.build-cache && cp -rf build/server/* docker/prod/.build-cache && npm run copy:playground && cd docker/prod && docker build -t rssproxy-prod -f Dockerfile .",
-    "run:dev": "npm run build:dev && docker run -v ${PWD}:/opt/rssproxy/sources -p 3000:8080 -p 3001:443 -t rssproxy-dev",
+    "build:proxy": "rm -rf build/@rss-it/proxy && tsc",
+    "build:prod": "npm run build:proxy && rm -rf docker/prod/.build-cache && mkdir -p docker/prod/.build-cache && cp package.json docker/prod/.build-cache && cp -rf build/proxy/* docker/prod/.build-cache && cd docker/prod && docker build -t rss-proxy-prod -f Dockerfile .",
+    "run:dev": "npm run build:dev && docker run -v ${PWD}:/opt/rss-proxy/sources -p 3000:8080 -t rss-proxy-dev",
     "run:prod": "npm run build:prod && docker run -p 80:8080 -t rssproxy-prod",
     "run:node": "./node_modules/.bin/nodemon",
     "init:mongo": "./node_modules/.bin/ts-node src/tools/init-database.ts",
@@ -39,7 +37,6 @@
     "@types/express": "^4.16.0",
     "@types/jsdom": "^12.2.4",
     "@types/lodash": "^4.14.116",
-    "@types/puppeteer": "^2.0.0",
     "@types/request": "^2.47.1",
     "@types/winston": "^2.4.4",
     "nodemon": "^1.18.4"

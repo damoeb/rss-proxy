@@ -1,5 +1,5 @@
-FROM node:10-stretch
-WORKDIR /opt/rssproxy/
+FROM node:12-stretch
+WORKDIR /opt/rss-proxy/
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update \
@@ -7,7 +7,7 @@ RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /data/db \
-  && mkdir -p /opt/rssproxy/sources
+  && mkdir -p /opt/rss-proxy/sources
 
 COPY entrypoint.sh ./
 

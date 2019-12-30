@@ -6,12 +6,11 @@ RUN pip -q install gixy && gixy nginx.conf
 
 # -- Build
 
-FROM node:10-stretch
-WORKDIR /opt/rssproxy
+FROM node:12-stretch
+WORKDIR /opt/rss-proxy
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4 \
-  && apt-get update \
+RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /data/db \

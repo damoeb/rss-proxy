@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "outDir": "dist/@rss-it/proxy",
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
@@ -12,7 +13,7 @@
     ],
     "typeRoots": [
       "node_modules/@types",
-      "node_modules/rssproxy-core/dist"
+      "node_modules/@rss-proxy/core/dist"
     ]
   },
   "exclude": [
