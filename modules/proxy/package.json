@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
     "express": "^4.16.3",
     "lodash": "^4.17.10",
+    "puppeteer": "latest",
     "request": "^2.88.0",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.5",
@@ -31,8 +33,10 @@
     "node": ">=10.0.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.6",
     "@types/express": "^4.16.0",
     "@types/lodash": "^4.14.116",
+    "@types/puppeteer": "^2.0.0",
     "@types/request": "^2.47.1",
     "@types/winston": "^2.4.4",
     "nodemon": "^1.18.4"

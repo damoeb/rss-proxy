@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import {Article, ArticleRule, FeedParser} from '../../../rss-it-core/src/feed-parser';
+import {Article, ArticleRule, FeedParser} from '../../../core/src/feed-parser';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -16,11 +17,13 @@ export class AppComponent {
   articles: Array<Article>;
   url: string;
 
-  constructor() {
+  constructor(private httpClient: HttpClient) {
 
   }
 
   parseHtml() {
+    this.json = '';
+    this.articles = [];
 
     const domParser = new DOMParser();
     const htmlDoc = domParser.parseFromString(this.html, 'text/html');
@@ -42,5 +45,17 @@ export class AppComponent {
   applyRuleFromEvent(event: Event) {
     console.log('apply rule', this.currentRule);
     this.applyRule(this.currentRule);
+  }
+
+  parseUrl() {
+    const headers = new HttpHeaders({
+      Accept: 'text/html'
+    });
+
+    this.httpClient.get(`http://localhost:3000/api/proxy?url=${encodeURI(this.url)}`, { headers, responseType: 'text' })
+      .subscribe(response => {
+        this.html = response;
+        this.parseHtml();
+      });
   }
 }

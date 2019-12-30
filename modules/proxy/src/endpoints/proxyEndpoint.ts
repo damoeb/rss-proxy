@@ -1,12 +1,12 @@
 import {Express, Request, Response} from 'express';
-import proxyService from "../services/proxyService";
-import httpUtil from "../httpUtil";
-import logger from "../logger";
+import proxyService from '../services/proxyService';
+import logger from '../logger';
+import * as cors from 'cors';
 
-export default new class ProxyEndpoint {
+export const proxyEndpoint = new class ProxyEndpoint {
   register(app: Express) {
 
-    app.get('/api/proxy', (request: Request, response: Response) => {
+    app.get('/api/proxy', cors(), (request: Request, response: Response) => {
       const url = request.query.url;
       logger.info(`proxy ${url}`);
       if (url) {
