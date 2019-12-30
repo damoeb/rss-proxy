@@ -3,6 +3,7 @@ import * as bodyParser from 'body-parser';
 
 import logger from './logger'
 import { proxyEndpoint } from './endpoints/proxyEndpoint';
+import { feedEndpoint } from './endpoints/feedEndpoint';
 import {config} from './config';
 
 // -- express
@@ -22,6 +23,7 @@ export interface ErrorsResponse {
 // -- endpoints
 
 proxyEndpoint.register(app);
+feedEndpoint.register(app);
 
 // startup
 app.listen(config.port, () => logger.info(`Listening on port ${config.port}`));

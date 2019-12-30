@@ -7,15 +7,15 @@ export interface ArticleRule extends PartialArticlesWithDescription {
   score: number;
 }
 
-interface RawArticleRule {
+export interface RawArticleRule {
   contextElementPath: string;
   linkPath: string;
 }
 
 export interface PartialArticlesWithStructure {
   id: string;
-  articles: Array<ArticleContext>;
-  commonTextNodePath: Array<string>;
+  articles: ArticleContext[];
+  commonTextNodePath: string[];
   rule: RawArticleRule;
 }
 
@@ -31,7 +31,7 @@ export interface TitleRule {
   score?: number;
 }
 
-interface DescriptionFeatures {
+export interface DescriptionFeatures {
   variance: number;
   avgWordCount: number;
 }
@@ -53,7 +53,7 @@ export interface StatsWrapper {
 export interface Article {
   title: string;
   link: string;
-  summary?: Array<string>;
+  summary?: string[];
   context?: string;
 }
 
@@ -74,7 +74,7 @@ export interface ArticleContext {
 }
 
 export interface LinkGroup {
-  links: Array<LinkPointer>;
+  links: LinkPointer[];
 }
 
 export class FeedParser {
@@ -99,8 +99,8 @@ export class FeedParser {
     return path;
   }
 
-  private findLinks(): Array<HTMLElement> {
-    return Array.from(this.document.getElementsByTagName('A')) as Array<HTMLElement>;
+  private findLinks(): HTMLElement[] {
+    return Array.from(this.document.getElementsByTagName('A')) as HTMLElement[];
   }
 
   private findArticleRootElement(currentElement: HTMLElement[]): HTMLElement[] {
@@ -110,14 +110,14 @@ export class FeedParser {
       if (parentNodes[0].isSameNode(parentNodes[1])) {
         break;
       }
-      currentElement = parentNodes as Array<HTMLElement>;
+      currentElement = parentNodes as HTMLElement[];
     }
     return currentElement;
   }
 
-  private findArticleContext(linkGroup: LinkGroup, root: HTMLElement, index: number): Array<ArticleContext> {
+  private findArticleContext(linkGroup: LinkGroup, root: HTMLElement, index: number): ArticleContext[] {
     const linkPointers = linkGroup.links;
-    const linkElements = linkPointers.map(nodeElement => nodeElement.element);
+    const linkElements = linkPointers.map((nodeElement: LinkPointer) => nodeElement.element);
     const articleRootElements = this.findArticleRootElement(linkElements);
 
     const id = linkPointers[0].path;
@@ -136,12 +136,12 @@ export class FeedParser {
     });
   }
 
-  private toWords(text: string): Array<string> {
+  private toWords(text: string): string[] {
     return text.trim().split(' ').filter(word => word.length > 0);
   }
 
-  public findTextNodesInContext(context: HTMLElement): Array<HTMLElement> {
-    const textNodes: Array<HTMLElement> = [];
+  public findTextNodesInContext(context: HTMLElement): HTMLElement[] {
+    const textNodes: HTMLElement[] = [];
     const walk = this.document.createTreeWalker(context, -1, null, false);
     while (true) {
       const node = walk.nextNode();
@@ -160,7 +160,7 @@ export class FeedParser {
     return textNodes;
   }
 
-  private findCommonTextNodes(articles: Array<ArticleContext>, root: HTMLElement, index: number): PartialArticlesWithStructure {
+  private findCommonTextNodes(articles: ArticleContext[], root: HTMLElement, index: number): PartialArticlesWithStructure {
 
     const referenceArticle = articles[0];
     const referenceArticleNode = referenceArticle.contextElement;
@@ -216,7 +216,7 @@ export class FeedParser {
     return node.tagName;
   }
 
-  private uniq(list: Array<string>): Array<string> {
+  private uniq(list: string[]): string[] {
     return list.reduce((uniqList, item) => {
 
       if (uniqList.indexOf(item) === -1) {
@@ -300,12 +300,12 @@ export class FeedParser {
     return group;
   }
 
-  public getArticleRules(): Array<ArticleRule> {
+  public getArticleRules(): ArticleRule[] {
 
     const body = this.getDocumentRoot();
 
     // find links
-    const linkElements: Array<LinkPointer> = this.findLinks()
+    const linkElements: LinkPointer[] = this.findLinks()
       .filter(element => this.toWords(element.textContent).length > 3)
       .map(element => {
         return {
@@ -328,7 +328,7 @@ export class FeedParser {
 
     console.log(`${groups.length} link groups`);
 
-    const relevantGroups: Array<PartialArticlesWithDescription> = groups
+    const relevantGroups: PartialArticlesWithDescription[] = groups
       .filter((linkGroup, index) => {
         const hasEnoughMembers = linkGroup.links.length > 3;
 
@@ -366,14 +366,14 @@ export class FeedParser {
       .sort((a, b) => b.score - a.score);
   }
 
-  public getArticles(): Array<Article> {
+  public getArticles(): Article[] {
 
     const rules = this.getArticleRules();
     const bestRule = rules[0];
     return this.getArticlesByRule(bestRule);
   }
 
-  public getArticlesByRule(rule: ArticleRule): Array<Article> {
+  public getArticlesByRule(rule: ArticleRule): Article[] {
 
     return Array.from(this.document.querySelectorAll(rule.rule.contextElementPath)).map(element => {
       try {

@@ -4,7 +4,16 @@
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "target": "es2018"
+    "target": "es2018",
+    "lib": [
+      "es2018",
+      "esnext.array",
+      "dom"
+    ],
+    "typeRoots": [
+      "node_modules/@types",
+      "node_modules/rssproxy-core/dist"
+    ]
   },
   "exclude": [
     "node_modules",

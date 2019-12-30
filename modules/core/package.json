@@ -1,10 +1,14 @@
 {
-  "name": "rss-it-library",
+  "name": "rss-proxy-core",
   "version": "0.0.0",
   "scripts": {
-    "test": "node ./node_modules/.bin/tsc --build tsconfig.test.json && node ./node_modules/.bin/mocha --timeout 5000 --recursive"
+    "build": "rm -rf dist && tsc",
+    "test": "rm -rf test/* && tsc --build tsconfig.test.json && mocha --timeout 5000 --recursive",
+    "prepublish": "npm run build"
   },
   "private": true,
+  "main": "dist/index.ts",
+  "types": "dist/index.d.ts",
   "dependencies": {},
   "devDependencies": {
     "@types/chai": "^4.2.7",
