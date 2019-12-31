@@ -1,7 +1,7 @@
 import * as request from 'request';
 import {JSDOM} from 'jsdom';
 import {Feed} from 'feed';
-import {Article, FeedParser, FeedParserOptions} from '../parser/feed-parser';
+import {Article, FeedParser, FeedMappingOptions} from '@rss-proxy/core';
 
 export const feedService =  new class FeedService {
   mapToFeed(url: string, options: FeedMappingOptions): Promise<Feed> {

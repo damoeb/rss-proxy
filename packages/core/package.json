@@ -2,7 +2,7 @@
   "name": "@rss-proxy/core",
   "version": "0.0.0",
   "scripts": {
-    "build": "rm -rf dist && tsc",
+    "build": "tsc",
     "test": "rm -rf test/* && tsc --build tsconfig.test.json && mocha --timeout 5000 --recursive",
     "prepublish": "npm run build"
   },

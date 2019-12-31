@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "@rss-proxy/core": "file:../core",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.16.3",
@@ -16,6 +17,10 @@
     "winston": "^3.1.0"
   },
   "scripts": {
+    "preinstall": "npm install ../core",
+    "preupdate": "npm install ../core",
+    "postinstall": "npm link ../core",
+    "postupdate": "npm link ../core",
     "docker:stop": "docker stop $(docker ps | grep rss-proxy-dev | awk '{print $1}') &>/dev/null",
     "build:dev": "cd docker/dev && docker build -t rss-proxy-dev -f Dockerfile .",
     "build:playground": "cd ../playground && npm run build -- --prod && npm pack",

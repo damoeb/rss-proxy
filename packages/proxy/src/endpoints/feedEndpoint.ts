@@ -2,7 +2,8 @@ import {Express, Request, Response} from 'express';
 import * as cors from 'cors';
 import {Feed} from 'feed';
 import logger from '../logger';
-import {FeedMappingOptions, feedService, OutputType} from '../services/feedService';
+import {feedService} from '../services/feedService';
+import {FeedMappingOptions, OutputType} from '@rss-proxy/core';
 
 export const feedEndpoint = new class FeedEndpoint {
   register(app: Express) {
