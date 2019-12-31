@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import {Article, ArticleRule, FeedParser} from '../../../core/src/feed-parser';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Component} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {FeedService} from './services/feed.service';
+import {Article, ArticleRule} from '../../../core/src';
+import {FeedMappingOptions, OutputType, PageResolutionType, SourceType} from '../../../core/src/feed-parser';
 
 @Component({
   selector: 'app-root',
@@ -12,12 +14,24 @@ export class AppComponent {
   html = '';
   json = '';
   rules: Array<ArticleRule>;
-  private feedParser: FeedParser;
   currentRule: ArticleRule;
   articles: Array<Article>;
   url: string;
+  outputs = [OutputType.ATOM, OutputType.RSS, OutputType.JSON];
+  sources = [SourceType.STATIC, SourceType.WITH_SCRIPTS];
+  pageResolutions = [PageResolutionType.STATIC, PageResolutionType.NESTED];
+  feedUrl: string;
 
-  constructor(private httpClient: HttpClient) {
+  options: FeedMappingOptions = {
+    output: OutputType.JSON,
+    source: SourceType.STATIC,
+    preferExistingFeed: false,
+    pageResolution: PageResolutionType.STATIC,
+    parser: null
+  };
+
+  constructor(private httpClient: HttpClient,
+              private feedService: FeedService) {
 
   }
 
@@ -25,12 +39,9 @@ export class AppComponent {
     this.json = '';
     this.articles = [];
 
-    const domParser = new DOMParser();
-    const htmlDoc = domParser.parseFromString(this.html, 'text/html');
-
-    this.feedParser = new FeedParser(htmlDoc);
-
-    this.rules = this.feedParser.getArticleRules();
+    this.feedService.getRulesForHtml(this.html).subscribe(rules => {
+      this.rules = rules;
+    });
 
     this.applyRule(this.rules[0]);
   }
@@ -38,7 +49,9 @@ export class AppComponent {
   applyRule(rule: ArticleRule) {
     console.log('apply rule', rule);
     this.currentRule = rule;
-    this.articles = this.feedParser.getArticlesByRule(rule);
+    this.feedService.getArticlesByRule(rule).subscribe(articles => {
+      this.articles = articles;
+    });
     this.json = JSON.stringify(this.articles, null, 2);
   }
 
@@ -48,11 +61,7 @@ export class AppComponent {
   }
 
   parseUrl() {
-    const headers = new HttpHeaders({
-      Accept: 'text/html'
-    });
-
-    this.httpClient.get(`http://localhost:3000/api/proxy?url=${encodeURI(this.url)}`, { headers, responseType: 'text' })
+    this.feedService.getHtmlForUrl(this.url)
       .subscribe(response => {
         this.html = response;
         this.parseHtml();

@@ -12,8 +12,7 @@
       "dom"
     ],
     "typeRoots": [
-      "node_modules/@types",
-      "node_modules/@rss-proxy/core/dist"
+      "node_modules/@types"
     ]
   },
   "exclude": [

@@ -7,6 +7,30 @@ export interface ArticleRule extends PartialArticlesWithDescription {
   score: number;
 }
 
+export enum OutputType {
+  JSON = 'JSON', RSS = 'RSS', ATOM = 'ATOM'
+}
+
+export enum SourceType {
+  STATIC = 'STATIC', WITH_SCRIPTS = 'WITH_SCRIPTS'
+}
+
+export enum PageResolutionType {
+  STATIC = 'STATIC', NESTED = 'NESTED'
+}
+
+export interface FeedParserOptions {
+}
+
+export interface FeedMappingOptions {
+  output: OutputType;
+  source: SourceType;
+  // todo optin to use real rss
+  preferExistingFeed: boolean;
+  pageResolution: PageResolutionType;
+  parser: FeedParserOptions;
+}
+
 export interface RawArticleRule {
   contextElementPath: string;
   linkPath: string;
@@ -179,10 +203,10 @@ export class FeedParser {
         }).length / articles.length;
 
         if (frequency >= 0.7) {
-          console.log(`+ ${ pathToTextNode } common node, frequency= ${ frequency * 100 }%`);
+          console.log(`+ ${pathToTextNode} common node, frequency= ${frequency * 100}%`);
           return true;
         } else {
-          console.log(`- ${ pathToTextNode } not a common node,frequency= ${ frequency * 100 }%`);
+          console.log(`- ${pathToTextNode} not a common node,frequency= ${frequency * 100}%`);
           return false;
         }
       });
@@ -239,8 +263,8 @@ export class FeedParser {
         .map((title) => {
           // score
           title.score = (title.features.avgWordLength > 3 ? 1 : 0)
-          + (title.features.hasHeaderInPath ? 1 : 0)
-          + title.features.variance;
+            + (title.features.hasHeaderInPath ? 1 : 0)
+            + title.features.variance;
           return title;
         })
         .sort((a, b) => {
@@ -379,7 +403,7 @@ export class FeedParser {
       try {
         const titles = Array.from(element.querySelectorAll(rule.titlePath)).map(node => node.textContent.trim());
         const link = element.querySelector(rule.linkPath).getAttribute('href');
-        if (titles.length === 0  || titles.join('').trim().length === 0 || !link) {
+        if (titles.length === 0 || titles.join('').trim().length === 0 || !link) {
           return undefined;
         }
 

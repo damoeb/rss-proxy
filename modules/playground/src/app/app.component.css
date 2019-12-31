@@ -1,16 +1,26 @@
-#panels {
+.panels {
   display: flex;
-  height: 100vh;
+  height: 50vh;
 }
-#editor {
-  flex: 1;
-  background-color: black;
+.panels > div {
   padding: 10px;
 }
-#feed {
+#options {
   flex: 1;
+  background: black;
+  color: white;
+}
+#editor {
+  flex: 2;
+  background-color: gray;
+}
+#console {
+  flex: 1;
+}
+#feed {
+  flex: 2;
 }
 textarea {
   width: 98%;
-  height: 50vh;
+  height: 70%;
 }
