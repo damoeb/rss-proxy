@@ -29,7 +29,7 @@
       <tr>
         <td>Page Resolutions</td>
         <td>
-          <select [ngModel]="options.pageResolution">
+          <select [ngModel]="options.contentResolution" (change)="update()">
             <option [ngValue]="pageResolution" *ngFor="let pageResolution of pageResolutions">{{ pageResolution }}</option>
           </select>
         </td>
@@ -61,6 +61,9 @@
   <div id="console">
     <h3>Console</h3>
     <hr>
+    <div *ngFor="let log of logs">
+      {{ log }}
+    </div>
   </div>
 
   <!-- Feed -------------------------------------------------------------------------------------------------------- -->

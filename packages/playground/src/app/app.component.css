@@ -16,6 +16,7 @@
 }
 #console {
   flex: 1;
+  white-space: pre-line;
 }
 #feed {
   flex: 2;

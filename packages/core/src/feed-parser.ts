@@ -15,20 +15,24 @@ export enum SourceType {
   STATIC = 'STATIC', WITH_SCRIPTS = 'WITH_SCRIPTS'
 }
 
-export enum PageResolutionType {
-  STATIC = 'STATIC', NESTED = 'NESTED'
+export enum ContentResolutionType {
+  STATIC = 'STATIC', DEEP = 'DEEP'
+}
+
+export interface FeedParserResult {
+  logs: string[];
+  options: FeedParserOptions;
+  rules: ArticleRule[];
+  html: string;
+  feed?: any;
 }
 
 export interface FeedParserOptions {
-}
-
-export interface FeedMappingOptions {
   output: OutputType;
   source: SourceType;
   // todo optin to use real rss
   preferExistingFeed: boolean;
-  pageResolution: PageResolutionType;
-  parser: FeedParserOptions;
+  contentResolution: ContentResolutionType;
 }
 
 export interface RawArticleRule {
@@ -101,8 +105,15 @@ export interface LinkGroup {
   links: LinkPointer[];
 }
 
+export interface Logger {
+  log: (...params:any[]) => void
+  error: (...params:any[]) => void
+}
+
 export class FeedParser {
-  constructor(private document: HTMLDocument) {
+  constructor(private document: HTMLDocument,
+              private options: FeedParserOptions,
+              private logger: Logger) {
   }
 
 
@@ -145,7 +156,7 @@ export class FeedParser {
     const articleRootElements = this.findArticleRootElement(linkElements);
 
     const id = linkPointers[0].path;
-    console.log(`context #${index} group ${id} ${this.getRelativePath(articleRootElements[0], root, false)}`);
+    this.logger.log(`context #${index} group ${id} ${this.getRelativePath(articleRootElements[0], root, false)}`);
 
     return linkPointers.map((linkPointer, linkPointerIndex) => {
       const linkElement = linkPointer.element;
@@ -188,7 +199,7 @@ export class FeedParser {
 
     const referenceArticle = articles[0];
     const referenceArticleNode = referenceArticle.contextElement;
-    console.log(`common-nodes #${index} for ${referenceArticle.id}`);
+    this.logger.log(`common-nodes #${index} for ${referenceArticle.id}`);
 
     const textNodes = this.findTextNodesInContext(referenceArticleNode);
 
@@ -203,10 +214,10 @@ export class FeedParser {
         }).length / articles.length;
 
         if (frequency >= 0.7) {
-          console.log(`+ ${pathToTextNode} common node, frequency= ${frequency * 100}%`);
+          this.logger.log(`+ ${pathToTextNode} common node, frequency= ${frequency * 100}%`);
           return true;
         } else {
-          console.log(`- ${pathToTextNode} not a common node,frequency= ${frequency * 100}%`);
+          this.logger.log(`- ${pathToTextNode} not a common node,frequency= ${frequency * 100}%`);
           return false;
         }
       });
@@ -222,8 +233,8 @@ export class FeedParser {
         commonTextNodePath: commonTextNodes.filter(this.onlyUnique),
       };
     } catch (e) {
-      console.log(`Dropping ${referenceArticle.id}`);
-      console.error(e);
+      this.logger.log(`Dropping ${referenceArticle.id}`);
+      this.logger.error(e);
       return null;
     }
   }
@@ -254,7 +265,7 @@ export class FeedParser {
   private findTitles(group: PartialArticlesWithStructure, index: number): PartialArticlesWithTitle {
     try {
 
-      console.log(`title #${index} for #${group.id}`);
+      this.logger.log(`title #${index} for #${group.id}`);
 
       // todo common path should use index or classes
       const sortedTitleNodes: TitleRule[] = group.commonTextNodePath.map((textNodePath) => {
@@ -274,13 +285,13 @@ export class FeedParser {
       const referenceArticle = group.articles[0];
 
       if (sortedTitleNodes.length === 0) {
-        console.log(`Drop ${group.id} - no titles found`);
+        this.logger.log(`Drop ${group.id} - no titles found`);
         // throw new Error('No textNode found that looks like a title');
         return null;
       }
 
       const titlePath = sortedTitleNodes[0];
-      console.log(`group ${group.id} has title ${titlePath.textNodePath}`);
+      this.logger.log(`group ${group.id} has title ${titlePath.textNodePath}`);
 
       return {
         id: group.id,
@@ -292,7 +303,7 @@ export class FeedParser {
         commonTextNodePath: group.commonTextNodePath.filter(path => path && path !== titlePath.textNodePath),
       };
     } catch (e) {
-      console.error('Cannot extract title', e);
+      this.logger.error('Cannot extract title', e);
       return null;
     }
   }
@@ -350,16 +361,16 @@ export class FeedParser {
 
     const groups: Array<LinkGroup> = Object.values(linksGroupedByPath);
 
-    console.log(`${groups.length} link groups`);
+    this.logger.log(`${groups.length} link groups`);
 
     const relevantGroups: PartialArticlesWithDescription[] = groups
       .filter((linkGroup, index) => {
         const hasEnoughMembers = linkGroup.links.length > 3;
 
         if (hasEnoughMembers) {
-          console.log(`size #${index} keep ${linkGroup.links[0].path} - ${linkGroup.links.length} member`);
+          this.logger.log(`size #${index} keep ${linkGroup.links[0].path} - ${linkGroup.links.length} member`);
         } else {
-          console.log(`size #${index} drop ${linkGroup.links[0].path} - ${linkGroup.links.length} member`);
+          this.logger.log(`size #${index} drop ${linkGroup.links[0].path} - ${linkGroup.links.length} member`);
         }
 
         return hasEnoughMembers;
@@ -374,8 +385,8 @@ export class FeedParser {
       .map(articlesInGroup => this.findDescriptions(articlesInGroup));
 
 
-    console.log(`${relevantGroups.length} article rules`);
-    relevantGroups.forEach(group => console.log(group.id));
+    this.logger.log(`${relevantGroups.length} article rules`);
+    relevantGroups.forEach(group => this.logger.log(group.id));
 
     return relevantGroups
       .map(group => {

@@ -22,6 +22,8 @@ export interface ErrorsResponse {
 
 // -- endpoints
 
+// todo serve static playground
+
 proxyEndpoint.register(app);
 feedEndpoint.register(app);
 
