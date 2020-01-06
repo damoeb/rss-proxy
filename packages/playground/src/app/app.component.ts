@@ -1,8 +1,7 @@
 import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {FeedService} from './services/feed.service';
-import {Article, ArticleRule} from '../../../core/src';
-import {OutputType, ContentResolutionType, SourceType, FeedParserOptions} from '../../../core/src/feed-parser';
+import {Article, ArticleRule, OutputType, ContentResolutionType, SourceType, FeedParserOptions} from '../../../core/src';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +14,6 @@ export class AppComponent {
   feedData = '';
   rules: Array<ArticleRule>;
   currentRule: ArticleRule;
-  // articles: Array<Article>;
   url: string;
   outputs = [OutputType.ATOM, OutputType.RSS, OutputType.JSON];
   sources = [SourceType.STATIC, SourceType.WITH_SCRIPTS];
@@ -25,24 +23,21 @@ export class AppComponent {
   showConsole = false;
   showFeed = true;
 
-  options: FeedParserOptions = {
-    output: OutputType.RSS,
-    source: SourceType.STATIC,
-    useRuleId: null,
-    preferExistingFeed: false,
-    contentResolution: ContentResolutionType.STATIC,
-  };
+  options: FeedParserOptions;
+
+  optionsFromParser: Partial<FeedParserOptions> = {};
+
   logs: string[];
   articles: Article[];
 
   constructor(private httpClient: HttpClient,
               private feedService: FeedService) {
     this.url = 'https://www.heise.de/';
+    this.reset();
   }
 
   parseHtml() {
     this.feedData = '';
-    // this.articles = [];
 
     this.feedService.fromHTML(this.html, this.options)
       .subscribe(result => {
@@ -50,6 +45,7 @@ export class AppComponent {
         this.logs = result.logs;
         this.html = result.html;
         this.articles = result.articles;
+        this.optionsFromParser = result.options;
       });
 
     this.applyRule(this.rules[0]);
@@ -78,6 +74,7 @@ export class AppComponent {
         this.currentRule = response.rules[0];
         this.feedData = response.feed;
         this.articles = response.articles;
+        this.optionsFromParser = response.options;
       });
   }
 
@@ -87,5 +84,16 @@ export class AppComponent {
 
   getFeedUrl() {
     return this.feedService.getDirectFeedUrl(this.url, this.options);
+  }
+
+  reset() {
+    this.options = {
+      output: OutputType.RSS,
+      source: SourceType.STATIC,
+      useRuleId: null,
+      preferExistingFeed: false,
+      contentResolution: ContentResolutionType.STATIC,
+    };
+    this.optionsFromParser = {};
   }
 }

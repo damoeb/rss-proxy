@@ -14,7 +14,7 @@ export const feedEndpoint = new class FeedEndpoint {
       contentResolution: ContentResolutionType.STATIC
     };
 
-    function parseFeed(url: string, request: Request, response: Response) {
+    function parseFeed(url: string, request: Request) {
       const actualOptions = request.query.options ? JSON.parse(request.query.options) : {};
       const options: FeedParserOptions = {...defaultOptions, ...actualOptions};
 
@@ -30,7 +30,7 @@ export const feedEndpoint = new class FeedEndpoint {
         const url = request.query.url;
         logger.info(`live feed-mapping of ${url}`);
 
-        parseFeed(url, request, response).then((feedParserResult: FeedParserResult) => {
+        parseFeed(url, request).then((feedParserResult: FeedParserResult) => {
             response.send(feedParserResult);
 
           }).catch((err: Error) => {
@@ -48,7 +48,7 @@ export const feedEndpoint = new class FeedEndpoint {
         const url = request.query.url;
         logger.info(`live feed-mapping of ${url}`);
 
-        parseFeed(url, request, response).then((feedParserResult: FeedParserResult) => {
+        parseFeed(url, request).then((feedParserResult: FeedParserResult) => {
           response.send(feedParserResult.feed);
 
         }).catch((err: Error) => {

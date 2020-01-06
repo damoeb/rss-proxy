@@ -24,6 +24,7 @@
         Feed
       </label>
 
+      <button (click)="reset()">Reset</button>
       <input type="button" value="Parse" (click)="parseFromUrl()">
     </div>
     <div>
@@ -44,7 +45,7 @@
           <td>
             <select [(ngModel)]="options.output">
               <option [ngValue]="output" *ngFor="let output of outputs">{{ output }}</option>
-            </select> - {{options.output}}
+            </select> - {{optionsFromParser.output}}
           </td>
         </tr>
         <tr>
@@ -52,7 +53,7 @@
           <td>
             <select [(ngModel)]="options.source">
               <option [ngValue]="source" *ngFor="let source of sources">{{ source }}</option>
-            </select> - {{options.source}}
+            </select> - {{optionsFromParser.source}}
           </td>
         </tr>
         <tr>
@@ -60,19 +61,19 @@
           <td>
             <select [(ngModel)]="options.contentResolution">
               <option [ngValue]="pageResolution" *ngFor="let pageResolution of pageResolutions">{{ pageResolution }}</option>
-            </select> - {{ options.contentResolution }}
+            </select> - {{ optionsFromParser.contentResolution }}
           </td>
         </tr>
         <tr>
           <td>Use Existing Feed</td>
-          <td><input type="checkbox" [(ngModel)]="options.preferExistingFeed"></td>
+          <td><input type="checkbox" [(ngModel)]="options.preferExistingFeed">  - {{ optionsFromParser.preferExistingFeed }}</td>
         </tr>
       </table>
-      <button (click)="parseFromUrl()">Parse</button>
+      <input type="button" value="Parse" (click)="parseFromUrl()">
     </app-panel>
 
 
-    <!-- Markus Editor ----------------------------------------------------------------------------------------------- -->
+    <!-- Markup ----------------------------------------------------------------------------------------------- -->
 
     <app-panel id="editor" *ngIf="showMarkup">
       <h3>Markup</h3>
