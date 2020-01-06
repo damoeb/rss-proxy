@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
-import {Article, ArticleRule, FeedParser, FeedParserOptions, FeedParserResult} from '../../../../core/src';
+import {Article, ArticleRule, FeedParser, FeedParserOptions, FeedParserResult, LogCollector} from '../../../../core/src';
 
 @Injectable({
   providedIn: 'root'
@@ -13,31 +13,30 @@ export class FeedService {
   constructor(private httpClient: HttpClient) { }
 
   fromHTML(html: string, options: FeedParserOptions): Observable<FeedParserResult> {
-    if (this.offline) {
-      const domParser = new DOMParser();
-      const htmlDoc = domParser.parseFromString(html, 'text/html');
+    const domParser = new DOMParser();
+    const htmlDoc = domParser.parseFromString(html, 'text/html');
 
-      const logs: string[] = [];
-      const logCollector = {
-        log(...params: any[]) { logs.push(['INFO', ...params].join(' ')); },
-        error(...params: any[]) { logs.push(['ERROR', ...params].join(' ')); }
-      };
-      const feedParser = new FeedParser(htmlDoc, options, logCollector);
+    const logCollector = new LogCollector();
+    const feedParser = new FeedParser(htmlDoc, options, logCollector);
 
-      const result: FeedParserResult = {
-        logs,
-        options,
-        rules: feedParser.getArticleRules(),
-        html
-      };
-      return of(result);
-    } else {
-      return this.httpClient.get(`http://localhost:3000/api/parse?html=${encodeURI(html)}`) as Observable<FeedParserResult>;
-    }
+    const result: FeedParserResult = {
+      logs: logCollector.logs(),
+      options,
+      rules: feedParser.getArticleRules(),
+      articles: feedParser.getArticles(),
+      html
+    };
+    return of(result);
   }
 
-  applyRule(rule: ArticleRule): Observable<Article[]> {
-    return undefined;
+  applyRule(html: string, rule: ArticleRule, options: FeedParserOptions): Observable<Article[]> {
+    const logCollector = new LogCollector();
+
+    const htmlDoc = new DOMParser().parseFromString(html, 'text/html');
+
+    const feedParser = new FeedParser(htmlDoc, options, logCollector);
+
+    return of(feedParser.getArticlesByRule(rule));
   }
 
   // proxy(url: string) {
@@ -48,9 +47,15 @@ export class FeedService {
   //   return this.httpClient.get(`http://localhost:3000/api/proxy?url=${encodeURI(url)}`, { headers, responseType: 'text' });
   // }
 
+  getDirectFeedUrl(url: string, options: FeedParserOptions): string {
+    return `http://localhost:3000/api/feed?url=${
+      encodeURI(url)
+      }&options=${JSON.stringify(options)}`;
+  }
+
   fromUrl(url: string, options: FeedParserOptions): Observable<FeedParserResult> {
     console.log(options);
-    return this.httpClient.get(`http://localhost:3000/api/parse?url=${
+    return this.httpClient.get(`http://localhost:3000/api/feed/live?url=${
       encodeURI(url)
     }&options=${JSON.stringify(options)}`) as Observable<FeedParserResult>;
   }

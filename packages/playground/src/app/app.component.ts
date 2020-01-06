@@ -12,71 +12,80 @@ import {OutputType, ContentResolutionType, SourceType, FeedParserOptions} from '
 export class AppComponent {
 
   html = '';
-  json = '';
+  feedData = '';
   rules: Array<ArticleRule>;
   currentRule: ArticleRule;
-  articles: Array<Article>;
+  // articles: Array<Article>;
   url: string;
   outputs = [OutputType.ATOM, OutputType.RSS, OutputType.JSON];
   sources = [SourceType.STATIC, SourceType.WITH_SCRIPTS];
   pageResolutions = [ContentResolutionType.STATIC, ContentResolutionType.DEEP];
-  feedUrl: string;
+  showOptions = false;
+  showMarkup = false;
+  showConsole = false;
+  showFeed = true;
 
   options: FeedParserOptions = {
-    output: OutputType.JSON,
+    output: OutputType.RSS,
     source: SourceType.STATIC,
+    useRuleId: null,
     preferExistingFeed: false,
     contentResolution: ContentResolutionType.STATIC,
   };
   logs: string[];
+  articles: Article[];
 
   constructor(private httpClient: HttpClient,
               private feedService: FeedService) {
-
+    this.url = 'https://www.heise.de/';
   }
 
   parseHtml() {
-    this.json = '';
-    this.articles = [];
+    this.feedData = '';
+    // this.articles = [];
 
     this.feedService.fromHTML(this.html, this.options)
       .subscribe(result => {
         this.rules = result.rules;
         this.logs = result.logs;
         this.html = result.html;
+        this.articles = result.articles;
       });
 
     this.applyRule(this.rules[0]);
   }
 
-  applyRule(rule: ArticleRule) {
+  private applyRule(rule: ArticleRule) {
     console.log('apply rule', rule);
     this.currentRule = rule;
-    this.feedService.applyRule(rule).subscribe(articles => {
+    this.feedService.applyRule(this.html, rule, this.options).subscribe(articles => {
       this.articles = articles;
     });
-    this.json = JSON.stringify(this.articles, null, 2);
   }
 
   applyRuleFromEvent(event: Event) {
     console.log('apply rule', this.currentRule);
+    this.options.useRuleId = this.currentRule.id;
     this.applyRule(this.currentRule);
   }
 
-  parseUrl() {
+  parseFromUrl() {
     this.feedService.fromUrl(this.url, this.options)
       .subscribe(response => {
         this.html = response.html;
         this.logs = response.logs;
         this.rules = response.rules;
         this.currentRule = response.rules[0];
-        this.json = response.feed;
-
-        // this.parseHtml();
+        this.feedData = response.feed;
+        this.articles = response.articles;
       });
   }
 
-  update() {
-    console.log('update');
+  getArticles(): string {
+    return this.articles ? JSON.stringify(this.articles, null, 2) : '';
+  }
+
+  getFeedUrl() {
+    return this.feedService.getDirectFeedUrl(this.url, this.options);
   }
 }

@@ -1,25 +1,27 @@
-.panels {
+.playground {
+  height: 100vh;
   display: flex;
-  height: 50vh;
+  flex-direction: column;
 }
-.panels > div {
+.playground__header {
   padding: 10px;
 }
-#options {
+.playground__panels {
+  display: flex;
   flex: 1;
+}
+app-panel {
+  flex: 1;
+}
+#options {
   background: black;
   color: white;
 }
 #editor {
-  flex: 2;
   background-color: gray;
 }
 #console {
-  flex: 1;
   white-space: pre-line;
-}
-#feed {
-  flex: 2;
 }
 textarea {
   width: 98%;

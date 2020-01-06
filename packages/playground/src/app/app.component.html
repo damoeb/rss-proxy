@@ -1,88 +1,122 @@
-<div class="panels">
+<div class="playground">
+  <div class="playground__header">
 
-  <!-- Options ----------------------------------------------------------------------------------------------------- -->
-
-  <div id="options">
-    <h3>Options</h3>
-    <hr>
-    <table>
-      <tr>
-        <td>Url</td>
-        <td><input [(ngModel)]="url" type="url" placeholder="URL of website"></td>
-      </tr>
-      <tr>
-        <td>Output</td>
-        <td>
-          <select [ngModel]="options.output">
-            <option [ngValue]="output" *ngFor="let output of outputs">{{ output }}</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>Source</td>
-        <td>
-          <select [ngModel]="options.source">
-            <option [ngValue]="source" *ngFor="let source of sources">{{ source }}</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>Page Resolutions</td>
-        <td>
-          <select [ngModel]="options.contentResolution" (change)="update()">
-            <option [ngValue]="pageResolution" *ngFor="let pageResolution of pageResolutions">{{ pageResolution }}</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>Use Existing Feed</td>
-        <td><input type="checkbox" [ngModel]="options.preferExistingFeed"></td>
-      </tr>
-    </table>
-    <button (click)="parseUrl()">Parse</button>
-  </div>
-
-
-  <!-- Editor ------------------------------------------------------------------------------------------------------ -->
-
-  <div id="editor">
-    <h3>Markup</h3>
-    <hr>
-    <textarea [(ngModel)]="html" placeholder="HTML markup of website"></textarea>
-    <button (click)="parseHtml()">Parse HTML</button>
-  </div>
-</div>
-
-<div class="panels">
-
-
-  <!-- Console -------------------------------------------------------------------------------------------------------- -->
-
-  <div id="console">
-    <h3>Console</h3>
-    <hr>
-    <div *ngFor="let log of logs">
-      {{ log }}
-    </div>
-  </div>
-
-  <!-- Feed -------------------------------------------------------------------------------------------------------- -->
-
-  <div id="feed" style="overflow: auto">
-    <h3>Feed</h3>
-    <hr>
-    <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule">
-      <option *ngFor="let rule of rules" [ngValue]="rule">{{ rule?.score }} {{ rule?.id }}</option>
-    </select>
     <div>
-      <div>Score: {{currentRule?.score}}</div>
-      <div>Stats: {{currentRule?.stats | json}}</div>
-      <div>title: {{currentRule?.titlePath }}</div>
-      <div>link: {{currentRule?.linkPath }}</div>
-      <div>Common: {{currentRule?.commonTextNodePath }}</div>
-      <div>{{ articles?.length }} articles</div>
-      <pre [innerText]="json"></pre>
+      <label>
+        Url:
+        <input [(ngModel)]="url" type="url" placeholder="URL of website">
+      </label>
+
+      <label>
+        <input type="checkbox" [value]="showOptions" (change)="showOptions = !showOptions">
+        Options
+      </label>
+      <label>
+        <input type="checkbox" [value]="showMarkup" (change)="showMarkup = !showMarkup">
+        Markup
+      </label>
+      <label>
+        <input type="checkbox" [value]="showConsole" (change)="showConsole = !showConsole">
+        Console
+      </label>
+      <label>
+        <input type="checkbox" [value]="showFeed" (change)="showFeed = !showFeed">
+        Feed
+      </label>
+
+      <input type="button" value="Parse" (click)="parseFromUrl()">
+    </div>
+    <div>
+      Direct Feed Url: <a [href]="getFeedUrl()">{{ getFeedUrl() }}</a>
     </div>
   </div>
 
+  <div class="playground__panels">
+
+    <!-- Options ----------------------------------------------------------------------------------------------------- -->
+
+    <app-panel id="options" *ngIf="showOptions">
+      <h3>Options</h3>
+      <hr>
+      <table>
+        <tr>
+          <td>Output</td>
+          <td>
+            <select [(ngModel)]="options.output">
+              <option [ngValue]="output" *ngFor="let output of outputs">{{ output }}</option>
+            </select> - {{options.output}}
+          </td>
+        </tr>
+        <tr>
+          <td>Source</td>
+          <td>
+            <select [(ngModel)]="options.source">
+              <option [ngValue]="source" *ngFor="let source of sources">{{ source }}</option>
+            </select> - {{options.source}}
+          </td>
+        </tr>
+        <tr>
+          <td>Page Resolutions</td>
+          <td>
+            <select [(ngModel)]="options.contentResolution">
+              <option [ngValue]="pageResolution" *ngFor="let pageResolution of pageResolutions">{{ pageResolution }}</option>
+            </select> - {{ options.contentResolution }}
+          </td>
+        </tr>
+        <tr>
+          <td>Use Existing Feed</td>
+          <td><input type="checkbox" [(ngModel)]="options.preferExistingFeed"></td>
+        </tr>
+      </table>
+      <button (click)="parseFromUrl()">Parse</button>
+    </app-panel>
+
+
+    <!-- Markus Editor ----------------------------------------------------------------------------------------------- -->
+
+    <app-panel id="editor" *ngIf="showMarkup">
+      <h3>Markup</h3>
+      <hr>
+      <textarea [(ngModel)]="html" placeholder="HTML markup of website"></textarea>
+      <button (click)="parseHtml()">Parse HTML</button>
+    </app-panel>
+
+
+    <!-- Console ----------------------------------------------------------------------------------------------------- -->
+
+    <app-panel id="console" *ngIf="showConsole">
+      <h3>Console</h3>
+      <hr>
+      <div *ngFor="let log of logs">
+        {{ log }}
+      </div>
+    </app-panel>
+
+    <!-- Feed -------------------------------------------------------------------------------------------------------- -->
+
+    <app-panel id="feed" style="overflow: auto" name="Feed" *ngIf="showFeed">
+      <h3>Feed</h3>
+      <hr>
+      <pre [innerText]="feedData"></pre>
+    </app-panel>
+
+    <!-- Articles -------------------------------------------------------------------------------------------------- -->
+
+    <app-panel id="articles" style="overflow: auto" name="Articles">
+      <h3>Articles</h3>
+      <hr>
+      <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule">
+        <option *ngFor="let rule of rules" [ngValue]="rule">{{ rule?.score }} {{ rule?.id }}</option>
+      </select>
+      <div>
+        <div>Score: {{currentRule?.score}}</div>
+        <div>Title: {{currentRule?.titlePath }}</div>
+        <div>Link: {{currentRule?.rule.linkPath }}</div>
+        <div>Context: {{currentRule?.rule.contextElementPath }}</div>
+        <div>{{ articles?.length }} articles</div>
+        <pre [innerText]="getArticles()"></pre>
+      </div>
+    </app-panel>
+
+  </div>
 </div>

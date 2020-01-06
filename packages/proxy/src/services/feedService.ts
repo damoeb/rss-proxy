@@ -1,23 +1,9 @@
 import * as request from 'request';
 import {Article, ContentResolutionType, FeedParser, FeedParserOptions, FeedParserResult, OutputType} from '@rss-proxy/core';
-import {Logger, SourceType} from '@rss-proxy/core/dist/feed-parser';
+import {SourceType} from '@rss-proxy/core/dist/feed-parser';
 import {JSDOM} from 'jsdom';
 import {Feed} from 'feed';
-
-export class LogCollector implements Logger {
-  private _logs:string[] = [];
-
-  error(...params: any[]) {
-    this._logs.push(['Error', ...params].join(' '))
-  }
-  log(...params: any[]) {
-    this._logs.push(['Info', ...params].join(' '))
-  }
-
-  logs() {
-    return this._logs;
-  }
-}
+import {LogCollector} from '@rss-proxy/core/dist/LogCollector';
 
 export interface FeedUrl {
   name: string;
@@ -48,6 +34,7 @@ export const feedService =  new class FeedService {
             options,
             rules: null,
             html,
+            articles: null,
             feed: this.renderFeed(options.output)(feed)
           };
         });
@@ -103,7 +90,8 @@ export const feedService =  new class FeedService {
     // todo pass options.parser
     const rules = feedParser.getArticleRules();
 
-    feedParser.getArticlesByRule(rules[0]).forEach((article: Article) => {
+    const articles = feedParser.getArticlesByRule(rules[0]);
+    articles.forEach((article: Article) => {
       feed.addItem({
         title: article.title,
         link: article.link,
@@ -119,6 +107,7 @@ export const feedService =  new class FeedService {
       options,
       rules: rules,
       html,
+      articles: articles,
       feed: await this.tryAddDeepContent(options.contentResolution)(feed)
         .then(this.renderFeed(options.output))
     });

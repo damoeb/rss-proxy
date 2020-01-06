@@ -20,6 +20,8 @@ import {
   LinkGroup
 } from './feed-parser';
 
+import {LogCollector} from './log-collector'
+
 export {
   FeedParser,
   Article,
@@ -29,6 +31,7 @@ export {
   FeedParserResult,
   FeedParserOptions,
   LinkPointer,
+  LogCollector,
   ArticleRule,
   PartialArticlesWithStructure,
   TitleFeatures,

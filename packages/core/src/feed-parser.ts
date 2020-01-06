@@ -25,11 +25,13 @@ export interface FeedParserResult {
   rules: ArticleRule[];
   html: string;
   feed?: any;
+  articles: Article[];
 }
 
 export interface FeedParserOptions {
   output: OutputType;
   source: SourceType;
+  useRuleId?: string,
   // todo optin to use real rss
   preferExistingFeed: boolean;
   contentResolution: ContentResolutionType;
