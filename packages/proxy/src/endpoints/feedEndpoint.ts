@@ -35,7 +35,7 @@ export const feedEndpoint = new class FeedEndpoint {
 
           }).catch((err: Error) => {
             logger.error(`Failed to proxy ${url}, cause ${err}`);
-            response.send({error: err});
+            response.send({error: err.toString()});
           });
 
       } catch (e) {
@@ -53,7 +53,7 @@ export const feedEndpoint = new class FeedEndpoint {
 
         }).catch((err: Error) => {
           logger.error(`Failed to proxy ${url}, cause ${err}`);
-          response.send({error: err});
+          response.send({error: err.toString()});
         });
 
       } catch (e) {

@@ -1,3 +1,8 @@
+export interface FeedUrl {
+  name: string;
+  url: string;
+}
+
 export interface LinkPointer {
   element: HTMLElement;
   path: string;
@@ -20,6 +25,9 @@ export enum ContentResolutionType {
 }
 
 export interface FeedParserResult {
+  usesExistingFeed: boolean;
+  feeds?: FeedUrl[];
+  error?: any;
   logs: string[];
   options: FeedParserOptions;
   rules: ArticleRule[];
@@ -395,8 +403,8 @@ export class FeedParser {
 
         const rule = group as ArticleRule;
 
-        rule.score = group.stats.title.features.variance * group.stats.title.features.avgWordLength +
-          group.stats.description.features.variance * group.stats.description.features.avgWordCount;
+        rule.score = this.roundScore(group.stats.title.features.variance * group.stats.title.features.avgWordLength +
+          group.stats.description.features.variance * group.stats.description.features.avgWordCount);
 
         return rule;
       })
@@ -477,5 +485,9 @@ export class FeedParser {
       variance: this.uniq(articleWords.flat(1)).length / Math.max(articleWords.flat(1).length, 1),
       avgWordCount: totalWordCount / group.articles.length
     };
+  }
+
+  private roundScore(score: number) {
+    return Math.round(score * 100) / 100;
   }
 }

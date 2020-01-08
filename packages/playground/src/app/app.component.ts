@@ -22,6 +22,7 @@ export class AppComponent {
   showMarkup = false;
   showConsole = false;
   showFeed = true;
+  showArticles = false;
 
   options: FeedParserOptions;
 
@@ -29,6 +30,7 @@ export class AppComponent {
 
   logs: string[];
   articles: Article[];
+  private usesExistingFeed: boolean;
 
   constructor(private httpClient: HttpClient,
               private feedService: FeedService) {
@@ -68,13 +70,35 @@ export class AppComponent {
   parseFromUrl() {
     this.feedService.fromUrl(this.url, this.options)
       .subscribe(response => {
-        this.html = response.html;
-        this.logs = response.logs;
-        this.rules = response.rules;
-        this.currentRule = response.rules[0];
-        this.feedData = response.feed;
-        this.articles = response.articles;
-        this.optionsFromParser = response.options;
+        if (response.error) {
+          this.html = response.error;
+          console.error('Proxy replies an error.', response.error);
+        } else {
+          if (response.usesExistingFeed) {
+            console.log('Proxy replies an existing feed');
+            this.articles = [];
+
+            this.showArticles = false;
+            this.showFeed = true;
+
+          } else {
+            console.log('Proxy replies an generated feed');
+            this.rules = response.rules;
+            this.currentRule = response.rules[0];
+            this.articles = response.articles;
+
+            this.showArticles = true;
+            this.showFeed = true;
+
+          }
+
+          this.html = response.html;
+          this.usesExistingFeed = response.usesExistingFeed;
+          this.logs = response.logs;
+          this.feedData = response.feed;
+          this.optionsFromParser = response.options;
+
+        }
       });
   }
 
@@ -95,5 +119,9 @@ export class AppComponent {
       contentResolution: ContentResolutionType.STATIC,
     };
     this.optionsFromParser = {};
+  }
+
+  getFeedPanelName() {
+    return this.usesExistingFeed ? `Feed (from site)` : 'Feed (generated)';
   }
 }

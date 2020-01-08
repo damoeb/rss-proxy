@@ -21,6 +21,7 @@ export class FeedService {
 
     const result: FeedParserResult = {
       logs: logCollector.logs(),
+      usesExistingFeed: false,
       options,
       rules: feedParser.getArticleRules(),
       articles: feedParser.getArticles(),

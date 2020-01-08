@@ -8,20 +8,24 @@
       </label>
 
       <label>
-        <input type="checkbox" [value]="showOptions" (change)="showOptions = !showOptions">
+        <input type="checkbox" [checked]="showOptions" (change)="showOptions = !showOptions">
         Options
       </label>
       <label>
-        <input type="checkbox" [value]="showMarkup" (change)="showMarkup = !showMarkup">
+        <input type="checkbox" [checked]="showMarkup" (change)="showMarkup = !showMarkup">
         Markup
       </label>
       <label>
-        <input type="checkbox" [value]="showConsole" (change)="showConsole = !showConsole">
+        <input type="checkbox" [checked]="showConsole" (change)="showConsole = !showConsole">
         Console
       </label>
       <label>
-        <input type="checkbox" [value]="showFeed" (change)="showFeed = !showFeed">
+        <input type="checkbox" [checked]="showFeed" (change)="showFeed = !showFeed">
         Feed
+      </label>
+      <label>
+        <input type="checkbox" [checked]="showArticles" (change)="showArticles = !showArticles">
+        Articles
       </label>
 
       <button (click)="reset()">Reset</button>
@@ -36,9 +40,7 @@
 
     <!-- Options ----------------------------------------------------------------------------------------------------- -->
 
-    <app-panel id="options" *ngIf="showOptions">
-      <h3>Options</h3>
-      <hr>
+    <app-panel id="options" name="Options" *ngIf="showOptions">
       <table>
         <tr>
           <td>Output</td>
@@ -75,9 +77,7 @@
 
     <!-- Markup ----------------------------------------------------------------------------------------------- -->
 
-    <app-panel id="editor" *ngIf="showMarkup">
-      <h3>Markup</h3>
-      <hr>
+    <app-panel id="editor" name="Markup" *ngIf="showMarkup">
       <textarea [(ngModel)]="html" placeholder="HTML markup of website"></textarea>
       <button (click)="parseHtml()">Parse HTML</button>
     </app-panel>
@@ -85,9 +85,7 @@
 
     <!-- Console ----------------------------------------------------------------------------------------------------- -->
 
-    <app-panel id="console" *ngIf="showConsole">
-      <h3>Console</h3>
-      <hr>
+    <app-panel id="console" name="Console" *ngIf="showConsole">
       <div *ngFor="let log of logs">
         {{ log }}
       </div>
@@ -95,19 +93,15 @@
 
     <!-- Feed -------------------------------------------------------------------------------------------------------- -->
 
-    <app-panel id="feed" style="overflow: auto" name="Feed" *ngIf="showFeed">
-      <h3>Feed</h3>
-      <hr>
+    <app-panel id="feed" style="overflow: auto" [name]="getFeedPanelName()" *ngIf="showFeed">
       <pre [innerText]="feedData"></pre>
     </app-panel>
 
     <!-- Articles -------------------------------------------------------------------------------------------------- -->
 
-    <app-panel id="articles" style="overflow: auto" name="Articles">
-      <h3>Articles</h3>
-      <hr>
+    <app-panel id="articles" style="overflow: auto" name="Articles" *ngIf="showArticles">
       <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule">
-        <option *ngFor="let rule of rules" [ngValue]="rule">{{ rule?.score }} {{ rule?.id }}</option>
+        <option *ngFor="let rule of rules" [ngValue]="rule">{{ rule?.score }} points / {{ rule?.articles?.length }} articles / {{ rule?.id }}</option>
       </select>
       <div>
         <div>Score: {{currentRule?.score}}</div>

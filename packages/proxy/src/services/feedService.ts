@@ -1,21 +1,16 @@
 import * as request from 'request';
-import {Article, ContentResolutionType, FeedParser, FeedParserOptions, FeedParserResult, OutputType} from '@rss-proxy/core';
+import {Article, ContentResolutionType, FeedParser, FeedParserOptions, FeedParserResult, FeedUrl, OutputType} from '@rss-proxy/core';
 import {SourceType} from '@rss-proxy/core/dist/feed-parser';
 import {JSDOM} from 'jsdom';
 import {Feed} from 'feed';
 import {LogCollector} from '@rss-proxy/core/dist/LogCollector';
 
-export interface FeedUrl {
-  name: string;
-  url: string;
-}
 
 export const feedService =  new class FeedService {
   async mapToFeed(url: string, options: FeedParserOptions): Promise<FeedParserResult> {
 
     const html = await this.download(url, options.source);
-    const doc = new JSDOM(html).window.document;
-    const feedUrls = this.findFeedUrls(doc);
+    const feedUrls = this.findFeedUrls(html);
 
     function firstFeed(feedUrls: FeedUrl[], logCollector: LogCollector) {
       const firstFeed = feedUrls[0];
@@ -23,19 +18,21 @@ export const feedService =  new class FeedService {
       return firstFeed.url;
     }
 
-    if (options.preferExistingFeed && feedUrls.length > 0) {
+    if (this.canUseExistingFeed(options, feedUrls)) {
       const logCollector = new LogCollector();
       return this.download(firstFeed(feedUrls, logCollector), options.source)
-        .then(feedString => JSON.parse(feedString) as Feed)
-        .then(this.tryAddDeepContent(options.contentResolution))
+        // .then(feedString => JSON.parse(feedString) as Feed)
+        // .then(this.tryAddDeepContent(options.contentResolution))
         .then(feed => {
           return {
+            usesExistingFeed: true,
+            feeds: feedUrls,
             logs: logCollector.logs(),
             options,
             rules: null,
             html,
             articles: null,
-            feed: this.renderFeed(options.output)(feed)
+            feed
           };
         });
     } else {
@@ -46,7 +43,8 @@ export const feedService =  new class FeedService {
 
   private download(url: string, source: SourceType): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      request(url, (error, serverResponse, html) => {
+      const options = {method:'GET', url, headers: {"content-type": "text/plain"}};
+      request(options, (error, serverResponse, html) => {
         if (!error && serverResponse && serverResponse.statusCode === 200) {
           resolve(html);
         } else {
@@ -103,6 +101,7 @@ export const feedService =  new class FeedService {
     });
 
     return Promise.resolve({
+      usesExistingFeed: false,
       logs: logCollector.logs(),
       options,
       rules: rules,
@@ -122,20 +121,20 @@ export const feedService =  new class FeedService {
     };
   }
 
-  private findFeedUrls(doc: Document): FeedUrl[] {
-    /*
-    List<String> types = Arrays.asList("application/atom+xml", "application/rss+xml", "application/json");
-this.feeds = document.head().childNodes().stream().filter(node -> {
- return node.nodeName().equalsIgnoreCase("link")
-   && node.hasAttr("type")
-   && node.hasAttr("href")
-   && types.contains(node.attr("type"));
-}).map(node -> {
- return new LinkElement(node.attr("title"), absoluteUrl(baseUrl, node.attr("href")), node.attr("type"));
-}).collect(Collectors.toSet());
+  private findFeedUrls(html: string): FeedUrl[] {
 
- */
-    return [];
+    const types = ["application/atom+xml", "application/rss+xml", "application/json"];
+
+    const doc = new JSDOM(html).window.document;
+
+    return types.map(type => Array.from(doc.querySelectorAll(`link[href][type="${type}"]`)))
+      .flat(1)
+      .map(linkElement => {
+        return {
+          name: linkElement.getAttribute('title'),
+          url: linkElement.getAttribute('href'),
+        }
+      });
   }
 
   private renderFeed(output: OutputType) {
@@ -150,5 +149,13 @@ this.feeds = document.head().childNodes().stream().filter(node -> {
               return feed.json1()
           }
     };
+  }
+
+  private canUseExistingFeed(options: FeedParserOptions, feedUrls: FeedUrl[]) {
+    if (options.preferExistingFeed) {
+      console.log(`Found ${feedUrls.length} feeds`, feedUrls);
+      return feedUrls.length > 0;
+    }
+    return false;
   }
 };
