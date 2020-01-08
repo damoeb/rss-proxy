@@ -7,11 +7,6 @@ describe('FeedParser', () => {
 
   const toDocument = (markup: string): HTMLDocument => new JSDOM(markup).window.document;
 
-  it('unique', () => {
-    const feedParser = new FeedParser(null);
-
-  });
-
   it('findTextNodesInContext', () => {
     const markup = `<!DOCTYPE html>
 <html>
@@ -80,7 +75,7 @@ describe('FeedParser', () => {
     const doc = toDocument(markup);
     const context = doc.getElementById('context-el');
 
-    const feedParser = new FeedParser(doc);
+    const feedParser = new FeedParser(doc, null, null);
 
     const nodes = feedParser.findTextNodesInContext(context);
 
