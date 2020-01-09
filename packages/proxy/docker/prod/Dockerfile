@@ -1,8 +1,8 @@
 # -- Test
 
-FROM python:slim
-COPY nginx.conf .
-RUN pip -q install gixy && gixy nginx.conf
+#FROM python:slim
+#COPY nginx.conf .
+#RUN pip -q install gixy && gixy nginx.conf
 
 # -- Build
 

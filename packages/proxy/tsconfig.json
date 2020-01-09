@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "outDir": "dist/@rss-it/proxy",
+    "outDir": "dist/@rss-proxy/proxy",
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,

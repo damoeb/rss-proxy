@@ -1,7 +1,7 @@
 Playground
 ----------
 
-*Playground* is the management module to configure the options of the RSS generation *core* module.
+*Playground* is the management module to configure the options of the feed generation *core* module.
 
 # Development
 
@@ -9,4 +9,3 @@ Playground
 npm run start
 ``
 
-# Production

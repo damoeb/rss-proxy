@@ -7,7 +7,7 @@
 ![GitHub forks](https://img.shields.io/github/forks/scottydocs/README-template.md?style=social)
 ![Twitter Follow](https://img.shields.io/twitter/follow/scottydocs?style=social)
 
-RSS-Proxy is a tool that allows `<insert_target_audience>` to do create an RSS feed of almost any website, 
+RSS-Proxy is a tool that allows you to do create an RSS/ATOM or JSON feed of almost any website, 
 purely by analyzing just the DOM structure.
 
 Additional line of information text about what the project does. Your introduction should be around 2 or 3 sentences. Don't go overboard, people won't read it.
@@ -15,18 +15,18 @@ Additional line of information text about what the project does. Your introducti
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
-<!--- These are just example requirements. Add, duplicate or remove as required --->
-* You have installed the latest version of `<coding_language/dependency/requirement_1>`
+* [docker](https://docs.docker.com/install/) 19+
+
 * You have a `<Windows/Linux/Mac>` machine. State which OS is supported/which is not.
 * You have read `<guide/link/documentation_related_to_project>`.
 
-## Installing <project_name>
+## Installing RSS-Proxy
 
-To install <project_name>, follow these steps:
+To install Rss-proxy, follow these steps:
 
 Linux and macOS:
 ```
-<install_command>
+docker run 
 ```
 
 
@@ -54,11 +54,7 @@ Alternatively see the GitHub documentation on [creating a pull request](https://
 
 ## Contributors
 
-Thanks to the following people who have contributed to this project:
-
-* [@scottydocs](https://github.com/scottydocs) 📖
-* [@cainwatson](https://github.com/cainwatson) 🐛
-* [@calchuchesta](https://github.com/calchuchesta) 🐛
+* [damoeb](https://github.com/damoeb)  🐛
 
 You might want to consider using something like the [All Contributors](https://github.com/all-contributors/all-contributors) specification and its [emoji key](https://allcontributors.org/docs/en/emoji-key).
 
@@ -67,6 +63,5 @@ You might want to consider using something like the [All Contributors](https://g
 If you want to contact me you can reach me at <your_email@address.com>.
 
 ## License
-<!--- If you're not sure which open license to use see https://choosealicense.com/--->
 
-This project uses the following license: [<license_name>](<link>).
+This project uses the following license: [CC-NC](https://en.wikipedia.org/wiki/Creative_Commons_NonCommercial_license).

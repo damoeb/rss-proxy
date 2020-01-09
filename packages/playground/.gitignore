@@ -18,6 +18,7 @@ speed-measure-plugin*.json
 /.idea
 .project
 .classpath
+*.tgz
 .c9/
 *.launch
 test

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {Article, ArticleRule, FeedParser, FeedParserOptions, FeedParserResult, LogCollector} from '../../../../core/src';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -49,15 +50,13 @@ export class FeedService {
   // }
 
   getDirectFeedUrl(url: string, options: FeedParserOptions): string {
-    return `http://localhost:3000/api/feed?url=${
-      encodeURI(url)
-      }&options=${JSON.stringify(options)}`;
+    return `${environment.apiBase}api/feed?url=${encodeURIComponent(url)}&options=${JSON.stringify(options)}`;
   }
 
   fromUrl(url: string, options: FeedParserOptions): Observable<FeedParserResult> {
     console.log(options);
-    return this.httpClient.get(`http://localhost:3000/api/feed/live?url=${
-      encodeURI(url)
+    return this.httpClient.get(`${environment.apiBase}api/feed/live?url=${
+      encodeURIComponent(url)
     }&options=${JSON.stringify(options)}`) as Observable<FeedParserResult>;
   }
 }
