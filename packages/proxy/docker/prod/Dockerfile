@@ -16,9 +16,10 @@ RUN apt-get update \
   && rm -rf /data/db \
   && mkdir -p /data/db
 
-COPY [ "entrypoint.sh", ".build-cache/package.json", "./" ]
+COPY [ "entrypoint.sh", ".build-cache/package.json", ".build-cache/rss-proxy-core-0.0.0.tgz", ".build-cache/proxy/", "./" ]
+COPY [ ".build-cache/playground", "./playground" ]
 
-RUN yarn install --production
+RUN npm install rss-proxy-playground-0.0.0.tgz rss-proxy-core-0.0.0.tgz --ignore-scripts && yarn install --production --ignore-scripts
 
 COPY .build-cache/* ./
 
@@ -28,4 +29,4 @@ USER node
 
 ENTRYPOINT [ "sh", "entrypoint.sh" ]
 
-EXPOSE 8080
+EXPOSE 3000
