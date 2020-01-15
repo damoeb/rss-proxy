@@ -12,33 +12,7 @@ export const feedService =  new class FeedService {
     const html = await this.download(url, options.source);
     const feedUrls = this.findFeedUrls(html);
 
-    function firstFeed(feedUrls: FeedUrl[], logCollector: LogCollector) {
-      const firstFeed = feedUrls[0];
-      logCollector.log('Using feed url', firstFeed.url);
-      return firstFeed.url;
-    }
-
-    if (this.canUseExistingFeed(options, feedUrls)) {
-      const logCollector = new LogCollector();
-      return this.download(firstFeed(feedUrls, logCollector), options.source)
-        // .then(feedString => JSON.parse(feedString) as Feed)
-        // .then(this.tryAddDeepContent(options.contentResolution))
-        .then(feed => {
-          return {
-            usesExistingFeed: true,
-            feeds: feedUrls,
-            logs: logCollector.logs(),
-            options,
-            rules: null,
-            html,
-            articles: null,
-            feed
-          };
-        });
-    } else {
-
-      return this.generateFeedFromUrl(url, html, options);
-    }
+    return this.generateFeedFromUrl(url, html, options, feedUrls);
   }
 
   private download(url: string, source: SourceType): Promise<string> {
@@ -55,14 +29,12 @@ export const feedService =  new class FeedService {
   }
 
 
-  private async generateFeedFromUrl(url: string, html: string, options: FeedParserOptions): Promise<FeedParserResult> {
+  private async generateFeedFromUrl(url: string, html: string, options: FeedParserOptions, feeds: FeedUrl[]): Promise<FeedParserResult> {
 
     const logCollector = new LogCollector();
 
     const doc = new JSDOM(html).window.document;
     const feedParser = new FeedParser(doc, options, logCollector);
-
-    // todo detect feed
 
     const feed = new Feed({
       title: doc.title,
@@ -78,11 +50,11 @@ export const feedService =  new class FeedService {
         json: "https://example.com/json",
         atom: "https://example.com/atom"
       },
-      author: {
-        name: "John Doe",
-        email: "johndoe@example.com",
-        link: "https://example.com/johndoe"
-      }
+      // author: {
+      //   name: "John Doe",
+      //   email: "johndoe@example.com",
+      //   link: "https://example.com/johndoe"
+      // }
     });
 
     // todo pass options.parser
@@ -105,16 +77,18 @@ export const feedService =  new class FeedService {
       logs: logCollector.logs(),
       options,
       rules: rules,
+      feeds,
       html,
       articles: articles,
-      feed: await this.tryAddDeepContent(options.contentResolution)(feed)
+      feedOutputType: options.output,
+      feed: await this.tryAddDeepContent(options.content)(feed)
         .then(this.renderFeed(options.output))
     });
   }
 
-  private tryAddDeepContent(contentResolution: ContentResolutionType): (feed: Feed) => Promise<Feed> {
+  private tryAddDeepContent(content: ContentResolutionType): (feed: Feed) => Promise<Feed> {
     return (feed: Feed) => {
-      if (contentResolution === ContentResolutionType.DEEP) {
+      if (content === ContentResolutionType.DEEP) {
         console.log('Would use puppeteer to resolve deep content');
       }
       return Promise.resolve(feed);
@@ -151,11 +125,4 @@ export const feedService =  new class FeedService {
     };
   }
 
-  private canUseExistingFeed(options: FeedParserOptions, feedUrls: FeedUrl[]) {
-    if (options.preferExistingFeed) {
-      console.log(`Found ${feedUrls.length} feeds`, feedUrls);
-      return feedUrls.length > 0;
-    }
-    return false;
-  }
 };

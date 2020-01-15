@@ -32,6 +32,7 @@ export interface FeedParserResult {
   options: FeedParserOptions;
   rules: ArticleRule[];
   html: string;
+  feedOutputType?: OutputType,
   feed?: any;
   articles: Article[];
 }
@@ -39,10 +40,9 @@ export interface FeedParserResult {
 export interface FeedParserOptions {
   output: OutputType;
   source: SourceType;
-  useRuleId?: string,
+  rule?: string,
   // todo optin to use real rss
-  preferExistingFeed: boolean;
-  contentResolution: ContentResolutionType;
+  content: ContentResolutionType;
 }
 
 export interface RawArticleRule {

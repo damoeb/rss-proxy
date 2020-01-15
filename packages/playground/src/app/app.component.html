@@ -8,10 +8,6 @@
       </label>
 
       <label>
-        <input type="checkbox" [checked]="showOptions" (change)="showOptions = !showOptions">
-        Options
-      </label>
-      <label>
         <input type="checkbox" [checked]="showMarkup" (change)="showMarkup = !showMarkup">
         Markup
       </label>
@@ -38,43 +34,6 @@
 
   <div class="playground__panels">
 
-    <!-- Options ----------------------------------------------------------------------------------------------------- -->
-
-    <app-panel id="options" name="Options" *ngIf="showOptions">
-      <table>
-        <tr>
-          <td>Output</td>
-          <td>
-            <select [(ngModel)]="options.output">
-              <option [ngValue]="output" *ngFor="let output of outputs">{{ output }}</option>
-            </select> - {{optionsFromParser.output}}
-          </td>
-        </tr>
-        <tr>
-          <td>Source</td>
-          <td>
-            <select [(ngModel)]="options.source">
-              <option [ngValue]="source" *ngFor="let source of sources">{{ source }}</option>
-            </select> - {{optionsFromParser.source}}
-          </td>
-        </tr>
-        <tr>
-          <td>Page Resolutions</td>
-          <td>
-            <select [(ngModel)]="options.contentResolution">
-              <option [ngValue]="pageResolution" *ngFor="let pageResolution of pageResolutions">{{ pageResolution }}</option>
-            </select> - {{ optionsFromParser.contentResolution }}
-          </td>
-        </tr>
-        <tr>
-          <td>Use Existing Feed</td>
-          <td><input type="checkbox" [(ngModel)]="options.preferExistingFeed">  - {{ optionsFromParser.preferExistingFeed }}</td>
-        </tr>
-      </table>
-      <input type="button" value="Parse" (click)="parseFromUrl()">
-    </app-panel>
-
-
     <!-- Markup ----------------------------------------------------------------------------------------------- -->
 
     <app-panel id="editor" name="Markup" *ngIf="showMarkup">
@@ -94,6 +53,15 @@
     <!-- Feed -------------------------------------------------------------------------------------------------------- -->
 
     <app-panel id="feed" style="overflow: auto" [name]="getFeedPanelName()" *ngIf="showFeed">
+      <select [(ngModel)]="options.output">
+        <option [ngValue]="output" *ngFor="let output of outputs">{{ output }}</option>
+      </select> - {{optionsFromParser.output}}
+
+      <select [(ngModel)]="options.content">
+        <option [ngValue]="pageResolution" *ngFor="let pageResolution of pageResolutions">{{ pageResolution }}</option>
+      </select> - {{ optionsFromParser.content }}
+
+
       <pre [innerText]="feedData"></pre>
     </app-panel>
 

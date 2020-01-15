@@ -2,7 +2,6 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 
 import logger from './logger'
-import { proxyEndpoint } from './endpoints/proxyEndpoint';
 import { feedEndpoint } from './endpoints/feedEndpoint';
 import {config} from './config';
 

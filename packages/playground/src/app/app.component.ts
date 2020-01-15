@@ -63,7 +63,7 @@ export class AppComponent {
 
   applyRuleFromEvent(event: Event) {
     console.log('apply rule', this.currentRule);
-    this.options.useRuleId = this.currentRule.id;
+    this.options.rule = this.currentRule.id;
     this.applyRule(this.currentRule);
   }
 
@@ -114,9 +114,8 @@ export class AppComponent {
     this.options = {
       output: OutputType.RSS,
       source: SourceType.STATIC,
-      useRuleId: null,
-      preferExistingFeed: false,
-      contentResolution: ContentResolutionType.STATIC,
+      rule: null,
+      content: ContentResolutionType.STATIC,
     };
     this.optionsFromParser = {};
   }

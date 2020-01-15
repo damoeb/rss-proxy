@@ -10,12 +10,15 @@ export const feedEndpoint = new class FeedEndpoint {
     const defaultOptions: FeedParserOptions = {
       output: OutputType.JSON,
       source: SourceType.STATIC,
-      preferExistingFeed: false,
-      contentResolution: ContentResolutionType.STATIC
+      content: ContentResolutionType.STATIC
     };
 
     function parseFeed(url: string, request: Request) {
-      const actualOptions = request.query.options ? JSON.parse(request.query.options) : {};
+      const actualOptions: Partial<FeedParserOptions> = {
+        output: request.query.output,
+        rule: request.query.rule,
+        content: request.query.content
+      };
       const options: FeedParserOptions = {...defaultOptions, ...actualOptions};
 
       if (!url) {
@@ -31,15 +34,15 @@ export const feedEndpoint = new class FeedEndpoint {
         logger.info(`live feed-mapping of ${url}`);
 
         parseFeed(url, request).then((feedParserResult: FeedParserResult) => {
-            response.send(feedParserResult);
+            response.json(feedParserResult);
 
           }).catch((err: Error) => {
             logger.error(`Failed to proxy ${url}, cause ${err}`);
-            response.send({error: err.toString()});
+            response.json({error: err.toString()});
           });
 
       } catch (e) {
-        response.send({error: e.message});
+        response.json({error: e.message});
       }
     });
 
@@ -48,18 +51,29 @@ export const feedEndpoint = new class FeedEndpoint {
         const url = request.query.url;
         logger.info(`live feed-mapping of ${url}`);
 
-        parseFeed(url, request).then((feedParserResult: FeedParserResult) => {
-          response.send(feedParserResult.feed);
+        parseFeed(url, request)
+          .then((feedParserResult: FeedParserResult) => {
+            response.setHeader('Content-Type', this.outputToContentType(feedParserResult.feedOutputType));
+            response.send(feedParserResult.feed);
 
-        }).catch((err: Error) => {
-          logger.error(`Failed to proxy ${url}, cause ${err}`);
-          response.send({error: err.toString()});
-        });
+          })
+          .catch((err: Error) => {
+            logger.error(`Failed to proxy ${url}, cause ${err}`);
+            response.json({error: err.toString()});
+          });
 
       } catch (e) {
-        response.send({error: e.message});
+        response.json({error: e.message});
       }
     });
 
+  }
+
+  private outputToContentType(outputType: OutputType): string {
+    switch (outputType) {
+      case OutputType.ATOM: return 'application/atom+xml';
+      case OutputType.JSON: return 'application/json';
+      default: return 'application/rss+xml';
+    }
   }
 };

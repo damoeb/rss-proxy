@@ -3,13 +3,18 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {Article, ArticleRule, FeedParser, FeedParserOptions, FeedParserResult, LogCollector} from '../../../../core/src';
 import {environment} from '../../environments/environment';
+import {ContentResolutionType, OutputType, SourceType} from '../../../../core/dist';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FeedService {
 
-  private offline = false;
+  private defaultOptions: FeedParserOptions = {
+    output: OutputType.RSS,
+    source: SourceType.STATIC,
+    content: ContentResolutionType.STATIC
+  };
 
   constructor(private httpClient: HttpClient) { }
 
@@ -41,16 +46,11 @@ export class FeedService {
     return of(feedParser.getArticlesByRule(rule));
   }
 
-  // proxy(url: string) {
-  //   const headers = new HttpHeaders({
-  //     Accept: 'text/html'
-  //   });
-  //
-  //   return this.httpClient.get(`http://localhost:3000/api/proxy?url=${encodeURI(url)}`, { headers, responseType: 'text' });
-  // }
-
   getDirectFeedUrl(url: string, options: FeedParserOptions): string {
-    return `${environment.apiBase}api/feed?url=${encodeURIComponent(url)}&options=${JSON.stringify(options)}`;
+    return `${environment.apiBase}api/feed?url=${encodeURIComponent(url)}`
+      + this.feedUrlFragment('rule', options)
+      + this.feedUrlFragment('output', options)
+      + this.feedUrlFragment('content', options);
   }
 
   fromUrl(url: string, options: FeedParserOptions): Observable<FeedParserResult> {
@@ -58,5 +58,17 @@ export class FeedService {
     return this.httpClient.get(`${environment.apiBase}api/feed/live?url=${
       encodeURIComponent(url)
     }&options=${JSON.stringify(options)}`) as Observable<FeedParserResult>;
+  }
+
+  private feedUrlFragment(id: 'output'|'content'|'rule', options: FeedParserOptions) {
+
+    function prop<T, K extends keyof T>(obj: T, key: K) {
+      return obj[key];
+    }
+
+    if (prop(this.defaultOptions, id) !== prop(options, id)) {
+      return `&${id}=${encodeURIComponent(prop(options, id))}`;
+    }
+    return '';
   }
 }
