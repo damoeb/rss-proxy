@@ -1,27 +1,35 @@
 <div class="playground">
   <div class="playground__header">
 
-    <div>
-      <label class="tooltip bottom" aria-label="The URL you want to RSSify">
-        Url:
-        <input [(ngModel)]="url" type="url" class="focussed" placeholder="https://">
-      </label>
+    <label style="float: right;">
+      <input type="checkbox" [checked]="showDebugger" (change)="showDebugger = !showDebugger; showFeed = !showDebugger; showArticles = showDebugger">
+      Debugger
+    </label>
 
-      <label class="tooltip bottom" aria-label="Toggle the feed panel">
-        <input type="checkbox" [checked]="showFeed" (change)="showFeed = !showFeed">
-        Feed
-      </label>
-      <label class="tooltip bottom" aria-label="Toggle the article details panel">
-        <input type="checkbox" [checked]="showArticles" (change)="showArticles = !showArticles">
-        Articles
-      </label>
+    <h1>Generate RSS/ATOM/JSON Feed from Website</h1>
 
-      <button (click)="parseFromUrl()" class="focussed">Generate Feed</button>
+    <div style="display: flex">
+      <div class="tooltip bottom" aria-label="The URL you want to RSSify">
+        <input [(ngModel)]="url" type="url" placeholder="https://">
+      </div>
+      <select [(ngModel)]="options.output">
+        <option [ngValue]="output" *ngFor="let output of outputs">{{ output }}</option>
+      </select>
 
-      <label style="float: right;">
-        <input type="checkbox" [checked]="showDebugger" (change)="showDebugger = !showDebugger; showFeed = !showDebugger; showArticles = showDebugger">
-        Debugger
-      </label>
+<!--      <label class="tooltip bottom" aria-label="Toggle the feed panel" *ngIf="showDebugger">-->
+<!--        <input type="checkbox" [checked]="showFeed" (change)="showFeed = !showFeed">-->
+<!--        Feed-->
+<!--      </label>-->
+<!--      <label class="tooltip bottom" aria-label="Toggle the article details panel" *ngIf="showDebugger">-->
+<!--        <input type="checkbox" [checked]="showArticles" (change)="showArticles = !showArticles">-->
+<!--        Articles-->
+<!--      </label>-->
+
+      <button (click)="parseFromUrl()">
+        Preview {{ options.output }} Feed
+        <span class="icon-rss"></span>
+      </button>
+
     </div>
 
     <div class="feed-url tooltip bottom" aria-label="The Feed URL that can be used in a feed reader of your choice">
@@ -73,7 +81,7 @@
     <!-- Articles -------------------------------------------------------------------------------------------------- -->
 
     <app-panel id="articles" style="overflow: auto" name="Articles" *ngIf="showArticles">
-      <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule" class="focussed">
+      <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule">
         <option *ngFor="let rule of rules" [ngValue]="rule">{{ rule?.score }} points / {{ rule?.articles?.length }} articles / {{ rule?.id }}</option>
       </select>
       <div>

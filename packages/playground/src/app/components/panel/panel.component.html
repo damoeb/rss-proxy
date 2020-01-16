@@ -1,4 +1,8 @@
 <div class="panel">
-  <div class="header">{{ name }}</div>
-  <ng-content></ng-content>
+  <div class="header">{{ name }}
+  <button style="float: right"><img src="/assets/x.svg" style="height: 18px;"></button>
+  </div>
+  <div style="padding: 10px">
+    <ng-content></ng-content>
+  </div>
 </div>

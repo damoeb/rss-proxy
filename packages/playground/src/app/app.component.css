@@ -31,7 +31,6 @@ app-panel {
   flex: 1;
 }
 #console {
-  padding: 10px;
   white-space: pre-line;
 }
 textarea {

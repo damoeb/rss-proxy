@@ -20,7 +20,7 @@ export class AppComponent {
   pageResolutions = [ContentResolutionType.STATIC, ContentResolutionType.DEEP];
   showOptions = false;
   showDebugger = false;
-  showFeed = true;
+  showFeed = false;
   showArticles = false;
 
   options: FeedParserOptions;
@@ -102,7 +102,7 @@ export class AppComponent {
     this.options = {
       output: OutputType.RSS,
       source: SourceType.STATIC,
-      rule: null,
+      rule: 'auto',
       content: ContentResolutionType.STATIC,
     };
     this.optionsFromParser = {};
