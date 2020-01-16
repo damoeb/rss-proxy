@@ -4,17 +4,9 @@
     <div>
       <label>
         Url:
-        <input [(ngModel)]="url" type="url" placeholder="URL of website">
+        <input [(ngModel)]="url" type="url" class="focussed" placeholder="https://" >
       </label>
 
-      <label>
-        <input type="checkbox" [checked]="showMarkup" (change)="showMarkup = !showMarkup">
-        Markup
-      </label>
-      <label>
-        <input type="checkbox" [checked]="showConsole" (change)="showConsole = !showConsole">
-        Console
-      </label>
       <label>
         <input type="checkbox" [checked]="showFeed" (change)="showFeed = !showFeed">
         Feed
@@ -24,11 +16,17 @@
         Articles
       </label>
 
-      <button (click)="reset()">Reset</button>
-      <input type="button" value="Parse" (click)="parseFromUrl()">
+<!--      <button (click)="reset()">Reset</button>-->
+      <button (click)="parseFromUrl()" class="focussed">Generate Feed</button>
+
+      <label style="float: right;">
+        <input type="checkbox" [checked]="showDebugger" (change)="showDebugger = !showDebugger; showFeed = !showDebugger; showArticles = showDebugger">
+        Debugger
+      </label>
     </div>
-    <div>
-      Direct Feed Url: <a [href]="getFeedUrl()">{{ getFeedUrl() }}</a>
+
+    <div class="feed-url">
+      Feed Url: <a [href]="getFeedUrl()">{{ getFeedUrl() }}</a>
     </div>
   </div>
 
@@ -36,23 +34,25 @@
 
     <!-- Markup ----------------------------------------------------------------------------------------------- -->
 
-    <app-panel id="editor" name="Markup" *ngIf="showMarkup">
+    <app-panel id="editor" name="Markup" *ngIf="showDebugger">
+      <button (click)="parseHtml()">Generate from HTML</button>
       <textarea [(ngModel)]="html" placeholder="HTML markup of website"></textarea>
-      <button (click)="parseHtml()">Parse HTML</button>
     </app-panel>
 
 
     <!-- Console ----------------------------------------------------------------------------------------------------- -->
 
-    <app-panel id="console" name="Console" *ngIf="showConsole">
-      <div *ngFor="let log of logs">
-        {{ log }}
+    <app-panel id="console" name="Console" *ngIf="showDebugger">
+      <div style="overflow: scroll">
+        <div *ngFor="let log of logs">
+          {{ log }}
+        </div>
       </div>
     </app-panel>
 
     <!-- Feed -------------------------------------------------------------------------------------------------------- -->
 
-    <app-panel id="feed" style="overflow: auto" [name]="getFeedPanelName()" *ngIf="showFeed">
+    <app-panel id="feed" style="overflow: auto" name="Feed" *ngIf="showFeed">
       <select [(ngModel)]="options.output">
         <option [ngValue]="output" *ngFor="let output of outputs">{{ output }}</option>
       </select> - {{optionsFromParser.output}}
@@ -61,6 +61,12 @@
         <option [ngValue]="pageResolution" *ngFor="let pageResolution of pageResolutions">{{ pageResolution }}</option>
       </select> - {{ optionsFromParser.content }}
 
+      <div *ngIf="feeds?.length > 0">
+        <p>Feeds Found in DOM:</p>
+        <ul>
+          <li *ngFor="let feed of feeds"><a [href]="feed.url">{{ feed.name }}</a></li>
+        </ul>
+      </div>
 
       <pre [innerText]="feedData"></pre>
     </app-panel>
@@ -68,7 +74,7 @@
     <!-- Articles -------------------------------------------------------------------------------------------------- -->
 
     <app-panel id="articles" style="overflow: auto" name="Articles" *ngIf="showArticles">
-      <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule">
+      <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule" class="focussed">
         <option *ngFor="let rule of rules" [ngValue]="rule">{{ rule?.score }} points / {{ rule?.articles?.length }} articles / {{ rule?.id }}</option>
       </select>
       <div>

@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {FeedService} from './services/feed.service';
-import {Article, ArticleRule, OutputType, ContentResolutionType, SourceType, FeedParserOptions} from '../../../core/src';
+import {Article, ArticleRule, OutputType, ContentResolutionType, SourceType, FeedParserOptions, FeedUrl} from '../../../core/src';
 
 @Component({
   selector: 'app-root',
@@ -19,8 +19,7 @@ export class AppComponent {
   sources = [SourceType.STATIC, SourceType.WITH_SCRIPTS];
   pageResolutions = [ContentResolutionType.STATIC, ContentResolutionType.DEEP];
   showOptions = false;
-  showMarkup = false;
-  showConsole = false;
+  showDebugger = false;
   showFeed = true;
   showArticles = false;
 
@@ -30,7 +29,7 @@ export class AppComponent {
 
   logs: string[];
   articles: Article[];
-  private usesExistingFeed: boolean;
+  feeds: FeedUrl[];
 
   constructor(private httpClient: HttpClient,
               private feedService: FeedService) {
@@ -74,26 +73,15 @@ export class AppComponent {
           this.html = response.error;
           console.error('Proxy replies an error.', response.error);
         } else {
-          if (response.usesExistingFeed) {
-            console.log('Proxy replies an existing feed');
-            this.articles = [];
+          console.log('Proxy replies an generated feed');
+          this.rules = response.rules;
+          this.currentRule = response.rules[0];
+          this.articles = response.articles;
 
-            this.showArticles = false;
-            this.showFeed = true;
-
-          } else {
-            console.log('Proxy replies an generated feed');
-            this.rules = response.rules;
-            this.currentRule = response.rules[0];
-            this.articles = response.articles;
-
-            this.showArticles = true;
-            this.showFeed = true;
-
-          }
-
+          this.showArticles = true;
+          this.showFeed = !this.showDebugger;
           this.html = response.html;
-          this.usesExistingFeed = response.usesExistingFeed;
+          this.feeds = response.feeds;
           this.logs = response.logs;
           this.feedData = response.feed;
           this.optionsFromParser = response.options;
@@ -118,9 +106,5 @@ export class AppComponent {
       content: ContentResolutionType.STATIC,
     };
     this.optionsFromParser = {};
-  }
-
-  getFeedPanelName() {
-    return this.usesExistingFeed ? `Feed (from site)` : 'Feed (generated)';
   }
 }

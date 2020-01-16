@@ -8,18 +8,25 @@ export const feedEndpoint = new class FeedEndpoint {
   register(app: Express) {
 
     const defaultOptions: FeedParserOptions = {
-      output: OutputType.JSON,
+      output: OutputType.RSS,
       source: SourceType.STATIC,
       content: ContentResolutionType.STATIC
     };
 
     function parseFeed(url: string, request: Request) {
-      const actualOptions: Partial<FeedParserOptions> = {
-        output: request.query.output,
-        rule: request.query.rule,
-        content: request.query.content
-      };
+      const actualOptions: Partial<FeedParserOptions> = {};
+      if (request.query.output) {
+        actualOptions.output = request.query.output;
+      }
+      if (request.query.rule) {
+        actualOptions.rule = request.query.rule;
+      }
+      if (request.query.content) {
+        actualOptions.content = request.query.content;
+      }
       const options: FeedParserOptions = {...defaultOptions, ...actualOptions};
+
+      console.log(options);
 
       if (!url) {
         return Promise.reject('Param url us missing');

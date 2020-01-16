@@ -1,7 +1,24 @@
 .playground {
   height: 100vh;
   display: flex;
+  background-color: #feffee;
   flex-direction: column;
+}
+a {
+  color: black;
+  border-bottom: 2px solid black;
+}
+a:hover {
+  text-decoration: none;
+  border-bottom-style: hidden;
+}
+select:focus,
+select:hover,
+input[type=text]:focus,
+input[type=text]:hover,
+input[type=checkbox]:focus,
+input[type=checkbox]:hover {
+  background-color: white;
 }
 .playground__header {
   padding: 10px;
@@ -13,17 +30,16 @@
 app-panel {
   flex: 1;
 }
-#options {
-  background: black;
-  color: white;
-}
-#editor {
-  background-color: gray;
-}
 #console {
+  padding: 10px;
   white-space: pre-line;
 }
 textarea {
   width: 98%;
   height: 70vh;
+}
+.feed-url {
+  padding-top: 15px;
+  font-size: 1.2em;
+  padding-bottom: 15px;
 }

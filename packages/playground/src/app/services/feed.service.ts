@@ -55,9 +55,12 @@ export class FeedService {
 
   fromUrl(url: string, options: FeedParserOptions): Observable<FeedParserResult> {
     console.log(options);
-    return this.httpClient.get(`${environment.apiBase}api/feed/live?url=${
-      encodeURIComponent(url)
-    }&options=${JSON.stringify(options)}`) as Observable<FeedParserResult>;
+    const parserUrl = `${environment.apiBase}api/feed/live?url=${encodeURIComponent(url)}`
+      + this.feedUrlFragment('rule', options)
+      + this.feedUrlFragment('output', options)
+      + this.feedUrlFragment('content', options);
+
+    return this.httpClient.get(parserUrl) as Observable<FeedParserResult>;
   }
 
   private feedUrlFragment(id: 'output'|'content'|'rule', options: FeedParserOptions) {
