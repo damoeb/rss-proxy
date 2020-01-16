@@ -2,21 +2,20 @@
   <div class="playground__header">
 
     <div>
-      <label>
+      <label class="tooltip bottom" aria-label="The URL you want to RSSify">
         Url:
-        <input [(ngModel)]="url" type="url" class="focussed" placeholder="https://" >
+        <input [(ngModel)]="url" type="url" class="focussed" placeholder="https://">
       </label>
 
-      <label>
+      <label class="tooltip bottom" aria-label="Toggle the feed panel">
         <input type="checkbox" [checked]="showFeed" (change)="showFeed = !showFeed">
         Feed
       </label>
-      <label>
+      <label class="tooltip bottom" aria-label="Toggle the article details panel">
         <input type="checkbox" [checked]="showArticles" (change)="showArticles = !showArticles">
         Articles
       </label>
 
-<!--      <button (click)="reset()">Reset</button>-->
       <button (click)="parseFromUrl()" class="focussed">Generate Feed</button>
 
       <label style="float: right;">
@@ -25,7 +24,7 @@
       </label>
     </div>
 
-    <div class="feed-url">
+    <div class="feed-url tooltip bottom" aria-label="The Feed URL that can be used in a feed reader of your choice">
       Feed Url: <a [href]="getFeedUrl()">{{ getFeedUrl() }}</a>
     </div>
   </div>
