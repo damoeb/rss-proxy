@@ -15,6 +15,7 @@
     "@types/mocha": "^5.2.7",
     "@types/node": "^8.9.5",
     "chai": "^4.2.0",
+    "fast-check": "^1.21.0",
     "jsdom": "^15.2.1",
     "mocha": "^6.2.2",
     "tslint": "~5.15.0",

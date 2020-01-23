@@ -2,10 +2,21 @@ import {JSDOM} from 'jsdom';
 import {FeedParser} from './feed-parser';
 import {expect} from 'chai';
 import {describe, it} from 'mocha';
+import * as fc from 'fast-check';
 
 describe('FeedParser', () => {
 
   const toDocument = (markup: string): HTMLDocument => new JSDOM(markup).window.document;
+
+  it('toWords', () => {
+    fc.assert(
+      fc.property(
+        fc.string(0, 500), (text) => {
+
+          expect(Array.isArray(FeedParser.toWords(text))).to.be.true;
+
+        }));
+  });
 
   it('findTextNodesInContext', () => {
     const markup = `<!DOCTYPE html>

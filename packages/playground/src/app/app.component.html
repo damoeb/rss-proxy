@@ -1,55 +1,86 @@
 <div class="playground">
-  <div class="playground__header">
+  <div class="playground__header" [ngClass]="{'playground__header--slim': hasResults || isLoading, 'playground__header--large': !hasResults && !isLoading}">
 
     <label style="float: right;">
-      <input type="checkbox" [checked]="showDebugger" (change)="showDebugger = !showDebugger; showFeed = !showDebugger; showArticles = showDebugger">
+      <input type="checkbox"
+             [checked]="showDebugger"
+             (change)="showDebugger = !showDebugger; showFeed = !showDebugger; showArticles = showDebugger"
+             class="tooltip bottom" aria-label="If you are a developer"
+            tabindex="-1">
       Debugger
     </label>
 
-    <h1>Generate RSS/ATOM/JSON Feed from Website</h1>
+    <h1>Generate a rich RSS/ATOM/JSON Feed from any Website</h1>
 
-    <div style="display: flex">
-      <div class="tooltip bottom" aria-label="The URL you want to RSSify">
-        <input [(ngModel)]="url" type="url" placeholder="https://">
-      </div>
-      <select [(ngModel)]="options.output">
-        <option [ngValue]="output" *ngFor="let output of outputs">{{ output }}</option>
-      </select>
+    <div class="form">
+      <ng-form #form>
+        <div class="tooltip bottom" aria-label="The URL you want to RSSify">
+          <input [(ngModel)]="url"
+                 type="url"
+                 autofocus
+                 name="url"
+                 required="true"
+                 placeholder="Url of Feed or Website">
+        </div>
+        <div class="tooltip bottom" aria-label="The desired output format of the feed">
+          <select [(ngModel)]="options.output"
+                  name="output">
+            <option [ngValue]="output"
+                    *ngFor="let output of outputs">{{ output }}</option>
+          </select>
+        </div>
+  <!--      <label class="tooltip bottom" aria-label="Toggle the feed panel" *ngIf="showDebugger">-->
+  <!--        <input type="checkbox" [checked]="showFeed" (change)="showFeed = !showFeed">-->
+  <!--        Feed-->
+  <!--      </label>-->
+  <!--      <label class="tooltip bottom" aria-label="Toggle the article details panel" *ngIf="showDebugger">-->
+  <!--        <input type="checkbox" [checked]="showArticles" (change)="showArticles = !showArticles">-->
+  <!--        Articles-->
+  <!--      </label>-->
 
-<!--      <label class="tooltip bottom" aria-label="Toggle the feed panel" *ngIf="showDebugger">-->
-<!--        <input type="checkbox" [checked]="showFeed" (change)="showFeed = !showFeed">-->
-<!--        Feed-->
-<!--      </label>-->
-<!--      <label class="tooltip bottom" aria-label="Toggle the article details panel" *ngIf="showDebugger">-->
-<!--        <input type="checkbox" [checked]="showArticles" (change)="showArticles = !showArticles">-->
-<!--        Articles-->
-<!--      </label>-->
-
-      <button (click)="parseFromUrl()">
-        Preview {{ options.output }} Feed
-        <span class="icon-rss"></span>
-      </button>
-
+        <button (click)="parseFromUrl()"
+                [disabled]="isLoading">
+          Generate
+          <span class="icon-rss"></span>
+        </button>
+      </ng-form>
     </div>
 
-    <div class="feed-url tooltip bottom" aria-label="The Feed URL that can be used in a feed reader of your choice">
+    <div class="feed-url tooltip bottom"
+         aria-label="The Feed URL that can be used in a feed reader of your choice"
+         *ngIf="isGenerated">
       Feed Url: <a [href]="getFeedUrl()">{{ getFeedUrl() }}</a>
     </div>
   </div>
 
-  <div class="playground__panels">
+  <div style="display:flex;justify-content:center; align-items:center;"
+       *ngIf="isLoading">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="playground__panels"
+       *ngIf="isGenerated">
 
     <!-- Markup ----------------------------------------------------------------------------------------------- -->
 
-    <app-panel id="editor" name="Markup" *ngIf="showDebugger">
-      <button (click)="parseHtml()">Generate from HTML</button>
-      <textarea [(ngModel)]="html" placeholder="HTML markup of website"></textarea>
+    <app-panel id="editor"
+               name="Markup"
+               *ngIf="showDebugger">
+      <button (click)="parseHtml()">
+        Generate from HTML
+      </button>
+      <textarea [(ngModel)]="html"
+                placeholder="HTML markup of website">
+
+      </textarea>
     </app-panel>
 
 
     <!-- Console ----------------------------------------------------------------------------------------------------- -->
 
-    <app-panel id="console" name="Console" *ngIf="showDebugger">
+    <app-panel id="console"
+               name="Console"
+               *ngIf="showDebugger">
       <div style="overflow: scroll">
         <div *ngFor="let log of logs">
           {{ log }}
@@ -59,13 +90,22 @@
 
     <!-- Feed -------------------------------------------------------------------------------------------------------- -->
 
-    <app-panel id="feed" style="overflow: auto" name="Feed" *ngIf="showFeed">
+    <app-panel id="feed"
+               style="overflow: auto"
+               name="Feed"
+               *ngIf="showFeed">
       <select [(ngModel)]="options.output">
-        <option [ngValue]="output" *ngFor="let output of outputs">{{ output }}</option>
+        <option [ngValue]="output"
+                *ngFor="let output of outputs">
+          {{ output }}
+        </option>
       </select> - {{optionsFromParser.output}}
 
       <select [(ngModel)]="options.content">
-        <option [ngValue]="pageResolution" *ngFor="let pageResolution of pageResolutions">{{ pageResolution }}</option>
+        <option [ngValue]="pageResolution"
+                *ngFor="let pageResolution of pageResolutions">
+          {{ pageResolution }}
+        </option>
       </select> - {{ optionsFromParser.content }}
 
       <div *ngIf="feeds?.length > 0">
@@ -80,9 +120,15 @@
 
     <!-- Articles -------------------------------------------------------------------------------------------------- -->
 
-    <app-panel id="articles" style="overflow: auto" name="Articles" *ngIf="showArticles">
+    <app-panel id="articles"
+               style="overflow: auto"
+               name="Choose Articles"
+               *ngIf="showArticles">
       <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule">
-        <option *ngFor="let rule of rules" [ngValue]="rule">{{ rule?.score }} points / {{ rule?.articles?.length }} articles / {{ rule?.id }}</option>
+        <option *ngFor="let rule of rules"
+                [ngValue]="rule">
+          {{ rule?.score }} points / {{ rule?.articles?.length }} articles / {{ rule?.id }}
+        </option>
       </select>
       <div>
         <div>Score: {{currentRule?.score}}</div>

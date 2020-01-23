@@ -6,7 +6,7 @@ import {Article, ArticleRule, OutputType, ContentResolutionType, SourceType, Fee
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
 
@@ -22,6 +22,7 @@ export class AppComponent {
   showDebugger = false;
   showFeed = false;
   showArticles = false;
+  hasResults = false;
 
   options: FeedParserOptions;
 
@@ -30,10 +31,12 @@ export class AppComponent {
   logs: string[];
   articles: Article[];
   feeds: FeedUrl[];
+  isLoading = false;
+  isGenerated = false;
 
   constructor(private httpClient: HttpClient,
               private feedService: FeedService) {
-    this.url = 'https://www.heise.de/';
+    this.url = 'https://www.heise.de/rss/heise-atom.xml';
     this.reset();
   }
 
@@ -67,8 +70,13 @@ export class AppComponent {
   }
 
   parseFromUrl() {
+    this.reset();
+    this.isLoading = true;
     this.feedService.fromUrl(this.url, this.options)
       .subscribe(response => {
+        this.hasResults = true;
+        this.isLoading = false;
+        this.isGenerated = true;
         if (response.error) {
           this.html = response.error;
           console.error('Proxy replies an error.', response.error);
@@ -100,7 +108,7 @@ export class AppComponent {
 
   reset() {
     this.options = {
-      output: OutputType.RSS,
+      output: OutputType.ATOM,
       source: SourceType.STATIC,
       rule: 'auto',
       content: ContentResolutionType.STATIC,

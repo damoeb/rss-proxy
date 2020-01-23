@@ -181,7 +181,7 @@ export class FeedParser {
     });
   }
 
-  private toWords(text: string): string[] {
+  static toWords(text: string): string[] {
     return text.trim().split(' ').filter(word => word.length > 0);
   }
 
@@ -351,7 +351,7 @@ export class FeedParser {
 
     // find links
     const linkElements: LinkPointer[] = this.findLinks()
-      .filter(element => this.toWords(element.textContent).length > 3)
+      .filter(element => FeedParser.toWords(element.textContent).length > 3)
       .map(element => {
         return {
           element,
@@ -372,6 +372,8 @@ export class FeedParser {
     const groups: Array<LinkGroup> = Object.values(linksGroupedByPath);
 
     this.logger.log(`${groups.length} link groups`);
+
+    // todo merge rules that just have a different context
 
     const relevantGroups: PartialArticlesWithDescription[] = groups
       .filter((linkGroup, index) => {
@@ -423,6 +425,7 @@ export class FeedParser {
     return Array.from(this.document.querySelectorAll(rule.rule.contextElementPath)).map(element => {
       try {
         const titles = Array.from(element.querySelectorAll(rule.titlePath)).map(node => node.textContent.trim());
+        // todo link must be absolute link
         const link = element.querySelector(rule.linkPath).getAttribute('href');
         if (titles.length === 0 || titles.join('').trim().length === 0 || !link) {
           return undefined;
@@ -454,7 +457,7 @@ export class FeedParser {
         if (!otherTextNode) {
           return [];
         }
-        return this.toWords(otherTextNode.textContent);
+        return FeedParser.toWords(otherTextNode.textContent);
       });
     const words = wordsInTitles.flat(1);
     const variance = words.filter(this.onlyUnique).length / Math.max(words.length, 1);
@@ -473,7 +476,7 @@ export class FeedParser {
           .map(textNode => textNode.textContent)
         )
         .flat(1)
-        .map(text => this.toWords(text))
+        .map(text => FeedParser.toWords(text))
         .flat(1);
     });
 

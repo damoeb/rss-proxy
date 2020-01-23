@@ -3,6 +3,23 @@
   display: flex;
   background-color: #feffee;
   flex-direction: column;
+
+  &__header {
+    &--large {
+      h1 {
+        margin-top: 100px;
+        text-align: center;
+      }
+      .form {
+        text-align: center;
+      }
+    }
+    &--slim {
+      h1 {
+        font-size: larger;
+      }
+    }
+  }
 }
 a {
   color: black;
@@ -38,6 +55,10 @@ textarea {
   height: 70vh;
 }
 .feed-url {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80vw;
   padding-top: 15px;
   font-size: 1.2em;
   padding-bottom: 15px;
