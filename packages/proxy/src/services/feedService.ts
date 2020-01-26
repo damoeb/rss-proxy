@@ -1,10 +1,9 @@
-import * as request from 'request';
 import {Article, ContentResolutionType, FeedParser, FeedParserOptions, FeedParserResult, FeedUrl, OutputType} from '@rss-proxy/core';
-import {SourceType} from '@rss-proxy/core/dist/feed-parser';
 import {JSDOM} from 'jsdom';
 import {Feed} from 'feed';
 import {LogCollector} from '@rss-proxy/core/dist/LogCollector';
 import {Item} from 'feed/lib/typings';
+import {siteService} from './siteService';
 
 
 export interface GetResponse {
@@ -15,7 +14,7 @@ export interface GetResponse {
 export const feedService =  new class FeedService {
   async mapToFeed(url: string, options: FeedParserOptions): Promise<FeedParserResult> {
 
-    const response = await this.download(url, options.source);
+    const response = await siteService.download(url);
 
     const contentType = response.contentType.split(';')[0].toLowerCase();
 
@@ -30,49 +29,32 @@ export const feedService =  new class FeedService {
     }
   }
 
-  private download(url: string, source: SourceType): Promise<GetResponse> {
-    return new Promise<GetResponse>((resolve, reject) => {
-      const options = {method:'GET', url, headers: {"content-type": "text/plain"}};
-      request(options, (error, serverResponse, html) => {
-        if (!error && serverResponse && serverResponse.statusCode === 200) {
-          resolve({body: html, contentType: serverResponse.headers['content-type']});
-        } else {
-          reject(error);
-        }
-      });
-    });
-  }
-
-
   private async generateFeedFromUrl(url: string, html: string, options: FeedParserOptions, feeds: FeedUrl[]): Promise<FeedParserResult> {
 
     const logCollector = new LogCollector();
 
-    const doc = new JSDOM(html).window.document;
-    const feedParser = new FeedParser(doc, options, logCollector);
+    const doc = siteService.toDom(html);
+    const feedParser = new FeedParser(doc, url, options, logCollector);
+
+    const meta = siteService.getMeta(doc);
 
     const feed = new Feed({
       title: doc.title,
       // description: doc.,
       id: url,
       link: url,
-      // language: 'en', // optional, used only in RSS 2.0, possible values: http://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
-      // favicon: "http://example.com/favicon.ico",
-      copyright: "All rights reserved 2013, John Doe",
+      // author: this.getMetatag(doc, ''),
+      language: meta.language,
+      favicon: meta.favicon,
+      copyright: meta.copyright,
       // updated: new Date(2013, 6, 14), // optional, default = today
       generator: "rss-proxy", // optional, default = 'Feed for Node.js'
-      feedLinks: {
-        json: "https://example.com/json",
-        atom: "https://example.com/atom"
-      },
-      // author: {
-      //   name: "John Doe",
-      //   email: "johndoe@example.com",
-      //   link: "https://example.com/johndoe"
-      // }
+      feedLinks: feeds.reduce((map:any, feed) => {
+        map[feed.name] = feed.url;
+        return map;
+      }, {})
     });
 
-    // todo pass options.parser
     const rules = feedParser.getArticleRules();
 
     const articles = feedParser.getArticlesByRule(rules[0]);
@@ -104,14 +86,13 @@ export const feedService =  new class FeedService {
   private tryAddDeepContent(content: ContentResolutionType): (feed: Feed) => Promise<Feed> {
     return (feed: Feed) => {
       if (content === ContentResolutionType.DEEP) {
-        feed.items.map(item => this.addDeepContent(item))
-        // console.log('Would use puppeteer to resolve deep content');
+        feed.items.map(item => this.mapToDeepContent(item))
       }
       return Promise.resolve(feed);
     };
   }
 
-  private addDeepContent(item: Item) {
+  private mapToDeepContent(item: Item) {
     // todo dowload
     // <meta name=author content="DER SPIEGEL, Hamburg, Germany">
     // <meta name=msvalidate.01 content="0EE91CCF2745FAE5C53BFE9A010D3C79">
@@ -130,7 +111,6 @@ export const feedService =  new class FeedService {
     // <meta property="og:url" content="https://www.spiegel.de/">
     // <meta property="og:image" content="https://www.spiegel.de/public/spon/images/logos/fb_logo_default.jpg">
     // <meta property="og:description" content="Deutschlands führende Nachrichtenseite. Alles Wichtige aus Politik, Wirtschaft, Sport, Kultur, Wissenschaft, Technik und mehr.">
-
   }
 
   private findFeedUrls(html: string): FeedUrl[] {

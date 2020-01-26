@@ -23,7 +23,8 @@ export class FeedService {
     const htmlDoc = domParser.parseFromString(html, 'text/html');
 
     const logCollector = new LogCollector();
-    const feedParser = new FeedParser(htmlDoc, options, logCollector);
+    const url = 'http://example.com';
+    const feedParser = new FeedParser(htmlDoc, url, options, logCollector);
 
     const result: FeedParserResult = {
       logs: logCollector.logs(),
@@ -36,12 +37,12 @@ export class FeedService {
     return of(result);
   }
 
-  applyRule(html: string, rule: ArticleRule, options: FeedParserOptions): Observable<Article[]> {
+  applyRule(html: string, url: string, rule: ArticleRule, options: FeedParserOptions): Observable<Article[]> {
     const logCollector = new LogCollector();
 
     const htmlDoc = new DOMParser().parseFromString(html, 'text/html');
 
-    const feedParser = new FeedParser(htmlDoc, options, logCollector);
+    const feedParser = new FeedParser(htmlDoc, url, options, logCollector);
 
     return of(feedParser.getArticlesByRule(rule));
   }

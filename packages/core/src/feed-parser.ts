@@ -122,6 +122,7 @@ export interface Logger {
 
 export class FeedParser {
   constructor(private document: HTMLDocument,
+              private url: string,
               private options: FeedParserOptions,
               private logger: Logger) {
   }
@@ -433,7 +434,7 @@ export class FeedParser {
 
         const article: Article = {
           title: titles.join(' / '),
-          link,
+          link: `${this.url}/${link}`,
           content: element.outerHTML,
           summary: rule.commonTextNodePath.map(textNodePath => {
             return Array.from(element.querySelectorAll(textNodePath))

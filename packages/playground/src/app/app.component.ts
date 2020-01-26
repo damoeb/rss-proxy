@@ -58,7 +58,7 @@ export class AppComponent {
   private applyRule(rule: ArticleRule) {
     console.log('apply rule', rule);
     this.currentRule = rule;
-    this.feedService.applyRule(this.html, rule, this.options).subscribe(articles => {
+    this.feedService.applyRule(this.html, this.url, rule, this.options).subscribe(articles => {
       this.articles = articles;
     });
   }
