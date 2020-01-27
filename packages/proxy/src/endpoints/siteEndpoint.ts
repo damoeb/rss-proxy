@@ -10,7 +10,7 @@ export const siteEndpoint = new class ProxyEndpoint {
       const url = request.query.url;
       logger.info(`deep-site ${url}`);
       if (url) {
-        siteService.proxy(url).then(result => {
+        siteService.analyze(url).then(result => {
           response.json(result);
         }).catch(err => {
           logger.error(`Failed to proxy ${url}, cause ${err}`);

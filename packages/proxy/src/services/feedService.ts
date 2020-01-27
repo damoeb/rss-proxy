@@ -86,31 +86,23 @@ export const feedService =  new class FeedService {
   private tryAddDeepContent(content: ContentResolutionType): (feed: Feed) => Promise<Feed> {
     return (feed: Feed) => {
       if (content === ContentResolutionType.DEEP) {
-        feed.items.map(item => this.mapToDeepContent(item))
+        return Promise.all(feed.items.map(item => this.addDeepContent(item)))
+          .then(() => feed);
+      } else {
+        return Promise.resolve(feed);
       }
-      return Promise.resolve(feed);
     };
   }
 
-  private mapToDeepContent(item: Item) {
-    // todo dowload
-    // <meta name=author content="DER SPIEGEL, Hamburg, Germany">
-    // <meta name=msvalidate.01 content="0EE91CCF2745FAE5C53BFE9A010D3C79">
-    // <meta name=description content="Deutschlands führende Nachrichtenseite. Alles Wichtige aus Politik, Wirtschaft, Sport, Kultur, Wissenschaft, Technik und mehr.">
-    // <meta name=last-modified content="2020-01-21T21:20:21+01:00">
-    // <meta name=locale content="de_DE">
-    // <meta property="fb:page_id" content>
-    // <meta property="twitter:account_id" content="2834511">
-    // <meta name=twitter:card content="summary_large_image">
-    // <meta name=twitter:site content="@derspiegel">
-    // <meta name=twitter:title content="DER SPIEGEL | Online-Nachrichten">
-    // <meta name=twitter:creator content="@derspiegel">
-    // <meta name=twitter:image content="https://www.spiegel.de/public/spon/images/logos/fb_logo_default.jpg">
-    // <meta property="og:title" content="DER SPIEGEL | Online-Nachrichten">
-    // <meta property="og:type" content="website">
-    // <meta property="og:url" content="https://www.spiegel.de/">
-    // <meta property="og:image" content="https://www.spiegel.de/public/spon/images/logos/fb_logo_default.jpg">
-    // <meta property="og:description" content="Deutschlands führende Nachrichtenseite. Alles Wichtige aus Politik, Wirtschaft, Sport, Kultur, Wissenschaft, Technik und mehr.">
+  private addDeepContent(item: Item): Promise<void> {
+    return siteService.analyze(item.link).then(siteAnalysis => {
+      item.description = siteAnalysis.readability.excerpt;
+      item.content = siteAnalysis.readability.content;
+      item.date = siteAnalysis.meta.date;
+      item.title = siteAnalysis.readability.title;
+      // item.extensions = siteAnalysis.readability.title;
+      // todo item.author = siteAnalysis.readability.byline;
+    })
   }
 
   private findFeedUrls(html: string): FeedUrl[] {

@@ -3,5 +3,6 @@ export const config = {
   appEnv: 'dev',
   port: 3000,
   hostname: 'localhost',
-  logLevel: 'info'
+  logLevel: 'info',
+  debug: true
 };

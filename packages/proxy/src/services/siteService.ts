@@ -1,23 +1,33 @@
 import * as request from 'request';
 import {GetResponse} from './feedService';
 import {JSDOM} from 'jsdom';
-import {response} from 'express';
+import * as Readability from 'mozilla-readability';
+import * as createDOMPurify from 'dompurify';
+import {config} from '../config';
 
 export interface SiteMeta {
   language: string
   favicon: string
-  date: string
+  date: Date
   author: string
   title: string
   copyright: string
 }
 
+interface SiteAnalysis {
+  readability: Readability.ParseResult,
+  meta: SiteMeta
+}
+
 export const siteService = new class SiteService {
-  proxy(url: string): Promise<SiteMeta> {
+  analyze(url: string): Promise<SiteAnalysis> {
     return this.download(url).then(response => {
       const doc = this.toDom(response.body);
 
-      return this.getMeta(doc);
+      return {
+        meta: this.getMeta(doc),
+        readability: this.getReadability(doc)
+      };
     });
   }
 
@@ -26,7 +36,7 @@ export const siteService = new class SiteService {
     return {
       language: this.el(doc.querySelector('html')).getAttribute('lang'),
       favicon: this.getFavIcon(doc),
-      date: this.getMetatag(doc, 'date'),
+      date: new Date(this.getMetatag(doc, 'date')),
       author: this.getMetatag(doc, 'author'),
       title: this.getMetatag(doc, 'title'),
       copyright: this.getMetatag(doc, 'dcterms.rightsHolder')
@@ -75,6 +85,17 @@ export const siteService = new class SiteService {
   }
 
   toDom(html: string): Document {
-    return new JSDOM(html).window.document;
+    const {window} = new JSDOM('');
+    const DOMPurify = createDOMPurify(window);
+
+    const clean = DOMPurify.sanitize(html, {WHOLE_DOCUMENT: true,
+      FORBID_TAGS: ['style', 'script'],
+      ADD_TAGS:['meta', 'html'],
+      ADD_ATTR:['lang', 'content', 'name']});
+    return new JSDOM(clean).window.document;
+  }
+
+  private getReadability(doc: Document): Readability.ParseResult {
+    return new Readability(doc, {debug: config.debug}).parse();
   }
 };
