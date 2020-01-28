@@ -59,6 +59,7 @@ export const feedService =  new class FeedService {
 
     const articles = feedParser.getArticlesByRule(rules[0]);
     articles.forEach((article: Article) => {
+      article.link = this.applyReaderLink(article.link);
       feed.addItem({
         title: article.title,
         link: article.link,
@@ -78,31 +79,12 @@ export const feedService =  new class FeedService {
       html,
       articles: articles,
       feedOutputType: options.output,
-      feed: await this.tryAddDeepContent(options.content)(feed)
-        .then(this.renderFeed(options.output))
+      feed: this.renderFeed(options.output)(feed)
     });
   }
 
-  private tryAddDeepContent(content: ContentResolutionType): (feed: Feed) => Promise<Feed> {
-    return (feed: Feed) => {
-      if (content === ContentResolutionType.DEEP) {
-        return Promise.all(feed.items.map(item => this.addDeepContent(item)))
-          .then(() => feed);
-      } else {
-        return Promise.resolve(feed);
-      }
-    };
-  }
-
-  private addDeepContent(item: Item): Promise<void> {
-    return siteService.analyze(item.link).then(siteAnalysis => {
-      item.description = siteAnalysis.readability.excerpt;
-      item.content = siteAnalysis.readability.content;
-      item.date = siteAnalysis.meta.date;
-      item.title = siteAnalysis.readability.title;
-      // item.extensions = siteAnalysis.readability.title;
-      // todo item.author = siteAnalysis.readability.byline;
-    })
+  private applyReaderLink(link: string) {
+    return `http://localhost:3000/api/reader?url=${encodeURIComponent(link)}`
   }
 
   private findFeedUrls(html: string): FeedUrl[] {

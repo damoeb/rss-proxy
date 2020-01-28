@@ -14,7 +14,7 @@ export interface SiteMeta {
   copyright: string
 }
 
-interface SiteAnalysis {
+export interface SiteAnalysis {
   readability: Readability.ParseResult,
   meta: SiteMeta
 }

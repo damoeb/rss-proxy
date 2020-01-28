@@ -4,7 +4,7 @@ import * as bodyParser from 'body-parser';
 import logger from './logger'
 import { feedEndpoint } from './endpoints/feedEndpoint';
 import {config} from './config';
-import {siteEndpoint} from './endpoints/siteEndpoint';
+import {readerEndpoint} from './endpoints/readerEndpoint';
 
 // -- express
 const app = express();
@@ -25,7 +25,7 @@ export interface ErrorsResponse {
 // todo serve static playground
 app.use('/playground', express.static('playground'));
 
-siteEndpoint.register(app);
+readerEndpoint.register(app);
 feedEndpoint.register(app);
 
 // startup
