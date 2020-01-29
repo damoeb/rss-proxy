@@ -25,36 +25,50 @@ export const readerEndpoint = new class ProxyEndpoint {
   word-break: break-word;
 }
 img {
-  display: none;
+  width: 100%;
 }
 </style>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  const links = Array.from(document.querySelectorAll('.c a')).map((link, index) => {
-    link.replaceWith(link.textContent +' ['+( index + 1)+']');
-    return link;
+  const links = Array.from(document.querySelectorAll('.c a')).map((originalLink, index) => {
+
+    const link = originalLink.cloneNode();
+    
+    const url = originalLink.getAttribute('href');
+    link.setAttribute('href', location.origin + '/api/reader?url=' + encodeURIComponent(url));
+    
+    const text = document.createElement('span');
+    text.innerText = link.textContent + ' ';
+    
+    originalLink.replaceWith(text);
+    const linkText = index + 1;
+    // const linkText = new URL(url).hostname;
+    link.innerText = '['+ linkText +']';
+    link.setAttribute('title', url);
+    text.append(link);
+    return originalLink;
   });
 
-  const footerLinks = links.map((link, index) => {
+  const references = links.map((link, index) => {
     return '<p><a name="'+ (index + 1) +'"></a>['+ (index + 1) +'] <a="'+link.getAttribute('href')+'" target="_blank">'+link.getAttribute('href') +'</a></p>';
   }).join(' ');
-  
-  console.log(footerLinks);
-  
-  document.querySelector('.links').innerHTML = footerLinks;
+
+  document.querySelector('.references').innerHTML = references;
 });
 
 </script>
 <body>
 <div class="r">
-  <h1><a href="url">${result.readability.title}</a></h1>
-  <p>${result.meta.date}</p>
-  <p>${result.readability.excerpt}</p>
+  <p><a href="${url}" target="_blank">${url}</a></p>
+  <h1>${result.readability.title}</h1>
+<!--  <p>${result.meta.date}</p>-->
+  <p style="padding-bottom: 20px"><strong>TLDR</strong>: ${result.readability.excerpt}</p>
   <div class="c">
     ${result.readability.content}
   </div>
-  <div class="links"></div>
+  <div style="border-top: 2px solid black; margin-top: 50px" class="references">
+  </div>
 </div>
 </body>
 </html>`;
