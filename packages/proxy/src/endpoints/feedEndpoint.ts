@@ -2,48 +2,22 @@ import {Express, Request, Response} from 'express';
 import * as cors from 'cors';
 import logger from '../logger';
 import {feedService} from '../services/feedService';
-import {FeedParserOptions, OutputType, ContentResolutionType, SourceType, FeedParserResult} from '@rss-proxy/core';
+import {FeedParserResult, OutputType} from '@rss-proxy/core';
 
 export const feedEndpoint = new class FeedEndpoint {
   register(app: Express) {
-
-    const defaultOptions: FeedParserOptions = {
-      output: OutputType.RSS,
-      source: SourceType.STATIC,
-      content: ContentResolutionType.STATIC
-    };
-
-    function parseFeed(url: string, request: Request) {
-      const actualOptions: Partial<FeedParserOptions> = {};
-      if (request.query.output) {
-        actualOptions.output = request.query.output;
-      }
-      if (request.query.rule) {
-        actualOptions.rule = request.query.rule;
-      }
-      if (request.query.content) {
-        actualOptions.content = request.query.content;
-      }
-      const options: FeedParserOptions = {...defaultOptions, ...actualOptions};
-
-      console.log(options);
-
-      if (!url) {
-        return Promise.reject('Param url us missing');
-      }
-
-      return feedService.mapToFeed(url, options);
-    }
 
     app.get('/api/feed/live', cors(), (request: Request, response: Response) => {
       try {
         const url = request.query.url;
         logger.info(`live feed-mapping of ${url}`);
 
-        parseFeed(url, request).then((feedParserResult: FeedParserResult) => {
+        feedService.parseFeed(url, request)
+          .then((feedParserResult: FeedParserResult) => {
             response.json(feedParserResult);
 
-          }).catch((err: Error) => {
+          })
+          .catch((err: Error) => {
             logger.error(`Failed to proxy ${url}, cause ${err}`);
             response.json({error: err.toString()});
           });
@@ -58,7 +32,7 @@ export const feedEndpoint = new class FeedEndpoint {
         const url = request.query.url;
         logger.info(`live feed-mapping of ${url}`);
 
-        parseFeed(url, request)
+        feedService.parseFeed(url, request)
           .then((feedParserResult: FeedParserResult) => {
             response.setHeader('Content-Type', this.outputToContentType(feedParserResult.feedOutputType));
             response.send(feedParserResult.feed);
@@ -79,8 +53,10 @@ export const feedEndpoint = new class FeedEndpoint {
   private outputToContentType(outputType: OutputType): string {
     switch (outputType) {
       case OutputType.ATOM: return 'application/atom+xml';
-      case OutputType.JSON: return 'application/json';
-      default: return 'application/rss+xml';
+      case OutputType.RSS: return 'application/rss+xml';
+      case OutputType.JSON:
+      default:
+        return 'application/json';
     }
   }
 };

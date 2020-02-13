@@ -10,39 +10,43 @@
       Debugger
     </label>
 
-    <h1>Generate a rich RSS/ATOM/JSON Feed from any Website</h1>
+    <h1>Generate an RSS/ATOM/JSON Feed from any Website</h1>
 
     <div class="form">
-      <ng-form #form>
-        <div class="tooltip bottom" aria-label="The URL you want to RSSify">
-          <input [(ngModel)]="url"
-                 type="url"
-                 autofocus
-                 name="url"
-                 required="true"
-                 placeholder="Url of Feed or Website">
-        </div>
-        <div class="tooltip bottom" aria-label="The desired output format of the feed">
-          <select [(ngModel)]="options.output"
-                  name="output">
-            <option [ngValue]="output"
-                    *ngFor="let output of outputs">{{ output }}</option>
-          </select>
-        </div>
-  <!--      <label class="tooltip bottom" aria-label="Toggle the feed panel" *ngIf="showDebugger">-->
-  <!--        <input type="checkbox" [checked]="showFeed" (change)="showFeed = !showFeed">-->
-  <!--        Feed-->
-  <!--      </label>-->
-  <!--      <label class="tooltip bottom" aria-label="Toggle the article details panel" *ngIf="showDebugger">-->
-  <!--        <input type="checkbox" [checked]="showArticles" (change)="showArticles = !showArticles">-->
-  <!--        Articles-->
-  <!--      </label>-->
+      <ng-form #form (ngSubmit)="parseFromUrl()">
+        <div style="display: inline-block">
+          <div class="tooltip bottom" aria-label="The URL you want to RSSify">
+            <input [(ngModel)]="url"
+                   type="url"
+                   autofocus
+                   name="url"
+                   required="true"
+                   placeholder="Url of Feed or Website">
+          </div>
+          <div class="tooltip bottom" aria-label="The desired output format of the feed">
+            <select [(ngModel)]="options.output"
+                    name="output">
+              <option [ngValue]="output"
+                      *ngFor="let output of outputs">{{ output }}</option>
+            </select>
+          </div>
+    <!--      <label class="tooltip bottom" aria-label="Toggle the feed panel" *ngIf="showDebugger">-->
+    <!--        <input type="checkbox" [checked]="showFeed" (change)="showFeed = !showFeed">-->
+    <!--        Feed-->
+    <!--      </label>-->
+    <!--      <label class="tooltip bottom" aria-label="Toggle the article details panel" *ngIf="showDebugger">-->
+    <!--        <input type="checkbox" [checked]="showArticles" (change)="showArticles = !showArticles">-->
+    <!--        Articles-->
+    <!--      </label>-->
 
-        <button (click)="parseFromUrl()"
-                [disabled]="isLoading">
-          Generate
-          <span class="icon-rss"></span>
-        </button>
+          <button (click)="parseFromUrl()"
+                  [disabled]="isLoading">
+            Generate
+            <span class="icon-rss"></span>
+          </button>
+
+          <div>Advanced Settings</div>
+        </div>
       </ng-form>
     </div>
 

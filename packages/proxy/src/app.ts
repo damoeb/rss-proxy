@@ -5,6 +5,7 @@ import logger from './logger'
 import { feedEndpoint } from './endpoints/feedEndpoint';
 import {config} from './config';
 import {readerEndpoint} from './endpoints/readerEndpoint';
+import {operatorEndpoint} from './endpoints/operatorEndpoint';
 
 // -- express
 const app = express();
@@ -27,6 +28,7 @@ app.use('/playground', express.static('playground'));
 
 readerEndpoint.register(app);
 feedEndpoint.register(app);
+operatorEndpoint.register(app);
 
 // startup
 app.listen(config.port, () => logger.info(`Listening on port ${config.port}`));

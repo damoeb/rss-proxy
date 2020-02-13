@@ -1,15 +1,31 @@
-import {Article, ContentResolutionType, FeedParser, FeedParserOptions, FeedParserResult, FeedUrl, OutputType} from '@rss-proxy/core';
+import {
+  Article,
+  ContentResolutionType,
+  FeedParser,
+  FeedParserOptions,
+  FeedParserResult,
+  FeedUrl,
+  OutputType,
+  SourceType
+} from '@rss-proxy/core';
 import {JSDOM} from 'jsdom';
 import {Feed} from 'feed';
 import {LogCollector} from '@rss-proxy/core/dist/LogCollector';
-import {Item} from 'feed/lib/typings';
 import {siteService} from './siteService';
+import {Request} from 'express';
 
 
 export interface GetResponse {
   body: string
   contentType: string
 }
+
+const defaultOptions: FeedParserOptions = {
+  output: OutputType.JSON,
+  source: SourceType.STATIC,
+  content: ContentResolutionType.STATIC
+};
+
 
 export const feedService =  new class FeedService {
   async mapToFeed(url: string, options: FeedParserOptions): Promise<FeedParserResult> {
@@ -28,6 +44,29 @@ export const feedService =  new class FeedService {
         return Promise.reject(`Content of type ${response.contentType} is not supported`)
     }
   }
+
+  public parseFeed(url: string, request: Request): Promise<FeedParserResult> {
+      const actualOptions: Partial<FeedParserOptions> = {};
+      if (request.query.output) {
+        actualOptions.output = request.query.output;
+      }
+      if (request.query.rule) {
+        actualOptions.rule = request.query.rule;
+      }
+      if (request.query.content) {
+        actualOptions.content = request.query.content;
+      }
+      const options: FeedParserOptions = {...defaultOptions, ...actualOptions};
+
+      console.log(options);
+
+      if (!url) {
+        return Promise.reject('Param url us missing');
+      }
+
+      return feedService.mapToFeed(url, options);
+    }
+
 
   private async generateFeedFromUrl(url: string, html: string, options: FeedParserOptions, feeds: FeedUrl[]): Promise<FeedParserResult> {
 
@@ -57,18 +96,21 @@ export const feedService =  new class FeedService {
 
     const rules = feedParser.getArticleRules();
 
-    const articles = feedParser.getArticlesByRule(rules[0]);
-    articles.forEach((article: Article) => {
-      article.link = this.applyReaderLink(article.link);
-      feed.addItem({
-        title: article.title,
-        link: article.link,
-        published: new Date(),
-        date: new Date(),
-        description: article.summary.join(' / '),
-        content: article.content
+    let articles: Article[] = [];
+    if (rules.length > 0) {
+      articles = feedParser.getArticlesByRule(rules[0]);
+      articles.forEach((article: Article) => {
+        article.link = this.applyReaderLink(article.link);
+        feed.addItem({
+          title: article.title,
+          link: article.link,
+          published: new Date(),
+          date: new Date(),
+          description: article.summary.join(' / '),
+          content: article.content
+        });
       });
-    });
+    }
 
     return Promise.resolve({
       usesExistingFeed: false,
@@ -84,7 +126,8 @@ export const feedService =  new class FeedService {
   }
 
   private applyReaderLink(link: string) {
-    return `http://localhost:3000/api/reader?url=${encodeURIComponent(link)}`
+    // todo return `http://localhost:3000/api/reader?url=${encodeURIComponent(link)}`
+    return link;
   }
 
   private findFeedUrls(html: string): FeedUrl[] {

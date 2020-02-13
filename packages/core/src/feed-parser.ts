@@ -41,7 +41,6 @@ export interface FeedParserOptions {
   output: OutputType;
   source: SourceType;
   rule?: string,
-  // todo optin to use real rss
   content: ContentResolutionType;
 }
 
@@ -401,6 +400,17 @@ export class FeedParser {
     this.logger.log(`${relevantGroups.length} article rules`);
     relevantGroups.forEach(group => this.logger.log(group.id));
 
+    // relevantGroups.map(group => {
+    //     (group as any).groupHash = `${group.titlePath}::${group.linkPath}::${group.commonTextNodePath.join(',')}`;
+    //     return group;
+    //   }).reduce((merged, group) => {
+    //
+    // }, {});
+    // groupBy(relevantGroups.map(group => {
+    //   (group as any).groupHash = `${group.titlePath}::${group.linkPath}::${group.commonTextNodePath.join(',')}`;
+    //   return group;
+    // }, 'groupHash'))
+
     return relevantGroups
       .map(group => {
 
@@ -423,12 +433,14 @@ export class FeedParser {
 
   public getArticlesByRule(rule: ArticleRule): Article[] {
 
+    this.logger.log('apply rule', rule.id);
+
     return Array.from(this.document.querySelectorAll(rule.rule.contextElementPath)).map(element => {
       try {
         const titles = Array.from(element.querySelectorAll(rule.titlePath)).map(node => node.textContent.trim());
-        // todo link must be absolute link
+        this.logger.log('hit');
         const link = element.querySelector(rule.linkPath).getAttribute('href');
-        if (titles.length === 0 || titles.join('').trim().length === 0 || !link) {
+        if (titles.length === 0 || titles.join('').trim().length === 0) {
           return undefined;
         }
 
@@ -444,6 +456,7 @@ export class FeedParser {
             .filter(this.onlyUnique)
             .filter(text => text.split(' ').length > 5)
         };
+
         return article;
       } catch (err) {
         return undefined;

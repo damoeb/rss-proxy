@@ -36,7 +36,7 @@ export class AppComponent {
 
   constructor(private httpClient: HttpClient,
               private feedService: FeedService) {
-    this.url = 'https://www.heise.de/rss/heise-atom.xml';
+    this.url = 'https://twitter.com/gurkendoktor';
     this.reset();
   }
 

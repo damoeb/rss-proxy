@@ -1,9 +1,9 @@
 import * as request from 'request';
 import {GetResponse} from './feedService';
 import {JSDOM} from 'jsdom';
+import {uniq} from 'lodash';
 import * as Readability from 'mozilla-readability';
 import * as createDOMPurify from 'dompurify';
-import {config} from '../config';
 
 export interface SiteMeta {
   language: string
@@ -16,7 +16,8 @@ export interface SiteMeta {
 
 export interface SiteAnalysis {
   readability: Readability.ParseResult,
-  meta: SiteMeta
+  meta: SiteMeta,
+  links: string[]
 }
 
 export const siteService = new class SiteService {
@@ -26,7 +27,8 @@ export const siteService = new class SiteService {
 
       return {
         meta: this.getMeta(doc),
-        readability: this.getReadability(doc)
+        readability: this.getReadability(doc),
+        links: uniq(Array.from(doc.querySelectorAll('a[href]')).map(element => element.getAttribute('href')))
       };
     });
   }
@@ -96,6 +98,6 @@ export const siteService = new class SiteService {
   }
 
   private getReadability(doc: Document): Readability.ParseResult {
-    return new Readability(doc, {debug: config.debug}).parse();
+    return new Readability(doc).parse();
   }
 };

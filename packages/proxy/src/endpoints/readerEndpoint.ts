@@ -6,6 +6,22 @@ import {readerService} from '../services/readerService';
 export const readerEndpoint = new class ProxyEndpoint {
   register(app: Express) {
 
+    app.get('/api/content/json', cors(), (request: Request, response: Response) => {
+      const url = request.query.url;
+      logger.info(`reader-mode ${url} as json`);
+      if (url) {
+        readerService.parseArticle(url)
+          .then(result => {
+            response.json(result);
+          })
+          .catch(err => {
+            response.json({error: err})
+          });
+      } else {
+        response.json({error: 'param url is missing'})
+      }
+    });
+
     app.get('/api/reader', cors(), (request: Request, response: Response) => {
       const url = request.query.url;
       logger.info(`reader-mode ${url}`);
