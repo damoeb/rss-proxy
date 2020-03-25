@@ -1,29 +1,26 @@
-# -- Test
+FROM node:12-stretch-slim
+WORKDIR /opt/rss-proxy-build
 
-#FROM python:slim
-#COPY nginx.conf .
-#RUN pip -q install gixy && gixy nginx.conf
+RUN apt-get update \
+  && apt-get install -y git
 
-# -- Build
+COPY [ "package.json", "package-lock.json", "core/rss-proxy-core-0.0.0.tgz", "entrypoint.sh", "proxy", "./" ]
 
-FROM node:12-stretch
+RUN npm install rss-proxy-core-0.0.0.tgz --ignore-scripts \
+  && yarn install --production --ignore-scripts \
+  && rm rss-proxy-core-0.0.0.tgz
+
+FROM node:12-stretch-slim
 WORKDIR /opt/rss-proxy
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+COPY --from=0 /opt/rss-proxy-build/ ./
+
 RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* \
-  && rm -rf /data/db \
-  && mkdir -p /data/db
-
-COPY [ "entrypoint.sh", ".build-cache/package.json", ".build-cache/rss-proxy-core-0.0.0.tgz", ".build-cache/proxy/", "./" ]
-COPY [ ".build-cache/playground", "./playground" ]
-
-RUN npm install rss-proxy-playground-0.0.0.tgz rss-proxy-core-0.0.0.tgz --ignore-scripts && yarn install --production --ignore-scripts
-
-COPY .build-cache/* ./
-
-RUN chown -R 0444 .
+  && chown -R 0444 .
 
 USER node
 

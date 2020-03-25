@@ -20,6 +20,12 @@ Before you begin, ensure you have met the following requirements:
 * You have a `<Windows/Linux/Mac>` machine. State which OS is supported/which is not.
 * You have read `<guide/link/documentation_related_to_project>`.
 
+## Running RSS-Proxy using docker
+```
+ docker run -p 3000:3000 -it rss-proxy-prod
+```
+
+
 ## Installing RSS-Proxy
 
 To install Rss-proxy, follow these steps:

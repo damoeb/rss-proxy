@@ -2,15 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="be223c1e-fb57-4edb-9549-acf979246252" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/packages/proxy/publish-docker-image.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/parser.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/parser2.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/rss-it-app/src/app/feed-parser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/modules/rss-it-app/src/app/feed-parser.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/rss-it-app/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/modules/rss-it-app/src/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/docker/prod/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/docker/prod/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/package.json" afterDir="false" />
     </list>
+    <list id="0fdeac33-4664-41b2-9080-89bed972c3c4" name="ignore" comment="build 2" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,43 +19,26 @@
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
   </component>
+  <component name="ElmWorkspace">
+    <elmProjects />
+    <settings elmCompilerPath="" elmFormatPath="" elmTestPath="" isElmFormatOnSaveEnabled="false" />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/app/feed-parser.ts">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/packages/proxy/package.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="222" column="97" selection-start-line="222" selection-start-column="97" selection-end-line="222" selection-end-column="97" />
+            <state relative-caret-position="719">
+              <caret line="50" column="3" selection-start-line="50" selection-start-column="3" selection-end-line="50" selection-end-column="3" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.ts">
+        <entry file="file://$PROJECT_DIR$/packages/proxy/src/app.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="2" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="2" />
-              <folding>
-                <element signature="e#0#42#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" selection-start-line="2" selection-end-line="2" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/proxy-server/src/app.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
+            <state relative-caret-position="210">
+              <caret line="14" column="27" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -66,180 +47,83 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.html">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="360">
+                <caret line="24" column="32" selection-start-line="24" selection-start-column="32" selection-end-line="24" selection-end-column="32" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/packages/proxy/build-docker-image.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="33" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
+            <state relative-caret-position="465">
+              <caret line="31" column="39" selection-start-line="31" selection-start-column="39" selection-end-line="31" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/packages/proxy/publish-docker-image.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="25" selection-start-line="2" selection-start-column="25" selection-end-line="2" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/packages/proxy/src/services/feedService.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="466">
+              <caret line="142" column="41" selection-start-line="142" selection-start-column="41" selection-end-line="142" selection-end-column="41" />
               <folding>
-                <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+                <element signature="e#0#163#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/rss-it-app/test/pages/gohugo_io.html">
+        <entry file="file://$PROJECT_DIR$/packages/core/package.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" selection-start-line="15" selection-end-line="15" />
-              <folding>
-                <element signature="n#style#0;n#input#0;n#fieldset#0;n#form#0;n#div#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#svg#0;n#a#0;n#span#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#path#0;n#svg#0;n#a#0;n#span#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="e#8305#8312#0" expanded="true" />
-                <element signature="e#8837#8844#0" expanded="true" />
-                <element signature="e#9339#9346#0" expanded="true" />
-                <element signature="e#9440#9447#0" expanded="true" />
-                <element signature="e#9970#9977#0" expanded="true" />
-                <element signature="e#10500#10507#0" expanded="true" />
-                <element signature="e#11024#11031#0" expanded="true" />
-                <element signature="e#11681#11688#0" expanded="true" />
-                <element signature="e#12197#12204#0" expanded="true" />
-                <element signature="e#12719#12726#0" expanded="true" />
-                <element signature="e#13213#13220#0" expanded="true" />
-                <element signature="e#13768#13775#0" expanded="true" />
-                <element signature="e#14294#14301#0" expanded="true" />
-                <element signature="e#14789#14796#0" expanded="true" />
-                <element signature="e#15361#15368#0" expanded="true" />
-                <element signature="e#15893#15900#0" expanded="true" />
-                <element signature="e#16356#16364#0" expanded="true" />
-                <element signature="e#16447#16454#0" expanded="true" />
-                <element signature="e#16875#16883#0" expanded="true" />
-                <element signature="e#16966#16973#0" expanded="true" />
-                <element signature="e#17499#17506#0" expanded="true" />
-                <element signature="e#18087#18094#0" expanded="true" />
-                <element signature="e#18597#18604#0" expanded="true" />
-                <element signature="e#19131#19138#0" expanded="true" />
-                <element signature="e#19674#19681#0" expanded="true" />
-                <element signature="e#20208#20215#0" expanded="true" />
-                <element signature="e#20688#20695#0" expanded="true" />
-                <element signature="e#21261#21268#0" expanded="true" />
-                <element signature="e#21818#21825#0" expanded="true" />
-                <element signature="e#22235#22243#0" expanded="true" />
-                <element signature="e#22349#22356#0" expanded="true" />
-                <element signature="e#22934#22941#0" expanded="true" />
-                <element signature="e#23480#23487#0" expanded="true" />
-                <element signature="e#24030#24037#0" expanded="true" />
-                <element signature="e#24622#24629#0" expanded="true" />
-                <element signature="e#25135#25142#0" expanded="true" />
-                <element signature="e#25629#25636#0" expanded="true" />
-                <element signature="e#26202#26209#0" expanded="true" />
-                <element signature="e#26783#26790#0" expanded="true" />
-                <element signature="e#27296#27303#0" expanded="true" />
-                <element signature="e#27804#27811#0" expanded="true" />
-                <element signature="e#28314#28321#0" expanded="true" />
-                <element signature="e#28928#28935#0" expanded="true" />
-                <element signature="e#29525#29532#0" expanded="true" />
-                <element signature="e#29961#29968#0" expanded="true" />
-                <element signature="e#29969#29976#0" expanded="true" />
-                <element signature="e#30083#30090#0" expanded="true" />
-                <element signature="e#30618#30625#0" expanded="true" />
-                <element signature="e#31191#31198#0" expanded="true" />
-                <element signature="e#31704#31711#0" expanded="true" />
-                <element signature="e#32246#32253#0" expanded="true" />
-                <element signature="e#32756#32763#0" expanded="true" />
-                <element signature="e#33296#33303#0" expanded="true" />
-                <element signature="e#33840#33847#0" expanded="true" />
-                <element signature="e#34427#34434#0" expanded="true" />
-                <element signature="e#35065#35072#0" expanded="true" />
-                <element signature="e#35581#35588#0" expanded="true" />
-                <element signature="e#36114#36121#0" expanded="true" />
-                <element signature="e#36644#36651#0" expanded="true" />
-                <element signature="e#37147#37154#0" expanded="true" />
-                <element signature="e#37729#37736#0" expanded="true" />
-                <element signature="e#38241#38248#0" expanded="true" />
-                <element signature="e#38691#38699#0" expanded="true" />
-                <element signature="e#38782#38789#0" expanded="true" />
-                <element signature="e#39320#39327#0" expanded="true" />
-                <element signature="e#39854#39861#0" expanded="true" />
-                <element signature="e#40359#40366#0" expanded="true" />
-                <element signature="e#40870#40877#0" expanded="true" />
-                <element signature="e#41405#41412#0" expanded="true" />
-                <element signature="e#41975#41982#0" expanded="true" />
-                <element signature="e#42398#42405#0" expanded="true" />
-                <element signature="e#42413#42420#0" expanded="true" />
-                <element signature="e#42531#42538#0" expanded="true" />
-                <element signature="e#43093#43100#0" expanded="true" />
-                <element signature="e#43568#43575#0" expanded="true" />
-                <element signature="e#43713#43720#0" expanded="true" />
-                <element signature="e#44221#44228#0" expanded="true" />
-                <element signature="e#44623#44628#0" expanded="true" />
-                <element signature="e#44739#44746#0" expanded="true" />
-                <element signature="e#45267#45274#0" expanded="true" />
-                <element signature="e#45741#45748#0" expanded="true" />
-                <element signature="e#46299#46306#0" expanded="true" />
-                <element signature="e#46817#46824#0" expanded="true" />
-                <element signature="e#47344#47351#0" expanded="true" />
-                <element signature="e#47886#47893#0" expanded="true" />
-                <element signature="e#48410#48417#0" expanded="true" />
-                <element signature="e#49288#49295#0" expanded="true" />
-                <element signature="e#49851#49858#0" expanded="true" />
-                <element signature="e#50409#50416#0" expanded="true" />
-                <element signature="e#50957#50964#0" expanded="true" />
-                <element signature="e#51485#51492#0" expanded="true" />
-                <element signature="e#52022#52029#0" expanded="true" />
-                <element signature="e#52552#52559#0" expanded="true" />
-                <element signature="e#53092#53099#0" expanded="true" />
-                <element signature="e#53622#53629#0" expanded="true" />
-                <element signature="e#54166#54173#0" expanded="true" />
-                <element signature="e#54777#54784#0" expanded="true" />
-                <element signature="e#55308#55315#0" expanded="true" />
-                <element signature="e#55443#55450#0" expanded="true" />
-                <element signature="e#56154#56161#0" expanded="true" />
-                <element signature="e#56982#56989#0" expanded="true" />
-                <element signature="e#57528#57535#0" expanded="true" />
-                <element signature="e#58072#58079#0" expanded="true" />
-                <element signature="e#58652#58659#0" expanded="true" />
-                <element signature="e#59265#59272#0" expanded="true" />
-                <element signature="e#59813#59820#0" expanded="true" />
-                <element signature="e#60286#60293#0" expanded="true" />
-                <element signature="e#67424#67429#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="75">
+              <caret line="5" selection-start-line="4" selection-end-line="5" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/rss-it-app/test/pages/mozilla-blog.html">
+        <entry file="file://$PROJECT_DIR$/packages/playground/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="480">
+              <caret line="32" column="28" selection-start-line="32" selection-start-column="28" selection-end-line="32" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/packages/proxy/docker/prod/Dockerfile">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="255">
-              <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
+              <caret line="17" column="35" selection-start-line="17" selection-start-column="35" selection-end-line="17" selection-end-column="35" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" column="11" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/styles.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
-            </state>
-          </provider>
+        <entry file="file://$PROJECT_DIR$/packages/proxy/docker/prod/entrypoint.sh">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>linkNode</find>
-      <find>extractHrefs</find>
-      <find>candidate group</find>
-      <find>function()</find>
-      <find>rules</find>
-      <find>var</find>
-      <find>findArt</find>
-      <find>hrefs</find>
-      <find>remaining</find>
-      <find>found link</find>
       <find>slice</find>
       <find>.reduce</find>
       <find>avgWordCount</find>
@@ -260,6 +144,16 @@
       <find>reduce(</find>
       <find>otherTextNode</find>
       <find>articleWords.flat(1).</find>
+      <find>Advanced settings</find>
+      <find>core</find>
+      <find>/core</find>
+      <find>build:core</find>
+      <find>build:playground</find>
+      <find>build:docker</find>
+      <find>build:proxy</find>
+      <find>rss-proxy-core-0.0.0.tgz</find>
+      <find>cd</find>
+      <find>playground</find>
     </findStrings>
     <replaceStrings>
       <replace>score</replace>
@@ -270,6 +164,9 @@
       <replace>export interface</replace>
       <replace>rule</replace>
     </replaceStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/packages/proxy</dir>
+    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -287,19 +184,30 @@
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/test/mozilla-blog.test.js" />
         <option value="$PROJECT_DIR$/app/parser.js" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.ts" />
         <option value="$PROJECT_DIR$/modules/rss-it-app/src/styles.css" />
         <option value="$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.css" />
         <option value="$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.html" />
         <option value="$PROJECT_DIR$/modules/rss-it-app/src/app/feed-parser.ts" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/packages/playground/src/app/app.component.html" />
+        <option value="$PROJECT_DIR$/packages/proxy/dist/@rss-proxy/Dockerfile" />
+        <option value="$PROJECT_DIR$/packages/proxy/src/services/feedService.ts" />
+        <option value="$PROJECT_DIR$/packages/core/package.json" />
+        <option value="$PROJECT_DIR$/packages/playground/package.json" />
+        <option value="$PROJECT_DIR$/packages/proxy/build-docker-image.sh" />
+        <option value="$PROJECT_DIR$/packages/proxy/src/app.ts" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/packages/proxy/publish-docker-image.sh" />
+        <option value="$PROJECT_DIR$/packages/proxy/package.json" />
+        <option value="$PROJECT_DIR$/packages/proxy/docker/prod/Dockerfile" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="4" />
     <option name="width" value="1912" />
-    <option name="height" value="1044" />
+    <option name="height" value="1040" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -307,7 +215,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -318,39 +225,52 @@
             <path>
               <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
               <item name="rss-it" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rss-it" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-              <item name="rss-it-app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rss-it" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-              <item name="rss-it-app" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rss-it" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-              <item name="rss-it-app" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rss-it" type="462c0819:PsiDirectoryNode" />
+              <item name="packages" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rss-it" type="462c0819:PsiDirectoryNode" />
+              <item name="packages" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rss-it" type="462c0819:PsiDirectoryNode" />
+              <item name="packages" type="462c0819:PsiDirectoryNode" />
+              <item name="proxy" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rss-it" type="462c0819:PsiDirectoryNode" />
+              <item name="packages" type="462c0819:PsiDirectoryNode" />
+              <item name="proxy" type="462c0819:PsiDirectoryNode" />
+              <item name="docker" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rss-it" type="462c0819:PsiDirectoryNode" />
+              <item name="packages" type="462c0819:PsiDirectoryNode" />
+              <item name="proxy" type="462c0819:PsiDirectoryNode" />
+              <item name="docker" type="462c0819:PsiDirectoryNode" />
+              <item name="prod" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="GO_FMT" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="android.sdk.path" value="$USER_HOME$/Android/Sdk" />
     <property name="aspect.path.notification.shown" value="true" />
@@ -358,19 +278,21 @@
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/test" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="ts.external.directory.path" value="$PROJECT_DIR$/modules/proxy-server/node_modules/typescript/lib" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/packages/playground/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/modules/rss-it-app" />
       <recent name="$PROJECT_DIR$/test" />
       <recent name="$PROJECT_DIR$/app" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/test" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -401,6 +323,7 @@
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="be223c1e-fb57-4edb-9549-acf979246252" name="Default Changelist" comment="" />
+      <changelist id="0fdeac33-4664-41b2-9080-89bed972c3c4" name="ignore" comment="" />
       <created>1566491045220</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -414,6 +337,11 @@
       <workItem from="1573741804306" duration="1847000" />
       <workItem from="1574949312333" duration="102000" />
       <workItem from="1576479771155" duration="5954000" />
+      <workItem from="1582148162681" duration="43000" />
+      <workItem from="1584715983588" duration="1211000" />
+      <workItem from="1585057139043" duration="1675000" />
+      <workItem from="1585147016015" duration="25000" />
+      <workItem from="1585150918288" duration="18286000" />
     </task>
     <task id="LOCAL-00001" summary="find articles">
       <created>1567323868854</created>
@@ -471,24 +399,59 @@
       <option name="project" value="LOCAL" />
       <updated>1571165578527</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="build">
+      <created>1585174740711</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1585174740711</updated>
+    </task>
+    <task id="LOCAL-00010" summary="build 2">
+      <created>1585218897444</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1585218897444</updated>
+    </task>
+    <task id="LOCAL-00011" summary="build 2">
+      <created>1585223079223</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1585223079223</updated>
+    </task>
+    <task id="LOCAL-00012" summary="build 2">
+      <created>1585223661143</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1585223661143</updated>
+    </task>
+    <task id="LOCAL-00013" summary="build 2">
+      <created>1585223707706</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1585223707706</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="52662000" />
+    <option name="totallyTimeSpent" value="77525000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1044" extended-state="6" />
+    <frame x="-4" y="0" width="1928" height="1048" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18317358" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22151224" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="Capture Tool" order="4" />
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.32899022" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32899022" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -496,10 +459,12 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
-      <window_info anchor="bottom" id="Terminal" order="9" weight="0.32899022" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.32790446" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="11" weight="0.32899022" />
       <window_info anchor="bottom" id="TypeScript" order="12" />
+      <window_info anchor="bottom" id="Elm Compiler" order="13" />
+      <window_info anchor="bottom" id="SonarLint" order="14" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -509,16 +474,17 @@
       <window_info anchor="right" id="Palette&#9;" order="6" />
       <window_info anchor="right" id="Database" order="7" />
       <window_info anchor="right" id="SciView" order="8" />
+      <window_info anchor="right" id="Elm" order="9" />
     </layout>
     <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25825346" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22151224" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="Capture Tool" order="4" />
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32899022" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -526,9 +492,12 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.32899022" />
+      <window_info anchor="bottom" id="Terminal" order="9" visible="true" weight="0.32790446" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="11" weight="0.32899022" />
+      <window_info anchor="bottom" id="TypeScript" order="12" />
+      <window_info anchor="bottom" id="Elm Compiler" order="13" />
+      <window_info anchor="bottom" id="SonarLint" order="14" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -537,6 +506,8 @@
       <window_info anchor="right" id="Capture Analysis" order="5" />
       <window_info anchor="right" id="Palette&#9;" order="6" />
       <window_info anchor="right" id="Database" order="7" />
+      <window_info anchor="right" id="SciView" order="8" />
+      <window_info anchor="right" id="Elm" order="9" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -553,7 +524,10 @@
     <MESSAGE value="first test works" />
     <MESSAGE value="tests" />
     <MESSAGE value="ng app works" />
-    <option name="LAST_COMMIT_MESSAGE" value="ng app works" />
+    <MESSAGE value="build" />
+    <MESSAGE value="ignore" />
+    <MESSAGE value="build 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="build 2" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/.editorconfig">
@@ -567,212 +541,173 @@
     <entry file="file://$PROJECT_DIR$/test/mozilla-blog.html" />
     <entry file="file://$PROJECT_DIR$/test/derstandard_at.html" />
     <entry file="file://$PROJECT_DIR$/test/derstandard_at.test.js" />
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json" />
     <entry file="file://$PROJECT_DIR$/app/parser.js" />
     <entry file="file://$PROJECT_DIR$/test/mozilla-blog.test.js" />
     <entry file="file://$PROJECT_DIR$/modules/proxy-server/package-lock.json" />
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/modules/proxy-server/src/app.ts" />
+    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/test/pages/gohugo_io.html" />
+    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/test/pages/mozilla-blog.html" />
+    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/package.json" />
+    <entry file="file://$PROJECT_DIR$/modules/proxy-server/node_modules/typescript/lib/lib.dom.d.ts" />
+    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/styles.css" />
+    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.css" />
+    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.ts" />
+    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.html" />
+    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/app/feed-parser.ts" />
+    <entry file="file://$PROJECT_DIR$/packages/core/bundle.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
+        <state relative-caret-position="150">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/proxy-server/src/app.ts">
+    <entry file="file://$PROJECT_DIR$/packages/proxy/src/endpoints/operatorEndpoint.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
+        <state relative-caret-position="195">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/proxy/src/services/readerService.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="27" column="8" selection-start-line="27" selection-start-column="8" selection-end-line="27" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/playground/src/app/app.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="705">
+          <caret line="47" column="36" selection-start-line="47" selection-start-column="36" selection-end-line="47" selection-end-column="36" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#ng-form#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/core/src/feed-parser.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6495">
+          <caret line="433" column="9" selection-start-line="433" selection-start-column="9" selection-end-line="433" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/playground/src/app/services/feed.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="4" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/core/src/log-collector.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/yahoo pipes.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/network progress.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/playground/angular.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/proxy/src/services/feedService.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="466">
+          <caret line="142" column="41" selection-start-line="142" selection-start-column="41" selection-end-line="142" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#163#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/playground/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="32" column="28" selection-start-line="32" selection-start-column="28" selection-end-line="32" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/proxy/dist/@rss-proxy/Dockerfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="34" lean-forward="true" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/proxy/docker/prod/entrypoint.sh">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/proxy/src/app.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="27" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/test/pages/gohugo_io.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-          <folding>
-            <element signature="n#style#0;n#input#0;n#fieldset#0;n#form#0;n#div#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#svg#0;n#a#0;n#span#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#path#0;n#svg#0;n#a#0;n#span#0;n#div#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="e#8305#8312#0" expanded="true" />
-            <element signature="e#8837#8844#0" expanded="true" />
-            <element signature="e#9339#9346#0" expanded="true" />
-            <element signature="e#9440#9447#0" expanded="true" />
-            <element signature="e#9970#9977#0" expanded="true" />
-            <element signature="e#10500#10507#0" expanded="true" />
-            <element signature="e#11024#11031#0" expanded="true" />
-            <element signature="e#11681#11688#0" expanded="true" />
-            <element signature="e#12197#12204#0" expanded="true" />
-            <element signature="e#12719#12726#0" expanded="true" />
-            <element signature="e#13213#13220#0" expanded="true" />
-            <element signature="e#13768#13775#0" expanded="true" />
-            <element signature="e#14294#14301#0" expanded="true" />
-            <element signature="e#14789#14796#0" expanded="true" />
-            <element signature="e#15361#15368#0" expanded="true" />
-            <element signature="e#15893#15900#0" expanded="true" />
-            <element signature="e#16356#16364#0" expanded="true" />
-            <element signature="e#16447#16454#0" expanded="true" />
-            <element signature="e#16875#16883#0" expanded="true" />
-            <element signature="e#16966#16973#0" expanded="true" />
-            <element signature="e#17499#17506#0" expanded="true" />
-            <element signature="e#18087#18094#0" expanded="true" />
-            <element signature="e#18597#18604#0" expanded="true" />
-            <element signature="e#19131#19138#0" expanded="true" />
-            <element signature="e#19674#19681#0" expanded="true" />
-            <element signature="e#20208#20215#0" expanded="true" />
-            <element signature="e#20688#20695#0" expanded="true" />
-            <element signature="e#21261#21268#0" expanded="true" />
-            <element signature="e#21818#21825#0" expanded="true" />
-            <element signature="e#22235#22243#0" expanded="true" />
-            <element signature="e#22349#22356#0" expanded="true" />
-            <element signature="e#22934#22941#0" expanded="true" />
-            <element signature="e#23480#23487#0" expanded="true" />
-            <element signature="e#24030#24037#0" expanded="true" />
-            <element signature="e#24622#24629#0" expanded="true" />
-            <element signature="e#25135#25142#0" expanded="true" />
-            <element signature="e#25629#25636#0" expanded="true" />
-            <element signature="e#26202#26209#0" expanded="true" />
-            <element signature="e#26783#26790#0" expanded="true" />
-            <element signature="e#27296#27303#0" expanded="true" />
-            <element signature="e#27804#27811#0" expanded="true" />
-            <element signature="e#28314#28321#0" expanded="true" />
-            <element signature="e#28928#28935#0" expanded="true" />
-            <element signature="e#29525#29532#0" expanded="true" />
-            <element signature="e#29961#29968#0" expanded="true" />
-            <element signature="e#29969#29976#0" expanded="true" />
-            <element signature="e#30083#30090#0" expanded="true" />
-            <element signature="e#30618#30625#0" expanded="true" />
-            <element signature="e#31191#31198#0" expanded="true" />
-            <element signature="e#31704#31711#0" expanded="true" />
-            <element signature="e#32246#32253#0" expanded="true" />
-            <element signature="e#32756#32763#0" expanded="true" />
-            <element signature="e#33296#33303#0" expanded="true" />
-            <element signature="e#33840#33847#0" expanded="true" />
-            <element signature="e#34427#34434#0" expanded="true" />
-            <element signature="e#35065#35072#0" expanded="true" />
-            <element signature="e#35581#35588#0" expanded="true" />
-            <element signature="e#36114#36121#0" expanded="true" />
-            <element signature="e#36644#36651#0" expanded="true" />
-            <element signature="e#37147#37154#0" expanded="true" />
-            <element signature="e#37729#37736#0" expanded="true" />
-            <element signature="e#38241#38248#0" expanded="true" />
-            <element signature="e#38691#38699#0" expanded="true" />
-            <element signature="e#38782#38789#0" expanded="true" />
-            <element signature="e#39320#39327#0" expanded="true" />
-            <element signature="e#39854#39861#0" expanded="true" />
-            <element signature="e#40359#40366#0" expanded="true" />
-            <element signature="e#40870#40877#0" expanded="true" />
-            <element signature="e#41405#41412#0" expanded="true" />
-            <element signature="e#41975#41982#0" expanded="true" />
-            <element signature="e#42398#42405#0" expanded="true" />
-            <element signature="e#42413#42420#0" expanded="true" />
-            <element signature="e#42531#42538#0" expanded="true" />
-            <element signature="e#43093#43100#0" expanded="true" />
-            <element signature="e#43568#43575#0" expanded="true" />
-            <element signature="e#43713#43720#0" expanded="true" />
-            <element signature="e#44221#44228#0" expanded="true" />
-            <element signature="e#44623#44628#0" expanded="true" />
-            <element signature="e#44739#44746#0" expanded="true" />
-            <element signature="e#45267#45274#0" expanded="true" />
-            <element signature="e#45741#45748#0" expanded="true" />
-            <element signature="e#46299#46306#0" expanded="true" />
-            <element signature="e#46817#46824#0" expanded="true" />
-            <element signature="e#47344#47351#0" expanded="true" />
-            <element signature="e#47886#47893#0" expanded="true" />
-            <element signature="e#48410#48417#0" expanded="true" />
-            <element signature="e#49288#49295#0" expanded="true" />
-            <element signature="e#49851#49858#0" expanded="true" />
-            <element signature="e#50409#50416#0" expanded="true" />
-            <element signature="e#50957#50964#0" expanded="true" />
-            <element signature="e#51485#51492#0" expanded="true" />
-            <element signature="e#52022#52029#0" expanded="true" />
-            <element signature="e#52552#52559#0" expanded="true" />
-            <element signature="e#53092#53099#0" expanded="true" />
-            <element signature="e#53622#53629#0" expanded="true" />
-            <element signature="e#54166#54173#0" expanded="true" />
-            <element signature="e#54777#54784#0" expanded="true" />
-            <element signature="e#55308#55315#0" expanded="true" />
-            <element signature="e#55443#55450#0" expanded="true" />
-            <element signature="e#56154#56161#0" expanded="true" />
-            <element signature="e#56982#56989#0" expanded="true" />
-            <element signature="e#57528#57535#0" expanded="true" />
-            <element signature="e#58072#58079#0" expanded="true" />
-            <element signature="e#58652#58659#0" expanded="true" />
-            <element signature="e#59265#59272#0" expanded="true" />
-            <element signature="e#59813#59820#0" expanded="true" />
-            <element signature="e#60286#60293#0" expanded="true" />
-            <element signature="e#67424#67429#0" expanded="true" />
-          </folding>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="360">
+            <caret line="24" column="32" selection-start-line="24" selection-start-column="32" selection-end-line="24" selection-end-column="32" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/test/pages/mozilla-blog.html">
+    <entry file="file://$PROJECT_DIR$/packages/proxy/build-docker-image.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="31" column="39" selection-start-line="31" selection-start-column="39" selection-end-line="31" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/core/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" selection-start-line="4" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/proxy/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="719">
+          <caret line="50" column="3" selection-start-line="50" selection-start-column="3" selection-end-line="50" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/proxy/publish-docker-image.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="25" selection-start-line="2" selection-start-column="25" selection-end-line="2" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/proxy/docker/prod/Dockerfile">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
-          <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="11" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/proxy-server/node_modules/typescript/lib/lib.dom.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="5862" column="4" selection-start-line="5862" selection-start-column="4" selection-end-line="5862" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/styles.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="11" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="2" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="2" />
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/app/app.component.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="33" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
-          <folding>
-            <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/app/feed-parser.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="222" column="97" selection-start-line="222" selection-start-column="97" selection-end-line="222" selection-end-column="97" />
+          <caret line="17" column="35" selection-start-line="17" selection-start-column="35" selection-end-line="17" selection-end-column="35" />
         </state>
       </provider>
     </entry>
