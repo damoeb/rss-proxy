@@ -10,7 +10,7 @@ import {
 } from '@rss-proxy/core';
 import {JSDOM} from 'jsdom';
 import {Feed} from 'feed';
-import {LogCollector} from '@rss-proxy/core/dist/LogCollector';
+import {LogCollector} from '@rss-proxy/core/dist/log-collector';
 import {siteService} from './siteService';
 import {Request} from 'express';
 

@@ -24,7 +24,7 @@ export interface ErrorsResponse {
 // -- endpoints
 
 // todo serve static playground
-app.use('/playground', express.static('playground'));
+app.use('/', express.static('static'));
 
 readerEndpoint.register(app);
 feedEndpoint.register(app);

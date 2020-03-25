@@ -16,12 +16,9 @@ RUN apt-get update \
   && rm -rf /data/db \
   && mkdir -p /data/db
 
-COPY [ "entrypoint.sh", ".build-cache/package.json", ".build-cache/rss-proxy-core-0.0.0.tgz", ".build-cache/proxy/", "./" ]
-COPY [ ".build-cache/playground", "./playground" ]
+COPY [ "entrypoint.sh", "package.json", "package-lock.json", "core/rss-proxy-core-0.0.0.tgz", "proxy", "./" ]
 
-RUN npm install rss-proxy-playground-0.0.0.tgz rss-proxy-core-0.0.0.tgz --ignore-scripts && yarn install --production --ignore-scripts
-
-COPY .build-cache/* ./
+RUN npm install rss-proxy-core-0.0.0.tgz --ignore-scripts && yarn install --production --ignore-scripts
 
 RUN chown -R 0444 .
 

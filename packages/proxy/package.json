@@ -23,19 +23,12 @@
     "preupdate": "npm install ../core",
     "postinstall": "npm link ../core",
     "postupdate": "npm link ../core",
-    "docker:stop": "docker stop $(docker ps | grep rss-proxy-dev | awk '{print $1}') &>/dev/null",
-    "build:dev": "cd docker/dev && docker build -t rss-proxy-dev -f Dockerfile .",
-    "build:playground": "cd ../playground && npm run build -- --prod && npm pack",
-    "build:core": "cd ../core && npm run build && npm pack",
-    "copy:playground": "rm -rf ./dist/@rss-proxy/playground && mkdir -p ./dist/@rss-proxy/playground && cp -r ../playground/rss-proxy-playground-0.0.0.tgz ./dist/@rss-proxy/",
-    "copy:core": "rm -rf ./dist/@rss-proxy/core && mkdir -p ./dist/@rss-proxy/core && cp -r ../core/rss-proxy-core-0.0.0.tgz ./dist/@rss-proxy/",
-    "prebuild:prod": "npm run build:playground && npm run copy:playground && npm run build:core && npm run copy:core",
-    "build:proxy": "rm -rf dist/@rss-proxy/proxy && tsc",
-    "build:prod": "npm run build:proxy && rm -rf docker/prod/.build-cache && mkdir -p docker/prod/.build-cache && cp package.json docker/prod/.build-cache && cp -rf dist/@rss-proxy/proxy dist/@rss-proxy/rss-proxy-core-0.0.0.tgz dist/@rss-proxy/rss-proxy-playground-0.0.0.tgz docker/prod/.build-cache && cd docker/prod && docker build -t rss-proxy-prod -f Dockerfile .",
-    "run:prod": "npm run build:prod && docker run -p 80:3000 -t rssproxy-prod",
     "test": "sh ../../scripts/lint-dockerfiles.sh",
+    "docker:build": "sh build-docker-image.sh",
     "start": "npx nodemon",
-    "build": "npm run build:prod"
+    "build:proxy": "tsc",
+    "build": "npm run build:proxy",
+    "clean": "rm -rf dist"
   },
   "engines": {
     "node": ">=12.0.0"
