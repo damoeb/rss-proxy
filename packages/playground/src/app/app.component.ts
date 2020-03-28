@@ -82,12 +82,24 @@ export class AppComponent {
         this.isLoading = false;
         if (response.message) {
           this.isGenerated = false;
-          this.error = response.message;
-          this.showConsole = true;
-          this.showMarkup = true;
-          this.html = (response as any).data.html;
-          this.feeds = (response as any).data.feeds;
-          this.logs = (response as any).data.logs;
+
+          try {
+            const {html, feeds, logs} = (response as any).data;
+            if (html) {
+              this.showMarkup = true;
+              this.feeds = feeds;
+              this.html = html;
+            }
+            if (logs) {
+              this.showConsole = true;
+              this.logs = [...logs, response.message];
+            } else {
+              this.error = response.message;
+            }
+          } catch(e) {
+            this.error = response.message;
+          }
+
           console.error('Proxy replies an error.', response.message);
         } else {
           this.isGenerated = true;

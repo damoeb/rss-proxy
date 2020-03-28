@@ -82,7 +82,7 @@ export const siteService = new class SiteService {
         if (!error && serverResponse && serverResponse.statusCode === 200) {
           resolve({body: html, contentType: serverResponse.headers['content-type']});
         } else {
-          reject(`Unable to download ${url}, cause ${error}`);
+          reject({ message: `Unable to download ${url}, cause ${error}`});
         }
       });
     });

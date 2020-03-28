@@ -18,7 +18,7 @@ export const feedEndpoint = new class FeedEndpoint {
 
           })
           .catch((err: FeedParserError) => {
-            logger.error(`Failed to proxy ${url}, cause ${err}`);
+            logger.error(`Failed to proxy ${url}, cause ${err.message}`);
             response.json(err);
           });
 
@@ -39,7 +39,7 @@ export const feedEndpoint = new class FeedEndpoint {
 
           })
           .catch((err: FeedParserError) => {
-            logger.error(`Failed to proxy ${url}, cause ${err}`);
+            logger.error(`Failed to proxy ${url}, cause ${err.message}`);
             response.json(err);
           });
 

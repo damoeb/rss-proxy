@@ -371,7 +371,7 @@ export class FeedParser {
 
     const groups: Array<LinkGroup> = Object.values(linksGroupedByPath);
 
-    this.logger.log(`${groups.length} link groups found`);
+    this.logger.log(`Found ${groups.length} link groups`);
 
     // todo merge rules that just have a different context
 
@@ -380,9 +380,9 @@ export class FeedParser {
         const hasEnoughMembers = linkGroup.links.length > 3;
 
         if (hasEnoughMembers) {
-          this.logger.log(`size #${index} keep ${linkGroup.links[0].path} - ${linkGroup.links.length} member`);
+          // this.logger.log(`link-group #${index} keep ${linkGroup.links[0].path} - ${linkGroup.links.length} member`);
         } else {
-          this.logger.log(`size #${index} drop ${linkGroup.links[0].path} - ${linkGroup.links.length} member`);
+          this.logger.log(`Dropping link-group #${index} drop ${linkGroup.links[0].path} - ${linkGroup.links.length} member`);
         }
 
         return hasEnoughMembers;
@@ -397,7 +397,7 @@ export class FeedParser {
       .map(articlesInGroup => this.findDescriptions(articlesInGroup));
 
 
-    this.logger.log(`${relevantGroups.length} article rules`);
+    this.logger.log(`${relevantGroups.length} article rules left`);
     relevantGroups.forEach(group => this.logger.log(group.id));
 
     // relevantGroups.map(group => {

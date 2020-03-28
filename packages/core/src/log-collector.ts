@@ -11,13 +11,13 @@ export class LogCollector implements Logger {
     if (this.parentLogger) {
       this.parentLogger.error(...params);
     }
-    this._logs.push(['Error', ...params].join(' '));
+    this._logs.push([...params].join(' '));
   }
   log(...params: any[]) {
     if (this.parentLogger) {
       this.parentLogger.log(...params);
     }
-    this._logs.push(['Info', ...params].join(' '));
+    this._logs.push([...params].join(' '));
   }
 
   logs() {
