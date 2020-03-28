@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {FeedService} from './services/feed.service';
 import {Article, ArticleRule, OutputType, ContentResolutionType, SourceType, FeedParserOptions, FeedUrl} from '../../../core/src';
+import {build} from '../environments/build'
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,8 @@ export class AppComponent {
   pageResolutions = [ContentResolutionType.STATIC, ContentResolutionType.DEEP];
   showOptions = false;
   showDebugger = false;
+  showMarkup = false;
+  showConsole = false;
   showFeed = false;
   showArticles = false;
   hasResults = false;
@@ -33,6 +36,7 @@ export class AppComponent {
   feeds: FeedUrl[];
   isLoading = false;
   isGenerated = false;
+  error: string;
 
   constructor(private httpClient: HttpClient,
               private feedService: FeedService) {
@@ -76,11 +80,17 @@ export class AppComponent {
       .subscribe(response => {
         this.hasResults = true;
         this.isLoading = false;
-        this.isGenerated = true;
-        if (response.error) {
-          this.html = response.error;
-          console.error('Proxy replies an error.', response.error);
+        if (response.message) {
+          this.isGenerated = false;
+          this.error = response.message;
+          this.showConsole = true;
+          this.showMarkup = true;
+          this.html = (response as any).data.html;
+          this.feeds = (response as any).data.feeds;
+          this.logs = (response as any).data.logs;
+          console.error('Proxy replies an error.', response.message);
         } else {
+          this.isGenerated = true;
           console.log('Proxy replies an generated feed');
           this.rules = response.rules;
           this.currentRule = response.rules[0];
@@ -88,6 +98,8 @@ export class AppComponent {
 
           this.showArticles = true;
           this.showFeed = !this.showDebugger;
+          this.showMarkup = this.showDebugger;
+          this.showConsole = this.showDebugger;
           this.html = response.html;
           this.feeds = response.feeds;
           this.logs = response.logs;
@@ -106,6 +118,10 @@ export class AppComponent {
     return this.feedService.getDirectFeedUrl(this.url, this.options);
   }
 
+  getVersions() {
+    return build;
+  }
+
   reset() {
     this.options = {
       output: OutputType.ATOM,
@@ -114,5 +130,14 @@ export class AppComponent {
       content: ContentResolutionType.STATIC,
     };
     this.optionsFromParser = {};
+    this.html = '';
+    this.feeds = [];
+    this.logs = [];
+    this.feedData = '';
+  }
+
+  getBuildDate() {
+    const date = new Date(parseInt(this.getVersions().date));
+    return `${date.getUTCDate()}-${date.getUTCMonth()}-${date.getUTCFullYear()}`;
   }
 }

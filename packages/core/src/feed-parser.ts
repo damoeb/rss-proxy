@@ -27,7 +27,7 @@ export enum ContentResolutionType {
 export interface FeedParserResult {
   usesExistingFeed: boolean;
   feeds?: FeedUrl[];
-  error?: any;
+  message?: string;
   logs: string[];
   options: FeedParserOptions;
   rules: ArticleRule[];
@@ -371,7 +371,7 @@ export class FeedParser {
 
     const groups: Array<LinkGroup> = Object.values(linksGroupedByPath);
 
-    this.logger.log(`${groups.length} link groups`);
+    this.logger.log(`${groups.length} link groups found`);
 
     // todo merge rules that just have a different context
 

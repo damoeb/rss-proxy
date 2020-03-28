@@ -22,7 +22,7 @@ export class FeedService {
     const domParser = new DOMParser();
     const htmlDoc = domParser.parseFromString(html, 'text/html');
 
-    const logCollector = new LogCollector(true);
+    const logCollector = new LogCollector(console);
     const url = 'http://example.com';
     const feedParser = new FeedParser(htmlDoc, url, options, console);
 
@@ -48,15 +48,14 @@ export class FeedService {
   }
 
   getDirectFeedUrl(url: string, options: FeedParserOptions): string {
-    return `${environment.apiBase}api/feed?url=${encodeURIComponent(url)}`
+    return `${this.getApiBase()}api/feed?url=${encodeURIComponent(url)}`
       + this.feedUrlFragment('rule', options)
       + this.feedUrlFragment('output', options)
       + this.feedUrlFragment('content', options);
   }
 
   fromUrl(url: string, options: FeedParserOptions): Observable<FeedParserResult> {
-    console.log(options);
-    const parserUrl = `${environment.apiBase}api/feed/live?url=${encodeURIComponent(url)}`
+    const parserUrl = `${this.getApiBase()}api/feed/live?url=${encodeURIComponent(url)}`
       + this.feedUrlFragment('rule', options)
       + this.feedUrlFragment('output', options)
       + this.feedUrlFragment('content', options);
@@ -74,5 +73,9 @@ export class FeedService {
       return `&${id}=${encodeURIComponent(prop(options, id))}`;
     }
     return '';
+  }
+
+  private getApiBase() {
+    return environment.apiBase || location.href;
   }
 }

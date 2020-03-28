@@ -4,10 +4,16 @@
   background-color: #feffee;
   flex-direction: column;
 
+  &__footer {
+    text-align: center;
+    padding-top: 5rem;
+    padding-bottom: 1rem;
+  }
+
   &__header {
     &--large {
       h1 {
-        margin-top: 100px;
+        margin-top: 10rem;
         text-align: center;
       }
       .form {

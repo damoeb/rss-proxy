@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-PWD=`pwd`
-echo $PWD
-
 clean () {
   cd ../core && npm run clean && cd -
   cd ../playeground && npm run clean && cd -
@@ -37,7 +34,7 @@ docker_image () {
   echo "\n docker"
   pwd
   cp docker/prod/* package.json package-lock.json dist/@rss-proxy/
-  cd dist/@rss-proxy && docker build -t rss-proxy-prod -f Dockerfile .
+  cd dist/@rss-proxy && docker build -t damoeb/rss-proxy -f Dockerfile .
 }
 
 

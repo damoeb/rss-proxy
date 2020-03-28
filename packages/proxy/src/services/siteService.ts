@@ -4,6 +4,8 @@ import {JSDOM} from 'jsdom';
 import {uniq} from 'lodash';
 import * as Readability from 'mozilla-readability';
 import * as createDOMPurify from 'dompurify';
+import * as winston from 'winston';
+import logger from '../logger';
 
 export interface SiteMeta {
   language: string
@@ -80,7 +82,7 @@ export const siteService = new class SiteService {
         if (!error && serverResponse && serverResponse.statusCode === 200) {
           resolve({body: html, contentType: serverResponse.headers['content-type']});
         } else {
-          reject(error);
+          reject(`Unable to download ${url}, cause ${error}`);
         }
       });
     });

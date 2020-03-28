@@ -62,14 +62,19 @@
     <div class="spinner"></div>
   </div>
 
+  <div *ngIf="error">
+    {{error}}
+  </div>
+
   <div class="playground__panels"
-       *ngIf="isGenerated">
+       *ngIf="!isLoading">
 
     <!-- Markup ----------------------------------------------------------------------------------------------- -->
 
     <app-panel id="editor"
                name="Markup"
-               *ngIf="showDebugger">
+               (close)="showMarkup = false"
+               *ngIf="showMarkup">
       <button (click)="parseHtml()">
         Generate from HTML
       </button>
@@ -84,7 +89,8 @@
 
     <app-panel id="console"
                name="Console"
-               *ngIf="showDebugger">
+               (close)="showConsole = false"
+               *ngIf="showConsole">
       <div style="overflow: scroll">
         <div *ngFor="let log of logs">
           {{ log }}
@@ -97,6 +103,7 @@
     <app-panel id="feed"
                style="overflow: auto"
                name="Feed"
+               (close)="showFeed = false"
                *ngIf="showFeed">
       <select [(ngModel)]="options.output">
         <option [ngValue]="output"
@@ -105,12 +112,12 @@
         </option>
       </select> - {{optionsFromParser.output}}
 
-      <select [(ngModel)]="options.content">
-        <option [ngValue]="pageResolution"
-                *ngFor="let pageResolution of pageResolutions">
-          {{ pageResolution }}
-        </option>
-      </select> - {{ optionsFromParser.content }}
+<!--      <select [(ngModel)]="options.content">-->
+<!--        <option [ngValue]="pageResolution"-->
+<!--                *ngFor="let pageResolution of pageResolutions">-->
+<!--          {{ pageResolution }}-->
+<!--        </option>-->
+<!--      </select> - {{ optionsFromParser.content }}-->
 
       <div *ngIf="feeds?.length > 0">
         <p>Feeds Found in DOM:</p>
@@ -127,6 +134,7 @@
     <app-panel id="articles"
                style="overflow: auto"
                name="Choose Articles"
+               (close)="showArticles = false"
                *ngIf="showArticles">
       <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule">
         <option *ngFor="let rule of rules"
@@ -144,5 +152,9 @@
       </div>
     </app-panel>
 
+  </div>
+
+  <div class="playground__footer">
+    <a href="https://gitlab.com/damoeb/rss-it">rss-proxy</a> v. {{ getVersions().version }}@{{ getVersions().revision }} build on {{ getBuildDate() }}
   </div>
 </div>

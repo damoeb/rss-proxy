@@ -1,5 +1,5 @@
 import {
-  Article,
+  Article, ArticleRule,
   ContentResolutionType,
   FeedParser,
   FeedParserOptions,
@@ -8,11 +8,11 @@ import {
   OutputType,
   SourceType
 } from '@rss-proxy/core';
-import {JSDOM} from 'jsdom';
 import {Feed} from 'feed';
 import {LogCollector} from '@rss-proxy/core/dist/log-collector';
 import {siteService} from './siteService';
 import {Request} from 'express';
+import logger from '../logger';
 
 
 export interface GetResponse {
@@ -26,6 +26,12 @@ const defaultOptions: FeedParserOptions = {
   content: ContentResolutionType.STATIC
 };
 
+export interface FeedParserError {
+  message: string
+  code?: number
+  data?: Partial<FeedParserResult>
+}
+
 
 export const feedService =  new class FeedService {
   async mapToFeed(url: string, options: FeedParserOptions): Promise<FeedParserResult> {
@@ -33,15 +39,18 @@ export const feedService =  new class FeedService {
     const response = await siteService.download(url);
 
     const contentType = response.contentType.split(';')[0].toLowerCase();
+    logger.info(`Fetched ${url} with contentType ${response.contentType} -> main type ${contentType}`);
+
+    const doc = siteService.toDom(response.body);
 
     switch (contentType) {
       case 'text/html':
-        const feedUrls = this.findFeedUrls(response.body);
+        const feedUrls = this.findFeedUrls(doc, url);
 
-        return this.generateFeedFromUrl(url, response.body, options, feedUrls);
+        return this.generateFeedFromUrl(url, response.body, doc, options, feedUrls);
       default:
         // todo xml2json
-        return Promise.reject(`Content of type ${response.contentType} is not supported`)
+        return Promise.reject({message: `Content of type ${response.contentType} is not supported`} as FeedParserError)
     }
   }
 
@@ -58,21 +67,20 @@ export const feedService =  new class FeedService {
       }
       const options: FeedParserOptions = {...defaultOptions, ...actualOptions};
 
-      console.log(options);
+      logger.info(`Parsing ${url} with options ${JSON.stringify(options)}`);
 
       if (!url) {
-        return Promise.reject('Param url us missing');
+        return Promise.reject({message: 'Param url is missing'} as FeedParserError);
       }
 
       return feedService.mapToFeed(url, options);
     }
 
 
-  private async generateFeedFromUrl(url: string, html: string, options: FeedParserOptions, feeds: FeedUrl[]): Promise<FeedParserResult> {
+  private async generateFeedFromUrl(url: string, html: string, doc: Document, options: FeedParserOptions, feeds: FeedUrl[]): Promise<FeedParserResult> {
 
     const logCollector = new LogCollector();
 
-    const doc = siteService.toDom(html);
     const feedParser = new FeedParser(doc, url, options, logCollector);
 
     const meta = siteService.getMeta(doc);
@@ -98,7 +106,7 @@ export const feedService =  new class FeedService {
 
     let articles: Article[] = [];
     if (rules.length > 0) {
-      articles = feedParser.getArticlesByRule(rules[0]);
+      articles = feedParser.getArticlesByRule(this.getArticleRule(rules, options.rule));
       articles.forEach((article: Article) => {
         article.link = this.applyReaderLink(article.link);
         feed.addItem({
@@ -110,19 +118,31 @@ export const feedService =  new class FeedService {
           content: article.content
         });
       });
-    }
 
-    return Promise.resolve({
-      usesExistingFeed: false,
-      logs: logCollector.logs(),
-      options,
-      rules: rules,
-      feeds,
-      html,
-      articles: articles,
-      feedOutputType: options.output,
-      feed: this.renderFeed(options.output)(feed)
-    });
+      return Promise.resolve({
+        usesExistingFeed: false,
+        logs: logCollector.logs(),
+        options,
+        rules: rules,
+        feeds,
+        html,
+        articles: articles,
+        feedOutputType: options.output,
+        feed: this.renderFeed(options.output)(feed)
+      });
+
+    } else {
+      return Promise.reject({
+        message: 'No article-rules found',
+        data: {
+          logs: logCollector.logs(),
+          feeds,
+          html,
+          feedOutputType: options.output
+        }
+      } as FeedParserError);
+
+    }
   }
 
   private applyReaderLink(link: string) {
@@ -130,13 +150,11 @@ export const feedService =  new class FeedService {
     return link;
   }
 
-  private findFeedUrls(html: string): FeedUrl[] {
+  private findFeedUrls(doc: Document, url: string): FeedUrl[] {
 
     const types = ["application/atom+xml", "application/rss+xml", "application/json"];
 
-    const doc = new JSDOM(html).window.document;
-
-    return types.map(type => Array.from(doc.querySelectorAll(`link[href][type="${type}"]`)))
+    const feedUrls = types.map(type => Array.from(doc.querySelectorAll(`link[href][type="${type}"]`)))
       .flat(1)
       .map(linkElement => {
         return {
@@ -144,6 +162,10 @@ export const feedService =  new class FeedService {
           url: linkElement.getAttribute('href'),
         }
       });
+
+    logger.debug(`Found ${feedUrls.length} feeds in site ${url}`);
+
+    return feedUrls;
   }
 
   private renderFeed(output: OutputType) {
@@ -160,4 +182,18 @@ export const feedService =  new class FeedService {
     };
   }
 
+  private getArticleRule(rules: ArticleRule[], ruleId: string): ArticleRule {
+    const matchedRule = rules.find(rule => rule.id == ruleId);
+    if (matchedRule) {
+      console.log(`Applying article-rule ${ruleId}`);
+      return matchedRule;
+    } else {
+      if (ruleId) {
+        console.log(`Falling back to first article-rule, could not find article-rule ${ruleId} in ${rules.map(rule => rule.id)}`);
+      } else {
+        console.log(`Falling back to first article-rule`);
+      }
+      return rules[0];
+    }
+  }
 };

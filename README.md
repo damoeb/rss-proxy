@@ -22,7 +22,7 @@ Before you begin, ensure you have met the following requirements:
 
 ## Running RSS-Proxy using docker
 ```
- docker run -p 3000:3000 -it rss-proxy-prod
+ docker run -p 3000:3000 -it damoeb/rss-proxy
 ```
 
 

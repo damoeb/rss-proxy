@@ -1,7 +1,7 @@
 import {Express, Request, Response} from 'express';
 import * as cors from 'cors';
 import logger from '../logger';
-import {feedService} from '../services/feedService';
+import {FeedParserError, feedService} from '../services/feedService';
 import {FeedParserResult, OutputType} from '@rss-proxy/core';
 
 export const feedEndpoint = new class FeedEndpoint {
@@ -17,20 +17,20 @@ export const feedEndpoint = new class FeedEndpoint {
             response.json(feedParserResult);
 
           })
-          .catch((err: Error) => {
+          .catch((err: FeedParserError) => {
             logger.error(`Failed to proxy ${url}, cause ${err}`);
-            response.json({error: err.toString()});
+            response.json(err);
           });
 
       } catch (e) {
-        response.json({error: e.message});
+        response.json({message: e.message} as FeedParserError);
       }
     });
 
     app.get('/api/feed', cors(), (request: Request, response: Response) => {
       try {
         const url = request.query.url;
-        logger.info(`live feed-mapping of ${url}`);
+        logger.info(`feed-mapping of ${url}`);
 
         feedService.parseFeed(url, request)
           .then((feedParserResult: FeedParserResult) => {
@@ -38,13 +38,13 @@ export const feedEndpoint = new class FeedEndpoint {
             response.send(feedParserResult.feed);
 
           })
-          .catch((err: Error) => {
+          .catch((err: FeedParserError) => {
             logger.error(`Failed to proxy ${url}, cause ${err}`);
-            response.json({error: err.toString()});
+            response.json(err);
           });
 
       } catch (e) {
-        response.json({error: e.message});
+        response.json({message: e.message} as FeedParserError);
       }
     });
 

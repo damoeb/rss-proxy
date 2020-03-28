@@ -3,12 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "prestart": "npm run gen-build-info",
     "start": "ng serve",
+    "gen-build-info": "ts-node -O '{\"module\": \"commonjs\"}' build-info.ts",
+    "prebuild": "npm run gen-build-info",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prebuild": "npm run clean",
     "clean": "rm -rf dist"
   },
   "private": true,
