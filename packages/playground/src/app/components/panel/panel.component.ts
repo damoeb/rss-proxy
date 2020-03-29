@@ -11,7 +11,7 @@ export class PanelComponent implements OnInit {
   name: string;
 
   @Output()
-  close = new EventEmitter();
+  hide = new EventEmitter();
 
   constructor() { }
 

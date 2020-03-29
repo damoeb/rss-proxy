@@ -1,7 +1,7 @@
 Proxy
 -----
 
-*Proxy* is a module that serves the generated feeds of websites, also used by the playground module.
+*Proxy* is a module that serves the generated feeds of websites.
 
 
 # Development

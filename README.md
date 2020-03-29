@@ -8,19 +8,14 @@
 ![Twitter Follow](https://img.shields.io/twitter/follow/scottydocs?style=social)
 
 RSS-Proxy is a tool that allows you to do create an RSS/ATOM or JSON feed of almost any website, 
-purely by analyzing just the DOM structure.
+purely by analyzing just the static HTML structure.
 
-Additional line of information text about what the project does. Your introduction should be around 2 or 3 sentences. Don't go overboard, people won't read it.
 
-## Prerequisites
+## Using docker
 
 Before you begin, ensure you have met the following requirements:
 * [docker](https://docs.docker.com/install/) 19+
 
-* You have a `<Windows/Linux/Mac>` machine. State which OS is supported/which is not.
-* You have read `<guide/link/documentation_related_to_project>`.
-
-## Running RSS-Proxy using docker
 ```
  docker run -p 3000:3000 -it damoeb/rss-proxy
 ```
@@ -30,9 +25,8 @@ Before you begin, ensure you have met the following requirements:
 
 To install Rss-proxy, follow these steps:
 
-Linux and macOS:
 ```
-docker run 
+npm run bootstrap
 ```
 
 

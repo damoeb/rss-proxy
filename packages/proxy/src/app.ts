@@ -7,6 +7,16 @@ import {config} from './config';
 import {readerEndpoint} from './endpoints/readerEndpoint';
 import {operatorEndpoint} from './endpoints/operatorEndpoint';
 
+// see http://patorjk.com/software/taag/#p=display&f=Chunky&t=rss%20proxy
+if (!config.debug) {
+  console.log(`                                                    
+.----.-----.-----.    .-----.----.-----.--.--.--.--.
+|   _|__ --|__ --|    |  _  |   _|  _  |_   _|  |  |
+|__| |_____|_____|    |   __|__| |_____|__.__|___  |
+                      |__|                   |_____|\n\n`);
+}
+logger.info('Starting rss-proxy 0.0.0'); // todo fix version
+
 // -- express
 const app = express();
 app.use(bodyParser.urlencoded({extended: false}));

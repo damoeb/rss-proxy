@@ -120,10 +120,14 @@ export interface Logger {
 }
 
 export class FeedParser {
+
+  private readonly url: URL;
+
   constructor(private document: HTMLDocument,
-              private url: string,
+              url: string,
               private options: FeedParserOptions,
               private logger: Logger) {
+    this.url = new URL(url);
   }
 
 
@@ -446,7 +450,7 @@ export class FeedParser {
 
         const article: Article = {
           title: titles.join(' / '),
-          link: `${this.url}/${link}`,
+          link: this.toAbsoluteUrl(link),
           content: element.outerHTML,
           summary: rule.commonTextNodePath.map(textNodePath => {
             return Array.from(element.querySelectorAll(textNodePath))
@@ -506,5 +510,15 @@ export class FeedParser {
 
   private roundScore(score: number) {
     return Math.round(score * 100) / 100;
+  }
+
+  private toAbsoluteUrl(link: string) {
+    if (link.startsWith('http://') || link.startsWith('https://')) {
+      return link;
+    }
+    if (link.startsWith('//')) {
+      return `${this.url.protocol}${link}`;
+    }
+    return `${this.url.href}/${link}`;
   }
 }

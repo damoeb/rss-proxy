@@ -188,10 +188,10 @@ export const feedService =  new class FeedService {
       console.log(`Applying article-rule ${ruleId}`);
       return matchedRule;
     } else {
-      if (ruleId) {
-        console.log(`Falling back to first article-rule, could not find article-rule ${ruleId} in ${rules.map(rule => rule.id)}`);
+      if (ruleId && ruleId !== 'best') {
+        console.log(`Falling back to best article-rule, could not find article-rule ${ruleId} in ${rules.map(rule => rule.id)}`);
       } else {
-        console.log(`Falling back to first article-rule`);
+        console.log(`Falling back to best article-rule`);
       }
       return rules[0];
     }

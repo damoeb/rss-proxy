@@ -73,7 +73,7 @@
 
     <app-panel id="editor"
                name="Markup"
-               (close)="showMarkup = false"
+               (hide)="showMarkup = false"
                *ngIf="showMarkup">
       <button (click)="parseHtml()">
         Generate from HTML
@@ -89,7 +89,7 @@
 
     <app-panel id="console"
                name="Console"
-               (close)="showConsole = false"
+               (hide)="showConsole = false"
                *ngIf="showConsole">
       <div style="overflow: scroll">
         <div *ngFor="let log of logs">
@@ -103,7 +103,7 @@
     <app-panel id="feed"
                style="overflow: auto"
                name="Feed"
-               (close)="showFeed = false"
+               (hide)="showFeed = false"
                *ngIf="showFeed">
       <select [(ngModel)]="options.output">
         <option [ngValue]="output"
@@ -134,7 +134,7 @@
     <app-panel id="articles"
                style="overflow: auto"
                name="Choose Articles"
-               (close)="showArticles = false"
+               (hide)="showArticles = false"
                *ngIf="showArticles">
       <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule">
         <option *ngFor="let rule of rules"

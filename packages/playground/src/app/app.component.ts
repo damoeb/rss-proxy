@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {FeedService} from './services/feed.service';
 import {Article, ArticleRule, OutputType, ContentResolutionType, SourceType, FeedParserOptions, FeedUrl} from '../../../core/src';
-import {build} from '../environments/build'
+import {build} from '../environments/build';
 
 @Component({
   selector: 'app-root',
@@ -96,7 +96,7 @@ export class AppComponent {
             } else {
               this.error = response.message;
             }
-          } catch(e) {
+          } catch (e) {
             this.error = response.message;
           }
 
@@ -119,6 +119,10 @@ export class AppComponent {
           this.optionsFromParser = response.options;
 
         }
+      }, (error: HttpErrorResponse) => {
+        this.isLoading = false;
+        this.hasResults = true;
+        this.error = error.message;
       });
   }
 
@@ -138,7 +142,7 @@ export class AppComponent {
     this.options = {
       output: OutputType.ATOM,
       source: SourceType.STATIC,
-      rule: 'auto',
+      rule: 'best',
       content: ContentResolutionType.STATIC,
     };
     this.optionsFromParser = {};
@@ -149,7 +153,7 @@ export class AppComponent {
   }
 
   getBuildDate() {
-    const date = new Date(parseInt(this.getVersions().date));
+    const date = new Date(parseInt(this.getVersions().date, 10));
     return `${date.getUTCDate()}-${date.getUTCMonth()}-${date.getUTCFullYear()}`;
   }
 }
