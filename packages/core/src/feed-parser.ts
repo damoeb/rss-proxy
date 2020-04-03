@@ -326,6 +326,10 @@ export class FeedParser {
     return self.indexOf(value) === index;
   }
 
+  public uniqueArticles(value: Article, index: number, self: Article[]) {
+    return self.indexOf(self.find(article => article.link === value.link)) === index;
+  }
+
   public filterSubpath(value: string, index: number, self: string[]) {
     return self.indexOf(value) === index;
   }
@@ -439,33 +443,36 @@ export class FeedParser {
 
     this.logger.log('apply rule', rule.id);
 
-    return Array.from(this.document.querySelectorAll(rule.rule.contextElementPath)).map(element => {
-      try {
-        const titles = Array.from(element.querySelectorAll(rule.titlePath)).map(node => node.textContent.trim());
-        this.logger.log('hit');
-        const link = element.querySelector(rule.linkPath).getAttribute('href');
-        if (titles.length === 0 || titles.join('').trim().length === 0) {
+    return Array.from(this.document.querySelectorAll(rule.rule.contextElementPath))
+      .map(element => {
+        try {
+          const titles = Array.from(element.querySelectorAll(rule.titlePath)).map(node => node.textContent.trim());
+          this.logger.log('hit');
+          const link = element.querySelector(rule.linkPath).getAttribute('href');
+          if (titles.length === 0 || titles.join('').trim().length === 0) {
+            return undefined;
+          }
+
+          const article: Article = {
+            title: titles.join(' / '),
+            link: FeedParser.toAbsoluteUrl(this.url, link),
+            content: element.outerHTML,
+            summary: rule.commonTextNodePath.map(textNodePath => {
+              return Array.from(element.querySelectorAll(textNodePath))
+                .map(textNode => textNode.textContent.trim());
+            })
+              .flat(1)
+              .filter(this.onlyUnique)
+              .filter(text => text.split(' ').length > 5)
+          };
+
+          return article;
+        } catch (err) {
           return undefined;
         }
-
-        const article: Article = {
-          title: titles.join(' / '),
-          link: this.toAbsoluteUrl(link),
-          content: element.outerHTML,
-          summary: rule.commonTextNodePath.map(textNodePath => {
-            return Array.from(element.querySelectorAll(textNodePath))
-              .map(textNode => textNode.textContent.trim());
-          })
-            .flat(1)
-            .filter(this.onlyUnique)
-            .filter(text => text.split(' ').length > 5)
-        };
-
-        return article;
-      } catch (err) {
-        return undefined;
-      }
-    }).filter(article => article);
+      })
+      .filter(article => article)
+      .filter(this.uniqueArticles);
   }
 
   private getTitleFeatures(group: PartialArticlesWithStructure, textNodePath: string): TitleFeatures {
@@ -512,13 +519,19 @@ export class FeedParser {
     return Math.round(score * 100) / 100;
   }
 
-  private toAbsoluteUrl(link: string) {
+  public static toAbsoluteUrl(url: URL, link: string) {
+    if (link.endsWith('//')) {
+      link = link.substring(0, link.length-1);
+    }
     if (link.startsWith('http://') || link.startsWith('https://')) {
       return link;
     }
     if (link.startsWith('//')) {
-      return `${this.url.protocol}${link}`;
+      return `${url.protocol}${link}`;
     }
-    return `${this.url.href}/${link}`;
+    if (link.startsWith('/')) {
+      return `${url.origin}${link}`;
+    }
+    return `${url.origin}/${link}`;
   }
 }

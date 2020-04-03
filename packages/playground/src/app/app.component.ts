@@ -3,6 +3,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {FeedService} from './services/feed.service';
 import {Article, ArticleRule, OutputType, ContentResolutionType, SourceType, FeedParserOptions, FeedUrl} from '../../../core/src';
 import {build} from '../environments/build';
+import {isEmpty} from 'lodash';
 
 @Component({
   selector: 'app-root',
@@ -37,10 +38,10 @@ export class AppComponent {
   isLoading = false;
   isGenerated = false;
   error: string;
+  help = true;
 
   constructor(private httpClient: HttpClient,
               private feedService: FeedService) {
-    this.url = 'https://twitter.com/gurkendoktor';
     this.reset();
   }
 
@@ -74,6 +75,22 @@ export class AppComponent {
   }
 
   parseFromUrl() {
+    if (isEmpty(this.url)) {
+      this.error = '';
+      return;
+    }
+
+    if (!this.url.startsWith('http://') && !this.url.startsWith('https://')) {
+      this.url = 'http://' + this.url;
+    }
+
+    try {
+      new URL(this.url);
+    } catch (e) {
+      this.error = 'Please enter a valid url';
+      return;
+    }
+
     this.reset();
     this.isLoading = true;
     this.feedService.fromUrl(this.url, this.options)
@@ -147,6 +164,7 @@ export class AppComponent {
     };
     this.optionsFromParser = {};
     this.html = '';
+    this.error = '';
     this.feeds = [];
     this.logs = [];
     this.feedData = '';

@@ -27,6 +27,10 @@
     }
   }
 }
+button.inactive {
+  background: transparent;
+  border: 1px solid black;
+}
 a {
   color: black;
   border-bottom: 2px solid black;

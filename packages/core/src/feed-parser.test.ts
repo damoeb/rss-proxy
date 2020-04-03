@@ -18,6 +18,30 @@ describe('FeedParser', () => {
         }));
   });
 
+  // it('toAbsoluteUrl', () => {
+  //   fc.assert(
+  //     fc.property(
+  //       fc.webUrl({validSchemes: ['https', ''], withQueryParameters: true, withFragments: true}),
+  //       (link) => {
+  //
+  //         const relativeLink = link.startsWith('://');
+  //         if (relativeLink) {
+  //           link = link.substring(2);
+  //         }
+  //
+  //         const absolute = new URL(FeedParser.toAbsoluteUrl(new URL('https://example.com/'), link));
+  //
+  //         if (relativeLink) {
+  //           expect(absolute.href.indexOf(link) > -1).to.be.true;
+  //         } else {
+  //           expect(absolute.href.indexOf(new URL(link).pathname) > -1).to.be.true;
+  //         }
+  //
+  //         // expect(absolute.href.indexOf('//') === absolute.href.lastIndexOf('//')).to.be.true;
+  //
+  //       }));
+  // });
+
   it('findTextNodesInContext', () => {
     const markup = `<!DOCTYPE html>
 <html>
@@ -86,7 +110,7 @@ describe('FeedParser', () => {
     const doc = toDocument(markup);
     const context = doc.getElementById('context-el');
 
-    const feedParser = new FeedParser(doc, null, null);
+    const feedParser = new FeedParser(doc, 'http://example.com', null, null);
 
     const nodes = feedParser.findTextNodesInContext(context);
 

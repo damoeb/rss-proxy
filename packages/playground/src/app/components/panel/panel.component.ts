@@ -10,6 +10,9 @@ export class PanelComponent implements OnInit {
   @Input()
   name: string;
 
+  @Input()
+  tooltip: string;
+
   @Output()
   hide = new EventEmitter();
 

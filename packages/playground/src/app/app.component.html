@@ -1,16 +1,17 @@
 <div class="playground">
   <div class="playground__header" [ngClass]="{'playground__header--slim': hasResults || isLoading, 'playground__header--large': !hasResults && !isLoading}">
 
-    <label style="float: right;">
-      <input type="checkbox"
-             [checked]="showDebugger"
-             (change)="showDebugger = !showDebugger; showFeed = !showDebugger; showArticles = showDebugger"
-             class="tooltip bottom" aria-label="If you are a developer"
-            tabindex="-1">
-      Debugger
-    </label>
+<!--    todo -->
+<!--    <label style="float: right;">-->
+<!--      <input type="checkbox"-->
+<!--             [checked]="true"-->
+<!--             (change)="help = !help"-->
+<!--             class="tooltip bottom"-->
+<!--             aria-label="Show additional explanation">-->
+<!--      Help-->
+<!--    </label>-->
 
-    <h1>Generate an RSS/ATOM/JSON Feed from any Website</h1>
+    <h1>Transform any Website to a RSS/ATOM/JSON Feed</h1>
 
     <div class="form">
       <ng-form #form (ngSubmit)="parseFromUrl()">
@@ -20,8 +21,11 @@
                    type="url"
                    autofocus
                    name="url"
+                   [autofocus]="true"
+                   autocomplete="off"
                    required="true"
-                   placeholder="Url of Feed or Website">
+                   (keyup.enter)="parseFromUrl()"
+                   placeholder="Enter the Url of a Website">
           </div>
           <div class="tooltip bottom" aria-label="The desired output format of the feed">
             <select [(ngModel)]="options.output"
@@ -53,7 +57,7 @@
     <div class="feed-url tooltip bottom"
          aria-label="The Feed URL that can be used in a feed reader of your choice"
          *ngIf="isGenerated">
-      Feed Url: <a [href]="getFeedUrl()">{{ getFeedUrl() }}</a>
+      <span class="tooltip" aria-label="The Feed Url, which you can use in a feedreader of choice">Feed Url: </span> <a [href]="getFeedUrl()">{{ getFeedUrl() }}</a>
     </div>
   </div>
 
@@ -66,6 +70,15 @@
     {{error}}
   </div>
 
+  <div class="playground__header" *ngIf="hasResults">
+
+    <button [ngClass]="{'inactive':!showMarkup}" (click)="showMarkup = !showMarkup">Markup</button>
+    <button [ngClass]="{'inactive':!showFeed}" (click)="showFeed = !showFeed">Feed</button>
+    <button [ngClass]="{'inactive':!showConsole}" (click)="showConsole = !showConsole">Console</button>
+    <button [ngClass]="{'inactive':!showArticles}" (click)="showArticles = !showArticles">Articles</button>
+
+  </div>
+
   <div class="playground__panels"
        *ngIf="!isLoading">
 
@@ -74,6 +87,7 @@
     <app-panel id="editor"
                name="Markup"
                (hide)="showMarkup = false"
+               tooltip="The static HTML-data used by the feed parser. Some websites are generated using JavaScript, which is not supported by rss-proxy"
                *ngIf="showMarkup">
       <button (click)="parseHtml()">
         Generate from HTML
@@ -89,6 +103,7 @@
 
     <app-panel id="console"
                name="Console"
+               tooltip="Console logs from the parser"
                (hide)="showConsole = false"
                *ngIf="showConsole">
       <div style="overflow: scroll">
@@ -103,14 +118,15 @@
     <app-panel id="feed"
                style="overflow: auto"
                name="Feed"
+               tooltip="the articles translated in a feed in the format of choice"
                (hide)="showFeed = false"
                *ngIf="showFeed">
       <select [(ngModel)]="options.output">
         <option [ngValue]="output"
                 *ngFor="let output of outputs">
-          {{ output }}
+          {{ output }} Feed
         </option>
-      </select> - {{optionsFromParser.output}}
+      </select>
 
 <!--      <select [(ngModel)]="options.content">-->
 <!--        <option [ngValue]="pageResolution"-->
@@ -133,7 +149,8 @@
 
     <app-panel id="articles"
                style="overflow: auto"
-               name="Choose Articles"
+               name="Groups Articles"
+               tooltip="Choose a group of article that should be included in the feed"
                (hide)="showArticles = false"
                *ngIf="showArticles">
       <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule">
