@@ -447,7 +447,6 @@ export class FeedParser {
       .map(element => {
         try {
           const titles = Array.from(element.querySelectorAll(rule.titlePath)).map(node => node.textContent.trim());
-          this.logger.log('hit');
           const link = element.querySelector(rule.linkPath).getAttribute('href');
           if (titles.length === 0 || titles.join('').trim().length === 0) {
             return undefined;

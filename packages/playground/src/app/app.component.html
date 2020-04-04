@@ -57,7 +57,7 @@
     <div class="feed-url tooltip bottom"
          aria-label="The Feed URL that can be used in a feed reader of your choice"
          *ngIf="isGenerated">
-      <span class="tooltip" aria-label="The Feed Url, which you can use in a feedreader of choice">Feed Url: </span> <a [href]="getFeedUrl()">{{ getFeedUrl() }}</a>
+      <span class="tooltip" aria-label="The Feed Url, which you can use in a feedreader of choice">Feed Url: </span> <a [href]="getFeedUrl()"> {{ getFeedUrl() }}</a>
     </div>
   </div>
 
@@ -70,11 +70,14 @@
     {{error}}
   </div>
 
-  <div class="playground__header" *ngIf="hasResults">
+  <div class="playground__buttons" *ngIf="hasResults">
 
+    Input:
     <button [ngClass]="{'inactive':!showMarkup}" (click)="showMarkup = !showMarkup">Markup</button>
-    <button [ngClass]="{'inactive':!showFeed}" (click)="showFeed = !showFeed">Feed</button>
+
+    Output:
     <button [ngClass]="{'inactive':!showConsole}" (click)="showConsole = !showConsole">Console</button>
+    <button [ngClass]="{'inactive':!showFeed}" (click)="showFeed = !showFeed">Feed</button>
     <button [ngClass]="{'inactive':!showArticles}" (click)="showArticles = !showArticles">Articles</button>
 
   </div>
@@ -106,11 +109,9 @@
                tooltip="Console logs from the parser"
                (hide)="showConsole = false"
                *ngIf="showConsole">
-      <div style="overflow: scroll">
-        <div *ngFor="let log of logs">
-          {{ log }}
-        </div>
-      </div>
+      <pre style="overflow: auto; height: 77vh">
+        <span *ngFor="let log of logs">{{ log }}</span>
+      </pre>
     </app-panel>
 
     <!-- Feed -------------------------------------------------------------------------------------------------------- -->
@@ -148,7 +149,7 @@
     <!-- Articles -------------------------------------------------------------------------------------------------- -->
 
     <app-panel id="articles"
-               style="overflow: auto"
+               style="overflow: auto;"
                name="Groups Articles"
                tooltip="Choose a group of article that should be included in the feed"
                (hide)="showArticles = false"
@@ -165,7 +166,7 @@
         <div>Link: {{currentRule?.rule.linkPath }}</div>
         <div>Context: {{currentRule?.rule.contextElementPath }}</div>
         <div>{{ articles?.length }} articles</div>
-        <pre [innerText]="getArticles()"></pre>
+        <pre [innerText]="getArticles()" style="height: 60vh"></pre>
       </div>
     </app-panel>
 

@@ -22,7 +22,7 @@
     }
     &--slim {
       h1 {
-        font-size: larger;
+        display: none;
       }
     }
   }
@@ -50,6 +50,10 @@ input[type=checkbox]:hover {
 .playground__header {
   padding: 10px;
 }
+.playground__buttons {
+  padding: 10px;
+  text-align: center;
+}
 .playground__panels {
   display: flex;
   flex: 1;
@@ -72,4 +76,24 @@ textarea {
   padding-top: 15px;
   font-size: 1.2em;
   padding-bottom: 15px;
+}
+pre {
+  margin-left: 0;
+  margin-right: 0;
+  height: 70vh;
+}
+
+pre span {
+  display: block;
+  line-height: 1.5rem;
+  counter-increment: line;
+}
+pre span:before {
+
+  content: counter(line);
+  display: inline-block;
+  border-right: 1px solid #ddd;
+  padding: 0 .5em;
+  margin-right: .5em;
+  color: #888
 }
