@@ -2,17 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="be223c1e-fb57-4edb-9549-acf979246252" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/styles.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/variables.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/core/src/feed-parser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/core/src/feed-parser.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/angular.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/lookdave.wav" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/app.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/app.component.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/styles.css" beforeDir="false" />
     </list>
     <list id="0fdeac33-4664-41b2-9080-89bed972c3c4" name="ignore" comment="build 2" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -21,6 +16,20 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
   </component>
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
@@ -31,14 +40,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/packages/core/src/feed-parser.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="207">
+              <caret line="426" column="63" selection-start-line="426" selection-start-column="63" selection-end-line="426" selection-end-column="63" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/packages/playground/src/app/app.component.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="112" column="48" selection-start-line="112" selection-start-column="48" selection-end-line="112" selection-end-column="48" />
+            <state relative-caret-position="207">
+              <caret line="33" column="28" selection-start-line="33" selection-start-column="28" selection-end-line="33" selection-end-column="28" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#ng-form#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#app-panel#1;n#div#4;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#app-panel#3;n#div#4;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#pre#0;n#div#0;n#app-panel#3;n#div#4;n#div#0;n#!!top" expanded="true" />
               </folding>
@@ -47,76 +64,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="34" selection-start-line="5" selection-start-column="34" selection-end-line="5" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/packages/playground/src/styles.scss">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="23" selection-start-column="23" selection-end-column="23" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/packages/playground/src/variables.scss">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" column="18" selection-start-line="1" selection-start-column="18" selection-end-line="1" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/packages/playground/angular.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="26" column="27" selection-start-line="26" selection-start-column="27" selection-end-line="26" selection-end-column="27" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/packages/playground/src/app/app.component.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="509">
-              <caret line="97" column="13" selection-start-line="97" selection-start-column="13" selection-end-line="97" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.scss">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="2" selection-start-line="15" selection-end-line="19" selection-end-column="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/packages/playground/src/app/app.component.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="329">
-              <caret line="40" column="13" selection-start-line="40" selection-start-column="13" selection-end-line="40" selection-end-column="13" />
-              <folding>
-                <element signature="e#0#40#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="494">
+              <caret line="100" column="20" selection-start-line="100" selection-start-column="20" selection-end-line="100" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -125,23 +76,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>.subscribe</find>
-      <find>Listening on port</find>
-      <find>link</find>
-      <find>findArticleContext</find>
-      <find>getArticleRules</find>
-      <find>this.url</find>
-      <find>Falling back to first article-rule,</find>
-      <find>auto</find>
-      <find>&lt;select</find>
-      <find>absolute</find>
-      <find>URL of</find>
-      <find>twitter.com</find>
-      <find>todo</find>
-      <find>tool</find>
-      <find>reset</find>
-      <find>Choose</find>
-      <find>&lt;app-panel</find>
       <find>Generate</find>
       <find>debugger</find>
       <find>select</find>
@@ -155,6 +89,23 @@
       <find>articles</find>
       <find>console</find>
       <find>hit</find>
+      <find>exec</find>
+      <find>link-group</find>
+      <find>Dropping link-</find>
+      <find>minLinkGroupSize</find>
+      <find>context</find>
+      <find>common</find>
+      <find>common-</find>
+      <find>`title</find>
+      <find>Looking for</find>
+      <find>todo</find>
+      <find>article rules left</find>
+      <find>Dropping link</find>
+      <find>common node</find>
+      <find>Articles</find>
+      <find>score</find>
+      <find>index</find>
+      <find>ngfor</find>
     </findStrings>
     <replaceStrings>
       <replace>score</replace>
@@ -169,9 +120,11 @@
     <dirStrings>
       <dir>$PROJECT_DIR$/packages/proxy/src</dir>
       <dir>$PROJECT_DIR$/packages/proxy</dir>
-      <dir>$PROJECT_DIR$/packages/playground/src</dir>
       <dir>$PROJECT_DIR$/packages/playground/src/app</dir>
       <dir>$PROJECT_DIR$/packages/playground</dir>
+      <dir>$PROJECT_DIR$/packages/core</dir>
+      <dir>$PROJECT_DIR$/packages/playground/src</dir>
+      <dir>$PROJECT_DIR$/packages/core/src</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -180,7 +133,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/.editorconfig" />
         <option value="$PROJECT_DIR$/test/mozilla-blog.js" />
         <option value="$PROJECT_DIR$/test/test-helper.js" />
         <option value="$PROJECT_DIR$/test/mozilla-blog.html" />
@@ -217,7 +169,6 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/packages/proxy/src/services/feedService.ts" />
         <option value="$PROJECT_DIR$/packages/proxy/src/app.ts" />
-        <option value="$PROJECT_DIR$/packages/playground/package.json" />
         <option value="$PROJECT_DIR$/packages/core/src/feed-parser.test.ts" />
         <option value="$PROJECT_DIR$/packages/playground/src/app/app.component.ts" />
         <option value="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.css" />
@@ -227,10 +178,12 @@
         <option value="$PROJECT_DIR$/packages/playground/src/variables.scss" />
         <option value="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.ts" />
         <option value="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.scss" />
-        <option value="$PROJECT_DIR$/packages/core/src/feed-parser.ts" />
+        <option value="$PROJECT_DIR$/build-info.ts" />
+        <option value="$PROJECT_DIR$/packages/playground/package.json" />
         <option value="$PROJECT_DIR$/packages/core/test/feed-parser.js" />
-        <option value="$PROJECT_DIR$/packages/playground/src/app/app.component.scss" />
+        <option value="$PROJECT_DIR$/packages/core/src/feed-parser.ts" />
         <option value="$PROJECT_DIR$/packages/playground/src/app/app.component.html" />
+        <option value="$PROJECT_DIR$/packages/playground/src/app/app.component.scss" />
       </list>
     </option>
   </component>
@@ -261,41 +214,13 @@
               <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
               <item name="rss-it" type="462c0819:PsiDirectoryNode" />
               <item name="packages" type="462c0819:PsiDirectoryNode" />
-              <item name="playground" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
               <item name="rss-it" type="462c0819:PsiDirectoryNode" />
               <item name="packages" type="462c0819:PsiDirectoryNode" />
               <item name="playground" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rss-it" type="462c0819:PsiDirectoryNode" />
-              <item name="packages" type="462c0819:PsiDirectoryNode" />
-              <item name="playground" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-              <item name="mini.css" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rss-it" type="462c0819:PsiDirectoryNode" />
-              <item name="packages" type="462c0819:PsiDirectoryNode" />
-              <item name="playground" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-              <item name="mini.css" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rss-it" type="462c0819:PsiDirectoryNode" />
-              <item name="packages" type="462c0819:PsiDirectoryNode" />
-              <item name="playground" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-              <item name="mini.css" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="flavors" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
@@ -311,38 +236,6 @@
               <item name="playground" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rss-it" type="462c0819:PsiDirectoryNode" />
-              <item name="packages" type="462c0819:PsiDirectoryNode" />
-              <item name="playground" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rss-it" type="462c0819:PsiDirectoryNode" />
-              <item name="packages" type="462c0819:PsiDirectoryNode" />
-              <item name="playground" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="panel" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rss-it" type="462c0819:PsiDirectoryNode" />
-              <item name="packages" type="462c0819:PsiDirectoryNode" />
-              <item name="proxy" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rss-it" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rss-it" type="462c0819:PsiDirectoryNode" />
-              <item name="packages" type="462c0819:PsiDirectoryNode" />
-              <item name="proxy" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -371,14 +264,15 @@
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/packages/playground/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/modules/rss-it-app" />
-      <recent name="$PROJECT_DIR$/test" />
-      <recent name="$PROJECT_DIR$/app" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/test" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/modules/rss-it-app" />
+      <recent name="$PROJECT_DIR$/test" />
+      <recent name="$PROJECT_DIR$/app" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -431,7 +325,8 @@
       <workItem from="1585333395022" duration="33757000" />
       <workItem from="1585657087165" duration="3599000" />
       <workItem from="1585732278221" duration="2853000" />
-      <workItem from="1585762954724" duration="9893000" />
+      <workItem from="1585762954724" duration="16828000" />
+      <workItem from="1586203030284" duration="2039000" />
     </task>
     <task id="LOCAL-00001" summary="find articles">
       <created>1567323868854</created>
@@ -573,16 +468,23 @@
       <option name="project" value="LOCAL" />
       <updated>1585954952247</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="ui">
+      <created>1586041076444</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1586041076444</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="138609000" />
+    <option name="totallyTimeSpent" value="147583000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1044" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23003195" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23216188" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -603,6 +505,7 @@
       <window_info anchor="bottom" id="TypeScript" order="12" />
       <window_info anchor="bottom" id="Elm Compiler" order="13" />
       <window_info anchor="bottom" id="SonarLint" order="14" />
+      <window_info anchor="bottom" id="Messages" order="15" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -610,9 +513,10 @@
       <window_info anchor="right" id="Maven" order="4" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
       <window_info anchor="right" id="Palette&#9;" order="6" />
-      <window_info anchor="right" id="Database" order="7" />
-      <window_info anchor="right" id="SciView" order="8" />
-      <window_info anchor="right" id="Elm" order="9" />
+      <window_info anchor="right" id="Database" order="7" sideWeight="0.49757674" weight="0.32960597" />
+      <window_info anchor="right" id="SciView" order="8" sideWeight="0.49919224" weight="0.32960597" />
+      <window_info anchor="right" id="Elm" order="9" sideWeight="0.49919224" weight="0.32960597" />
+      <window_info anchor="right" x="0" y="0" width="430" height="844" id="Documentation" order="10" sideWeight="0.50080776" side_tool="true" weight="0.32960597" />
     </layout>
     <layout-to-restore>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22364217" />
@@ -673,8 +577,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="ui" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/modules/rss-it-app/src/app/feed-parser.ts" />
-    <entry file="file://$PROJECT_DIR$/packages/core/bundle.js" />
     <entry file="file://$PROJECT_DIR$/packages/proxy/src/services/readerService.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
@@ -880,16 +782,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/packages/playground/build-info.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="28" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/packages/playground/node_modules/typescript/lib/lib.dom.d.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="197">
@@ -928,13 +820,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/packages/playground/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" column="23" selection-start-line="28" selection-start-column="23" selection-end-line="28" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/packages/proxy/src/services/feedService.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="413">
@@ -952,13 +837,6 @@
           <folding>
             <element signature="e#0#43#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/packages/core/src/feed-parser.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2475">
-          <caret line="165" selection-start-line="165" selection-end-line="165" />
         </state>
       </provider>
     </entry>
@@ -1031,20 +909,48 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/build-info.ts" />
+    <entry file="file://$PROJECT_DIR$/packages/playground/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="29" selection-start-line="19" selection-start-column="29" selection-end-line="19" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/core/test/feed-parser.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="244" column="47" selection-start-line="244" selection-start-column="33" selection-end-line="244" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/core/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="134" column="7" selection-start-line="134" selection-start-column="7" selection-end-line="134" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/packages/core/src/feed-parser.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="426" column="63" selection-start-line="426" selection-start-column="63" selection-end-line="426" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/packages/playground/src/app/app.component.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="509">
-          <caret line="97" column="13" selection-start-line="97" selection-start-column="13" selection-end-line="97" selection-end-column="13" />
+        <state relative-caret-position="494">
+          <caret line="100" column="20" selection-start-line="100" selection-start-column="20" selection-end-line="100" selection-end-column="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/packages/playground/src/app/app.component.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="112" column="48" selection-start-line="112" selection-start-column="48" selection-end-line="112" selection-end-column="48" />
+        <state relative-caret-position="207">
+          <caret line="33" column="28" selection-start-line="33" selection-start-column="28" selection-end-line="33" selection-end-column="28" />
           <folding>
             <element signature="n#style#0;n#div#0;n#ng-form#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#app-panel#1;n#div#4;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#app-panel#3;n#div#4;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#pre#0;n#div#0;n#app-panel#3;n#div#4;n#div#0;n#!!top" expanded="true" />
           </folding>

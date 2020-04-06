@@ -122,6 +122,7 @@ export interface Logger {
 export class FeedParser {
 
   private readonly url: URL;
+  private minLinkGroupSize = 4;
 
   constructor(private document: HTMLDocument,
               url: string,
@@ -170,7 +171,7 @@ export class FeedParser {
     const articleRootElements = this.findArticleRootElement(linkElements);
 
     const id = linkPointers[0].path;
-    this.logger.log(`context #${index} group ${id} ${this.getRelativePath(articleRootElements[0], root, false)}`);
+    // this.logger.log(`context #${index} group ${id} ${this.getRelativePath(articleRootElements[0], root, false)}`);
 
     return linkPointers.map((linkPointer, linkPointerIndex) => {
       const linkElement = linkPointer.element;
@@ -213,7 +214,7 @@ export class FeedParser {
 
     const referenceArticle = articles[0];
     const referenceArticleNode = referenceArticle.contextElement;
-    this.logger.log(`common-nodes #${index} for ${referenceArticle.id}`);
+    this.logger.log(`Looking for common text-nodes in ${referenceArticle.id} (index ${index})`);
 
     const textNodes = this.findTextNodesInContext(referenceArticleNode);
 
@@ -228,10 +229,10 @@ export class FeedParser {
         }).length / articles.length;
 
         if (frequency >= 0.7) {
-          this.logger.log(`+ ${pathToTextNode} common node, frequency= ${frequency * 100}%`);
+          this.logger.log(`Adding text-node ${pathToTextNode}, frequency= ${frequency * 100}%`);
           return true;
         } else {
-          this.logger.log(`- ${pathToTextNode} not a common node,frequency= ${frequency * 100}%`);
+          this.logger.log(`Ignoring text-node ${pathToTextNode}, frequency= ${frequency * 100}%`);
           return false;
         }
       });
@@ -279,7 +280,7 @@ export class FeedParser {
   private findTitles(group: PartialArticlesWithStructure, index: number): PartialArticlesWithTitle {
     try {
 
-      this.logger.log(`title #${index} for #${group.id}`);
+      this.logger.log(`Looking for title-node in #${group.id} (index ${index})`);
 
       // todo common path should use index or classes
       const sortedTitleNodes: TitleRule[] = group.commonTextNodePath.map((textNodePath) => {
@@ -383,14 +384,13 @@ export class FeedParser {
 
     // todo merge rules that just have a different context
 
+    this.logger.log(`Dropping irrelevant link-groups with less than ${this.minLinkGroupSize} members`);
     const relevantGroups: PartialArticlesWithDescription[] = groups
-      .filter((linkGroup, index) => {
-        const hasEnoughMembers = linkGroup.links.length > 3;
+      .filter(linkGroup => {
+        const hasEnoughMembers = linkGroup.links.length >= this.minLinkGroupSize;
 
-        if (hasEnoughMembers) {
-          // this.logger.log(`link-group #${index} keep ${linkGroup.links[0].path} - ${linkGroup.links.length} member`);
-        } else {
-          this.logger.log(`Dropping link-group #${index} drop ${linkGroup.links[0].path} - ${linkGroup.links.length} member`);
+        if (!hasEnoughMembers) {
+          this.logger.log(`Dropping link-group ${linkGroup.links[0].path} of size ${linkGroup.links.length}`);
         }
 
         return hasEnoughMembers;

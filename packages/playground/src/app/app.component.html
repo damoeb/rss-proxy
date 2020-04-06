@@ -78,7 +78,7 @@
     Output:
     <button [ngClass]="{'inactive':!showConsole}" (click)="showConsole = !showConsole">Console</button>
     <button [ngClass]="{'inactive':!showFeed}" (click)="showFeed = !showFeed">Feed</button>
-    <button [ngClass]="{'inactive':!showArticles}" (click)="showArticles = !showArticles">Articles</button>
+    <button [ngClass]="{'inactive':!showArticles}" (click)="showArticles = !showArticles">Article Candidates</button>
 
   </div>
 
@@ -150,22 +150,24 @@
 
     <app-panel id="articles"
                style="overflow: auto;"
-               name="Groups Articles"
+               name="Article Candidates"
                tooltip="Choose a group of article that should be included in the feed"
                (hide)="showArticles = false"
                *ngIf="showArticles">
       <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule">
         <option *ngFor="let rule of rules"
                 [ngValue]="rule">
-          {{ rule?.score }} points / {{ rule?.articles?.length }} articles / {{ rule?.id }}
+          Candidate {{ rule?.score }} points / {{ rule?.articles?.length }} articles / {{ rule?.id }}
         </option>
       </select>
       <div>
-        <div>Score: {{currentRule?.score}}</div>
-        <div>Title: {{currentRule?.titlePath }}</div>
-        <div>Link: {{currentRule?.rule.linkPath }}</div>
-        <div>Context: {{currentRule?.rule.contextElementPath }}</div>
-        <div>{{ articles?.length }} articles</div>
+        <div>Score: {{currentRule?.score}} points, {{ articles?.length }} articles</div>
+        <div class="rule__selectors">Selectors:
+          <div>Context: {{currentRule?.rule.contextElementPath }}</div>
+          <div>Title: {{currentRule?.titlePath }}</div>
+          <div>Link: {{currentRule?.rule.linkPath }}</div>
+        </div>
+        <div></div>
         <pre [innerText]="getArticles()" style="height: 60vh"></pre>
       </div>
     </app-panel>
