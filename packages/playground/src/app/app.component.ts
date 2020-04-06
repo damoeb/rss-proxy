@@ -39,10 +39,12 @@ export class AppComponent {
   isGenerated = false;
   error: string;
   help = true;
+  history: string[];
 
   constructor(private httpClient: HttpClient,
               private feedService: FeedService) {
     this.reset();
+    this.history = this.getHistory();
   }
 
   parseHtml() {
@@ -79,6 +81,8 @@ export class AppComponent {
       this.error = '';
       return;
     }
+
+    this.addToHistory(this.url);
 
     if (!this.url.startsWith('http://') && !this.url.startsWith('https://')) {
       this.url = 'http://' + this.url;
@@ -173,5 +177,26 @@ export class AppComponent {
   getBuildDate() {
     const date = new Date(parseInt(this.getVersions().date, 10));
     return `${date.getUTCDate()}-${date.getUTCMonth()}-${date.getUTCFullYear()}`;
+  }
+
+  private getHistory(): string[] {
+    return JSON.parse(localStorage.getItem('history') || JSON.stringify([]));
+  }
+
+  private addToHistory(url: string) {
+    let history = this.history.filter(otherUrl => otherUrl !== url);
+    history = history.reverse();
+    history.push(url);
+    history = history.reverse();
+    history = history.filter((otherUrl, index) => index < 5);
+
+    this.history = history;
+
+    localStorage.setItem('history', JSON.stringify(history));
+  }
+
+  parseFromHistoryUrl(url: string) {
+    this.url = url;
+    this.parseFromUrl();
   }
 }

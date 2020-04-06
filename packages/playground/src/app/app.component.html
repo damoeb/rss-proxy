@@ -15,7 +15,7 @@
 
     <div class="form">
       <ng-form #form (ngSubmit)="parseFromUrl()">
-        <div style="display: inline-block">
+        <div style="display: inline-block; text-align: left">
           <div class="tooltip bottom" aria-label="The URL you want to RSSify">
             <input [(ngModel)]="url"
                    type="url"
@@ -50,6 +50,9 @@
           </button>
 
 <!--          <div>Advanced Settings</div>-->
+          <div *ngIf="!isLoading && !hasResults ">
+            <p *ngFor="let url of history"><a href="javascript:void(0)" (click)="parseFromHistoryUrl(url)">{{ url }}</a></p>
+          </div>
         </div>
       </ng-form>
     </div>

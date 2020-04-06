@@ -1,10 +1,3 @@
-## Features
-- through backend you can only use the best scored rule
-
-## Requirements
-- Parse from url and track the urls
-- Article UUID should be consistent
-
 ## Ideas
 - publishedDate from meta tags )deep), else current date and pushed to remote
 - updatedDate cannot be constructed
