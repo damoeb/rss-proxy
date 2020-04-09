@@ -22,7 +22,7 @@ Then open [localhost:3000](http://localhost:3000) in the browser.
 
 ## Running RSS-Proxy from source
 
-For local development you need [node 12+](https://nodejs.org/en/). THen follow these steps:
+For local development you need [node 12+](https://nodejs.org/en/). Then follow these steps:
 
 - Install all npm dependencies
 ```
