@@ -11,45 +11,45 @@ RSS-Proxy is a tool that allows you to do create an RSS/ATOM or JSON feed of alm
 purely by analyzing just the static HTML structure.
 
 
-## Running RSS-Proxy docker
+## Running RSS-Proxy using docker
 
-The simplest way to use RSS-ProxyBefore is using [docker](https://docs.docker.com/install/)
+The simplest way to use RSS-Proxy is using [docker](https://docs.docker.com/install/)
 
 ```
  docker run -p 3000:3000 -it damoeb/rss-proxy
 ```
+Then open [localhost:3000](http://localhost:3000) in the browser.
 
+## Running RSS-Proxy from source
 
-## Installing RSS-Proxy
+For local development you need [node 12+](https://nodejs.org/en/). THen follow these steps:
 
-To install Rss-proxy, follow these steps:
-
+- Install all npm dependencies
 ```
 npm run bootstrap
+
+```
+
+- Start server
+```
+cd packages/proxy && npm run start
+
+```
+
+- Start client
+```
+cd packages/playground && npm run start
+
 ```
 
 
 ## Developing RSS-Proxy
 
-To use <project_name>, follow these steps:
+The project is separated into three modules
+- [core](packages/core/README.md): the feed parser logic, plain JavaScript
+- [playground](packages/playground/README.md): the web app to visualize and explore feed generation
+- [proxy](packages/proxy/README.md): the server
 
-```
-<usage_example>
-```
-
-Add run commands and examples you think users will find useful. Provide an options reference for bonus points!
-
-## Contributing to <project_name>
-<!--- If your README is long or you have some specific process or steps you want contributors to follow, consider creating a separate CONTRIBUTING.md file--->
-To contribute to <project_name>, follow these steps:
-
-1. Fork this repository.
-2. Create a branch: `git checkout -b <branch_name>`.
-3. Make your changes and commit them: `git commit -m '<commit_message>'`
-4. Push to the original branch: `git push origin <project_name>/<location>`
-5. Create the pull request.
-
-Alternatively see the GitHub documentation on [creating a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
 
 ## Contributors
 
@@ -64,7 +64,3 @@ If you want to contact me you can reach me at <your_email@address.com>.
 ## License
 
 This project uses the following license: [CC-NC](https://en.wikipedia.org/wiki/Creative_Commons_NonCommercial_license).
-
-## Resources
-
-- 
