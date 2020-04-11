@@ -10,6 +10,7 @@
 RSS-Proxy is a tool that allows you to do create an RSS/ATOM or JSON feed of almost any website, 
 purely by analyzing just the static HTML structure.
 
+![Playground](https://gitlab.com/damoeb/rss-proxy/-/raw/master/docs/rssproxy-candidates.png "Plauground")
 
 ## Running RSS-Proxy using docker
 
