@@ -1,4 +1,4 @@
-## Ideas
+## Issues
 - publishedDate from meta tags )deep), else current date and pushed to remote
 - updatedDate cannot be constructed
 - shareCount (from social media platforms) from client to remote
