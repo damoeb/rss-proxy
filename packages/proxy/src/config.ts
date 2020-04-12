@@ -4,5 +4,5 @@ export const config = {
   port: 3000,
   hostname: 'localhost',
   logLevel: 'info',
-  debug: true
+  debug: false
 };

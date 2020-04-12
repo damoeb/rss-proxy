@@ -1,6 +1,6 @@
 {
   "name": "@rss-proxy/root",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts": {
     "bootstrap": "cd packages/core && npm i && cd - && cd packages/playground && npm i && cd - && cd packages/proxy && npm i"
   }

@@ -9,14 +9,13 @@ import {operatorEndpoint} from './endpoints/operatorEndpoint';
 const build = require('./build.json');
 
 // see http://patorjk.com/software/taag/#p=display&f=Chunky&t=rss%20proxy
-if (!config.debug) {
-  console.log(`                                                    
+console.log(`                                                    
 .----.-----.-----.    .-----.----.-----.--.--.--.--.
 |   _|__ --|__ --|    |  _  |   _|  _  |_   _|  |  |
 |__| |_____|_____|    |   __|__| |_____|__.__|___  |
                       |__|                   |_____|\n\n`);
-}
-logger.info(`Starting rss-proxy ${build.version}@${build.revision}`); // todo fix version
+logger.info(`Starting rss-proxy v. ${build.version}@${build.revision}`);
+logger.info(`https://gitlab.com/damoeb/rss-proxy\n`);
 
 // -- express
 const app = express();
