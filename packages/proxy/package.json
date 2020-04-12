@@ -25,7 +25,7 @@
     "predocker:build": "npm run gen-build-info",
     "prestart": "npm run gen-build-info",
     "docker:build": "sh build-docker-image.sh",
-    "docker:publish": "sh publish-docker-image.sh",
+    "docker:publish": "docker push damoeb/rss-proxy:latest",
     "docker:start": "docker run -p 3000:3000 -it damoeb/rss-proxy",
     "start": "npx nodemon",
     "build:proxy": "tsc",

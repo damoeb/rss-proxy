@@ -1,27 +1,20 @@
-# RSS Proxy
+# RSS-proxy
 
-<!--- These are examples. See https://shields.io for others or to customize this set of shields. You might want to include dependencies, project status and licence info here --->
-![GitHub repo size](https://img.shields.io/github/repo-size/scottydocs/README-template.md)
-![GitHub contributors](https://img.shields.io/github/contributors/scottydocs/README-template.md)
-![GitHub stars](https://img.shields.io/github/stars/scottydocs/README-template.md?style=social)
-![GitHub forks](https://img.shields.io/github/forks/scottydocs/README-template.md?style=social)
-![Twitter Follow](https://img.shields.io/twitter/follow/scottydocs?style=social)
-
-RSS-Proxy is a tool that allows you to do create an RSS/ATOM or JSON feed of almost any website, 
+RSS-proxy is a tool that allows you to do create an RSS/ATOM or JSON feed of almost any website, 
 purely by analyzing just the static HTML structure.
 
 ![Playground](https://gitlab.com/damoeb/rss-proxy/-/raw/master/docs/rssproxy-candidates.png "Plauground")
 
-## Running RSS-Proxy using docker
+## Running RSS-proxy using docker
 
-The simplest way to use RSS-Proxy is using [docker](https://docs.docker.com/install/)
+The simplest way to use RSS-proxy is using [docker](https://docs.docker.com/install/)
 
 ```
  docker run -p 3000:3000 -it damoeb/rss-proxy
 ```
 Then open [localhost:3000](http://localhost:3000) in the browser.
 
-## Running RSS-Proxy from source
+## Running RSS-proxy from source
 
 For local development you need [node 12+](https://nodejs.org/en/). Then follow these steps:
 
@@ -44,7 +37,7 @@ cd packages/playground && npm run start
 ```
 
 
-## Developing RSS-Proxy
+## Developing RSS-proxy
 
 The project is separated into three modules
 - [core](packages/core/README.md): the feed parser logic, plain JavaScript

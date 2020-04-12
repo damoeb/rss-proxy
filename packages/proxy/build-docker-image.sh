@@ -19,6 +19,7 @@ build_core () {
 build_proxy () {
   echo "\n proxy"
   npm run build:proxy
+  cp src/build.json dist/@rss-proxy/proxy
 }
 
 build_playground () {
