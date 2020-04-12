@@ -18,15 +18,17 @@
   "scripts": {
     "preinstall": "npm install ../core",
     "preupdate": "npm install ../core",
-    "postinstall": "npm link ../core",
+    "postinstall": "npm link ../core && npm run predocker:build",
     "postupdate": "npm link ../core",
+    "gen-build-info": "node ../../build-info.js src/build.json",
     "test": "sh ../../scripts/lint-dockerfiles.sh",
+    "predocker:build": "npm run gen-build-info",
+    "prestart": "npm run gen-build-info",
     "docker:build": "sh build-docker-image.sh",
     "docker:publish": "sh publish-docker-image.sh",
     "docker:start": "docker run -p 3000:3000 -it damoeb/rss-proxy",
     "start": "npx nodemon",
     "build:proxy": "tsc",
-    "build": "npm run build:proxy",
     "clean": "rm -rf dist"
   },
   "engines": {
@@ -47,6 +49,7 @@
     "nodemon": "^1.18.4",
     "ts-node": "^7.0.1",
     "tslib": "^1.10.0",
+    "tslint": "^6.1.1",
     "typescript": "^3.1.5"
   }
 }

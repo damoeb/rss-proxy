@@ -19,8 +19,6 @@ export class AppComponent {
   url: string;
   outputs = [OutputType.ATOM, OutputType.RSS, OutputType.JSON];
   sources = [SourceType.STATIC, SourceType.WITH_SCRIPTS];
-  pageResolutions = [ContentResolutionType.STATIC, ContentResolutionType.DEEP];
-  showOptions = false;
   showDebugger = false;
   showMarkup = false;
   showConsole = false;
@@ -38,7 +36,6 @@ export class AppComponent {
   isLoading = false;
   isGenerated = false;
   error: string;
-  help = true;
   history: string[];
 
   constructor(private httpClient: HttpClient,
@@ -49,6 +46,8 @@ export class AppComponent {
 
   parseHtml() {
     this.feedData = '';
+    this.showFeed = false;
+    this.showArticles = true;
 
     this.feedService.fromHTML(this.html, this.options)
       .subscribe(result => {

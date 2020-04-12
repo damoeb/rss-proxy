@@ -24,7 +24,7 @@ export class FeedService {
 
     const logCollector = new LogCollector(console);
     const url = 'http://example.com';
-    const feedParser = new FeedParser(htmlDoc, url, options, console);
+    const feedParser = new FeedParser(htmlDoc, url, options, logCollector);
 
     const result: FeedParserResult = {
       logs: logCollector.logs(),

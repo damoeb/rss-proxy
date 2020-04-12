@@ -6,6 +6,7 @@ import { feedEndpoint } from './endpoints/feedEndpoint';
 import {config} from './config';
 import {readerEndpoint} from './endpoints/readerEndpoint';
 import {operatorEndpoint} from './endpoints/operatorEndpoint';
+const build = require('./build.json');
 
 // see http://patorjk.com/software/taag/#p=display&f=Chunky&t=rss%20proxy
 if (!config.debug) {
@@ -15,7 +16,7 @@ if (!config.debug) {
 |__| |_____|_____|    |   __|__| |_____|__.__|___  |
                       |__|                   |_____|\n\n`);
 }
-logger.info('Starting rss-proxy 0.0.0'); // todo fix version
+logger.info(`Starting rss-proxy ${build.version}@${build.revision}`); // todo fix version
 
 // -- express
 const app = express();
@@ -33,7 +34,6 @@ export interface ErrorsResponse {
 
 // -- endpoints
 
-// todo serve static playground
 app.use('/', express.static('static'));
 
 readerEndpoint.register(app);

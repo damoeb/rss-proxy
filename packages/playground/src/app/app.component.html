@@ -45,13 +45,16 @@
 
           <button (click)="parseFromUrl()"
                   [disabled]="isLoading">
-            Generate
+            Explore Feed
             <span class="icon-rss"></span>
           </button>
 
 <!--          <div>Advanced Settings</div>-->
-          <div *ngIf="!isLoading && !hasResults ">
-            <p *ngFor="let url of history"><a href="javascript:void(0)" (click)="parseFromHistoryUrl(url)">{{ url }}</a></p>
+          <div *ngIf="!isLoading && !hasResults && history.length > 0">
+            <p><strong>Previous Queries</strong></p>
+            <p *ngFor="let url of history">
+              <a href="javascript:void(0)" (click)="parseFromHistoryUrl(url)">{{ url }}</a>
+            </p>
           </div>
         </div>
       </ng-form>
@@ -60,7 +63,9 @@
     <div class="feed-url tooltip bottom"
          aria-label="The Feed URL that can be used in a feed reader of your choice"
          *ngIf="isGenerated">
-      <span class="tooltip" aria-label="The Feed Url, which you can use in a feedreader of choice">Feed Url: </span> <a [href]="getFeedUrl()"> {{ getFeedUrl() }}</a>
+      <span class="tooltip" aria-label="The Feed Url, which you can use in a feedreader of choice">Feed Url: </span>
+      <a [href]="getFeedUrl()"> {{ getFeedUrl() }}</a>
+<!--      <a href="javascript:void(0)">Harvest</a>-->
     </div>
   </div>
 
@@ -96,7 +101,7 @@
                tooltip="The static HTML-data used by the feed parser. Some websites are generated using JavaScript, which is not supported by rss-proxy"
                *ngIf="showMarkup">
       <button (click)="parseHtml()">
-        Generate from HTML
+        Refresh from HTML
       </button>
       <textarea [(ngModel)]="html"
                 placeholder="HTML markup of website">

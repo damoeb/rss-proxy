@@ -21,7 +21,7 @@ export interface GetResponse {
 }
 
 const defaultOptions: FeedParserOptions = {
-  output: OutputType.JSON,
+  output: OutputType.ATOM,
   source: SourceType.STATIC,
   content: ContentResolutionType.STATIC
 };
