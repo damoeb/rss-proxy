@@ -5,7 +5,6 @@ import logger from './logger'
 import { feedEndpoint } from './endpoints/feedEndpoint';
 import {config} from './config';
 import {readerEndpoint} from './endpoints/readerEndpoint';
-import {operatorEndpoint} from './endpoints/operatorEndpoint';
 
 // see http://patorjk.com/software/taag/#p=display&f=Chunky&t=rss%20proxy
 console.log(`                                                    
@@ -36,7 +35,14 @@ app.use('/', express.static('static'));
 
 readerEndpoint.register(app);
 feedEndpoint.register(app);
-operatorEndpoint.register(app);
+
+
+logger.debug('Available REST methods');
+app._router.stack.forEach((route:any) => {
+  if (route.route && route.route.path){
+    logger.debug(`${route.route.stack[0].method.toUpperCase()} ${route.route.path}`);
+  }
+});
 
 // startup
 app.listen(config.port, () => logger.info(`Listening on port ${config.port}`));
