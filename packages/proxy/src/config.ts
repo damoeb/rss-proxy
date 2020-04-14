@@ -1,8 +1,8 @@
+const build = require('./build.json');
+
 export const config = {
-  version: '0.1-alpha',
-  appEnv: 'dev',
-  port: 3000,
+  build,
+  port: process.env.PORT || 3000,
   hostname: 'localhost',
-  logLevel: 'info',
-  debug: false
+  logLevel: process.env.LOG_LEVEL || 'info'
 };
