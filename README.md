@@ -36,7 +36,6 @@ cd packages/playground && npm run start
 
 ```
 
-
 ## Developing RSS-proxy
 
 The project is separated into three modules
@@ -49,12 +48,6 @@ The project is separated into three modules
 
 * [damoeb](https://github.com/damoeb)  🐛
 
-You might want to consider using something like the [All Contributors](https://github.com/all-contributors/all-contributors) specification and its [emoji key](https://allcontributors.org/docs/en/emoji-key).
-
-## Contact
-
-If you want to contact me you can reach me at <your_email@address.com>.
-
 ## License
 
-This project uses the following license: [CC-NC](https://en.wikipedia.org/wiki/Creative_Commons_NonCommercial_license).
+This project uses the following license: [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html).

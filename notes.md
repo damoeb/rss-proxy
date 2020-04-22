@@ -3,6 +3,7 @@
 - updatedDate cannot be constructed
 - shareCount (from social media platforms) from client to remote
 - Filter content
+- Extract dates from content
 
 ## Monetization For Commercial use
 - All need API key to use the "deep" feature
