@@ -41,7 +41,7 @@ cd packages/playground && npm run start
 The project is separated into three modules
 - [core](packages/core/README.md): the feed parser logic, plain JavaScript
 - [playground](packages/playground/README.md): the web app to visualize and explore feed generation
-- [proxy](packages/proxy/README.md): the server
+- [proxy](packages/proxy/README.md): the expressjs server
 
 
 ## Contributors
