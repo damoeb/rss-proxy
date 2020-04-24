@@ -46,7 +46,11 @@ The project is separated into three modules
 
 ## Contributors
 
-* [damoeb](https://github.com/damoeb)  🐛
+* [damoeb](https://github.com/damoeb)
+
+## Contact
+
+* https://twitter.com/damoeb
 
 ## License
 
