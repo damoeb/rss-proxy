@@ -4,8 +4,23 @@
   "description": "RSS-proxy is a tool that allows you to do create an RSS/ATOM or JSON feed of almost any website, purely by analyzing just the static HTML structure.",
   "author": "damoeb",
   "license": "CC-NC",
-  "keywords": ["rss-feed", "atom-feed", "json-feed", "generator", "javascript"],
+  "keywords": [
+    "rss-feed",
+    "atom-feed",
+    "json-feed",
+    "generator",
+    "javascript"
+  ],
   "scripts": {
-    "bootstrap": "cd packages/core && npm i && cd - && cd packages/playground && npm i && cd - && cd packages/proxy && npm i"
+    "bootstrap": "npm i && cd packages/core && npm i && cd - && cd packages/playground && npm i && cd - && cd packages/proxy && npm i",
+    "lint": "echo 'linting'"
+  },
+  "devDependencies": {
+    "ghooks": "^2.0.4"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm lint"
+    }
   }
 }

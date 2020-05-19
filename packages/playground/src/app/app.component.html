@@ -165,11 +165,11 @@
       <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule">
         <option *ngFor="let rule of rules"
                 [ngValue]="rule">
-          Candidate {{ rule?.score }} points / {{ rule?.articles?.length }} articles / {{ rule?.id }}
+          Candidate {{ formatScore(rule?.score) }} pts / {{ rule?.articles?.length }} articles / {{ rule?.id }}
         </option>
       </select>
       <div>
-        <div>Score: {{currentRule?.score}} points, {{ articles?.length }} articles</div>
+        <div>Score: {{ formatScore(currentRule?.score) }} pts, {{ articles?.length }} articles</div>
         <div class="rule__selectors">Selectors:
           <div>Context: {{currentRule?.rule.contextElementPath }}</div>
           <div>Title: {{currentRule?.titlePath }}</div>

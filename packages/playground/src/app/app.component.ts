@@ -198,4 +198,8 @@ export class AppComponent {
     this.url = url;
     this.parseFromUrl();
   }
+
+  formatScore(score: any) {
+    return score.toFixed(2) * 100;
+  }
 }

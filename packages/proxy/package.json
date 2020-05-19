@@ -11,6 +11,7 @@
     "feed": "^4.1.0",
     "jsdom": "^15.2.1",
     "lodash": "^4.17.10",
+    "morgan": "^1.10.0",
     "mozilla-readability": "git+https://github.com/mozilla/readability.git",
     "request": "^2.88.0",
     "winston": "^3.1.0"

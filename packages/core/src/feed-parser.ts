@@ -122,7 +122,9 @@ export interface Logger {
 export class FeedParser {
 
   private readonly url: URL;
-  private minLinkGroupSize = 4;
+  private readonly minLinkGroupSize = 4;
+  private readonly maxWordLength = 50;
+  private readonly maxWordCount = 500;
 
   constructor(private document: HTMLDocument,
               url: string,
@@ -281,16 +283,15 @@ export class FeedParser {
     try {
 
       this.logger.log(`Looking for title-node in #${group.id} (index ${index})`);
-
       // todo common path should use index or classes
       const sortedTitleNodes: TitleRule[] = group.commonTextNodePath.map((textNodePath) => {
         return {features: this.getTitleFeatures(group, textNodePath), textNodePath} as TitleRule;
       })
         .map((title) => {
           // score
-          title.score = (title.features.avgWordLength > 3 ? 1 : 0)
+          title.score = (this.scoreWordLength(title.features.avgWordLength)
             + (title.features.hasHeaderInPath ? 1 : 0)
-            + title.features.variance;
+            + title.features.variance) / 3;
           return title;
         })
         .sort((a, b) => {
@@ -424,8 +425,11 @@ export class FeedParser {
 
         const rule = group as ArticleRule;
 
-        rule.score = this.roundScore(group.stats.title.features.variance * group.stats.title.features.avgWordLength +
-          group.stats.description.features.variance * group.stats.description.features.avgWordCount);
+        rule.score = (group.stats.title.features.variance
+          + this.scoreWordLength(group.stats.title.features.avgWordLength)
+          + group.stats.description.features.variance
+          + Math.min(group.stats.description.features.avgWordCount, this.maxWordCount) / this.maxWordCount
+        ) / 4;
 
         return rule;
       })
@@ -514,10 +518,6 @@ export class FeedParser {
     };
   }
 
-  private roundScore(score: number) {
-    return Math.round(score * 100) / 100;
-  }
-
   public static toAbsoluteUrl(url: URL, link: string) {
     if (link.endsWith('//')) {
       link = link.substring(0, link.length-1);
@@ -532,5 +532,9 @@ export class FeedParser {
       return `${url.origin}${link}`;
     }
     return `${url.origin}/${link}`;
+  }
+
+  private scoreWordLength(wordLength: number) {
+    return Math.min(wordLength, this.maxWordLength) / this.maxWordLength;
   }
 }
