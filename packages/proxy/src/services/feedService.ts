@@ -9,14 +9,17 @@ import {
   SourceType
 } from '@rss-proxy/core';
 import {Feed} from 'feed';
+import {isEmpty} from 'lodash';
 import {LogCollector} from '@rss-proxy/core/dist/log-collector';
 import {siteService} from './siteService';
 import {Request} from 'express';
 import logger from '../logger';
+import {config} from '../config';
 
 
 export interface GetResponse {
   body: string
+  type: 'GetResponse'
   contentType: string
 }
 
@@ -34,7 +37,7 @@ export interface FeedParserError {
 
 
 export const feedService =  new class FeedService {
-  async mapToFeed(url: string, options: FeedParserOptions): Promise<FeedParserResult> {
+  async mapToFeed(url: string, options: FeedParserOptions, canUseNativeFeed: boolean): Promise<FeedParserResult | GetResponse> {
 
     const response = await siteService.download(url);
 
@@ -46,15 +49,21 @@ export const feedService =  new class FeedService {
     switch (contentType) {
       case 'text/html':
         const feedUrls = this.findFeedUrls(doc, url);
+        const returnNativeFeed = canUseNativeFeed && config.preferNativeFeed && feedUrls.length > 0
+          && isEmpty(options.rule);
+        if (returnNativeFeed) {
+          return await siteService.download(feedUrls[0].url);
+        } else {
+          return this.generateFeedFromUrl(url, response.body, doc, options, feedUrls);
+        }
 
-        return this.generateFeedFromUrl(url, response.body, doc, options, feedUrls);
       default:
         // todo xml2json
         return Promise.reject({message: `Content of type ${response.contentType} is not supported`} as FeedParserError)
     }
   }
 
-  public parseFeed(url: string, request: Request): Promise<FeedParserResult> {
+  public parseFeed(url: string, request: Request, canUseNativeFeed: boolean = false): Promise<FeedParserResult | GetResponse> {
       const actualOptions: Partial<FeedParserOptions> = {};
       if (request.query.output) {
         actualOptions.output = request.query.output;
@@ -73,7 +82,7 @@ export const feedService =  new class FeedService {
         return Promise.reject({message: 'Param url is missing'} as FeedParserError);
       }
 
-      return feedService.mapToFeed(url, options);
+      return feedService.mapToFeed(url, options, canUseNativeFeed);
     }
 
 
@@ -157,13 +166,23 @@ export const feedService =  new class FeedService {
     const feedUrls = types.map(type => Array.from(doc.querySelectorAll(`link[href][type="${type}"]`)))
       .flat(1)
       .map(linkElement => {
+        let feedUrl = linkElement.getAttribute('href');
+        let optionalSlash = '';
+        if (!url.endsWith('/')) {
+          optionalSlash = '/';
+        }
+        if (!feedUrl.startsWith('http://') && !feedUrl.startsWith('https://')) {
+          feedUrl = url + optionalSlash + feedUrl;
+        }
+
         return {
           name: linkElement.getAttribute('title'),
-          url: linkElement.getAttribute('href'),
+          url: feedUrl
         }
       });
 
     logger.debug(`Found ${feedUrls.length} feeds in site ${url}`);
+    console.log(`Found ${feedUrls.length} feeds in site ${url}`);
 
     return feedUrls;
   }

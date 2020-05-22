@@ -12,15 +12,6 @@
     "javascript"
   ],
   "scripts": {
-    "bootstrap": "npm i && cd packages/core && npm i && cd - && cd packages/playground && npm i && cd - && cd packages/proxy && npm i",
-    "lint": "echo 'linting'"
-  },
-  "devDependencies": {
-    "ghooks": "^2.0.4"
-  },
-  "config": {
-    "ghooks": {
-      "pre-commit": "npm lint"
-    }
+    "bootstrap": "npm i && cd packages/core && npm i && cd - && cd packages/playground && npm i && cd - && cd packages/proxy && npm i"
   }
 }

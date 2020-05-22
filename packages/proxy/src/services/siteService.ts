@@ -6,6 +6,7 @@ import * as Readability from 'mozilla-readability';
 import * as createDOMPurify from 'dompurify';
 import * as winston from 'winston';
 import logger from '../logger';
+import {config} from '../config';
 
 export interface SiteMeta {
   language: string
@@ -77,10 +78,16 @@ export const siteService = new class SiteService {
 
   public download(url: string): Promise<GetResponse> {
     return new Promise<GetResponse>((resolve, reject) => {
-      const options = {method:'GET', url, headers: {"content-type": "text/plain"}};
+      const options = {method:'GET', url, headers: {
+        "Accepts": "text/html",
+        "User-Agent": config.userAgent
+        }};
       request(options, (error, serverResponse, html) => {
         if (!error && serverResponse && serverResponse.statusCode === 200) {
-          resolve({body: html, contentType: serverResponse.headers['content-type']});
+          resolve({
+            body: html,
+            type: 'GetResponse',
+            contentType: serverResponse.headers['content-type']},);
         } else {
           reject({ message: `Unable to download ${url}, cause ${error}`});
         }
@@ -94,8 +101,8 @@ export const siteService = new class SiteService {
 
     const clean = DOMPurify.sanitize(html, {WHOLE_DOCUMENT: true,
       FORBID_TAGS: ['style', 'script'],
-      ADD_TAGS:['meta', 'html'],
-      ADD_ATTR:['lang', 'content', 'name']});
+      ADD_TAGS:['meta', 'html', 'link'],
+      ADD_ATTR:['lang', 'content', 'name', 'type', 'href']});
     return new JSDOM(clean).window.document;
   }
 

@@ -1,7 +1,7 @@
 import {Express, Request, Response} from 'express';
 import * as cors from 'cors';
 import logger from '../logger';
-import {FeedParserError, feedService} from '../services/feedService';
+import {FeedParserError, feedService, GetResponse} from '../services/feedService';
 import {FeedParserResult, OutputType} from '@rss-proxy/core';
 
 export const feedEndpoint = new class FeedEndpoint {
@@ -32,10 +32,17 @@ export const feedEndpoint = new class FeedEndpoint {
         const url = request.query.url;
         logger.info(`feed-mapping of ${url}`);
 
-        feedService.parseFeed(url, request)
-          .then((feedParserResult: FeedParserResult) => {
-            response.setHeader('Content-Type', this.outputToContentType(feedParserResult.feedOutputType));
-            response.send(feedParserResult.feed);
+        feedService.parseFeed(url, request, true)
+          .then((feedData: FeedParserResult | GetResponse) => {
+            if ((feedData as any)['type'] === 'GetResponse') {
+              const getResponse = feedData as GetResponse;
+              response.setHeader('Content-Type', getResponse.contentType);
+              response.send(getResponse.body);
+            } else {
+              const feedParserResult = feedData as FeedParserResult;
+              response.setHeader('Content-Type', this.outputToContentType(feedParserResult.feedOutputType));
+              response.send(feedParserResult.feed);
+            }
 
           })
           .catch((err: FeedParserError) => {
