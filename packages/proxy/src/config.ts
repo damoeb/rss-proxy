@@ -3,6 +3,8 @@ const build = require('./build.json');
 export const config = {
   build,
   port: process.env.PORT || 3000,
+  env_fe: process.env.ENV_FE || 'live',
+  env: process.env.ENV || 'dev',
   hostname: 'localhost',
   preferNativeFeed: true,
   logLevel: process.env.LOG_LEVEL || 'info',
