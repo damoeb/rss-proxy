@@ -5,6 +5,11 @@
 - Filter content
 - Extract dates from content
 
+## Roadmap
+- proxy should prefere a native feed provided by the site, iff no rule is defined
+- probably integrate puppeteer preprosessing to support dynamic sites
+- ask michal to test it
+
 ## Monetization For Commercial use
 - All need API key to use the "deep" feature
 
