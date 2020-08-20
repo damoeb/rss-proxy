@@ -88,6 +88,7 @@ export class PlaygroundComponent {
     }
 
     try {
+      // tslint:disable-next-line:no-unused-expression
       new URL(this.url);
     } catch (e) {
       this.error = 'Please enter a valid url';

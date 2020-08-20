@@ -2,29 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="be223c1e-fb57-4edb-9549-acf979246252" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/landing/landing.component.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/landing/landing.component.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/landing/landing.component.spec.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/landing/landing.component.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/landing/landing.module.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.spec.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.module.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/services/settings.service.spec.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/services/settings.service.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/proxy/src/endpoints/settingsEndpoint.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/app.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/app.component.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/app.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/angular.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/app.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/services/settings.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/services/settings.service.spec.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/docker/prod/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/docker/prod/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/docker/prod/entrypoint.sh" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/docker/prod/entrypoint.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/app.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/config.ts" afterDir="false" />
     </list>
     <list id="0fdeac33-4664-41b2-9080-89bed972c3c4" name="ignore" comment="build 2" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,6 +43,11 @@
     <settings elmCompilerPath="" elmFormatPath="" elmTestPath="" isElmFormatOnSaveEnabled="false" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1bAP1fgOtOgpSalYPrtIlKkRt5d" />
@@ -120,6 +114,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.start" />
+        <item itemvalue="npm.start" />
         <item itemvalue="npm.start" />
       </list>
     </recent_temporary>
@@ -478,10 +474,10 @@
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="554" y="68" key="CommitChangelistDialog2/0.0.1920.1044@0.0.1920.1044" timestamp="1590160595752" />
-    <state x="100" y="100" width="1720" height="844" key="DiffContextDialog" timestamp="1589875137387">
+    <state x="100" y="100" width="1720" height="844" key="DiffContextDialog" timestamp="1597908131803">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="100" y="100" width="1720" height="844" key="DiffContextDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1589875137387" />
+    <state x="100" y="100" width="1720" height="844" key="DiffContextDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1597908131803" />
     <state x="742" y="230" width="434" height="590" key="FileChooserDialogImpl" timestamp="1589548078396">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
@@ -574,18 +570,18 @@
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="555" y="255" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1590160608110" />
-    <state x="664" y="265" width="675" height="518" key="find.popup" timestamp="1590160362590">
+    <state x="664" y="265" width="675" height="518" key="find.popup" timestamp="1597902598943">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="664" y="265" width="675" height="518" key="find.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1590160362590" />
+    <state x="664" y="265" width="675" height="518" key="find.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1597902598943" />
     <state x="624" y="238" key="run.anything.popup" timestamp="1590160055471">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="624" y="238" key="run.anything.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1590160055471" />
-    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1590786538912">
+    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1597902607533">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1590786538912" />
+    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1597902607533" />
     <state x="623" y="1080" width="672" height="1042" key="search.everywhere.popup/0.0.1920.2124@0.0.1920.2124" timestamp="1590151566267" />
   </component>
   <component name="XDebuggerManager">
