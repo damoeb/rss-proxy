@@ -9,7 +9,7 @@ export const feedEndpoint = new class FeedEndpoint {
 
     app.get('/api/feed/live', cors(), (request: Request, response: Response) => {
       try {
-        const url = request.query.url;
+        const url = request.query.url as string;
         logger.info(`live feed-mapping of ${url}`);
 
         feedService.parseFeed(url, request)
@@ -29,7 +29,7 @@ export const feedEndpoint = new class FeedEndpoint {
 
     app.get('/api/feed', cors(), (request: Request, response: Response) => {
       try {
-        const url = request.query.url;
+        const url = request.query.url as string;
         logger.info(`feed-mapping of ${url}`);
 
         feedService.parseFeed(url, request, true)
