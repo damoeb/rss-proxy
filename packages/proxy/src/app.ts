@@ -5,7 +5,6 @@ import * as cors from 'cors';
 import logger from './logger'
 import { feedEndpoint } from './endpoints/feedEndpoint';
 import {config} from './config';
-import {readerEndpoint} from './endpoints/readerEndpoint';
 
 // see http://patorjk.com/software/taag/#p=display&f=Chunky&t=rss%20proxy
 console.log(`
@@ -39,7 +38,6 @@ if (config.env !== 'prod') {
 }
 app.use('/', express.static('static'));
 
-readerEndpoint.register(app);
 feedEndpoint.register(app);
 
 

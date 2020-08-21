@@ -66,13 +66,13 @@ export const feedService =  new class FeedService {
   public parseFeed(url: string, request: Request, canUseNativeFeed: boolean = false): Promise<FeedParserResult | GetResponse> {
       const actualOptions: Partial<FeedParserOptions> = {};
       if (request.query.output) {
-        actualOptions.output = request.query.output;
+        actualOptions.output = request.query.output as OutputType;
       }
       if (request.query.rule) {
-        actualOptions.rule = request.query.rule;
+        actualOptions.rule = request.query.rule as string;
       }
       if (request.query.content) {
-        actualOptions.content = request.query.content;
+        actualOptions.content = request.query.content as ContentResolutionType;
       }
       const options: FeedParserOptions = {...defaultOptions, ...actualOptions};
 
