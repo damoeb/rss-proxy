@@ -15,6 +15,15 @@ module.exports = function (config) {
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
+    customLaunchers: {
+      ChromeHeadlessDocker: {
+        base: 'ChromeHeadless',
+        flags: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox'
+        ]
+      }
+    },
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, './coverage/rss-it'),
       reports: ['html', 'lcovonly', 'text-summary'],
