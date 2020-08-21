@@ -1,20 +1,20 @@
 import { TestBed, async } from '@angular/core/testing';
-import { AppComponent } from './app.component';
-import {AppModule} from './app.module';
+import { PlaygroundComponent } from './playground.component';
+import {PlaygroundModule} from './playground.module';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        AppModule,
+        PlaygroundModule,
         HttpClientTestingModule
       ]
     }).compileComponents();
   }));
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+  it('should create the component', () => {
+    const fixture = TestBed.createComponent(PlaygroundComponent);
     const app = fixture.debugElement.componentInstance;
 
     expect(app).toBeTruthy();

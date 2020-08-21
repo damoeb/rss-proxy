@@ -12,6 +12,7 @@
     "javascript"
   ],
   "scripts": {
-    "bootstrap": "npm i && cd packages/core && npm i && cd - && cd packages/playground && npm i && cd - && cd packages/proxy && npm i"
+    "preinstall": "cd packages/core && npm i && cd - && cd packages/playground && npm i && cd - && cd packages/proxy && npm i",
+    "pretest": "cd packages/core && npm test && cd - && cd packages/playground && npm test -- -c ci && cd - && cd packages/proxy && npm test"
   }
 }

@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {PanelModule} from './components/panel/panel.module';
+import {PlaygroundModule} from './components/playground/playground.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import {PanelModule} from './components/panel/panel.module';
     BrowserModule,
     FormsModule,
     PanelModule,
-    HttpClientModule
+    HttpClientModule,
+    PlaygroundModule
   ],
   providers: [],
   bootstrap: [AppComponent]

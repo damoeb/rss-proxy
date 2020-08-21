@@ -1,10 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FeedService } from './feed.service';
-import {PlaygroundModule} from '../components/playground/playground.module';
+import { SettingsService } from './settings.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 
-describe('FeedService', () => {
+describe('SettingsService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
       HttpClientTestingModule
@@ -12,7 +11,7 @@ describe('FeedService', () => {
   }));
 
   it('should be created', () => {
-    const service: FeedService = TestBed.get(FeedService);
+    const service: SettingsService = TestBed.get(SettingsService);
     expect(service).toBeTruthy();
   });
 });

@@ -22,7 +22,7 @@
     "postinstall": "npm link ../core && npm run predocker:build",
     "postupdate": "npm link ../core",
     "gen-build-info": "node ../../build-info.js src/build.json",
-    "test": "sh ../../scripts/lint-dockerfiles.sh",
+    "test": "",
     "predocker:build": "npm run gen-build-info",
     "prestart": "npm run gen-build-info",
     "docker:build": "sh build-docker-image.sh",

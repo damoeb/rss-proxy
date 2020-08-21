@@ -20,7 +20,7 @@ For local development you need [node 12+](https://nodejs.org/en/). Then follow t
 
 - Install all npm dependencies
 ```
-npm run bootstrap
+npm run install
 
 ```
 
@@ -43,6 +43,15 @@ The project is separated into three modules
 - [playground](packages/playground/README.md): the web app to visualize and explore feed generation
 - [proxy](packages/proxy/README.md): the expressjs server
 
+
+## Changelog
+
+## Unreleased
+- Simplify development by building the core-package automatically
+- travis-ci build
+
+### 0.1.0
+- Working version
 
 ## Contributors
 
