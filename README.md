@@ -53,6 +53,9 @@ The project is separated into three modules
 ### 0.1.0
 - Working version
 
+## Roadmap
+See [Roadmap](https://github.com/damoeb/rss-proxy/blob/master/roadmap.md).
+
 ## Contributors
 
 * [damoeb](https://github.com/damoeb)
