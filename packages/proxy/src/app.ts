@@ -13,7 +13,7 @@ console.log(`
 |__| |_____|_____|    |   __|__| |_____|__.__|___  |
                       |__|                   |_____|\n\n`);
 logger.info(`Starting rss-proxy v. ${config.build.version}@${config.build.revision}`);
-logger.info(`https://gitlab.com/damoeb/rss-proxy\n`);
+logger.info(`https://github.com/damoeb/rss-proxy\n`);
 logger.info(`env: ${config.env}`);
 
 // -- express

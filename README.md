@@ -46,6 +46,9 @@ The project is separated into three modules
 
 ## Changelog
 
+## Unreleased
+- Correct urls pointing to old repo
+
 ## 0.2.0
 - Using pm2 to keep node server running after crash
 - Simplify development by building the core-package automatically
