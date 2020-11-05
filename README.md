@@ -47,7 +47,7 @@ The project is separated into three modules
 ## Changelog
 
 ## Unreleased
-- Correct urls pointing to old repo
+- Correct urls pointing to old repo - [99600d1](https://github.com/damoeb/rss-proxy/commit/99600d1d944df7160cea48adc6bcf4aa6943d138)
 
 ## 0.2.0
 - Using pm2 to keep node server running after crash
