@@ -2,8 +2,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
-import logger from './logger'
-import { feedEndpoint } from './endpoints/feedEndpoint';
+import logger from './logger';
+import {feedEndpoint} from './endpoints/feedEndpoint';
 import {config} from './config';
 import {analyticsService} from './services/analyticsService';
 
@@ -49,8 +49,8 @@ feedEndpoint.register(app);
 
 
 logger.debug('Available REST methods');
-app._router.stack.forEach((route:any) => {
-  if (route.route && route.route.path){
+app._router.stack.forEach((route: any) => {
+  if (route.route && route.route.path) {
     logger.debug(`${route.route.stack[0].method.toUpperCase()} ${route.route.path}`);
   }
 });

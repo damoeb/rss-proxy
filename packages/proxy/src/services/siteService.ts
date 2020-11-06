@@ -5,6 +5,8 @@ import {uniq} from 'lodash';
 import Readability from 'mozilla-readability';
 import createDOMPurify from 'dompurify';
 import {config} from '../config';
+import puppeteerService from './puppeteerService';
+import logger from '../logger';
 
 export interface SiteMeta {
   language: string
@@ -23,7 +25,7 @@ export interface SiteAnalysis {
 
 export const siteService = new class SiteService {
   analyze(url: string): Promise<SiteAnalysis> {
-    return this.download(url).then(response => {
+    return this.download(url, false).then(response => {
       const doc = this.toDom(response.body);
 
       return {
@@ -45,7 +47,7 @@ export const siteService = new class SiteService {
       copyright: this.getMetatag(doc, 'dcterms.rightsHolder')
         || this.getMetatag(doc, 'dcterms.rights')
         || this.getMetatag(doc, 'copyright'),
-    }
+    };
   }
 
   private getMetatag(doc: Document, name: string): string {
@@ -74,20 +76,48 @@ export const siteService = new class SiteService {
     };
   }
 
-  public download(url: string): Promise<GetResponse> {
+  public download(url: string, renderJavaScript: boolean): Promise<GetResponse> {
+    if (renderJavaScript) {
+      return Promise.race([
+        this.downloadDynamic(url),
+        new Promise<GetResponse>((resolve, reject) => setTimeout(() => reject(new Error(`Timeout when fetching ${url}`)), 5000))
+      ]);
+    }
+    return this.downloadStatic(url);
+  }
+
+  public downloadDynamic(url: string): Promise<GetResponse> {
     return new Promise<GetResponse>((resolve, reject) => {
-      const options = {method:'GET', url, headers: {
-        "Accepts": "text/html",
-        "User-Agent": config.userAgent
-        }};
+      logger.info(`puppeteering ${url}`);
+      puppeteerService.getMarkup(url).then(html => {
+        resolve({
+          body: html,
+          type: 'GetResponse',
+          contentType: 'text/html'
+        });
+      }).catch(error => {
+        reject({message: `Unable to download ${url}, cause ${error}`});
+      });
+    });
+  }
+
+  private downloadStatic(url: string): Promise<GetResponse> {
+    return new Promise<GetResponse>((resolve, reject) => {
+      const options = {
+        method: 'GET', url, headers: {
+          'Accepts': 'text/html',
+          'User-Agent': config.userAgent
+        }
+      };
       request(options, (error, serverResponse, html) => {
         if (!error && serverResponse && serverResponse.statusCode === 200) {
           resolve({
             body: html,
             type: 'GetResponse',
-            contentType: serverResponse.headers['content-type']},);
+            contentType: serverResponse.headers['content-type']
+          },);
         } else {
-          reject({ message: `Unable to download ${url}, cause ${error}`});
+          reject({message: `Unable to download ${url}, cause ${error}`});
         }
       });
     });
@@ -97,10 +127,12 @@ export const siteService = new class SiteService {
     const {window} = new JSDOM('');
     const DOMPurify = createDOMPurify(window);
 
-    const clean = DOMPurify.sanitize(html, {WHOLE_DOCUMENT: true,
+    const clean = DOMPurify.sanitize(html, {
+      WHOLE_DOCUMENT: true,
       FORBID_TAGS: ['style', 'script'],
-      ADD_TAGS:['meta', 'html', 'link'],
-      ADD_ATTR:['lang', 'content', 'name', 'type', 'href']});
+      ADD_TAGS: ['meta', 'html', 'link'],
+      ADD_ATTR: ['lang', 'content', 'name', 'type', 'href']
+    });
     return new JSDOM(clean).window.document;
   }
 

@@ -1,7 +1,16 @@
 import {Component} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {FeedService} from '../../services/feed.service';
-import {Article, ArticleRule, OutputType, ContentResolutionType, SourceType, FeedParserOptions, FeedUrl} from '../../../../../core/src';
+import {
+  Article,
+  ArticleRule,
+  OutputType,
+  ContentResolutionType,
+  SourceType,
+  FeedParserOptions,
+  FeedUrl,
+  FeedParserResult
+} from '../../../../../core/src';
 import {build} from '../../../environments/build';
 import {isEmpty} from 'lodash';
 
@@ -25,6 +34,7 @@ export class PlaygroundComponent {
   showFeed = false;
   showArticles = false;
   hasResults = false;
+  renderJavaScript = false;
 
   options: FeedParserOptions;
 
@@ -97,54 +107,64 @@ export class PlaygroundComponent {
 
     this.reset();
     this.isLoading = true;
-    this.feedService.fromUrl(this.url, this.options)
-      .subscribe(response => {
-        this.hasResults = true;
-        this.isLoading = false;
-        if (response.message) {
-          this.isGenerated = false;
-
-          try {
-            const {html, feeds, logs} = (response as any).data;
-            if (html) {
-              this.showMarkup = true;
-              this.feeds = feeds;
-              this.html = html;
-            }
-            if (logs) {
-              this.showConsole = true;
-              this.logs = [...logs, response.message];
-            } else {
-              this.error = response.message;
-            }
-          } catch (e) {
-            this.error = response.message;
-          }
-
-          console.error('Proxy replies an error.', response.message);
-        } else {
-          this.isGenerated = true;
-          console.log('Proxy replies an generated feed');
-          this.rules = response.rules;
-          this.currentRule = response.rules[0];
-          this.articles = response.articles;
-
-          this.showArticles = true;
-          this.showFeed = !this.showDebugger;
-          this.showMarkup = this.showDebugger;
-          this.showConsole = this.showDebugger;
-          this.html = response.html;
-          this.feeds = response.feeds;
-          this.logs = response.logs;
-          this.feedData = response.feed;
-          this.optionsFromParser = response.options;
-
-        }
-      }, (error: HttpErrorResponse) => {
+    this.feedService.fromUrl(this.url, this.options, this.renderJavaScript)
+      .subscribe(
+        response => this.handleResponse(response),
+        (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.hasResults = true;
         this.error = error.message;
       });
+  }
+
+  private handleResponse(response: FeedParserResult) {
+    console.log('handleResponse', response);
+    this.hasResults = true;
+    this.isLoading = false;
+    if (response.message) {
+      if (this.renderJavaScript) {
+        this.isGenerated = false;
+
+        try {
+          const {html, feeds, logs} = (response as any).data;
+          if (html) {
+            this.showMarkup = true;
+            this.feeds = feeds;
+            this.html = html;
+          }
+          if (logs) {
+            this.showConsole = true;
+            this.logs = [...logs, response.message];
+          } else {
+            this.error = response.message;
+          }
+        } catch (e) {
+          this.error = response.message;
+        }
+
+        console.error('Proxy replies an error.', response.message);
+      } else {
+        this.renderJavaScript = true;
+        this.parseFromUrl();
+      }
+    } else {
+      this.isGenerated = true;
+      console.log('Proxy replies an generated feed');
+      this.rules = response.rules;
+      this.currentRule = response.rules[0];
+      this.articles = response.articles;
+
+      this.showArticles = true;
+      this.showFeed = !this.showDebugger;
+      this.showMarkup = this.showDebugger;
+      this.showConsole = this.showDebugger;
+      this.html = response.html;
+      this.feeds = response.feeds;
+      this.logs = response.logs;
+      this.feedData = response.feed;
+      this.optionsFromParser = response.options;
+
+    }
   }
 
   getArticles(): string {

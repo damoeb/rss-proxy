@@ -10,12 +10,13 @@ export const feedEndpoint = new class FeedEndpoint {
 
     app.get('/api/feed/live', cors(), (request: Request, response: Response) => {
       try {
-        const url = request.query.url as string;
-        logger.info(`live feed-mapping of ${url}`);
+        const url: string = request.query.url as string;
+        const renderJavaScript: boolean = request.query.js as boolean || false;
+        logger.info(`live feed-mapping of ${url}, JavaScript=${renderJavaScript}`);
 
         analyticsService.track('live-feed', request, {url});
 
-        feedService.parseFeed(url, request)
+        feedService.parseFeed(url, renderJavaScript, request)
           .then((feedParserResult: FeedParserResult) => {
             response.json(feedParserResult);
 
@@ -32,11 +33,13 @@ export const feedEndpoint = new class FeedEndpoint {
 
     app.get('/api/feed', cors(), (request: Request, response: Response) => {
       try {
-        const url = request.query.url as string;
-        logger.info(`feed-mapping of ${url}`);
+        const url: string = request.query.url as string;
+        const renderJavaScript: boolean = request.query.renderJavaScript as boolean || false;
+        logger.info(`feed-mapping of ${url}, JavaScript=${renderJavaScript}`);
+
         analyticsService.track('feed', request, {url});
 
-        feedService.parseFeed(url, request, true)
+        feedService.parseFeed(url, renderJavaScript, request, true)
           .then((feedData: FeedParserResult | GetResponse) => {
             if ((feedData as any)['type'] === 'GetResponse') {
               const getResponse = feedData as GetResponse;
@@ -63,8 +66,10 @@ export const feedEndpoint = new class FeedEndpoint {
 
   private outputToContentType(outputType: OutputType): string {
     switch (outputType) {
-      case OutputType.ATOM: return 'application/atom+xml';
-      case OutputType.RSS: return 'application/rss+xml';
+      case OutputType.ATOM:
+        return 'application/atom+xml';
+      case OutputType.RSS:
+        return 'application/rss+xml';
       case OutputType.JSON:
       default:
         return 'application/json';

@@ -30,11 +30,13 @@
           </div>
 
         </div>
-        <div>
+        <div style="display: inline-block;">
           <button (click)="parseFromUrl()"
                   [disabled]="isLoading">
             Explore Feed
           </button>
+        </div>
+        <div>
 
 <!--          <div>Advanced Settings</div>-->
           <div *ngIf="!isLoading && !hasResults && history.length > 0">
@@ -61,8 +63,8 @@
     <div class="spinner"></div>
   </div>
 
-  <div *ngIf="error">
-    {{error}}
+  <div class="error" *ngIf="error">
+    <h2>Oops! {{error}}.</h2>
   </div>
 
   <div class="playground__buttons" *ngIf="hasResults">

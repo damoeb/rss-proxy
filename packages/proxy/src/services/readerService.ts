@@ -26,6 +26,6 @@ export const readerService = new class ReaderService {
         content: result.readability.content,
         // links: result.links,
       };
-    })
+    });
   }
 };

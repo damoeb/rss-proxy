@@ -2,8 +2,9 @@ import Analytics from 'analytics-node';
 import {Request} from 'express';
 import {config} from '../config';
 
-export const analyticsService =  new class AnalyticsService {
+export const analyticsService = new class AnalyticsService {
   private analytics: Analytics;
+
   constructor() {
     if (config.analytics.enabled) {
       this.analytics = new Analytics(config.analytics.segmentKey);

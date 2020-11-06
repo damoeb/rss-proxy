@@ -1,5 +1,6 @@
 import {
-  Article, ArticleRule,
+  Article,
+  ArticleRule,
   ContentResolutionType,
   FeedParser,
   FeedParserOptions,
@@ -29,17 +30,17 @@ const defaultOptions: FeedParserOptions = {
   content: ContentResolutionType.STATIC
 };
 
-export interface FeedParserError {
+export interface FeedParserError extends Error {
   message: string
   code?: number
   data?: Partial<FeedParserResult>
 }
 
 
-export const feedService =  new class FeedService {
-  async mapToFeed(url: string, options: FeedParserOptions, canUseNativeFeed: boolean): Promise<FeedParserResult | GetResponse> {
+export const feedService = new class FeedService {
+  async mapToFeed(url: string, options: FeedParserOptions, canUseNativeFeed: boolean, renderJavaScript: boolean): Promise<FeedParserResult | GetResponse> {
 
-    const response = await siteService.download(url);
+    const response = await siteService.download(url, renderJavaScript);
 
     const contentType = response.contentType.split(';')[0].toLowerCase();
     logger.info(`Fetched ${url} with contentType ${response.contentType} -> main type ${contentType}`);
@@ -52,38 +53,38 @@ export const feedService =  new class FeedService {
         const returnNativeFeed = canUseNativeFeed && config.preferNativeFeed && feedUrls.length > 0
           && isEmpty(options.rule);
         if (returnNativeFeed) {
-          return await siteService.download(feedUrls[0].url);
+          return await siteService.download(feedUrls[0].url, renderJavaScript);
         } else {
           return this.generateFeedFromUrl(url, response.body, doc, options, feedUrls);
         }
 
       default:
         // todo xml2json
-        return Promise.reject({message: `Content of type ${response.contentType} is not supported`} as FeedParserError)
+        return Promise.reject({message: `Content of type ${response.contentType} is not supported`} as FeedParserError);
     }
   }
 
-  public parseFeed(url: string, request: Request, canUseNativeFeed: boolean = false): Promise<FeedParserResult | GetResponse> {
-      const actualOptions: Partial<FeedParserOptions> = {};
-      if (request.query.output) {
-        actualOptions.output = request.query.output as OutputType;
-      }
-      if (request.query.rule) {
-        actualOptions.rule = request.query.rule as string;
-      }
-      if (request.query.content) {
-        actualOptions.content = request.query.content as ContentResolutionType;
-      }
-      const options: FeedParserOptions = {...defaultOptions, ...actualOptions};
-
-      logger.info(`Parsing ${url} with options ${JSON.stringify(options)}`);
-
-      if (!url) {
-        return Promise.reject({message: 'Param url is missing'} as FeedParserError);
-      }
-
-      return feedService.mapToFeed(url, options, canUseNativeFeed);
+  public parseFeed(url: string, renderJavaScript: boolean, request: Request, canUseNativeFeed: boolean = false): Promise<FeedParserResult | GetResponse> {
+    const actualOptions: Partial<FeedParserOptions> = {};
+    if (request.query.output) {
+      actualOptions.output = request.query.output as OutputType;
     }
+    if (request.query.rule) {
+      actualOptions.rule = request.query.rule as string;
+    }
+    if (request.query.content) {
+      actualOptions.content = request.query.content as ContentResolutionType;
+    }
+    const options: FeedParserOptions = {...defaultOptions, ...actualOptions};
+
+    logger.info(`Parsing ${url} with options ${JSON.stringify(options)}`);
+
+    if (!url) {
+      return Promise.reject({message: 'Param url is missing'} as FeedParserError);
+    }
+
+    return feedService.mapToFeed(url, options, canUseNativeFeed, renderJavaScript);
+  }
 
 
   private async generateFeedFromUrl(url: string, html: string, doc: Document, options: FeedParserOptions, feeds: FeedUrl[]): Promise<FeedParserResult> {
@@ -104,8 +105,8 @@ export const feedService =  new class FeedService {
       favicon: meta.favicon,
       copyright: meta.copyright,
       // updated: new Date(2013, 6, 14), // optional, default = today
-      generator: "rss-proxy", // optional, default = 'Feed for Node.js'
-      feedLinks: feeds.reduce((map:any, feed) => {
+      generator: 'rss-proxy', // optional, default = 'Feed for Node.js'
+      feedLinks: feeds.reduce((map: any, feed) => {
         map[feed.name] = feed.url;
         return map;
       }, {})
@@ -142,7 +143,7 @@ export const feedService =  new class FeedService {
 
     } else {
       return Promise.reject({
-        message: 'No article-rules found',
+        message: 'No candidates for articles found',
         data: {
           logs: logCollector.logs(),
           feeds,
@@ -161,7 +162,7 @@ export const feedService =  new class FeedService {
 
   private findFeedUrls(doc: Document, url: string): FeedUrl[] {
 
-    const types = ["application/atom+xml", "application/rss+xml", "application/json"];
+    const types = ['application/atom+xml', 'application/rss+xml', 'application/json'];
 
     const feedUrls = types.map(type => Array.from(doc.querySelectorAll(`link[href][type="${type}"]`)))
       .flat(1)
@@ -178,7 +179,7 @@ export const feedService =  new class FeedService {
         return {
           name: linkElement.getAttribute('title'),
           url: feedUrl
-        }
+        };
       });
 
     logger.debug(`Found ${feedUrls.length} feeds in site ${url}`);
@@ -190,14 +191,14 @@ export const feedService =  new class FeedService {
   private renderFeed(output: OutputType) {
     return (feed: Feed) => {
       switch (output) {
-            case OutputType.ATOM:
-              return feed.atom1();
-            case OutputType.RSS:
-              return feed.rss2();
-            default:
-            case OutputType.JSON:
-              return feed.json1()
-          }
+        case OutputType.ATOM:
+          return feed.atom1();
+        case OutputType.RSS:
+          return feed.rss2();
+        default:
+        case OutputType.JSON:
+          return feed.json1();
+      }
     };
   }
 

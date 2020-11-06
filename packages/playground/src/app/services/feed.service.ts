@@ -47,18 +47,20 @@ export class FeedService {
     return of(feedParser.getArticlesByRule(rule));
   }
 
-  getDirectFeedUrl(url: string, options: FeedParserOptions): string {
+  public getDirectFeedUrl(url: string, options: FeedParserOptions, renderJavaScript = false): string {
     return `${this.getApiBase()}api/feed?url=${encodeURIComponent(url)}`
       + this.feedUrlFragment('rule', options)
       + this.feedUrlFragment('output', options)
-      + this.feedUrlFragment('content', options);
+      + this.feedUrlFragment('content', options)
+      + `&js=${renderJavaScript}`;
   }
 
-  fromUrl(url: string, options: FeedParserOptions): Observable<FeedParserResult> {
+  public fromUrl(url: string, options: FeedParserOptions, renderJavaScript = false): Observable<FeedParserResult> {
     const parserUrl = `${this.getApiBase()}api/feed/live?url=${encodeURIComponent(url)}`
       + this.feedUrlFragment('rule', options)
       + this.feedUrlFragment('output', options)
-      + this.feedUrlFragment('content', options);
+      + this.feedUrlFragment('content', options)
+      + `&js=${renderJavaScript}`;
 
     return this.httpClient.get(parserUrl) as Observable<FeedParserResult>;
   }
