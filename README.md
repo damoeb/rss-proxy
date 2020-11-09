@@ -52,7 +52,7 @@ The project is separated into three modules
 - Bugfixes - [3f43d4a](https://github.com/damoeb/rss-proxy/commit/3f43d4a25749da476d4683bc3560e0a88fb06b24)
 
 ## 0.2.0
-- Using pm2 to keep node server running after crash
+- Using pm2 to keep node server running after crash - [5138d25](https://github.com/damoeb/rss-proxy/commit/5138d25667934f28991cd339b3816ec1078dec3d)
 - Simplify development by building the core-package automatically
 - travis-ci build
 
