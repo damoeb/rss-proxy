@@ -159,6 +159,9 @@ export class FeedParser {
     while (true) {
       const parentNodes = currentElement.map(currentNode => currentNode.parentNode);
       // todo all parent nodes are the same
+      if (!parentNodes || parentNodes.length === 0) {
+        break;
+      }
       if (parentNodes[0].isSameNode(parentNodes[1])) {
         break;
       }
