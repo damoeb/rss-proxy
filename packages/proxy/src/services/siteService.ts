@@ -1,11 +1,9 @@
-import * as request from 'request';
+import request from 'request';
 import {GetResponse} from './feedService';
 import {JSDOM} from 'jsdom';
 import {uniq} from 'lodash';
-import * as Readability from 'mozilla-readability';
-import * as createDOMPurify from 'dompurify';
-import * as winston from 'winston';
-import logger from '../logger';
+import Readability from 'mozilla-readability';
+import createDOMPurify from 'dompurify';
 import {config} from '../config';
 
 export interface SiteMeta {
