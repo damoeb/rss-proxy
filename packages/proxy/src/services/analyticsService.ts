@@ -12,11 +12,12 @@ export const analyticsService =  new class AnalyticsService {
 
   public track(event: string, request: Request, properties: object) {
     if (this.active()) {
+      const ip = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
       this.analytics.track({
         event,
         properties,
         context: {
-          ip: request.ip
+          ip
         },
         anonymousId: request.ip,
         timestamp: new Date()
