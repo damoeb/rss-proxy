@@ -1,9 +1,10 @@
 {
   "name": "@rss-proxy/proxy",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "dependencies": {
     "@rss-proxy/core": "file:../core",
+    "analytics-node": "^3.4.0-beta.3",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "dompurify": "^2.0.7",
@@ -36,6 +37,7 @@
     "node": ">=12.0.0"
   },
   "devDependencies": {
+    "@types/analytics-node": "^3.1.3",
     "@types/chai": "^4.2.7",
     "@types/cors": "^2.8.6",
     "@types/dompurify": "^2.0.1",

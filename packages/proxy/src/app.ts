@@ -1,10 +1,11 @@
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
-import * as cors from 'cors';
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
 
 import logger from './logger'
 import { feedEndpoint } from './endpoints/feedEndpoint';
 import {config} from './config';
+import {analyticsService} from './services/analyticsService';
 
 // see http://patorjk.com/software/taag/#p=display&f=Chunky&t=rss%20proxy
 console.log(`
@@ -33,10 +34,16 @@ export interface ErrorsResponse {
 // -- endpoints
 
 if (config.env !== 'prod') {
-  logger.info('Enabling cors');
+  logger.info('+ Enabling cors');
   app.use(cors());
 }
 app.use('/', express.static('static'));
+
+if (analyticsService.active()) {
+  logger.info('+ Enabling analytics');
+} else {
+  logger.info('- Disabling analytics');
+}
 
 feedEndpoint.register(app);
 

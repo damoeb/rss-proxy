@@ -1,8 +1,9 @@
 import {Express, Request, Response} from 'express';
-import * as cors from 'cors';
+import cors from 'cors';
 import logger from '../logger';
 import {FeedParserError, feedService, GetResponse} from '../services/feedService';
 import {FeedParserResult, OutputType} from '@rss-proxy/core';
+import {analyticsService} from '../services/analyticsService';
 
 export const feedEndpoint = new class FeedEndpoint {
   register(app: Express) {
@@ -11,6 +12,8 @@ export const feedEndpoint = new class FeedEndpoint {
       try {
         const url = request.query.url as string;
         logger.info(`live feed-mapping of ${url}`);
+
+        analyticsService.track('live-feed', request, {url});
 
         feedService.parseFeed(url, request)
           .then((feedParserResult: FeedParserResult) => {
@@ -31,6 +34,7 @@ export const feedEndpoint = new class FeedEndpoint {
       try {
         const url = request.query.url as string;
         logger.info(`feed-mapping of ${url}`);
+        analyticsService.track('feed', request, {url});
 
         feedService.parseFeed(url, request, true)
           .then((feedData: FeedParserResult | GetResponse) => {

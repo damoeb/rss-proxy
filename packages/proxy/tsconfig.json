@@ -6,6 +6,7 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "target": "es2018",
+    "esModuleInterop": true,
     "lib": [
       "es2018",
       "esnext.array",
