@@ -39,8 +39,8 @@ docker_image () {
 }
 
 
-clean
-build_core
-build_proxy
-build_playground
+#clean
+#build_core
+#build_proxy
+#build_playground
 docker_image

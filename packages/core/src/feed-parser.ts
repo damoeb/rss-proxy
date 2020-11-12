@@ -24,7 +24,10 @@ export enum ContentResolutionType {
   STATIC = 'STATIC', DEEP = 'DEEP'
 }
 
-export interface FeedParserResult {
+export interface SimpleFeedResult {
+  feed?: any;
+}
+export interface FeedParserResult extends SimpleFeedResult {
   usesExistingFeed: boolean;
   feeds?: FeedUrl[];
   message?: string;

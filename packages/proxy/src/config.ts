@@ -5,6 +5,9 @@ export const config = {
   port: process.env.PORT || 3000,
   env: process.env.RP_ENV || 'dev',
   hostname: 'localhost',
+  cache: {
+    lifetimeSec: 60 * 10
+  },
   analytics: {
     enabled: process.env.RP_ENV === 'deploy' || false,
     segmentKey: process.env.SEGMENT_COM_KEY

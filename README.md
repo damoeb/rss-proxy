@@ -46,6 +46,9 @@ The project is separated into three modules
 
 ## Changelog
 
+## Unreleased
+- Cache layer using memcache
+
 ## 0.3.0
 - analytics - [5617576](https://github.com/damoeb/rss-proxy/commit/5617576d80a69f0b5a0d5e69f4dd6d8bc7b06908)
 - Correct urls pointing to old repo - [99600d1](https://github.com/damoeb/rss-proxy/commit/99600d1d944df7160cea48adc6bcf4aa6943d138)
