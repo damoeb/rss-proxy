@@ -6,6 +6,7 @@ import {
   FeedParserResult,
   FeedUrl,
   OutputType,
+  SimpleFeedResult,
   SourceType
 } from '@rss-proxy/core';
 import {Feed} from 'feed';
@@ -15,6 +16,7 @@ import {siteService} from './siteService';
 import {Request} from 'express';
 import logger from '../logger';
 import {config} from '../config';
+import {cacheService} from './cacheService';
 
 
 export interface GetResponse {
@@ -63,25 +65,46 @@ export const feedService =  new class FeedService {
     }
   }
 
-  public parseFeed(url: string, request: Request, canUseNativeFeed: boolean = false): Promise<FeedParserResult | GetResponse> {
-      const actualOptions: Partial<FeedParserOptions> = {};
-      if (request.query.output) {
-        actualOptions.output = request.query.output as OutputType;
-      }
-      if (request.query.rule) {
-        actualOptions.rule = request.query.rule as string;
-      }
-      if (request.query.content) {
-        actualOptions.content = request.query.content as ContentResolutionType;
-      }
-      const options: FeedParserOptions = {...defaultOptions, ...actualOptions};
+  public parseFeedCached(url: string, options: FeedParserOptions, canUseNativeFeed: boolean = false): Promise<SimpleFeedResult | GetResponse> {
+    const cacheKey = FeedService.toCacheKey(url, options);
+    return cacheService.get<SimpleFeedResult | GetResponse>(cacheKey)
+      .then((response) => {
+        logger.debug('Cache hit');
+        return response;
+      })
+      .catch(async () => {
+        logger.debug('Cache miss');
+        const response = await feedService.parseFeed(url, options, canUseNativeFeed);
+        if ((response as any)['type'] !== 'GetResponse') {
+          cacheService.put(cacheKey, {feed: (response as FeedParserResult).feed});
+        } else {
+          cacheService.put(cacheKey, response);
+        }
+        return response;
+      });
+  }
+
+  public toOptions(request: Request): FeedParserOptions {
+    const actualOptions: Partial<FeedParserOptions> = {};
+    if (request.query.output) {
+      actualOptions.output = request.query.output as OutputType;
+    }
+    if (request.query.rule) {
+      actualOptions.rule = request.query.rule as string;
+    }
+    if (request.query.content) {
+      actualOptions.content = request.query.content as ContentResolutionType;
+    }
+    return {...defaultOptions, ...actualOptions};
+  }
+
+  public parseFeed(url: string, options: FeedParserOptions, canUseNativeFeed: boolean = false): Promise<FeedParserResult | GetResponse> {
 
       logger.info(`Parsing ${url} with options ${JSON.stringify(options)}`);
 
       if (!url) {
         return Promise.reject({message: 'Param url is missing'} as FeedParserError);
       }
-
       return feedService.mapToFeed(url, options, canUseNativeFeed);
     }
 
@@ -214,5 +237,9 @@ export const feedService =  new class FeedService {
       }
       return rules[0];
     }
+  }
+
+  private static toCacheKey(url: string, options: FeedParserOptions): string {
+    return `feed/${url}/${JSON.stringify(options)}`;
   }
 };

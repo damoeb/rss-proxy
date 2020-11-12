@@ -18,6 +18,7 @@ WORKDIR /opt/rss-proxy
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN apt-get update \
+  && apt-get install -y memcached \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* \
   && chown -R 0444 . \
@@ -27,6 +28,8 @@ COPY --from=0 /opt/rss-proxy-build/ ./
 
 USER node
 
-CMD [ "pm2-runtime", "start", "ecosystem.config.js" ]
+CMD memcached -u node -A & pm2-runtime start ecosystem.config.js
+
+USER root
 
 EXPOSE 3000
