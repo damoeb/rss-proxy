@@ -6,6 +6,7 @@ export const config = {
   env: process.env.RP_ENV || 'dev',
   hostname: 'localhost',
   cache: {
+    enabled: process.env.RP_CACHE || true,
     lifetimeSec: 60 * 10
   },
   analytics: {

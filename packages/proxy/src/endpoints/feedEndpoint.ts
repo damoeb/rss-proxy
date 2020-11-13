@@ -36,7 +36,8 @@ export const feedEndpoint = new class FeedEndpoint {
         logger.info(`feed-mapping of ${url}`);
         analyticsService.track('feed', request, {url});
 
-        feedService.parseFeedCached(url, feedService.toOptions(request), true)
+        const options = feedService.toOptions(request);
+        feedService.parseFeedCached(url, options, true)
           .then((feedData: SimpleFeedResult | GetResponse) => {
             if ((feedData as any)['type'] === 'GetResponse') {
               const getResponse = feedData as GetResponse;
@@ -44,7 +45,7 @@ export const feedEndpoint = new class FeedEndpoint {
               response.send(getResponse.body);
             } else {
               const feedParserResult = feedData as FeedParserResult;
-              response.setHeader('Content-Type', this.outputToContentType(feedParserResult.feedOutputType));
+              response.setHeader('Content-Type', FeedEndpoint.outputToContentType(options.output));
               response.send(feedParserResult.feed);
             }
 
@@ -61,13 +62,16 @@ export const feedEndpoint = new class FeedEndpoint {
 
   }
 
-  private outputToContentType(outputType: OutputType): string {
+  private static outputToContentType(outputType: OutputType): string {
     switch (outputType) {
-      case OutputType.ATOM: return 'application/atom+xml';
-      case OutputType.RSS: return 'application/rss+xml';
+      case OutputType.ATOM:
+        return 'application/atom+xml';
       case OutputType.JSON:
-      default:
         return 'application/json';
+      case OutputType.RSS:
+      default:
+        return 'application/rss+xml';
+
     }
   }
 };

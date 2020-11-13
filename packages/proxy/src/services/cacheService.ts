@@ -9,6 +9,9 @@ export const cacheService =  new class CacheService {
 
   public get<T>(key: string): Promise<T> {
     return new Promise<T>((resolve, reject) => {
+      if (!config.cache.enabled) {
+        reject('Cache disabled');
+      }
       this.memcached.get(key, (err, data) => {
         if (err || !data) {
           reject(err);

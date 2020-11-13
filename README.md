@@ -46,6 +46,9 @@ The project is separated into three modules
 
 ## Changelog
 
+## Unreleased
+- Bugfixes
+
 ## 0.4.1
 - Allow short titles
 
