@@ -128,6 +128,7 @@ export class FeedParser {
   private readonly minLinkGroupSize = 4;
   private readonly maxWordLength = 50;
   private readonly maxWordCount = 500;
+  private readonly minWordCountOFLink: number = 1;
 
   constructor(private document: HTMLDocument,
               url: string,
@@ -367,7 +368,7 @@ export class FeedParser {
 
     // find links
     const linkElements: LinkPointer[] = this.findLinks()
-      .filter(element => FeedParser.toWords(element.textContent).length > 3)
+      .filter(element => FeedParser.toWords(element.textContent).length >= this.minWordCountOFLink)
       .map(element => {
         return {
           element,

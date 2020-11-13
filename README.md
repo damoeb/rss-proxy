@@ -46,6 +46,9 @@ The project is separated into three modules
 
 ## Changelog
 
+## Unreleased
+- Allow short titles
+
 ## 0.4.0
 - Cache layer using memcache
 
