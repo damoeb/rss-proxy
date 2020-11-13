@@ -125,7 +125,7 @@ export interface Logger {
 export class FeedParser {
 
   private readonly url: URL;
-  private readonly minLinkGroupSize = 4;
+  private readonly minLinkGroupSize = 2;
   private readonly maxWordLength = 50;
   private readonly maxWordCount = 500;
   private readonly minWordCountOFLink: number = 1;

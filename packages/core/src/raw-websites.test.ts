@@ -4,7 +4,7 @@ import {expect} from 'chai';
 import {describe, it} from 'mocha';
 import * as fs from 'fs';
 
-describe('SampleFeeds', () => {
+describe('Raw Websites', () => {
 
   const toDocument = (markup: string): HTMLDocument => new JSDOM(markup).window.document;
 
@@ -16,7 +16,10 @@ describe('SampleFeeds', () => {
 
     // files object contains all files names
     // log them on console
-    files.filter(file => file.endsWith('input.html')).forEach(file => {
+    files
+      .filter(file => file.endsWith('input.html'))
+      // .filter(file => file.startsWith('spotify'))
+      .forEach(file => {
 
       it(`validate feed generation from ${file}`, () => {
 
