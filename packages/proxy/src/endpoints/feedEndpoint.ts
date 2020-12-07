@@ -33,20 +33,22 @@ export const feedEndpoint = new class FeedEndpoint {
     app.get('/api/feed', cors(), (request: Request, response: Response) => {
       try {
         const url = request.query.url as string;
-        logger.info(`feed-mapping of ${url}`);
         analyticsService.track('feed', request, {url});
-
         const options = feedService.toOptions(request);
+
+        logger.info(`feed-mapping of ${url} as ${options.output}`);
         feedService.parseFeedCached(url, options, true)
           .then((feedData: SimpleFeedResult | GetResponse) => {
             if ((feedData as any)['type'] === 'GetResponse') {
               const getResponse = feedData as GetResponse;
               response.setHeader('Content-Type', getResponse.contentType);
-              response.send(getResponse.body);
+              response.write(getResponse.body);
+              response.end()
             } else {
               const feedParserResult = feedData as FeedParserResult;
               response.setHeader('Content-Type', FeedEndpoint.outputToContentType(options.output));
-              response.send(feedParserResult.feed);
+              response.write(feedParserResult.feed)
+              response.end();
             }
 
           })
