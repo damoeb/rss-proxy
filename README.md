@@ -1,7 +1,7 @@
 # RSS-proxy
 
 RSS-proxy is a tool that allows you to do create an RSS/ATOM or JSON feed of almost any website, 
-purely by analyzing just the static HTML structure. Try the [live demo](https://rssproxy.migor.org/).
+purely by analyzing just the static HTML structure. Try the [live demo](https://rssproxy.migor.org/). Use the dropdown (see screenshot below) to choose the feed the suits your needs.
 
 ![Playground](https://github.com/damoeb/rss-proxy/raw/master/docs/rssproxy-candidates.png "Playground")
 
