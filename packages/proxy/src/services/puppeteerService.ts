@@ -32,7 +32,7 @@ export class PuppeteerService {
         // Skip first run wizards
         '--no-first-run',
         // Disable sandbox mode
-        // '--no-sandbox',
+        '--no-sandbox',
         // Expose port 9222 for remote debugging
         //  '--remote-debugging-port=9222',
         // Disable fetching safebrowsing lists, likely redundant due to disable-background-networking

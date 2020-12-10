@@ -35,12 +35,14 @@ docker_image () {
   echo "\n docker"
   pwd
   cp docker/prod/* package.json package-lock.json dist/@rss-proxy/
-  cd dist/@rss-proxy && docker build -t damoeb/rss-proxy -f Dockerfile .
+#  todo tag with version
+#  cd dist/@rss-proxy && docker build -t damoeb/rss-proxy -f Dockerfile . && cd -
+  cd docker/prod/puppeteer && docker build -t damoeb/rss-proxy:js -f Dockerfile .
 }
 
 
-clean
-build_core
-build_proxy
-build_playground
+#clean
+#build_core
+#build_proxy
+#build_playground
 docker_image

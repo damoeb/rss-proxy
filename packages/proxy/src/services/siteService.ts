@@ -77,7 +77,7 @@ export const siteService = new class SiteService {
   }
 
   public download(url: string, renderJavaScript: boolean): Promise<GetResponse> {
-    if (renderJavaScript) {
+    if (config.supportJavaScript && renderJavaScript) {
       return Promise.race([
         this.downloadDynamic(url),
         new Promise<GetResponse>((resolve, reject) => setTimeout(() => reject(new Error(`Timeout when fetching ${url}`)), 5000))
