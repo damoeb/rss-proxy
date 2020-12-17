@@ -1,5 +1,6 @@
 import {Express, Request, Response} from 'express';
 import cors from 'cors';
+import { DateTime } from 'luxon';
 import logger from '../logger';
 import {FeedParserError, feedService, GetResponse} from '../services/feedService';
 import {FeedParserResult, SimpleFeedResult, OutputType} from '@rss-proxy/core';
@@ -35,6 +36,8 @@ export const feedEndpoint = new class FeedEndpoint {
         const url = request.query.url as string;
         analyticsService.track('feed', request, {url});
         const options = feedService.toOptions(request);
+
+        response.setHeader('Retry-After', [DateTime.local().toFormat('ccc, dd LLL kkkk hh:mm:ss ZZZZ'), '300'])
 
         logger.info(`feed-mapping of ${url} as ${options.output}`);
         feedService.parseFeedCached(url, options, true)

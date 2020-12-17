@@ -48,6 +48,7 @@ The project is separated into three modules
 
 ## Unreleased
 - Bugfixes
+- Adds Retry-After Header
 
 ## 0.4.1
 - Allow short titles
