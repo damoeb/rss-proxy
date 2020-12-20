@@ -146,7 +146,7 @@ export const feedService =  new class FeedService {
           link: article.link,
           published: new Date(),
           date: new Date(),
-          description: article.summary.join(' / '),
+          // description: article.summary.join(' / '),
           content: article.content
         });
       });
@@ -204,8 +204,7 @@ export const feedService =  new class FeedService {
         }
       });
 
-    logger.debug(`Found ${feedUrls.length} feeds in site ${url}`);
-    console.log(`Found ${feedUrls.length} feeds in site ${url}`);
+    logger.debug(`Found ${feedUrls.length} native feeds in site ${url}`);
 
     return feedUrls;
   }

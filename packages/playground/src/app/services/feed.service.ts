@@ -22,7 +22,7 @@ export class FeedService {
     const domParser = new DOMParser();
     const htmlDoc = domParser.parseFromString(html, 'text/html');
 
-    const logCollector = new LogCollector(console);
+    const logCollector = new LogCollector();
     const url = 'http://example.com';
     const feedParser = new FeedParser(htmlDoc, url, options, logCollector);
 

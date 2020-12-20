@@ -1,6 +1,6 @@
 
 export const build = {
   version: '0.4.1',
-  revision: '65df73c',
-  date: '1605294235097'
+  revision: 'd3e32e5',
+  date: '1609352977890'
 };

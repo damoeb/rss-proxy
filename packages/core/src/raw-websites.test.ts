@@ -8,7 +8,6 @@ describe('Raw Websites', () => {
 
   const toDocument = (markup: string): HTMLDocument => new JSDOM(markup).window.document;
 
-
   fs.readdir('./src/test-feeds', (err, files) => {
     if (err) {
       throw err;
@@ -18,20 +17,21 @@ describe('Raw Websites', () => {
     // log them on console
     files
       .filter(file => file.endsWith('input.html'))
-      // .filter(file => file.startsWith('spotify'))
+      // .filter((file, index) => index === 3)
       .forEach(file => {
 
       it(`validate feed generation from ${file}`, () => {
 
         const markup = fs.readFileSync('./src/test-feeds/'+ file, 'utf8');
-        const expectedArticles = fs.readFileSync('./src/test-feeds/'+ file.replace('input.html', 'output.json'), 'utf8');
+        const expectedLinks = fs.readFileSync('./src/test-feeds/'+ file.replace('input.html', 'output.json'), 'utf8');
 
         const doc = toDocument(markup);
         const options = {content: ContentResolutionType.STATIC, output: OutputType.JSON, source: SourceType.STATIC};
         const feedParser = new FeedParser(doc, 'http://example.com', options, {log: () => {}, error: console.error});
 
-        // console.log(JSON.stringify(feedParser.getArticles()));
-        expect(feedParser.getArticles()).to.eql(JSON.parse(expectedArticles));
+        const links = feedParser.getArticles().map(article => article.link)
+        // console.log(JSON.stringify(links));
+        expect(links).to.eql(JSON.parse(expectedLinks));
       });
     });
   });

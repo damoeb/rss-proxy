@@ -1,194 +1,34 @@
 [
-  {
-    "title": "People love typing",
-    "link": "http://example.com/./2019/on-typing",
-    "content": "<div class=\"mt1\"><a href=\"./2019/on-typing\">People love typing</a>\n      <div class=\"grey ml2 sub\">it's a suspicious thing.</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "building nlp-compromise",
-    "link": "http://example.com/./2019/building-compromise",
-    "content": "<div class=\"mt1\"><a href=\"./2019/building-compromise\">building nlp-compromise</a>\n      <div class=\"grey sub ml2\">and not knowing how.</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "Can there be a good markup language?",
-    "link": "http://example.com/./2020/computer-markup",
-    "content": "<div class=\"mt1\"><a href=\"./2020/computer-markup\">Can there be a good markup language?</a>\n      <div class=\"grey ml2 sub\">and why not.</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "VS Code",
-    "link": "http://example.com/./2019/vscode-what-we-deserve",
-    "content": "<div class=\"mt1\"><a href=\"./2019/vscode-what-we-deserve\">VS Code</a>\n      <div class=\"grey sub ml2\">the editor we deserve.</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "My family tree",
-    "link": "http://example.com/./2019/my-family-tree",
-    "content": "<div class=\"mt1\"><a href=\"./2019/my-family-tree\">My family tree</a>\n      <div class=\"grey sub ml2\">and if they'd like me</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "pretending to know my ancestors",
-    "link": "http://example.com/./2019/pretending-to-know-my-ancestors",
-    "content": "<div class=\"mt1\"><a href=\"./2019/pretending-to-know-my-ancestors\">pretending to know my ancestors</a>\n      <div class=\"grey sub ml2\">and fully stereotyping them.</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "Calendar design",
-    "link": "http://example.com/./2019/millenial-calendar",
-    "content": "<div class=\"mt1\"><a href=\"./2019/millenial-calendar\">Calendar design</a>\n      <div class=\"grey sub ml2\">taking a crack at it</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "Computers are calendars",
-    "link": "http://example.com/./2020/computer-is-calendar",
-    "content": "<div class=\"mt1\"><a href=\"./2020/computer-is-calendar\">Computers are calendars</a>\n      <div class=\"grey sub ml2\">they should be</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "Computers are furniture",
-    "link": "http://example.com/./2020/computer-is-furniture",
-    "content": "<div class=\"mt1\"><a href=\"./2020/computer-is-furniture\">Computers are furniture</a>\n      <div class=\"grey sub ml2\">they should be</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "software is 3d",
-    "link": "http://example.com/./2020/software-is-3d",
-    "content": "<div class=\"mt1\"><a href=\"./2020/software-is-3d\">software is 3d</a>\n      <div class=\"grey sub ml2\">we just forgot</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "should we stop?",
-    "link": "http://example.com/./2020/should-we-stop",
-    "content": "<div class=\"mt1\"><a href=\"./2020/should-we-stop\">should we stop?</a>\n      <div class=\"grey sub ml2\">maybe we should.</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "4 developers I admire",
-    "link": "http://example.com/./2019/four-more-developers",
-    "content": "<div class=\"mt1\"><a href=\"./2019/four-more-developers\">4 developers I admire</a>\n      <div class=\"grey sub ml2\">in 2019</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "4 developers I admire",
-    "link": "http://example.com/./2019/four-developers",
-    "content": "<div class=\"mt1\"><a href=\"./2019/four-developers\">4 developers I admire</a>\n      <div class=\"grey sub ml2\">in 2018</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "being healthy as a software engineer",
-    "link": "http://example.com/./2019/being-healthy",
-    "content": "<div class=\"mt1\"><a href=\"./2019/being-healthy\">being healthy as a software engineer</a>\n      <div class=\"grey sub ml2\">why not.</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "Software I love",
-    "link": "http://example.com/./2020/software-i-love",
-    "content": "<div class=\"mt1\"><a href=\"./2020/software-i-love\">Software I love</a>\n      <div class=\"grey sub ml2\">and use every day</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "My favourite blogs",
-    "link": "http://example.com/./2020/blogs-i-like",
-    "content": "<div class=\"mt1\"><a href=\"./2020/blogs-i-like\">My favourite blogs</a>\n      <div class=\"grey sub ml2\">a blog is a treasure</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "things I want to buy",
-    "link": "http://example.com/./2019/things-i-want-to-buy",
-    "content": "<div class=\"mt1\"><a href=\"./2019/things-i-want-to-buy\">things I want to buy</a>\n      <div class=\"grey sub ml2\">that don't exist</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "4 songs I like",
-    "link": "http://example.com/./2018/4-songs",
-    "content": "<div class=\"mt1\"><a href=\"./2018/4-songs\">4 songs I like</a>\n      <div class=\"grey sub ml2\">in 2018</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "New music videos",
-    "link": "http://example.com/./2020/music-videos",
-    "content": "<div class=\"mt1\"><a href=\"./2020/music-videos\">New music videos</a>\n      <div class=\"grey sub ml2\">they're a thing again</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "just starting out",
-    "link": "http://example.com/./2019/just-starting-out",
-    "content": "<div class=\"mt1\"><a href=\"./2019/just-starting-out\">just starting out</a>\n      <div class=\"grey sub ml2\">being amateur.</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "Space is close",
-    "link": "http://example.com/./2020/space-is-close",
-    "content": "<div class=\"mt1\"><a href=\"./2020/space-is-close\">Space is close</a>\n      <div class=\"grey sub ml2\">you could maybe bike there</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "Standing on a planet",
-    "link": "http://example.com/./2019/understanding-the-planet",
-    "content": "<div class=\"mt1\"><a href=\"./2019/understanding-the-planet\">Standing on a planet</a>\n      <div class=\"grey sub ml2\">the ground as a ball</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "There are many people",
-    "link": "http://example.com/./2020/many-people",
-    "content": "<div class=\"mt1\"><a href=\"./2020/many-people\">There are many people</a>\n      <div class=\"grey sub ml2\">alot-alot.</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "how to cook",
-    "link": "http://example.com/./2018/how-to-cook",
-    "content": "<div class=\"mt1\"><a href=\"./2018/how-to-cook\">how to cook</a>\n      <div class=\"grey sub ml2\">and die just once</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "air quality",
-    "link": "http://example.com/./2019/air-quality",
-    "content": "<div class=\"mt1\"><a href=\"./2019/air-quality\">air quality</a>\n      <div class=\"grey sub ml2\">is not a well-understood thing.</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "wikipedia in 2020",
-    "link": "http://example.com/./2019/wikipedias-in-trouble",
-    "content": "<div class=\"mt1\"><a href=\"./2019/wikipedias-in-trouble\">wikipedia in 2020</a>\n      <div class=\"grey sub ml2\">what even.</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "a relationship tube",
-    "link": "http://example.com/./2019/a-relationship-tube",
-    "content": "<div class=\"mt1\"><a href=\"./2019/a-relationship-tube\">a relationship tube</a>\n      <div class=\"grey sub ml2\">the new internet.</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "the history of freebase",
-    "link": "http://example.com/./2019/history-of-freebase",
-    "content": "<div class=\"mt1\"><a href=\"./2019/history-of-freebase\">the history of freebase</a>\n      <div class=\"grey sub ml2\">a very expensive csv file.</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "writing a blog",
-    "link": "http://example.com/./2018/how-to-be-a-blog-in-2018",
-    "content": "<div class=\"mt1\"><a href=\"./2018/how-to-be-a-blog-in-2018\">writing a blog</a>\n      <div class=\"grey sub ml2\">by/for yourself</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "Notes on Toronto",
-    "link": "http://example.com/./2020/notes-on-toronto",
-    "content": "<div class=\"mt1\"><a href=\"./2020/notes-on-toronto\">Notes on Toronto</a>\n      <div class=\"grey sub ml2\">the world's least-understood city.</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "Ontario water",
-    "link": "http://example.com/./2019/ontario-water",
-    "content": "<div class=\"mt1\"><a href=\"./2019/ontario-water\">Ontario water</a>\n      <div class=\"grey sub ml2\">where does it all go.</div>\n    </div>",
-    "summary": []
-  },
-  {
-    "title": "Toronto and Montreal",
-    "link": "http://example.com/./2020/toronto-and-montreal",
-    "content": "<div class=\"mt1\"><a href=\"./2020/toronto-and-montreal\">Toronto and Montreal</a>\n      <div class=\"grey sub ml2\">side-by-side</div>\n    </div>",
-    "summary": []
-  }
+  "http://example.com/./2019/on-typing",
+  "http://example.com/./2019/building-compromise",
+  "http://example.com/./2020/computer-markup",
+  "http://example.com/./2019/vscode-what-we-deserve",
+  "http://example.com/./2019/my-family-tree",
+  "http://example.com/./2019/pretending-to-know-my-ancestors",
+  "http://example.com/./2019/millenial-calendar",
+  "http://example.com/./2020/computer-is-calendar",
+  "http://example.com/./2020/computer-is-furniture",
+  "http://example.com/./2020/software-is-3d",
+  "http://example.com/./2020/should-we-stop",
+  "http://example.com/./2019/four-more-developers",
+  "http://example.com/./2019/four-developers",
+  "http://example.com/./2019/being-healthy",
+  "http://example.com/./2020/software-i-love",
+  "http://example.com/./2020/blogs-i-like",
+  "http://example.com/./2019/things-i-want-to-buy",
+  "http://example.com/./2018/4-songs",
+  "http://example.com/./2020/music-videos",
+  "http://example.com/./2019/just-starting-out",
+  "http://example.com/./2020/space-is-close",
+  "http://example.com/./2019/understanding-the-planet",
+  "http://example.com/./2020/many-people",
+  "http://example.com/./2018/how-to-cook",
+  "http://example.com/./2019/air-quality",
+  "http://example.com/./2019/wikipedias-in-trouble",
+  "http://example.com/./2019/a-relationship-tube",
+  "http://example.com/./2019/history-of-freebase",
+  "http://example.com/./2018/how-to-be-a-blog-in-2018",
+  "http://example.com/./2020/notes-on-toronto",
+  "http://example.com/./2019/ontario-water",
+  "http://example.com/./2020/toronto-and-montreal"
 ]

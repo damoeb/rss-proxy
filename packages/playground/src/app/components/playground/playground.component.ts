@@ -1,29 +1,38 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {FeedService} from '../../services/feed.service';
-import {Article, ArticleRule, OutputType, ContentResolutionType, SourceType, FeedParserOptions, FeedUrl} from '../../../../../core/src';
+import {Article, ArticleRule, ContentResolutionType, FeedParserOptions, FeedUrl, OutputType, SourceType} from '../../../../../core/src';
 import {build} from '../../../environments/build';
 import {isEmpty} from 'lodash';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 
 @Component({
   selector: 'app-playground',
   templateUrl: './playground.component.html',
-  styleUrls: ['./playground.component.scss']
+  styleUrls: ['./playground.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PlaygroundComponent {
+export class PlaygroundComponent implements OnInit {
+  private iframeLoaded = false;
 
+  constructor(private httpClient: HttpClient,
+              private sanitizer: DomSanitizer,
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private changeDetectorRef: ChangeDetectorRef,
+              private feedService: FeedService) {
+    this.reset();
+    this.history = PlaygroundComponent.getHistory();
+  }
+
+  @ViewChild('iframeElement', {static: false}) iframeRef: ElementRef;
   html = '';
   feedData = '';
   rules: Array<ArticleRule>;
   currentRule: ArticleRule;
-  url: string;
-  outputs = [OutputType.ATOM, OutputType.RSS, OutputType.JSON];
-  sources = [SourceType.STATIC, SourceType.WITH_SCRIPTS];
-  showDebugger = false;
-  showMarkup = false;
-  showConsole = false;
-  showFeed = false;
-  showArticles = false;
+  url = 'https://www.heise.de';
+  showViz = 'viz';
   hasResults = false;
 
   options: FeedParserOptions;
@@ -37,47 +46,48 @@ export class PlaygroundComponent {
   isGenerated = false;
   error: string;
   history: string[];
+  proxyUrl: SafeResourceUrl;
+  currentTab: string;
 
-  constructor(private httpClient: HttpClient,
-              private feedService: FeedService) {
-    this.reset();
-    this.history = this.getHistory();
+  private static getHistory(): string[] {
+    return JSON.parse(localStorage.getItem('history') || JSON.stringify([]));
   }
 
-  parseHtml() {
-    this.feedData = '';
-    this.showFeed = false;
-    this.showArticles = true;
-
-    this.feedService.fromHTML(this.html, this.options)
-      .subscribe(result => {
-        this.rules = result.rules;
-        this.logs = result.logs;
-        this.html = result.html;
-        this.articles = result.articles;
-        this.optionsFromParser = result.options;
-      });
-
-    this.applyRule(this.rules[0]);
+  public ngOnInit() {
+    this.activatedRoute.queryParams.subscribe(params => {
+      if (params.url) {
+        this.url = params.url;
+        this.parseFromUrlInternal();
+      }
+    });
   }
 
   private applyRule(rule: ArticleRule) {
     console.log('apply rule', rule);
     this.currentRule = rule;
+    this.highlightRule(rule);
     this.feedService.applyRule(this.html, this.url, rule, this.options).subscribe(articles => {
       this.articles = articles;
     });
   }
 
-  applyRuleFromEvent(event: Event) {
-    console.log('apply rule', this.currentRule);
-    this.options.rule = this.currentRule.id;
-    this.applyRule(this.currentRule);
+  public async parseFromUrl() {
+    if (this.isLoading) { return; }
+    const queryParams: Params = { url: this.url };
+
+    return this.router.navigate(
+      [],
+      {
+        relativeTo: this.activatedRoute,
+        queryParams,
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      });
   }
 
-  parseFromUrl() {
+  private parseFromUrlInternal(): void {
     if (isEmpty(this.url)) {
       this.error = '';
+      this.changeDetectorRef.detectChanges();
       return;
     }
 
@@ -92,11 +102,13 @@ export class PlaygroundComponent {
       new URL(this.url);
     } catch (e) {
       this.error = 'Please enter a valid url';
+      this.changeDetectorRef.detectChanges();
       return;
     }
-
-    this.reset();
     this.isLoading = true;
+    this.prepareIframe(this.url);
+    this.changeDetectorRef.detectChanges();
+
     this.feedService.fromUrl(this.url, this.options)
       .subscribe(response => {
         this.hasResults = true;
@@ -107,12 +119,10 @@ export class PlaygroundComponent {
           try {
             const {html, feeds, logs} = (response as any).data;
             if (html) {
-              this.showMarkup = true;
               this.feeds = feeds;
               this.html = html;
             }
             if (logs) {
-              this.showConsole = true;
               this.logs = [...logs, response.message];
             } else {
               this.error = response.message;
@@ -126,32 +136,23 @@ export class PlaygroundComponent {
           this.isGenerated = true;
           console.log('Proxy replies an generated feed');
           this.rules = response.rules;
-          this.currentRule = response.rules[0];
-          this.articles = response.articles;
-
-          this.showArticles = true;
-          this.showFeed = !this.showDebugger;
-          this.showMarkup = this.showDebugger;
-          this.showConsole = this.showDebugger;
-          this.html = response.html;
+          this.updateScores();
+          this.applyRule(this.rules[0]);
+          this.setCurrentTab(this.showViz);
           this.feeds = response.feeds;
-          this.logs = response.logs;
           this.feedData = response.feed;
           this.optionsFromParser = response.options;
-
+          this.changeDetectorRef.detectChanges();
         }
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
-        this.hasResults = true;
+        this.hasResults = false;
         this.error = error.message;
+        this.changeDetectorRef.detectChanges();
       });
   }
 
-  getArticles(): string {
-    return this.articles ? JSON.stringify(this.articles, null, 2) : '';
-  }
-
-  getFeedUrl() {
+  public getFeedUrl() {
     return this.feedService.getDirectFeedUrl(this.url, this.options);
   }
 
@@ -159,7 +160,7 @@ export class PlaygroundComponent {
     return build;
   }
 
-  reset() {
+  public reset() {
     this.options = {
       output: OutputType.ATOM,
       source: SourceType.STATIC,
@@ -169,18 +170,20 @@ export class PlaygroundComponent {
     this.optionsFromParser = {};
     this.html = '';
     this.error = '';
+    this.hasResults = false;
+    this.iframeLoaded = false;
     this.feeds = [];
+    this.currentRule = null;
     this.logs = [];
+    this.url = null;
+    this.rules = null;
+    this.proxyUrl = null;
     this.feedData = '';
   }
 
-  getBuildDate() {
+  public getBuildDate() {
     const date = new Date(parseInt(this.getVersions().date, 10));
     return `${date.getUTCDate()}-${date.getUTCMonth()}-${date.getUTCFullYear()}`;
-  }
-
-  private getHistory(): string[] {
-    return JSON.parse(localStorage.getItem('history') || JSON.stringify([]));
   }
 
   private addToHistory(url: string) {
@@ -195,12 +198,72 @@ export class PlaygroundComponent {
     localStorage.setItem('history', JSON.stringify(history));
   }
 
-  parseFromHistoryUrl(url: string) {
+  public parseFromHistoryUrl(url: string) {
     this.url = url;
-    this.parseFromUrl();
+    return this.parseFromUrl();
   }
 
-  formatScore(score: any) {
-    return score.toFixed(2) * 100;
+  private setCurrentTab(tab: string) {
+    this.currentTab = tab;
+  }
+
+  public isCurrentRule(rule: ArticleRule): boolean {
+    return this.currentRule === rule;
+  }
+
+  private prepareIframe(url: string) {
+    this.proxyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`/api/proxy?url=${encodeURIComponent(url)}`);
+  }
+
+  private highlightRule(rule: ArticleRule): void {
+    const iframeDocument = this.iframeRef.nativeElement.contentDocument;
+    const id = 'rss-proxy-style';
+
+    try {
+      iframeDocument.getElementById(id).remove();
+    } catch (e) {
+
+    }
+    const styleNode = iframeDocument.createElement('style');
+    styleNode.setAttribute('type', 'text/css');
+    styleNode.setAttribute('id', id);
+    const code = `${rule.contextPath} {
+            border: 2px solid red!important;
+            margin-bottom: 5px!important;
+            display: block;
+          }
+          `;
+
+    const firstMatch = iframeDocument.querySelector(rule.contextPath);
+    if (firstMatch) {
+      firstMatch.scrollIntoView();
+    }
+
+    styleNode.appendChild(iframeDocument.createTextNode(code));
+    iframeDocument.head.appendChild(styleNode);
+  }
+
+  public onIframeLoad(): void {
+    if (this.rules) {
+      this.updateScores();
+    } else {
+      this.iframeLoaded = true;
+    }
+  }
+  public updateScores(): void {
+    const iframeDocument = this.iframeRef.nativeElement.contentDocument;
+    this.rules.forEach(rule => {
+      const articles = Array.from(iframeDocument.querySelectorAll(rule.contextPath))
+          // remove hidden articles
+          .filter((elem: any) => !!(elem.offsetWidth || elem.offsetHeight))
+        // remove empty articles
+        // .filter((elem: any) => elem.textContent.trim() > 0)
+        // .filter((elem: any) => Array.from(elem.querySelectorAll(rule.linkPath)).length > 0);
+      ;
+      if (articles.length === 0) {
+        rule.score -= 20;
+      }
+    });
+    this.changeDetectorRef.detectChanges();
   }
 }

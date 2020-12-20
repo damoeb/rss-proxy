@@ -2,17 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="be223c1e-fb57-4edb-9549-acf979246252" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/packages/proxy/src/services/cacheService.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/core/src/feed-parser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/core/src/feed-parser.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/core/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/build-docker-image.sh" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/build-docker-image.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/docker/prod/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/docker/prod/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/endpoints/feedEndpoint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/endpoints/feedEndpoint.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/variables.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/feedService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/services/feedService.ts" afterDir="false" />
     </list>
     <list id="0fdeac33-4664-41b2-9080-89bed972c3c4" name="ignore" comment="build 2" />
@@ -45,13 +42,15 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="feature/puppeteer" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1bAP1fgOtOgpSalYPrtIlKkRt5d" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="false" id="Update" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -67,27 +66,34 @@
     <property name="editor.config.ad.shown" value="true" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/packages/proxy/src/services" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/packages/proxy/src/endpoints" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/packages/playground/node_modules/typescript/lib" />
   </component>
+  <component name="Push.Settings">
+    <force-push-targets>
+      <force-push-target remote-path="origin" branch="feature/viz" />
+    </force-push-targets>
+  </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/packages/proxy/src/services" />
-      <recent name="$PROJECT_DIR$/packages/playground/src/app/components/playground" />
-      <recent name="$PROJECT_DIR$/packages/proxy/src/endpoints" />
-      <recent name="$PROJECT_DIR$/packages/proxy" />
-      <recent name="$PROJECT_DIR$" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/packages/playground/src/app" />
+      <recent name="$PROJECT_DIR$/packages/proxy/docker/prod/puppeteer" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/modules/rss-it-app" />
       <recent name="$PROJECT_DIR$/test" />
-      <recent name="$PROJECT_DIR$/app" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/packages/proxy/src/endpoints" />
+      <recent name="$PROJECT_DIR$/packages/proxy/src/services" />
+      <recent name="$PROJECT_DIR$/packages/proxy/docker/prod" />
+      <recent name="$PROJECT_DIR$/packages/playground/src/app/components/playground" />
+      <recent name="$PROJECT_DIR$/packages/proxy" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start">
@@ -114,6 +120,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.start" />
         <item itemvalue="npm.start" />
         <item itemvalue="npm.start" />
         <item itemvalue="npm.start" />
@@ -174,6 +181,15 @@
       <workItem from="1605088809359" duration="7787000" />
       <workItem from="1605138331391" duration="918000" />
       <workItem from="1605188775473" duration="6189000" />
+      <workItem from="1607452580396" duration="835000" />
+      <workItem from="1607530967354" duration="5587000" />
+      <workItem from="1607618645425" duration="9599000" />
+      <workItem from="1607955819673" duration="1022000" />
+      <workItem from="1608059204622" duration="1229000" />
+      <workItem from="1608116303394" duration="1743000" />
+      <workItem from="1608129317522" duration="6292000" />
+      <workItem from="1608301727461" duration="35945000" />
+      <workItem from="1609024659581" duration="31450000" />
     </task>
     <task id="LOCAL-00001" summary="find articles">
       <created>1567323868854</created>
@@ -448,7 +464,77 @@
       <option name="project" value="LOCAL" />
       <updated>1605092016755</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="fix content-type of responses">
+      <created>1607385472363</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1607385472363</updated>
+    </task>
+    <task id="LOCAL-00041" summary="screenshot that shows candidates dropdown">
+      <created>1607557300928</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1607557300929</updated>
+    </task>
+    <task id="LOCAL-00042" summary="separate docker image for puppeteer support">
+      <created>1607631933246</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1607631933246</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Add Retry-After Header">
+      <created>1608164654487</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1608164654487</updated>
+    </task>
+    <task id="LOCAL-00044" summary="proxy viz">
+      <created>1608969312206</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1608969312206</updated>
+    </task>
+    <task id="LOCAL-00045" summary="proxy viz">
+      <created>1609059627224</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1609059627224</updated>
+    </task>
+    <task id="LOCAL-00046" summary="proxy viz">
+      <created>1609281557943</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1609281557943</updated>
+    </task>
+    <task id="LOCAL-00047" summary="proxy viz">
+      <created>1609284720561</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1609284720561</updated>
+    </task>
+    <task id="LOCAL-00048" summary="proxy viz">
+      <created>1609313723815</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1609313723815</updated>
+    </task>
+    <task id="LOCAL-00049" summary="proxy viz">
+      <created>1609314003909</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1609314003909</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -457,12 +543,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="first test works" />
-    <MESSAGE value="tests" />
-    <MESSAGE value="ng app works" />
-    <MESSAGE value="build" />
-    <MESSAGE value="ignore" />
-    <MESSAGE value="build 2" />
     <MESSAGE value="Merge branch 'master' of gitlab.com:damoeb/rss-it&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;packages/proxy/docker/prod/Dockerfile&#10;#&#9;packages/proxy/package.json" />
     <MESSAGE value="logging, build info" />
     <MESSAGE value="better logging" />
@@ -482,121 +562,138 @@
     <MESSAGE value="normalize score" />
     <MESSAGE value="return native feed (if available) if no rule is specified" />
     <MESSAGE value="support dynamic pages using puppeteer" />
-    <option name="LAST_COMMIT_MESSAGE" value="support dynamic pages using puppeteer" />
+    <MESSAGE value="fix content-type of responses" />
+    <MESSAGE value="screenshot that shows candidates dropdown" />
+    <MESSAGE value="separate docker image for puppeteer support" />
+    <MESSAGE value="Add Retry-After Header" />
+    <MESSAGE value="pg" />
+    <MESSAGE value="proxy viz" />
+    <option name="LAST_COMMIT_MESSAGE" value="proxy viz" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="533" y="59" key="CommitChangelistDialog2" timestamp="1605092015074">
+    <state x="665" y="324" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1607630896389">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="533" y="59" key="CommitChangelistDialog2/0.0.1920.1044@0.0.1920.1044" timestamp="1605092015074" />
-    <state width="696" height="506" key="DebuggerActiveHint" timestamp="1605190473438">
+    <state x="665" y="324" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1044@0.0.1920.1044" timestamp="1607630896389" />
+    <state x="533" y="59" width="803" height="926" key="CommitChangelistDialog2" timestamp="1609314002206">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="696" height="506" key="DebuggerActiveHint/0.0.1920.1044@0.0.1920.1044" timestamp="1605190473438" />
-    <state x="100" y="100" width="1720" height="844" key="DiffContextDialog" timestamp="1605189140354">
+    <state x="533" y="59" width="803" height="926" key="CommitChangelistDialog2/0.0.1920.1044@0.0.1920.1044" timestamp="1609314002206" />
+    <state x="533" y="118" key="CommitChangelistDialog2/0.0.1920.2094@0.0.1920.2094" timestamp="1608164652787" />
+    <state width="696" height="506" key="DebuggerActiveHint" timestamp="1608979447944">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="100" y="100" width="1720" height="844" key="DiffContextDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1605189140354" />
-    <state width="1872" height="338" key="GridCell.Tab.0.bottom" timestamp="1605190833696">
+    <state width="696" height="506" key="DebuggerActiveHint/0.0.1920.1044@0.0.1920.1044" timestamp="1608979447944" />
+    <state x="100" y="100" width="1720" height="844" key="DiffContextDialog" timestamp="1608996384954">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.0.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833696" />
-    <state width="1872" height="338" key="GridCell.Tab.0.center" timestamp="1605190833695">
+    <state x="100" y="100" width="1720" height="844" key="DiffContextDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1608996384954" />
+    <state width="1872" height="338" key="GridCell.Tab.0.bottom" timestamp="1609020468156">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.0.center/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833695" />
-    <state width="1872" height="338" key="GridCell.Tab.0.left" timestamp="1605190833695">
+    <state width="1872" height="338" key="GridCell.Tab.0.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468156" />
+    <state width="1872" height="338" key="GridCell.Tab.0.center" timestamp="1609020468156">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.0.left/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833695" />
-    <state width="1872" height="338" key="GridCell.Tab.0.right" timestamp="1605190833695">
+    <state width="1872" height="338" key="GridCell.Tab.0.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468156" />
+    <state width="1872" height="338" key="GridCell.Tab.0.left" timestamp="1609020468156">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833695" />
-    <state width="1872" height="338" key="GridCell.Tab.1.bottom" timestamp="1605190833696">
+    <state width="1872" height="338" key="GridCell.Tab.0.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468156" />
+    <state width="1872" height="338" key="GridCell.Tab.0.right" timestamp="1609020468156">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.1.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833696" />
-    <state width="1872" height="338" key="GridCell.Tab.1.center" timestamp="1605190833696">
+    <state width="1872" height="338" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468156" />
+    <state width="1872" height="338" key="GridCell.Tab.1.bottom" timestamp="1609020468158">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.1.center/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833696" />
-    <state width="1872" height="338" key="GridCell.Tab.1.left" timestamp="1605190833696">
+    <state width="1872" height="338" key="GridCell.Tab.1.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468158" />
+    <state width="1872" height="338" key="GridCell.Tab.1.center" timestamp="1609020468157">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.1.left/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833696" />
-    <state width="1872" height="338" key="GridCell.Tab.1.right" timestamp="1605190833696">
+    <state width="1872" height="338" key="GridCell.Tab.1.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468157" />
+    <state width="1872" height="338" key="GridCell.Tab.1.left" timestamp="1609020468157">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.1.right/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833696" />
-    <state width="1872" height="338" key="GridCell.Tab.2.bottom" timestamp="1605190833697">
+    <state width="1872" height="338" key="GridCell.Tab.1.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468157" />
+    <state width="1872" height="338" key="GridCell.Tab.1.right" timestamp="1609020468157">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.2.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833697" />
-    <state width="1872" height="338" key="GridCell.Tab.2.center" timestamp="1605190833697">
+    <state width="1872" height="338" key="GridCell.Tab.1.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468157" />
+    <state width="1872" height="338" key="GridCell.Tab.2.bottom" timestamp="1609020468159">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.2.center/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833697" />
-    <state width="1872" height="338" key="GridCell.Tab.2.left" timestamp="1605190833696">
+    <state width="1872" height="338" key="GridCell.Tab.2.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468159" />
+    <state width="1872" height="338" key="GridCell.Tab.2.center" timestamp="1609020468158">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.2.left/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833696" />
-    <state width="1872" height="338" key="GridCell.Tab.2.right" timestamp="1605190833697">
+    <state width="1872" height="338" key="GridCell.Tab.2.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468158" />
+    <state width="1872" height="338" key="GridCell.Tab.2.left" timestamp="1609020468158">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.2.right/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833697" />
-    <state width="1872" height="338" key="GridCell.Tab.3.bottom" timestamp="1605190833698">
+    <state width="1872" height="338" key="GridCell.Tab.2.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468158" />
+    <state width="1872" height="338" key="GridCell.Tab.2.right" timestamp="1609020468158">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.3.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833698" />
-    <state width="1872" height="338" key="GridCell.Tab.3.center" timestamp="1605190833697">
+    <state width="1872" height="338" key="GridCell.Tab.2.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468158" />
+    <state width="1872" height="338" key="GridCell.Tab.3.bottom" timestamp="1609020468159">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.3.center/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833697" />
-    <state width="1872" height="338" key="GridCell.Tab.3.left" timestamp="1605190833697">
+    <state width="1872" height="338" key="GridCell.Tab.3.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468159" />
+    <state width="1872" height="338" key="GridCell.Tab.3.center" timestamp="1609020468159">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.3.left/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833697" />
-    <state width="1872" height="338" key="GridCell.Tab.3.right" timestamp="1605190833698">
+    <state width="1872" height="338" key="GridCell.Tab.3.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468159" />
+    <state width="1872" height="338" key="GridCell.Tab.3.left" timestamp="1609020468159">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.3.right/0.0.1920.1044@0.0.1920.1044" timestamp="1605190833698" />
-    <state x="327" y="89" key="MergeDialog" timestamp="1604964899675">
+    <state width="1872" height="338" key="GridCell.Tab.3.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468159" />
+    <state width="1872" height="338" key="GridCell.Tab.3.right" timestamp="1609020468159">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="327" y="89" key="MergeDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1604964899675" />
+    <state width="1872" height="338" key="GridCell.Tab.3.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468159" />
+    <state x="327" y="89" key="MergeDialog" timestamp="1607789256659">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="327" y="89" key="MergeDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1607789256659" />
     <state x="851" y="389" width="490" height="265" key="MultipleFileMergeDialog" timestamp="1604964899683">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="851" y="389" width="490" height="265" key="MultipleFileMergeDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1604964899683" />
-    <state x="774" y="205" key="RollbackChangesDialog" timestamp="1605188808231">
+    <state x="774" y="205" key="RollbackChangesDialog" timestamp="1608969261686">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="774" y="205" key="RollbackChangesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1605188808231" />
-    <state x="559" y="243" key="Vcs.Push.Dialog.v2" timestamp="1605092021622">
+    <state x="774" y="205" key="RollbackChangesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1608969261686" />
+    <state x="559" y="243" key="Vcs.Push.Dialog.v2" timestamp="1609314010718">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="559" y="243" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1605092021622" />
-    <state x="564" y="135" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1605192044618">
+    <state x="559" y="243" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1609314010718" />
+    <state x="460" y="219" key="Vcs.Push.Dialog.v2/0.0.1920.2094@0.0.1920.2094" timestamp="1608164657976" />
+    <state x="100" y="100" width="1720" height="844" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1609171617175">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="564" y="135" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1044@0.0.1920.1044" timestamp="1605192044618" />
+    <state x="100" y="100" width="1720" height="844" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1609171617175" />
+    <state x="564" y="135" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1608387814665">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="564" y="135" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1044@0.0.1920.1044" timestamp="1608387814665" />
     <state x="757" y="436" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1605188829026">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="757" y="436" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1044@0.0.1920.1044" timestamp="1605188829026" />
-    <state x="664" y="265" width="675" height="518" key="find.popup" timestamp="1605194944891">
+    <state x="664" y="265" width="675" height="570" key="find.popup" timestamp="1609352962623">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="664" y="265" width="675" height="518" key="find.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1605194944891" />
-    <state x="721" y="215" key="git4idea.branch.GitSmartOperationDialog" timestamp="1605188781866">
+    <state x="664" y="265" width="675" height="570" key="find.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1609352962623" />
+    <state x="721" y="215" key="git4idea.branch.GitSmartOperationDialog" timestamp="1607789251606">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="721" y="215" key="git4idea.branch.GitSmartOperationDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1605188781866" />
-    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1605194258586">
+    <state x="721" y="215" key="git4idea.branch.GitSmartOperationDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1607789251606" />
+    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1609353690524">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1605194258586" />
+    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1609353690524" />
+    <state x="623" y="461" width="672" height="1360" key="search.everywhere.popup/0.0.1920.2094@0.0.1920.2094" timestamp="1608153806667" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -604,8 +701,12 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/packages/proxy/src/services/cacheService.ts</url>
           <line>12</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/packages/proxy/src/services/feedService.ts</url>
+          <line>136</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

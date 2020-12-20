@@ -6,6 +6,8 @@ import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {PanelModule} from './components/panel/panel.module';
 import {PlaygroundModule} from './components/playground/playground.module';
+import {RouterModule} from '@angular/router';
+import {AppRoutingModule} from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import {PlaygroundModule} from './components/playground/playground.module';
     FormsModule,
     PanelModule,
     HttpClientModule,
-    PlaygroundModule
+    PlaygroundModule,
+    AppRoutingModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,176 +1,117 @@
 <div class="playground">
-  <div class="playground__header" [ngClass]="{'playground__header--slim': hasResults || isLoading, 'playground__header--large': !hasResults && !isLoading}">
 
-<!--    todo -->
-<!--    <label style="float: right;">-->
-<!--      <input type="checkbox"-->
-<!--             [checked]="true"-->
-<!--             (change)="help = !help"-->
-<!--             class="tooltip bottom"-->
-<!--             aria-label="Show additional explanation">-->
-<!--      Help-->
-<!--    </label>-->
+  <div style="flex:1; display: flex;">
+    <div style="width: 500px; display: flex; flex-direction: column">
+      <a (click)="reset()" class="button" style="text-align: center">Reset Changes</a>
+      <div style="flex: 1; max-height: 75vh; overflow-y: auto">
+        <div class="form">
+          <p class="wizard_section"><strong>1.</strong> Please enter the URL of the website you want an RSS Feed from.</p>
+          <ng-form (ngSubmit)="parseFromUrl()">
+            <div style="text-align: left" class="row">
+              <div class="tooltip bottom col-lg-8" aria-label="The URL you want to RSSify">
+                <input [(ngModel)]="url"
+                       type="url"
+                       [ngClass]="{'active': !hasResults}"
+                       style="width: 100%"
+                       autofocus
+                       name="url"
+                       [autofocus]="true"
+                       autocomplete="off"
+                       required="true"
+                       (keyup.enter)="parseFromUrl()"
+                       placeholder="Enter the Url to convert into RSS">
+              </div>
+              <div class="col-lg-4">
+                <a href="javascript:void(0)" class="button secondary" (click)="parseFromUrl()">
+                  Explore Feed
+                </a>
+              </div>
+            </div>
+            <div>
 
-    <h1>Transform any Website to a RSS/ATOM/JSON Feed</h1>
+              <div *ngIf="!isLoading && !hasResults && history.length > 0">
+                <p><strong>Previous Queries</strong></p>
+                <p *ngFor="let url of history">
+                  <a href="javascript:void(0)" (click)="parseFromHistoryUrl(url)">{{ url }}</a>
+                </p>
+              </div>
+            </div>
+          </ng-form>
+        </div>
 
-    <div class="form">
-      <ng-form #form (ngSubmit)="parseFromUrl()">
-        <div style="display: inline-block; text-align: left">
-          <div class="tooltip bottom" aria-label="The URL you want to RSSify">
-            <input [(ngModel)]="url"
-                   type="url"
-                   style="width: 40em"
-                   autofocus
-                   name="url"
-                   [autofocus]="true"
-                   autocomplete="off"
-                   required="true"
-                   (keyup.enter)="parseFromUrl()"
-                   placeholder="Enter the Url to convert into RSS">
-          </div>
+        <div *ngIf="feeds?.length > 0">
+          <p class="wizard_section"><strong>2.</strong> Choose a feed</p>
+          <p>Native Feeds Found in DOM:</p>
+          <ul class="list-of-feeds">
+            <li *ngFor="let feed of feeds"><a [href]="feed.url">{{ feed.name }}</a></li>
+          </ul>
+        </div>
+
+        <div *ngIf="rules?.length > 0" style="margin-top: 10px">
+          <p>There are {{rules?.length}} feeds in this site, pick one:</p>
+          <ol class="list-of-feeds">
+            <li *ngFor="let rule of rules?.slice(0, 15); let i = index "
+                class="rule tooltip"
+                style="display: block"
+                aria-label="Try to visualize and scroll to articles in website"
+                [ngClass]="{'active': isCurrentRule(rule)}"
+                (click)="applyRule(rule)">
+              <a href="javascript:void(0)">Feed with <strong>{{ rule.count }}</strong> articles</a> <strong *ngIf="i === 0"> - highest score</strong>
+            </li>
+          </ol>
+        </div>
+
+        <div *ngIf="currentRule">
+          <p class="wizard_section"><strong>3.</strong> Filter the feed</p>
+          <ul style="list-style: none">
+            <li><input type="checkbox" checked> Remove items that contain <a href="">one of</a> (comma separated) <input type="text" name="excludeItemsThatContain" value="Newsletter, Advertisement"></li>
+            <li><input type="checkbox" checked> Remove items with <a href="">odd content structure</a></li>
+            <li><input type="checkbox" checked> Remove items that contain <a href="">no relevant text</a></li>
+          </ul>
 
         </div>
-        <div>
-          <button (click)="parseFromUrl()"
-                  [disabled]="isLoading">
-            Explore Feed
-          </button>
 
-<!--          <div>Advanced Settings</div>-->
-          <div *ngIf="!isLoading && !hasResults && history.length > 0">
-            <p><strong>Previous Queries</strong></p>
-            <p *ngFor="let url of history">
-              <a href="javascript:void(0)" (click)="parseFromHistoryUrl(url)">{{ url }}</a>
-            </p>
-          </div>
+        <div style="display:flex;justify-content:center; align-items:center;"
+             *ngIf="isLoading && !iframeLoaded">
+          <div class="spinner"></div>
         </div>
-      </ng-form>
+      </div>
+      <div class="feed-url"
+           style="border-top: 1px solid black"
+           *ngIf="isGenerated">
+        <a *ngIf="currentRule" class="button secondary large" [href]="getFeedUrl()" target="_blank">Your ATOM Feed</a>
+        <h3 *ngIf="!currentRule">Your ATOM Feed not yet specified</h3>
+      </div>
+      <div class="playground__footer">
+        <a href="https://github.com/damoeb/rss-proxy">rss-proxy</a> v. {{ getVersions().version }}@{{ getVersions().revision }} build on {{ getBuildDate() }}
+        <a href="https://twitter.com/damoeb">contact</a>
+      </div>
     </div>
 
-    <div class="feed-url tooltip bottom"
-         aria-label="The Feed URL that can be used in a feed reader of your choice"
-         *ngIf="isGenerated">
-      <span class="tooltip" aria-label="The Feed Url, which you can use in a feedreader of choice">Feed Url: </span>
-      <a [href]="getFeedUrl()"> {{ getFeedUrl() }}</a>
-<!--      <a href="javascript:void(0)">Harvest</a>-->
+    <div style="flex: 1; display: flex; flex-direction: column; border-left: 1px solid black; background: white">
+
+      <div style="display:flex;justify-content:center; align-items:center;"
+           *ngIf="isLoading && !iframeLoaded">
+        <div class="spinner"></div>
+      </div>
+
+      <div *ngIf="error">
+        {{error}}
+      </div>
+
+      <div class="playground__panels">
+
+        <!-- Visualization --------------------------------------------------------------------------------------------- -->
+
+        <iframe [src]="proxyUrl"
+                *ngIf="proxyUrl"
+                [hidden]="isLoading"
+                #iframeElement
+                (load)="onIframeLoad()"
+                sandbox="allow-scripts allow-same-origin allow-scripts"
+                style="flex: 1; border: none"></iframe>
+
+      </div>
     </div>
-  </div>
-
-  <div style="display:flex;justify-content:center; align-items:center;"
-       *ngIf="isLoading">
-    <div class="spinner"></div>
-  </div>
-
-  <div *ngIf="error">
-    {{error}}
-  </div>
-
-  <div class="playground__buttons" *ngIf="hasResults">
-
-    Input:
-    <button [ngClass]="{'inactive':!showMarkup}" (click)="showMarkup = !showMarkup">Markup</button>
-
-    Output:
-    <button [ngClass]="{'inactive':!showConsole}" (click)="showConsole = !showConsole">Console</button>
-    <button [ngClass]="{'inactive':!showFeed}" (click)="showFeed = !showFeed">Feed</button>
-    <button [ngClass]="{'inactive':!showArticles}" (click)="showArticles = !showArticles">Article Candidates</button>
-
-  </div>
-
-  <div class="playground__panels"
-       *ngIf="!isLoading">
-
-    <!-- Markup ----------------------------------------------------------------------------------------------- -->
-
-    <app-panel id="editor"
-               name="Markup"
-               (hide)="showMarkup = false"
-               tooltip="The static HTML-data used by the feed parser. Some websites are generated using JavaScript, which is not supported by rss-proxy"
-               *ngIf="showMarkup">
-      <button (click)="parseHtml()">
-        Refresh from HTML
-      </button>
-      <textarea [(ngModel)]="html"
-                placeholder="HTML markup of website">
-
-      </textarea>
-    </app-panel>
-
-
-    <!-- Console ----------------------------------------------------------------------------------------------------- -->
-
-    <app-panel id="console"
-               name="Console"
-               tooltip="Console logs from the parser"
-               (hide)="showConsole = false"
-               *ngIf="showConsole">
-      <pre style="overflow: auto; height: 77vh">
-        <span *ngFor="let log of logs">{{ log }}</span>
-      </pre>
-    </app-panel>
-
-    <!-- Feed -------------------------------------------------------------------------------------------------------- -->
-
-    <app-panel id="feed"
-               style="overflow: auto"
-               name="Feed"
-               tooltip="the articles translated in a feed in the format of choice"
-               (hide)="showFeed = false"
-               *ngIf="showFeed">
-      <select [(ngModel)]="options.output">
-        <option [ngValue]="output"
-                *ngFor="let output of outputs">
-          {{ output }} Feed
-        </option>
-      </select>
-
-<!--      <select [(ngModel)]="options.content">-->
-<!--        <option [ngValue]="pageResolution"-->
-<!--                *ngFor="let pageResolution of pageResolutions">-->
-<!--          {{ pageResolution }}-->
-<!--        </option>-->
-<!--      </select> - {{ optionsFromParser.content }}-->
-
-      <div *ngIf="feeds?.length > 0">
-        <p>Feeds Found in DOM:</p>
-        <ul>
-          <li *ngFor="let feed of feeds"><a [href]="feed.url">{{ feed.name }}</a></li>
-        </ul>
-      </div>
-
-      <pre [innerText]="feedData"></pre>
-    </app-panel>
-
-    <!-- Articles -------------------------------------------------------------------------------------------------- -->
-
-    <app-panel id="articles"
-               style="overflow: auto;"
-               name="Article Candidates"
-               tooltip="Choose a group of article that should be included in the feed"
-               (hide)="showArticles = false"
-               *ngIf="showArticles">
-      <select (change)="applyRuleFromEvent($event)" [(ngModel)]="currentRule">
-        <option *ngFor="let rule of rules"
-                [ngValue]="rule">
-          Candidate {{ formatScore(rule?.score) }} pts / {{ rule?.articles?.length }} articles / {{ rule?.id }}
-        </option>
-      </select>
-      <div>
-        <div>Score: {{ formatScore(currentRule?.score) }} pts, {{ articles?.length }} articles</div>
-        <div class="rule__selectors">Selectors:
-          <div>Context: {{currentRule?.rule.contextElementPath }}</div>
-          <div>Title: {{currentRule?.titlePath }}</div>
-          <div>Link: {{currentRule?.rule.linkPath }}</div>
-        </div>
-        <div></div>
-        <pre [innerText]="getArticles()" style="height: 60vh"></pre>
-      </div>
-    </app-panel>
-
-  </div>
-
-  <div class="playground__footer">
-    <a href="https://github.com/damoeb/rss-proxy">rss-proxy</a> v. {{ getVersions().version }}@{{ getVersions().revision }} build on {{ getBuildDate() }}
-    <a href="https://twitter.com/damoeb">contact</a>
   </div>
 </div>
