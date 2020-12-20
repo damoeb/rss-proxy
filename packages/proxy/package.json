@@ -17,6 +17,7 @@
     "morgan": "^1.10.0",
     "mozilla-readability": "git+https://github.com/mozilla/readability.git",
     "request": "^2.88.0",
+    "urijs": "^1.19.2",
     "winston": "^3.1.0"
   },
   "scripts": {
@@ -51,6 +52,7 @@
     "@types/mocha": "^5.2.7",
     "@types/mozilla-readability": "^0.1.3",
     "@types/request": "^2.47.1",
+    "@types/urijs": "^1.19.13",
     "chai": "^4.2.0",
     "mocha": "^6.2.2",
     "nodemon": "^1.18.4",

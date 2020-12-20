@@ -6,6 +6,7 @@ import logger from './logger'
 import { feedEndpoint } from './endpoints/feedEndpoint';
 import {config} from './config';
 import {analyticsService} from './services/analyticsService';
+import {proxyEndpoint} from './endpoints/proxyEndpoint';
 
 // see http://patorjk.com/software/taag/#p=display&f=Chunky&t=rss%20proxy
 console.log(`
@@ -46,6 +47,7 @@ if (analyticsService.active()) {
 }
 
 feedEndpoint.register(app);
+proxyEndpoint.register(app);
 
 
 logger.debug('Available REST methods');

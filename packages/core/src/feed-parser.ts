@@ -8,8 +8,13 @@ export interface LinkPointer {
   path: string;
 }
 
-export interface ArticleRule extends PartialArticlesWithDescription {
+export interface ArticleRule {
+  count: number;
   score: number;
+  contexts: ArticleContext[];
+  linkPath: string;
+  contextPath: string;
+  id: string;
 }
 
 export enum OutputType {
@@ -47,47 +52,10 @@ export interface FeedParserOptions {
   content: ContentResolutionType;
 }
 
-export interface RawArticleRule {
-  contextElementPath: string;
-  linkPath: string;
-}
-
-export interface PartialArticlesWithStructure {
-  id: string;
-  articles: ArticleContext[];
-  commonTextNodePath: string[];
-  rule: RawArticleRule;
-}
-
 export interface TitleFeatures {
   variance: number;
   avgWordLength: number;
   hasHeaderInPath: boolean;
-}
-
-export interface TitleRule {
-  features: TitleFeatures;
-  textNodePath: string;
-  score?: number;
-}
-
-export interface DescriptionFeatures {
-  variance: number;
-  avgWordCount: number;
-}
-
-export interface DescriptionRule {
-  features: DescriptionFeatures;
-  useCommonPaths: boolean;
-}
-
-export interface Stats {
-  title: TitleRule;
-  description?: DescriptionRule;
-}
-
-export interface StatsWrapper {
-  stats: Stats;
 }
 
 export interface Article {
@@ -95,15 +63,6 @@ export interface Article {
   link: string;
   summary?: string[];
   content?: string;
-}
-
-export interface PartialArticlesWithTitle extends PartialArticlesWithStructure, StatsWrapper {
-  linkPath: string;
-  titlePath: string;
-}
-
-export interface PartialArticlesWithDescription extends PartialArticlesWithTitle {
-  dummy?: boolean;
 }
 
 export interface ArticleContext {
@@ -143,6 +102,9 @@ export class FeedParser {
   }
 
   private getRelativePath(node: HTMLElement, context: HTMLElement, withClassNames = false) {
+    if (node.nodeType === 3 || node === context) {
+      return 'self';
+    }
     let path = node.tagName; // tagName for text nodes is undefined
     while (node.parentNode !== context) {
       node = node.parentNode as HTMLElement;
@@ -174,7 +136,7 @@ export class FeedParser {
     return currentElement;
   }
 
-  private findArticleContext(linkGroup: LinkGroup, root: HTMLElement, index: number): ArticleContext[] {
+  private findArticleContext(linkGroup: LinkGroup): ArticleContext[] {
     const linkPointers = linkGroup.links;
     const linkElements = linkPointers.map((nodeElement: LinkPointer) => nodeElement.element);
     const articleRootElements = this.findArticleRootElement(linkElements);
@@ -219,50 +181,6 @@ export class FeedParser {
     return textNodes;
   }
 
-  private findCommonTextNodes(articles: ArticleContext[], root: HTMLElement, index: number): PartialArticlesWithStructure {
-
-    const referenceArticle = articles[0];
-    const referenceArticleNode = referenceArticle.contextElement;
-    this.logger.log(`Looking for common text-nodes in ${referenceArticle.id} (index ${index})`);
-
-    const textNodes = this.findTextNodesInContext(referenceArticleNode);
-
-    const commonTextNodes = textNodes
-      .map(textNode => this.getRelativePath(textNode, referenceArticleNode))
-      .filter((pathToTextNode) => {
-        // check every article contains the path
-        const frequency = articles.filter(article => {
-          const resolvedTextNode = article.contextElement.querySelector(pathToTextNode);
-          // article.commonTextNodes.push(resolvedTextNode);
-          return !pathToTextNode || resolvedTextNode !== null;
-        }).length / articles.length;
-
-        if (frequency >= 0.7) {
-          this.logger.log(`Adding text-node ${pathToTextNode}, frequency= ${frequency * 100}%`);
-          return true;
-        } else {
-          this.logger.log(`Ignoring text-node ${pathToTextNode}, frequency= ${frequency * 100}%`);
-          return false;
-        }
-      });
-
-    try {
-      return {
-        id: referenceArticle.id,
-        articles,
-        rule: {
-          linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
-          contextElementPath: this.getRelativePath(referenceArticle.contextElement, root)
-        },
-        commonTextNodePath: commonTextNodes.filter(this.onlyUnique),
-      };
-    } catch (e) {
-      this.logger.log(`Dropping ${referenceArticle.id}`);
-      this.logger.error(e);
-      return null;
-    }
-  }
-
   private getTagName(node: HTMLElement, withClassNames: boolean): string {
     if (!withClassNames) {
       return node.tagName;
@@ -275,7 +193,7 @@ export class FeedParser {
     return node.tagName;
   }
 
-  private uniq(list: string[]): string[] {
+  private static uniq(list: string[]): string[] {
     return list.reduce((uniqList, item) => {
 
       if (uniqList.indexOf(item) === -1) {
@@ -286,80 +204,8 @@ export class FeedParser {
     }, []);
   }
 
-  private findTitles(group: PartialArticlesWithStructure, index: number): PartialArticlesWithTitle {
-    try {
-
-      this.logger.log(`Looking for title-node in #${group.id} (index ${index})`);
-      // todo common path should use index or classes
-      const sortedTitleNodes: TitleRule[] = group.commonTextNodePath.map((textNodePath) => {
-        return {features: this.getTitleFeatures(group, textNodePath), textNodePath} as TitleRule;
-      })
-        .map((title) => {
-          // score
-          title.score = (this.scoreWordLength(title.features.avgWordLength)
-            + (title.features.hasHeaderInPath ? 1 : 0)
-            + title.features.variance) / 3;
-          return title;
-        })
-        .sort((a, b) => {
-          return b.score - a.score;
-        });
-
-      const referenceArticle = group.articles[0];
-
-      if (sortedTitleNodes.length === 0) {
-        this.logger.log(`Drop ${group.id} - no titles found`);
-        // throw new Error('No textNode found that looks like a title');
-        return null;
-      }
-
-      const titlePath = sortedTitleNodes[0];
-      this.logger.log(`group ${group.id} has title ${titlePath.textNodePath}`);
-
-      return {
-        id: group.id,
-        stats: {title: titlePath},
-        articles: group.articles,
-        rule: group.rule,
-        linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
-        titlePath: titlePath.textNodePath,
-        commonTextNodePath: group.commonTextNodePath.filter(path => path && path !== titlePath.textNodePath),
-      };
-    } catch (e) {
-      this.logger.error('Cannot extract title', e);
-      return null;
-    }
-  }
-
-  public onlyUnique(value: string, index: number, self: string[]) {
-    return self.indexOf(value) === index;
-  }
-
-  public uniqueArticles(value: Article, index: number, self: Article[]) {
+  private uniqueArticles(value: Article, index: number, self: Article[]) {
     return self.indexOf(self.find(article => article.link === value.link)) === index;
-  }
-
-  public filterSubpath(value: string, index: number, self: string[]) {
-    return self.indexOf(value) === index;
-  }
-
-  private findDescriptions(group: PartialArticlesWithTitle): PartialArticlesWithDescription {
-    group.stats.description = {
-      features: this.getDescriptionFeatures(group),
-      useCommonPaths: true
-    };
-    group.commonTextNodePath = group.commonTextNodePath
-      .filter(textPath => !textPath.startsWith(group.titlePath))
-      // .sort((a, b) => a.length - b.length)
-      .reduce((commonTextNodePaths, textNodePath) => {
-
-        if (!textNodePath.endsWith('A') && !commonTextNodePaths.some(commonTextNodePath => textNodePath.startsWith(commonTextNodePath))) {
-          commonTextNodePaths.push(textNodePath);
-        }
-
-        return commonTextNodePaths;
-      }, []);
-    return group;
   }
 
   public getArticleRules(): ArticleRule[] {
@@ -377,12 +223,12 @@ export class FeedParser {
       });
 
     // group links with similar path in document
-    const linksGroupedByPath = linkElements.reduce((linksGroup, linkPath) => {
-      if (!linksGroup[linkPath.path]) {
-        linksGroup[linkPath.path] = {links: []};
+    const linksGroupedByPath = linkElements.reduce((linkGroup, linkPath) => {
+      if (!linkGroup[linkPath.path]) {
+        linkGroup[linkPath.path] = {links: []};
       }
-      linksGroup[linkPath.path].links.push(linkPath);
-      return linksGroup;
+      linkGroup[linkPath.path].links.push(linkPath);
+      return linkGroup;
     }, {} as any);
 
 
@@ -393,59 +239,120 @@ export class FeedParser {
     // todo merge rules that just have a different context
 
     this.logger.log(`Dropping irrelevant link-groups with less than ${this.minLinkGroupSize} members`);
-    const relevantGroups: PartialArticlesWithDescription[] = groups
+    const articleRules: ArticleRule[] = groups
       .filter(linkGroup => {
         const hasEnoughMembers = linkGroup.links.length >= this.minLinkGroupSize;
 
         if (!hasEnoughMembers) {
-          this.logger.log(`Dropping link-group ${linkGroup.links[0].path} of size ${linkGroup.links.length}`);
+          this.logger.log(`Dropping link-group ${linkGroup.links[0].path}, cause it is too small (${linkGroup.links.length})`);
         }
 
         return hasEnoughMembers;
       })
-      .map((linkGroup, index) => this.findArticleContext(linkGroup, body, index))
-      .map((articlesInGroup, index) => this.findCommonTextNodes(articlesInGroup, body, index))
+      .map(linkGroup => this.findArticleContext(linkGroup))
       .filter(value => value)
-      // find title: title is the first text node that has in avg 3+ words and is wrapped by the link
-      .map((articlesInGroup, index) => this.findTitles(articlesInGroup, index))
-      .filter(value => value)
-      // find description
-      .map(articlesInGroup => this.findDescriptions(articlesInGroup));
+      .map(contexts => this.convertContextsToRule(contexts, body))
 
 
-    this.logger.log(`${relevantGroups.length} article rules left`);
-    relevantGroups.forEach(group => this.logger.log(group.id));
+    this.logger.log(`${articleRules.length} article rules left`);
+    articleRules.forEach(group => this.logger.log(group.id));
 
-    // relevantGroups.map(group => {
-    //     (group as any).groupHash = `${group.titlePath}::${group.linkPath}::${group.commonTextNodePath.join(',')}`;
-    //     return group;
-    //   }).reduce((merged, group) => {
-    //
-    // }, {});
-    // groupBy(relevantGroups.map(group => {
-    //   (group as any).groupHash = `${group.titlePath}::${group.linkPath}::${group.commonTextNodePath.join(',')}`;
-    //   return group;
-    // }, 'groupHash'))
+    return articleRules
+      .map(rule => {
 
-    return relevantGroups
-      .map(group => {
+        const contextPathContains = (s: string) => rule.contextPath.toLowerCase().indexOf(s.toLowerCase()) > -1;
+        const linkPathContains = (s: string) => rule.linkPath.toLowerCase().indexOf(s.toLowerCase()) > -1;
+        const texts = rule.contexts.map(context => context.contextElement.textContent || '');
+        const linkElementsPerContext = rule.contexts.map(context => Array.from(context.contextElement.querySelectorAll('a[href]')));
+        const linksPerContext = linkElementsPerContext.map(linkElements => FeedParser.uniq(linkElements.map((elem:any) => elem.getAttribute('href'))))
+        let score = 0;
+        if (contextPathContains('header')) score -= 2;
+        if (contextPathContains('nav')) score --;
+        if (contextPathContains('article')) score += 2;
+        if (contextPathContains('main')) score += 2;
+        if (contextPathContains('aside')) score -= 2;
+        if (contextPathContains('footer')) score -= 2;
+        if (contextPathContains('ul>li')) score --;
+        if (linkPathContains('h1')) score += 4;
+        if (linkPathContains('h2')) score += 3;
+        if (linkPathContains('h3')) score += 2;
+        if (linkPathContains('h4')) score ++;
+        if (linkPathContains('strong')) score ++;
+        if (linkPathContains('aside')) score --;
+        if (linkPathContains('article')) score += 2;
+        // if (rule.linkPath.toLowerCase() === 'a') score --;
+        if (rule.contextPath.toLowerCase().endsWith('a')) score --;
 
-        const rule = group as ArticleRule;
+        // punish multiple links elements
+        score = score - this.avg(linkElementsPerContext.map(linkElements => linkElements.length)) + 1;
+        // punish multiple links
+        score = score - this.avg(linksPerContext.map(links => links.length)) + 1;
+        if (this.median(texts.map(text => text.length)) > 150) score += 2;
+        if (this.median(texts.map(text => text.length)) > 450) score += 4;
+        if (this.median(texts.map(text => text.length)) > 450) score += 1;
+        if (texts.some(text => text.length < 50)) score --;
+        if (rule.contexts.length < 3) score --;
+        if (rule.contexts.length > 5) score ++;
+        if (rule.contexts.length > 10) score ++;
 
-        rule.score = (group.stats.title.features.variance
-          + this.scoreWordLength(group.stats.title.features.avgWordLength)
-          + group.stats.description.features.variance
-          + Math.min(group.stats.description.features.avgWordCount, this.maxWordCount) / this.maxWordCount
-        ) / 4;
+        // todo score structure, link text is subset of context text
+
+        rule.score = score;
 
         return rule;
       })
+      .reduce((rules, rule) => {
+        const similarRule = rules.find((otherRule: ArticleRule) => otherRule.contextPath === rule.contextPath)
+        if (similarRule) {
+          similarRule.score += 3;
+        } else {
+          rules.push(rule);
+        }
+
+        // /a/b
+        // /a
+        const subRules = rules.filter((extendedRule: ArticleRule) => {
+          return extendedRule.contextPath.startsWith(rule.contextPath);
+        });
+        rule.score -= subRules.length;
+        rules.filter((superRule: ArticleRule) => {
+          return rule.contextPath.startsWith(superRule.contextPath);
+        })
+          .forEach((superRule: ArticleRule) => {
+          superRule.score --;
+        });
+
+        // todo mag punish more general rules
+        return rules;
+      }, [])
       .sort((a, b) => b.score - a.score);
+  }
+
+  private avg(values: number[]){
+    return values.reduce((sum, count) => {
+      return sum + count;
+    }, 0) / values.length;
+  }
+  private median(values: number[]){
+    if(values.length ===0) return 0;
+
+    values.sort((a,b) => a-b );
+
+    const half = Math.floor(values.length / 2);
+
+    if (values.length % 2) {
+      return values[half];
+    }
+
+    return (values[half - 1] + values[half]) / 2.0;
   }
 
   public getArticles(): Article[] {
 
     const rules = this.getArticleRules();
+    if (rules.length === 0) {
+      throw new Error('No rules available')
+    }
     const bestRule = rules[0];
     return this.getArticlesByRule(bestRule);
   }
@@ -454,26 +361,16 @@ export class FeedParser {
 
     this.logger.log('apply rule', rule.id);
 
-    return Array.from(this.document.querySelectorAll(rule.rule.contextElementPath))
+    return Array.from(this.document.querySelectorAll<HTMLElement>(rule.contextPath))
       .map(element => {
         try {
-          const titles = Array.from(element.querySelectorAll(rule.titlePath)).map(node => node.textContent.trim());
-          const link = element.querySelector(rule.linkPath).getAttribute('href');
-          if (titles.length === 0 || titles.join('').trim().length === 0) {
-            return undefined;
-          }
-
+          const link = FeedParser.querySelector(element, rule.linkPath);
+          const linkText = link.textContent;
+          const href = FeedParser.querySelector(element, rule.linkPath).getAttribute('href');
           const article: Article = {
-            title: titles.join(' / '),
-            link: FeedParser.toAbsoluteUrl(this.url, link),
+            title: linkText,
+            link: FeedParser.toAbsoluteUrl(this.url, href),
             content: element.outerHTML,
-            summary: rule.commonTextNodePath.map(textNodePath => {
-              return Array.from(element.querySelectorAll(textNodePath))
-                .map(textNode => textNode.textContent.trim());
-            })
-              .flat(1)
-              .filter(this.onlyUnique)
-              .filter(text => text.split(' ').length > 5)
           };
 
           return article;
@@ -483,46 +380,6 @@ export class FeedParser {
       })
       .filter(article => article)
       .filter(this.uniqueArticles);
-  }
-
-  private getTitleFeatures(group: PartialArticlesWithStructure, textNodePath: string): TitleFeatures {
-    const wordsInTitles = group.articles
-      .map(article => {
-        const otherTextNode = article.contextElement.querySelector(textNodePath);
-        if (!otherTextNode) {
-          return [];
-        }
-        return FeedParser.toWords(otherTextNode.textContent);
-      });
-    const words = wordsInTitles.flat(1);
-    const variance = words.filter(this.onlyUnique).length / Math.max(words.length, 1);
-
-    const totalWordLengthSum = wordsInTitles.map(wordsInTitle => wordsInTitle.length).reduce((sum, wordCount) => sum + wordCount, 0);
-    const avgWordLength = totalWordLengthSum / wordsInTitles.length;
-
-    return {variance, avgWordLength, hasHeaderInPath: /h[0-9]|header/i.test(textNodePath)};
-  }
-
-  private getDescriptionFeatures(group: PartialArticlesWithTitle) {
-    // todo exclude title
-    const articleWords = group.articles.map(article => {
-      return group.commonTextNodePath
-        .map(path => Array.from(article.contextElement.querySelectorAll(path))
-          .map(textNode => textNode.textContent)
-        )
-        .flat(1)
-        .map(text => FeedParser.toWords(text))
-        .flat(1);
-    });
-
-    const totalWordCount = articleWords.reduce((sum, words) => {
-      return sum + words.length;
-    }, 0);
-
-    return {
-      variance: this.uniq(articleWords.flat(1)).length / Math.max(articleWords.flat(1).length, 1),
-      avgWordCount: totalWordCount / group.articles.length
-    };
   }
 
   public static toAbsoluteUrl(url: URL, link: string) {
@@ -541,7 +398,23 @@ export class FeedParser {
     return `${url.origin}/${link}`;
   }
 
-  private scoreWordLength(wordLength: number) {
-    return Math.min(wordLength, this.maxWordLength) / this.maxWordLength;
+  private static querySelector(contextElement: HTMLElement, pathToTextNode: string): HTMLElement {
+    return pathToTextNode === 'self' ? contextElement : contextElement.querySelector(pathToTextNode);
+  }
+
+  // private static querySelectorAll(contextElement: HTMLElement, pathToTextNode: string): HTMLElement[] {
+  //   return pathToTextNode === 'self' ? [contextElement] : Array.from(contextElement.querySelectorAll(pathToTextNode));
+  // }
+
+  private convertContextsToRule(contexts: ArticleContext[], root: HTMLElement): ArticleRule {
+    const referenceArticle = contexts[0]
+    return {
+      count: contexts.length,
+      score: 0,
+      contexts,
+      linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
+      contextPath: 'body>'+this.getRelativePath(referenceArticle.contextElement, root),
+      id: contexts[0].id
+    };
   }
 }

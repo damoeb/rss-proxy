@@ -1,13 +1,11 @@
 .playground {
   height: 100vh;
   display: flex;
-  background-color: #feffee;
+  background-color: #ffffff;
   flex-direction: column;
 
   &__footer {
     text-align: center;
-    padding-top: 5rem;
-    padding-bottom: 1rem;
   }
 
   &__header {
@@ -26,19 +24,29 @@
       }
     }
   }
+  .list-of-feeds {
+    list-style: circle;
+    li {
+      font-size: larger;
+    }
+  }
+  .wizard_section {
+    margin-top: 40px;
+    font-size: larger;
+  }
 }
 button.inactive {
   background: transparent;
   border: 1px solid black;
 }
-a {
-  color: black;
-  border-bottom: 2px solid black;
-}
-a:hover {
-  text-decoration: none;
-  border-bottom-style: hidden;
-}
+//a {
+//  color: black;
+//  border-bottom: 2px solid black;
+//}
+//a:hover {
+//  text-decoration: none;
+//  border-bottom-style: hidden;
+//}
 select:focus,
 select:hover,
 input[type=text]:focus,
@@ -56,7 +64,7 @@ input[type=checkbox]:hover {
 }
 .playground__panels {
   display: flex;
-  max-height: 80vh;
+  max-height: 100vh;
   flex: 1;
 }
 app-panel {
@@ -71,6 +79,7 @@ textarea {
 }
 .feed-url {
   white-space: nowrap;
+  text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 80vw;
@@ -109,4 +118,21 @@ app-panel {
   border-left: 1px solid rgb(204, 204, 204);
   display: flex;
   flex-direction: column;
+}
+.rule {
+  cursor: pointer;
+}
+
+.active {
+  a {
+    color: #d32f2f;
+    font-weight: bold;
+  }
+}
+
+.btn-primary {
+  color: var(--primary-color);
+}
+.btn-secondary {
+  color: var(--secondary-color);
 }
