@@ -61,7 +61,10 @@ export class PuppeteerService {
     const page = await this.createPage();
     await page.goto(url, {
       waitUntil: 'domcontentloaded',
+      timeout: 15000
     });
+
+    await page.waitForTimeout(3000);
 
     const markup = await page.evaluate(() => {
       return document.documentElement.innerHTML;

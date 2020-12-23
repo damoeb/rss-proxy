@@ -45,9 +45,9 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 ENV RP_SUPPORT_JAVASCRIPT=true
-RUN chown -R node node_modules/puppeteer
+RUN chown -R node node_modules/puppeteer && node node_modules/puppeteer/install.js
 
 USER node
-CMD [ "pm2-runtime", "start", "ecosystem.config.js" ]
+#CMD [ "pm2-runtime", "start", "ecosystem.config.js" ]
 
-EXPOSE 3000
+#EXPOSE 3000

@@ -34,7 +34,7 @@ export const feedEndpoint = new class FeedEndpoint {
     app.get('/api/feed', cors(), (request: Request, response: Response) => {
       try {
         const url: string = request.query.url as string;
-        const renderJavaScript: boolean = request.query.renderJavaScript as boolean || false;
+        const renderJavaScript: boolean = request.query.js === 'true' || false;
         logger.info(`feed-mapping of ${url}, JavaScript=${renderJavaScript}`);
 
         analyticsService.track('feed', request, {url});
