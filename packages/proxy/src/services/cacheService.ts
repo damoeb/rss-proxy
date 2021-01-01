@@ -29,4 +29,8 @@ export const cacheService =  new class CacheService {
       }
     });
   }
+
+  public active(): boolean {
+    return config.cache.enabled;
+  }
 };

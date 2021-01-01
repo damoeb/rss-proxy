@@ -1,5 +1,6 @@
 import {Express, Request, Response} from 'express';
 import cors from 'cors';
+import iconv from 'iconv-lite';
 import logger from '../logger';
 import {FeedParserError, feedService, GetResponse} from '../services/feedService';
 import {FeedParserResult, SimpleFeedResult, OutputType} from '@rss-proxy/core';
@@ -15,7 +16,7 @@ export const feedEndpoint = new class FeedEndpoint {
 
         analyticsService.track('live-feed', request, {url});
 
-        feedService.parseFeed(url, feedService.toOptions(request))
+        feedService.parseFeed(url, feedService.toOptions(request), false, true)
           .then((feedParserResult: FeedParserResult) => {
             response.json(feedParserResult);
 
@@ -31,8 +32,8 @@ export const feedEndpoint = new class FeedEndpoint {
     });
 
     app.get('/api/feed', cors(), (request: Request, response: Response) => {
+      const url = request.query.url as string;
       try {
-        const url = request.query.url as string;
         analyticsService.track('feed', request, {url});
         const options = feedService.toOptions(request);
 
@@ -44,27 +45,35 @@ export const feedEndpoint = new class FeedEndpoint {
           .then((feedData: SimpleFeedResult | GetResponse) => {
             if ((feedData as any)['type'] === 'GetResponse') {
               const getResponse = feedData as GetResponse;
-              response.setHeader('Content-Type', getResponse.contentType);
-              response.write(getResponse.body);
+              response.set('Charset', 'utf-8');
+              response.setHeader('Content-Type', getResponse.contentType + '; charset=utf-8');
+              response.write(iconv.encode(getResponse.body, 'utf8'));
               response.end()
             } else {
               const feedParserResult = feedData as FeedParserResult;
-              response.setHeader('Content-Type', FeedEndpoint.outputToContentType(options.output));
-              response.write(feedParserResult.feed)
+              response.set('Charset', 'utf-8');
+              response.setHeader('Content-Type', FeedEndpoint.outputToContentType(options.output) + '; charset=utf-8');
+              response.write(iconv.encode(feedParserResult.feed, 'utf8'));
               response.end();
             }
 
           })
           .catch((err: FeedParserError) => {
-            logger.error(`Failed to proxy ${url}, cause ${err.message}`);
-            response.json(err);
+            FeedEndpoint.returnErrorFeed(url, err.message, response);
           });
 
       } catch (e) {
-        response.json({message: e.message} as FeedParserError);
+        logger.error(`Internal error when proxying ${url}, cause ${e}`);
+        FeedEndpoint.returnErrorFeed(url, e.message, response);
       }
     });
+  }
 
+  private static returnErrorFeed(url: string, message: string, response: Response) {
+    const errorFeed = feedService.mapErrorToFeed(url, message);
+    response.setHeader('Content-Type', 'application/atom+xml');
+    response.write(errorFeed);
+    response.end();
   }
 
   private static outputToContentType(outputType: OutputType): string {

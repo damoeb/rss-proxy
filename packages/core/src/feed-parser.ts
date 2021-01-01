@@ -1,3 +1,5 @@
+
+
 export interface FeedUrl {
   name: string;
   url: string;
@@ -9,11 +11,12 @@ export interface LinkPointer {
 }
 
 export interface ArticleRule {
-  count: number;
-  score: number;
-  contexts: ArticleContext[];
-  linkPath: string;
-  contextPath: string;
+  hidden?: boolean;
+  count?: number;
+  score?: number;
+  contexts?: ArticleContext[];
+  linkXPath: string;
+  contextXPath: string;
   id: string;
 }
 
@@ -47,9 +50,9 @@ export interface FeedParserResult extends SimpleFeedResult {
 
 export interface FeedParserOptions {
   output: OutputType;
-  source: SourceType;
   rule?: string,
-  content: ContentResolutionType;
+  excludeItemsThatContainOneOf?: string,
+  excludeBrokenItems?: boolean
 }
 
 export interface TitleFeatures {
@@ -85,8 +88,6 @@ export class FeedParser {
 
   private readonly url: URL;
   private readonly minLinkGroupSize = 2;
-  private readonly maxWordLength = 50;
-  private readonly maxWordCount = 500;
   private readonly minWordCountOFLink: number = 1;
 
   constructor(private document: HTMLDocument,
@@ -101,17 +102,40 @@ export class FeedParser {
     return this.document.getElementsByTagName('body').item(0);
   }
 
-  private getRelativePath(node: HTMLElement, context: HTMLElement, withClassNames = false) {
+  private static getRelativeXPath(element: HTMLElement, context: HTMLElement): string {
+    if (element.id !== '')
+      return "//*[@id='"+element.id+"']";
+
+    if (element === context)
+      return '//' + element.tagName.toLowerCase();
+
+    let ix = 0;
+    const siblings = element.parentElement.children;
+    for (let i = 0; i < siblings.length; i ++) {
+      const sibling = siblings[i];
+
+      if (sibling === element) {
+        return `${this.getRelativeXPath(element.parentElement, context)}/${element.tagName.toLowerCase()}[${ix + 1}]`;
+      }
+
+      if (sibling.nodeType===1 && sibling.tagName === element.tagName) {
+        ix++;
+      }
+    }
+  }
+
+  public static getRelativePath(node: HTMLElement, context: HTMLElement, withClassNames = false) {
     if (node.nodeType === 3 || node === context) {
+      // todo mag this is not applicable
       return 'self';
     }
     let path = node.tagName; // tagName for text nodes is undefined
     while (node.parentNode !== context) {
       node = node.parentNode as HTMLElement;
       if (typeof (path) === 'undefined') {
-        path = this.getTagName(node, withClassNames);
+        path = FeedParser.getTagName(node, withClassNames);
       } else {
-        path = `${this.getTagName(node, withClassNames)}>${path}`;
+        path = `${FeedParser.getTagName(node, withClassNames)}>${path}`;
       }
     }
     return path;
@@ -121,19 +145,18 @@ export class FeedParser {
     return Array.from(this.document.getElementsByTagName('A')) as HTMLElement[];
   }
 
-  private findArticleRootElement(currentElement: HTMLElement[]): HTMLElement[] {
+  private findArticleRootElement(linkElements: HTMLElement[]): HTMLElement[] {
     while (true) {
-      const parentNodes = currentElement.map(currentNode => currentNode.parentNode);
-      // todo all parent nodes are the same
+      const parentNodes = linkElements.map(currentNode => currentNode.parentElement);
       if (!parentNodes || parentNodes.length === 0) {
         break;
       }
       if (parentNodes[0].isSameNode(parentNodes[1])) {
         break;
       }
-      currentElement = parentNodes as HTMLElement[];
+      linkElements = parentNodes as HTMLElement[];
     }
-    return currentElement;
+    return linkElements;
   }
 
   private findArticleContext(linkGroup: LinkGroup): ArticleContext[] {
@@ -181,7 +204,7 @@ export class FeedParser {
     return textNodes;
   }
 
-  private getTagName(node: HTMLElement, withClassNames: boolean): string {
+  private static getTagName(node: HTMLElement, withClassNames: boolean): string {
     if (!withClassNames) {
       return node.tagName;
     }
@@ -218,7 +241,7 @@ export class FeedParser {
       .map(element => {
         return {
           element,
-          path: this.getRelativePath(element, body)
+          path: FeedParser.getRelativePath(element, body, true)
         };
       });
 
@@ -257,11 +280,13 @@ export class FeedParser {
     this.logger.log(`${articleRules.length} article rules left`);
     articleRules.forEach(group => this.logger.log(group.id));
 
+    const words = (text: string) => text.split(' ').filter(word => word.length > 0);
+
     return articleRules
       .map(rule => {
 
-        const contextPathContains = (s: string) => rule.contextPath.toLowerCase().indexOf(s.toLowerCase()) > -1;
-        const linkPathContains = (s: string) => rule.linkPath.toLowerCase().indexOf(s.toLowerCase()) > -1;
+        const contextPathContains = (s: string) => rule.contextXPath.toLowerCase().indexOf(s.toLowerCase()) > -1;
+        const linkPathContains = (s: string) => rule.linkXPath.toLowerCase().indexOf(s.toLowerCase()) > -1;
         const texts = rule.contexts.map(context => context.contextElement.textContent || '');
         const linkElementsPerContext = rule.contexts.map(context => Array.from(context.contextElement.querySelectorAll('a[href]')));
         const linksPerContext = linkElementsPerContext.map(linkElements => FeedParser.uniq(linkElements.map((elem:any) => elem.getAttribute('href'))))
@@ -281,12 +306,14 @@ export class FeedParser {
         if (linkPathContains('aside')) score --;
         if (linkPathContains('article')) score += 2;
         // if (rule.linkPath.toLowerCase() === 'a') score --;
-        if (rule.contextPath.toLowerCase().endsWith('a')) score --;
+        if (rule.contextXPath.toLowerCase().endsWith('a')) score -= 5;
+        if (rule.linkXPath.toLowerCase() === 'self') score --;
 
         // punish multiple links elements
         score = score - this.avg(linkElementsPerContext.map(linkElements => linkElements.length)) + 1;
         // punish multiple links
         score = score - this.avg(linksPerContext.map(links => links.length)) + 1;
+        if (this.median(texts.map(text => words(text).length)) < 3) score -= 10;
         if (this.median(texts.map(text => text.length)) > 150) score += 2;
         if (this.median(texts.map(text => text.length)) > 450) score += 4;
         if (this.median(texts.map(text => text.length)) > 450) score += 1;
@@ -295,14 +322,12 @@ export class FeedParser {
         if (rule.contexts.length > 5) score ++;
         if (rule.contexts.length > 10) score ++;
 
-        // todo score structure, link text is subset of context text
-
         rule.score = score;
 
         return rule;
       })
       .reduce((rules, rule) => {
-        const similarRule = rules.find((otherRule: ArticleRule) => otherRule.contextPath === rule.contextPath)
+        const similarRule = rules.find((otherRule: ArticleRule) => otherRule.contextXPath === rule.contextXPath)
         if (similarRule) {
           similarRule.score += 3;
         } else {
@@ -312,17 +337,16 @@ export class FeedParser {
         // /a/b
         // /a
         const subRules = rules.filter((extendedRule: ArticleRule) => {
-          return extendedRule.contextPath.startsWith(rule.contextPath);
+          return extendedRule.contextXPath.startsWith(rule.contextXPath);
         });
         rule.score -= subRules.length;
         rules.filter((superRule: ArticleRule) => {
-          return rule.contextPath.startsWith(superRule.contextPath);
+          return rule.contextXPath.startsWith(superRule.contextXPath);
         })
           .forEach((superRule: ArticleRule) => {
           superRule.score --;
         });
 
-        // todo mag punish more general rules
         return rules;
       }, [])
       .sort((a, b) => b.score - a.score);
@@ -333,6 +357,7 @@ export class FeedParser {
       return sum + count;
     }, 0) / values.length;
   }
+
   private median(values: number[]){
     if(values.length ===0) return 0;
 
@@ -361,25 +386,28 @@ export class FeedParser {
 
     this.logger.log('apply rule', rule.id);
 
-    return Array.from(this.document.querySelectorAll<HTMLElement>(rule.contextPath))
+    return FeedParser.evaluateXPath(rule.contextXPath, this.document.body, this.document)
       .map(element => {
         try {
-          const link = FeedParser.querySelector(element, rule.linkPath);
+          const link = FeedParser.evaluateXPath(rule.linkXPath, element, this.document)[0];
           const linkText = link.textContent;
-          const href = FeedParser.querySelector(element, rule.linkPath).getAttribute('href');
+          const href = link.getAttribute('href');
           const article: Article = {
             title: linkText,
             link: FeedParser.toAbsoluteUrl(this.url, href),
             content: element.outerHTML,
           };
 
+          if (!FeedParser.qualifiesAsArticle(element, rule, this.document)) {
+            return undefined;
+          }
+
           return article;
         } catch (err) {
           return undefined;
         }
       })
-      .filter(article => article)
-      .filter(this.uniqueArticles);
+      .filter(article => article);
   }
 
   public static toAbsoluteUrl(url: URL, link: string) {
@@ -398,23 +426,89 @@ export class FeedParser {
     return `${url.origin}/${link}`;
   }
 
-  private static querySelector(contextElement: HTMLElement, pathToTextNode: string): HTMLElement {
-    return pathToTextNode === 'self' ? contextElement : contextElement.querySelector(pathToTextNode);
-  }
+  // private static querySelector(contextElement: HTMLElement, pathToTextNode: string): HTMLElement {
+  //   return pathToTextNode === 'self' ? contextElement : contextElement.querySelector(pathToTextNode);
+  // }
 
   // private static querySelectorAll(contextElement: HTMLElement, pathToTextNode: string): HTMLElement[] {
   //   return pathToTextNode === 'self' ? [contextElement] : Array.from(contextElement.querySelectorAll(pathToTextNode));
   // }
 
   private convertContextsToRule(contexts: ArticleContext[], root: HTMLElement): ArticleRule {
-    const referenceArticle = contexts[0]
+    const referenceArticle = contexts[0];
     return {
       count: contexts.length,
       score: 0,
       contexts,
-      linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
-      contextPath: 'body>'+this.getRelativePath(referenceArticle.contextElement, root),
+      linkXPath: FeedParser.fixLinkXPath(FeedParser.getRelativeXPath(referenceArticle.linkElement, referenceArticle.contextElement)),
+      contextXPath: FeedParser.generalizeContextXPath(contexts, root),
       id: contexts[0].id
     };
+  }
+
+  private static evaluateXPath(xPath: string, context: HTMLElement | Document, document: Document): HTMLElement[] {
+    const xpathResult = document.evaluate(xPath, context, null, 5);
+    const nodes: HTMLElement[] = [];
+    let node = xpathResult.iterateNext();
+    while (node) {
+      nodes.push(node as HTMLElement);
+      node = xpathResult.iterateNext();
+    }
+    return nodes;
+  }
+
+  /**
+   * drops the last index if available
+   */
+  private static generalizeContextXPath(contexts: ArticleContext[], root: HTMLElement): string {
+    return this.generalizeXPaths(contexts.map(context => FeedParser.getRelativeXPath(context.contextElement, root)));
+  }
+
+  public static qualifiesAsArticle(elem: HTMLElement, rule: ArticleRule, document: Document): boolean {
+    if (elem.textContent.replace(/[\r\n\t ]+/g, '').length === 0) {
+      return false;
+    }
+    const links = this.evaluateXPath(rule.linkXPath, elem, document);
+    if (links.length === 0) {
+      return false;
+    }
+    return true;
+  }
+
+  private static fixLinkXPath(xpath: string) {
+    return xpath.replace(/\/\/[a-z]+/, '.');
+  }
+
+  public static generalizeXPaths(xpaths: string[]): string {
+    const tokenized = xpaths.map(xpath => xpath.split('/')
+      .map(p => {
+        const match = /([^\[]+)\[([0-9]+)\]?/g.exec(p);
+        if (match) {
+          return {
+            p,
+            match: {
+              path: match[1],
+              index: match[2]
+            }
+          }
+        } else {
+          return {p}
+        }
+      })
+    );
+    const templateXPath = tokenized[0].map((pathToken, index) => {
+      if (pathToken.match) {
+        const changingIndex = tokenized.some(tokens => !tokens[index].match || tokens[index].match.index !== pathToken.match.index)
+        if (changingIndex) {
+          return pathToken.match.path
+        } else {
+          return `${pathToken.match.path}[${pathToken.match.index}]`
+        }
+      } else {
+        return pathToken.p
+      }
+    });
+
+    return templateXPath.join('/');
   }
 }

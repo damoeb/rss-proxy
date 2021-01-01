@@ -45,14 +45,6 @@ export const proxyService = new class ProxyService {
 
           const script = window.document.createElement('script');
           script.type = 'text/javascript';
-          // const code = `function ${this.foo.toString()}; foo()`;
-          // try {
-          //   script.appendChild(window.document.createTextNode(code));
-          //   window.document.head.appendChild(script);
-          // } catch (e) {
-          //   script.text = code;
-          //   window.document.head.appendChild(script);
-          // }
 
           window.document.getElementsByTagName('head').item(0).appendChild(base)
           Array.from(window.document.querySelectorAll('[href]')).forEach(el => {

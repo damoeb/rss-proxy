@@ -3,14 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="be223c1e-fb57-4edb-9549-acf979246252" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/feed-parser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/core/src/feed-parser.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/styles.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/variables.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/feedService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/services/feedService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/endpoints/feedEndpoint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/endpoints/feedEndpoint.ts" afterDir="false" />
     </list>
     <list id="0fdeac33-4664-41b2-9080-89bed972c3c4" name="ignore" comment="build 2" />
     <option name="SHOW_DIALOG" value="false" />
@@ -56,6 +50,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="GO_FMT" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="false" />
@@ -66,9 +61,10 @@
     <property name="editor.config.ad.shown" value="true" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/packages/proxy/src/endpoints" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/docs" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs.mocha.mocha_node_package_dir" value="$PROJECT_DIR$/packages/core/node_modules/mocha" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -89,11 +85,11 @@
       <recent name="$PROJECT_DIR$/test" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs" />
       <recent name="$PROJECT_DIR$/packages/proxy/src/endpoints" />
       <recent name="$PROJECT_DIR$/packages/proxy/src/services" />
       <recent name="$PROJECT_DIR$/packages/proxy/docker/prod" />
       <recent name="$PROJECT_DIR$/packages/playground/src/app/components/playground" />
-      <recent name="$PROJECT_DIR$/packages/proxy" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start">
@@ -118,10 +114,26 @@
       <envs />
       <method v="2" />
     </configuration>
+    <configuration name="FeedParser.generalizeXPaths" type="mocha-javascript-test-runner" temporary="true" nameIsGenerated="true">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <mocha-package>$PROJECT_DIR$/packages/core/node_modules/mocha</mocha-package>
+      <working-directory>$PROJECT_DIR$/packages/core</working-directory>
+      <pass-parent-env>true</pass-parent-env>
+      <ui>bdd</ui>
+      <extra-mocha-options />
+      <test-kind>TEST</test-kind>
+      <test-file>$PROJECT_DIR$/packages/core/src/feed-parser.test.ts</test-file>
+      <test-names>
+        <name value="FeedParser" />
+        <name value="generalizeXPaths" />
+      </test-names>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="npm.start" />
-        <item itemvalue="npm.start" />
+        <item itemvalue="Mocha.FeedParser.generalizeXPaths" />
         <item itemvalue="npm.start" />
         <item itemvalue="npm.start" />
         <item itemvalue="npm.start" />
@@ -189,28 +201,7 @@
       <workItem from="1608116303394" duration="1743000" />
       <workItem from="1608129317522" duration="6292000" />
       <workItem from="1608301727461" duration="35945000" />
-      <workItem from="1609024659581" duration="31450000" />
-    </task>
-    <task id="LOCAL-00001" summary="find articles">
-      <created>1567323868854</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1567323868855</updated>
-    </task>
-    <task id="LOCAL-00002" summary="get link">
-      <created>1567404222260</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1567404222260</updated>
-    </task>
-    <task id="LOCAL-00003" summary="get title/desc">
-      <created>1567406529299</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1567406529299</updated>
+      <workItem from="1609024659581" duration="73176000" />
     </task>
     <task id="LOCAL-00004" summary="reformatting">
       <created>1567449869704</created>
@@ -534,7 +525,28 @@
       <option name="project" value="LOCAL" />
       <updated>1609314003909</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="proxy viz">
+      <created>1609355743947</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1609355743948</updated>
+    </task>
+    <task id="LOCAL-00051" summary="xpath">
+      <created>1609499317600</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1609499317600</updated>
+    </task>
+    <task id="LOCAL-00052" summary="xpath">
+      <created>1609634389036</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1609634389036</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -543,7 +555,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Merge branch 'master' of gitlab.com:damoeb/rss-it&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;packages/proxy/docker/prod/Dockerfile&#10;#&#9;packages/proxy/package.json" />
     <MESSAGE value="logging, build info" />
     <MESSAGE value="better logging" />
     <MESSAGE value="error handling" />
@@ -568,90 +579,91 @@
     <MESSAGE value="Add Retry-After Header" />
     <MESSAGE value="pg" />
     <MESSAGE value="proxy viz" />
-    <option name="LAST_COMMIT_MESSAGE" value="proxy viz" />
+    <MESSAGE value="xpath" />
+    <option name="LAST_COMMIT_MESSAGE" value="xpath" />
   </component>
   <component name="WindowStateProjectService">
     <state x="665" y="324" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1607630896389">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="665" y="324" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1044@0.0.1920.1044" timestamp="1607630896389" />
-    <state x="533" y="59" width="803" height="926" key="CommitChangelistDialog2" timestamp="1609314002206">
+    <state x="533" y="59" width="803" height="926" key="CommitChangelistDialog2" timestamp="1609634387191">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="533" y="59" width="803" height="926" key="CommitChangelistDialog2/0.0.1920.1044@0.0.1920.1044" timestamp="1609314002206" />
+    <state x="533" y="59" width="803" height="926" key="CommitChangelistDialog2/0.0.1920.1044@0.0.1920.1044" timestamp="1609634387191" />
     <state x="533" y="118" key="CommitChangelistDialog2/0.0.1920.2094@0.0.1920.2094" timestamp="1608164652787" />
-    <state width="696" height="506" key="DebuggerActiveHint" timestamp="1608979447944">
+    <state width="696" height="506" key="DebuggerActiveHint" timestamp="1609623837609">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="696" height="506" key="DebuggerActiveHint/0.0.1920.1044@0.0.1920.1044" timestamp="1608979447944" />
+    <state width="696" height="506" key="DebuggerActiveHint/0.0.1920.1044@0.0.1920.1044" timestamp="1609623837609" />
     <state x="100" y="100" width="1720" height="844" key="DiffContextDialog" timestamp="1608996384954">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="100" y="100" width="1720" height="844" key="DiffContextDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1608996384954" />
-    <state width="1872" height="338" key="GridCell.Tab.0.bottom" timestamp="1609020468156">
+    <state width="1872" height="338" key="GridCell.Tab.0.bottom" timestamp="1609634369871">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.0.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468156" />
-    <state width="1872" height="338" key="GridCell.Tab.0.center" timestamp="1609020468156">
+    <state width="1872" height="338" key="GridCell.Tab.0.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369871" />
+    <state width="1872" height="338" key="GridCell.Tab.0.center" timestamp="1609634369865">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.0.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468156" />
-    <state width="1872" height="338" key="GridCell.Tab.0.left" timestamp="1609020468156">
+    <state width="1872" height="338" key="GridCell.Tab.0.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369865" />
+    <state width="1872" height="338" key="GridCell.Tab.0.left" timestamp="1609634369864">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.0.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468156" />
-    <state width="1872" height="338" key="GridCell.Tab.0.right" timestamp="1609020468156">
+    <state width="1872" height="338" key="GridCell.Tab.0.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369864" />
+    <state width="1872" height="338" key="GridCell.Tab.0.right" timestamp="1609634369870">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468156" />
-    <state width="1872" height="338" key="GridCell.Tab.1.bottom" timestamp="1609020468158">
+    <state width="1872" height="338" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369870" />
+    <state width="1872" height="338" key="GridCell.Tab.1.bottom" timestamp="1609634369875">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.1.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468158" />
-    <state width="1872" height="338" key="GridCell.Tab.1.center" timestamp="1609020468157">
+    <state width="1872" height="338" key="GridCell.Tab.1.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369875" />
+    <state width="1872" height="338" key="GridCell.Tab.1.center" timestamp="1609634369874">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.1.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468157" />
-    <state width="1872" height="338" key="GridCell.Tab.1.left" timestamp="1609020468157">
+    <state width="1872" height="338" key="GridCell.Tab.1.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369874" />
+    <state width="1872" height="338" key="GridCell.Tab.1.left" timestamp="1609634369873">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.1.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468157" />
-    <state width="1872" height="338" key="GridCell.Tab.1.right" timestamp="1609020468157">
+    <state width="1872" height="338" key="GridCell.Tab.1.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369873" />
+    <state width="1872" height="338" key="GridCell.Tab.1.right" timestamp="1609634369875">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.1.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468157" />
-    <state width="1872" height="338" key="GridCell.Tab.2.bottom" timestamp="1609020468159">
+    <state width="1872" height="338" key="GridCell.Tab.1.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369875" />
+    <state width="1872" height="338" key="GridCell.Tab.2.bottom" timestamp="1609634369877">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.2.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468159" />
-    <state width="1872" height="338" key="GridCell.Tab.2.center" timestamp="1609020468158">
+    <state width="1872" height="338" key="GridCell.Tab.2.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369877" />
+    <state width="1872" height="338" key="GridCell.Tab.2.center" timestamp="1609634369876">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.2.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468158" />
-    <state width="1872" height="338" key="GridCell.Tab.2.left" timestamp="1609020468158">
+    <state width="1872" height="338" key="GridCell.Tab.2.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369876" />
+    <state width="1872" height="338" key="GridCell.Tab.2.left" timestamp="1609634369875">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.2.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468158" />
-    <state width="1872" height="338" key="GridCell.Tab.2.right" timestamp="1609020468158">
+    <state width="1872" height="338" key="GridCell.Tab.2.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369875" />
+    <state width="1872" height="338" key="GridCell.Tab.2.right" timestamp="1609634369876">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.2.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468158" />
-    <state width="1872" height="338" key="GridCell.Tab.3.bottom" timestamp="1609020468159">
+    <state width="1872" height="338" key="GridCell.Tab.2.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369876" />
+    <state width="1872" height="338" key="GridCell.Tab.3.bottom" timestamp="1609634369878">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.3.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468159" />
-    <state width="1872" height="338" key="GridCell.Tab.3.center" timestamp="1609020468159">
+    <state width="1872" height="338" key="GridCell.Tab.3.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369878" />
+    <state width="1872" height="338" key="GridCell.Tab.3.center" timestamp="1609634369877">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.3.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468159" />
-    <state width="1872" height="338" key="GridCell.Tab.3.left" timestamp="1609020468159">
+    <state width="1872" height="338" key="GridCell.Tab.3.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369877" />
+    <state width="1872" height="338" key="GridCell.Tab.3.left" timestamp="1609634369877">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.3.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468159" />
-    <state width="1872" height="338" key="GridCell.Tab.3.right" timestamp="1609020468159">
+    <state width="1872" height="338" key="GridCell.Tab.3.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369877" />
+    <state width="1872" height="338" key="GridCell.Tab.3.right" timestamp="1609634369878">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.3.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609020468159" />
+    <state width="1872" height="338" key="GridCell.Tab.3.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369878" />
     <state x="327" y="89" key="MergeDialog" timestamp="1607789256659">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
@@ -664,10 +676,10 @@
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="774" y="205" key="RollbackChangesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1608969261686" />
-    <state x="559" y="243" key="Vcs.Push.Dialog.v2" timestamp="1609314010718">
+    <state x="559" y="243" key="Vcs.Push.Dialog.v2" timestamp="1609355748196">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="559" y="243" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1609314010718" />
+    <state x="559" y="243" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1609355748196" />
     <state x="460" y="219" key="Vcs.Push.Dialog.v2/0.0.1920.2094@0.0.1920.2094" timestamp="1608164657976" />
     <state x="100" y="100" width="1720" height="844" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1609171617175">
       <screen x="0" y="0" width="1920" height="1044" />
@@ -681,38 +693,44 @@
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="757" y="436" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1044@0.0.1920.1044" timestamp="1605188829026" />
-    <state x="664" y="265" width="675" height="570" key="find.popup" timestamp="1609352962623">
+    <state x="664" y="265" width="675" height="570" key="find.popup" timestamp="1609623415329">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="664" y="265" width="675" height="570" key="find.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1609352962623" />
+    <state x="664" y="265" width="675" height="570" key="find.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1609623415329" />
     <state x="721" y="215" key="git4idea.branch.GitSmartOperationDialog" timestamp="1607789251606">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="721" y="215" key="git4idea.branch.GitSmartOperationDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1607789251606" />
-    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1609353690524">
+    <state x="624" y="238" key="run.anything.popup" timestamp="1609622572172">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1609353690524" />
+    <state x="624" y="238" key="run.anything.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1609622572172" />
+    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1609612918190">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1609612918190" />
     <state x="623" y="461" width="672" height="1360" key="search.everywhere.popup/0.0.1920.2094@0.0.1920.2094" timestamp="1608153806667" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/packages/proxy/src/services/cacheService.ts</url>
-          <line>12</line>
-          <option name="timeStamp" value="6" />
+          <url>file://$PROJECT_DIR$/packages/core/dist/feed-parser.js</url>
+          <line>291</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/packages/proxy/src/services/feedService.ts</url>
-          <line>136</line>
-          <option name="timeStamp" value="18" />
+          <url>file://$PROJECT_DIR$/packages/core/dist/feed-parser.js</url>
+          <line>331</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="41" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="js.build_tools.npm">
-        <watch expression="Array.from(doc.querySelectorAll(`link[href][type]`))" language="TypeScript" />
+        <watch expression="FeedParser.evaluateXPath(rule.contextXPath, this.document.body, this.document)" />
       </configuration>
     </watches-manager>
   </component>

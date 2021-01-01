@@ -1,17 +1,15 @@
 import {
   Article, ArticleRule,
-  ContentResolutionType,
   FeedParser,
   FeedParserOptions,
   FeedParserResult,
   FeedUrl,
   OutputType,
-  SimpleFeedResult,
-  SourceType
+  LogCollector,
+  SimpleFeedResult
 } from '@rss-proxy/core';
 import {Feed} from 'feed';
 import {isEmpty} from 'lodash';
-import {LogCollector} from '@rss-proxy/core/dist/log-collector';
 import {siteService} from './siteService';
 import {Request} from 'express';
 import logger from '../logger';
@@ -27,8 +25,6 @@ export interface GetResponse {
 
 const defaultOptions: FeedParserOptions = {
   output: OutputType.ATOM,
-  source: SourceType.STATIC,
-  content: ContentResolutionType.STATIC
 };
 
 export interface FeedParserError {
@@ -39,7 +35,7 @@ export interface FeedParserError {
 
 
 export const feedService =  new class FeedService {
-  async mapToFeed(url: string, options: FeedParserOptions, canUseNativeFeed: boolean): Promise<FeedParserResult | GetResponse> {
+  async mapToFeed(url: string, options: FeedParserOptions, canUseNativeFeed: boolean, liveSource: boolean): Promise<FeedParserResult | GetResponse> {
 
     const response = await siteService.download(url);
 
@@ -56,7 +52,7 @@ export const feedService =  new class FeedService {
         if (returnNativeFeed) {
           return await siteService.download(feedUrls[0].url);
         } else {
-          return this.generateFeedFromUrl(url, response.body, doc, options, feedUrls);
+          return this.generateFeedFromUrl(url, response.body, doc, options, feedUrls, liveSource);
         }
 
       default:
@@ -92,24 +88,44 @@ export const feedService =  new class FeedService {
     if (request.query.rule) {
       actualOptions.rule = request.query.rule as string;
     }
-    if (request.query.content) {
-      actualOptions.content = request.query.content as ContentResolutionType;
-    }
     return {...defaultOptions, ...actualOptions};
   }
 
-  public parseFeed(url: string, options: FeedParserOptions, canUseNativeFeed: boolean = false): Promise<FeedParserResult | GetResponse> {
+  public parseFeed(url: string, options: FeedParserOptions, canUseNativeFeed: boolean, liveSource = false): Promise<FeedParserResult | GetResponse> {
 
       logger.info(`Parsing ${url} with options ${JSON.stringify(options)}`);
 
       if (!url) {
         return Promise.reject({message: 'Param url is missing'} as FeedParserError);
       }
-      return feedService.mapToFeed(url, options, canUseNativeFeed);
+      return feedService.mapToFeed(url, options, canUseNativeFeed, liveSource);
     }
 
+  public mapErrorToFeed(url: string, message: string): string {
+    const feed = new Feed({
+      title: 'rss-proxy error',
+      id: url,
+      link: url,
+      generator: "rss-proxy",
+      copyright: "rss-proxy"
+    });
 
-  private async generateFeedFromUrl(url: string, html: string, doc: Document, options: FeedParserOptions, feeds: FeedUrl[]): Promise<FeedParserResult> {
+    feed.addItem({
+      title: 'Error',
+      link: `https://rssproxy.migor.org?url=${encodeURIComponent(url)}`,
+      published: new Date(),
+      date: new Date(),
+      content: `${message} Try to resolve the issue on provide link.`
+    });
+    return feed.atom1();
+  }
+
+  private async generateFeedFromUrl(url: string,
+                                    html: string,
+                                    doc: Document,
+                                    options: FeedParserOptions,
+                                    feeds: FeedUrl[],
+                                    liveSource: boolean): Promise<FeedParserResult> {
 
     const logCollector = new LogCollector();
 
@@ -134,13 +150,25 @@ export const feedService =  new class FeedService {
       }, {})
     });
 
-    const rules = feedParser.getArticleRules();
+    let rules: ArticleRule[];
+    let rule: ArticleRule;
+    if (liveSource) {
+      rules = feedParser.getArticleRules();
+      rule = this.getArticleRule(rules, options.rule, liveSource);
+    } else {
+      rules = [];
+      const parts = options.rule.split('||');
+      rule = {
+        contextXPath: parts[0],
+        linkXPath: parts[1],
+        id: parts[1]
+      };
+    }
 
     let articles: Article[] = [];
-    if (rules.length > 0) {
-      articles = feedParser.getArticlesByRule(this.getArticleRule(rules, options.rule));
+    if (rules.length > 0 || !liveSource) {
+      articles = feedParser.getArticlesByRule(rule);
       articles.forEach((article: Article) => {
-        article.link = this.applyReaderLink(article.link);
         feed.addItem({
           title: article.title,
           link: article.link,
@@ -175,11 +203,6 @@ export const feedService =  new class FeedService {
       } as FeedParserError);
 
     }
-  }
-
-  private applyReaderLink(link: string) {
-    // todo return `http://localhost:3000/api/reader?url=${encodeURIComponent(link)}`
-    return link;
   }
 
   private findFeedUrls(doc: Document, url: string): FeedUrl[] {
@@ -223,18 +246,21 @@ export const feedService =  new class FeedService {
     };
   }
 
-  private getArticleRule(rules: ArticleRule[], ruleId: string): ArticleRule {
+  private getArticleRule(rules: ArticleRule[], ruleId: string, liveSource: boolean): ArticleRule {
     const matchedRule = rules.find(rule => rule.id == ruleId);
     if (matchedRule) {
       console.log(`Applying article-rule ${ruleId}`);
       return matchedRule;
     } else {
-      if (ruleId && ruleId !== 'best') {
-        console.log(`Falling back to best article-rule, could not find article-rule ${ruleId} in ${rules.map(rule => rule.id)}`);
+      if (liveSource) {
+        return rules[0];
       } else {
-        console.log(`Falling back to best article-rule`);
+        if (ruleId) {
+          throw new Error(`Cannot generate Feed cause website has changed.`);
+        } else {
+          throw new Error(`Feed is not fully specified.`);
+        }
       }
-      return rules[0];
     }
   }
 

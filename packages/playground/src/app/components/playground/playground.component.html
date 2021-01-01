@@ -2,8 +2,8 @@
 
   <div style="flex:1; display: flex;">
     <div style="width: 500px; display: flex; flex-direction: column">
-      <a (click)="reset()" class="button" style="text-align: center">Reset Changes</a>
-      <div style="flex: 1; max-height: 75vh; overflow-y: auto">
+      <a (click)="resetAll()" class="button" style="text-align: center">Reset Changes</a>
+      <div style="flex: 1 100px; overflow-y: auto">
         <div class="form">
           <p class="wizard_section"><strong>1.</strong> Please enter the URL of the website you want an RSS Feed from.</p>
           <ng-form (ngSubmit)="parseFromUrl()">
@@ -43,7 +43,7 @@
           <p class="wizard_section"><strong>2.</strong> Choose a feed</p>
           <p>Native Feeds Found in DOM:</p>
           <ul class="list-of-feeds">
-            <li *ngFor="let feed of feeds"><a [href]="feed.url">{{ feed.name }}</a></li>
+            <li *ngFor="let feed of feeds"><a [href]="feed.url" target="_blank">{{ feed.name }}</a></li>
           </ul>
         </div>
 
@@ -56,7 +56,10 @@
                 aria-label="Try to visualize and scroll to articles in website"
                 [ngClass]="{'active': isCurrentRule(rule)}"
                 (click)="applyRule(rule)">
-              <a href="javascript:void(0)">Feed with <strong>{{ rule.count }}</strong> articles</a> <strong *ngIf="i === 0"> - highest score</strong>
+              <a href="javascript:void(0)">Feed with <strong>{{ rule.count }}</strong> articles</a>
+              <span *ngIf="i === 0">
+                <strong> - highest score</strong>
+              </span>
             </li>
           </ol>
         </div>
@@ -64,9 +67,9 @@
         <div *ngIf="currentRule">
           <p class="wizard_section"><strong>3.</strong> Filter the feed</p>
           <ul style="list-style: none">
-            <li><input type="checkbox" checked> Remove items that contain <a href="">one of</a> (comma separated) <input type="text" name="excludeItemsThatContain" value="Newsletter, Advertisement"></li>
-            <li><input type="checkbox" checked> Remove items with <a href="">odd content structure</a></li>
-            <li><input type="checkbox" checked> Remove items that contain <a href="">no relevant text</a></li>
+            <li><input type="checkbox" [(ngModel)]="excludeItemsThatContain"> Remove items that contain <a href="https://github.com/damoeb/rss-proxy/wiki/Filters#text-filter" target="_blank">one of</a> (comma separated) <input type="text" name="excludeItemsThatContainTexts" [(ngModel)]="excludeItemsThatContainTexts"></li>
+<!--            <li><input type="checkbox" checked> Remove items with <a href="">odd content structure</a></li>-->
+            <li><input type="checkbox" [(ngModel)]="excludeBrokenItems"> Remove items that contain <a href="https://github.com/damoeb/rss-proxy/wiki/Filters#bad-content-filter" target="_blank">no relevant text</a></li>
           </ul>
 
         </div>
@@ -76,15 +79,16 @@
           <div class="spinner"></div>
         </div>
       </div>
-      <div class="feed-url"
-           style="border-top: 1px solid black"
-           *ngIf="isGenerated">
-        <a *ngIf="currentRule" class="button secondary large" [href]="getFeedUrl()" target="_blank">Your ATOM Feed</a>
-        <h3 *ngIf="!currentRule">Your ATOM Feed not yet specified</h3>
-      </div>
-      <div class="playground__footer">
-        <a href="https://github.com/damoeb/rss-proxy">rss-proxy</a> v. {{ getVersions().version }}@{{ getVersions().revision }} build on {{ getBuildDate() }}
-        <a href="https://twitter.com/damoeb">contact</a>
+      <div [ngClass]="{'feed-specified': currentRule}"
+           style="border-top: 1px solid black; height: 150px">
+        <div class="feed-url">
+          <a *ngIf="currentRule" class="button secondary large" [href]="getFeedUrl()" target="_blank">Your ATOM Feed</a>
+          <h3 *ngIf="!currentRule">Your ATOM Feed not yet specified</h3>
+        </div>
+        <div class="playground__footer">
+          <a href="https://github.com/damoeb/rss-proxy">rss-proxy</a> v. {{ getVersions().version }}@{{ getVersions().revision }} build on {{ getBuildDate() }}
+          <a href="https://twitter.com/damoeb">contact</a>
+        </div>
       </div>
     </div>
 
