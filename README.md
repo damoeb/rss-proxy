@@ -47,6 +47,8 @@ The project is separated into three modules
 ## Changelog
 
 ## Unreleased
+- Improved UI to see feed output in a visual way
+- Adds basic filter options
 - Bugfixes
 - Adds Retry-After Header
 

@@ -7,6 +7,7 @@ import { feedEndpoint } from './endpoints/feedEndpoint';
 import {config} from './config';
 import {analyticsService} from './services/analyticsService';
 import {proxyEndpoint} from './endpoints/proxyEndpoint';
+import {cacheService} from './services/cacheService';
 
 // see http://patorjk.com/software/taag/#p=display&f=Chunky&t=rss%20proxy
 console.log(`
@@ -35,7 +36,7 @@ export interface ErrorsResponse {
 // -- endpoints
 
 if (config.env !== 'prod') {
-  logger.info('+ Enabling cors');
+  logger.info('+ Enabling cors on dev env');
   app.use(cors());
 }
 app.use('/', express.static('static'));
@@ -45,7 +46,11 @@ if (analyticsService.active()) {
 } else {
   logger.info('- Disabling analytics');
 }
-
+if (cacheService.active()) {
+  logger.info('+ Enabling cache');
+} else {
+  logger.info('- Disabling cache');
+}
 feedEndpoint.register(app);
 proxyEndpoint.register(app);
 

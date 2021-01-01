@@ -1,11 +1,17 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {FeedService} from '../../services/feed.service';
-import {Article, ArticleRule, ContentResolutionType, FeedParserOptions, FeedUrl, OutputType, SourceType} from '../../../../../core/src';
+import {Article, ArticleRule, FeedParser, FeedParserOptions, FeedUrl, OutputType, SourceType} from '../../../../../core/src';
 import {build} from '../../../environments/build';
 import {isEmpty} from 'lodash';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {ActivatedRoute, Params, Router} from '@angular/router';
+
+interface ArticleCandidate {
+  elem: HTMLElement;
+  index: number;
+  qualified: boolean;
+}
 
 @Component({
   selector: 'app-playground',
@@ -22,7 +28,7 @@ export class PlaygroundComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private changeDetectorRef: ChangeDetectorRef,
               private feedService: FeedService) {
-    this.reset();
+    this.resetAll();
     this.history = PlaygroundComponent.getHistory();
   }
 
@@ -48,6 +54,9 @@ export class PlaygroundComponent implements OnInit {
   history: string[];
   proxyUrl: SafeResourceUrl;
   currentTab: string;
+  excludeItemsThatContain = true;
+  excludeItemsThatContainTexts = 'Newsletter, Advertisement';
+  excludeBrokenItems = true;
 
   private static getHistory(): string[] {
     return JSON.parse(localStorage.getItem('history') || JSON.stringify([]));
@@ -65,10 +74,12 @@ export class PlaygroundComponent implements OnInit {
   private applyRule(rule: ArticleRule) {
     console.log('apply rule', rule);
     this.currentRule = rule;
-    this.highlightRule(rule);
+    this.options.rule = `${rule.contextXPath}||${rule.linkXPath}`;
     this.feedService.applyRule(this.html, this.url, rule, this.options).subscribe(articles => {
       this.articles = articles;
     });
+    this.highlightRule(rule);
+    this.changeDetectorRef.detectChanges();
   }
 
   public async parseFromUrl() {
@@ -109,6 +120,8 @@ export class PlaygroundComponent implements OnInit {
     this.prepareIframe(this.url);
     this.changeDetectorRef.detectChanges();
 
+    this.updateParserOptions();
+
     this.feedService.fromUrl(this.url, this.options)
       .subscribe(response => {
         this.hasResults = true;
@@ -136,8 +149,9 @@ export class PlaygroundComponent implements OnInit {
           this.isGenerated = true;
           console.log('Proxy replies an generated feed');
           this.rules = response.rules;
-          this.updateScores();
-          this.applyRule(this.rules[0]);
+          setTimeout(() => {
+            this.applyRule(this.rules[0]);
+          }, 1000);
           this.setCurrentTab(this.showViz);
           this.feeds = response.feeds;
           this.feedData = response.feed;
@@ -160,12 +174,11 @@ export class PlaygroundComponent implements OnInit {
     return build;
   }
 
-  public reset() {
+  public resetAll() {
     this.options = {
       output: OutputType.ATOM,
-      source: SourceType.STATIC,
-      rule: 'best',
-      content: ContentResolutionType.STATIC,
+      excludeItemsThatContainOneOf: this.excludeItemsThatContainTexts,
+      excludeBrokenItems: this.excludeBrokenItems
     };
     this.optionsFromParser = {};
     this.html = '';
@@ -175,7 +188,7 @@ export class PlaygroundComponent implements OnInit {
     this.feeds = [];
     this.currentRule = null;
     this.logs = [];
-    this.url = null;
+    // this.url = null;
     this.rules = null;
     this.proxyUrl = null;
     this.feedData = '';
@@ -227,14 +240,30 @@ export class PlaygroundComponent implements OnInit {
     const styleNode = iframeDocument.createElement('style');
     styleNode.setAttribute('type', 'text/css');
     styleNode.setAttribute('id', id);
-    const code = `${rule.contextPath} {
-            border: 2px solid red!important;
+    const allMatches: HTMLElement[] = this.evaluateXPathInIframe(rule.contextXPath, iframeDocument);
+
+    const qualifiedAsArticle = (elem: HTMLElement, index: number): boolean => {
+      // todo apply filters
+      return FeedParser.qualifiesAsArticle(elem, rule, iframeDocument);
+    };
+    const matchingIndexes = allMatches.map((elem, index) => {
+      return {
+       elem,
+       index,
+       qualified: qualifiedAsArticle(elem, index)
+      } as ArticleCandidate;
+    }).filter(candidate => candidate.qualified).map(candidate => candidate.index);
+
+    const cssSelectorContextPath = 'body>' + FeedParser.getRelativePath(allMatches[0], iframeDocument.body);
+
+    const code = `${matchingIndexes.map(index => `${cssSelectorContextPath}:nth-of-type(${index + 1})`).join(', ')} {
+            border: 2px dotted red!important;
             margin-bottom: 5px!important;
             display: block;
           }
           `;
 
-    const firstMatch = iframeDocument.querySelector(rule.contextPath);
+    const firstMatch = allMatches[0];
     if (firstMatch) {
       firstMatch.scrollIntoView();
     }
@@ -250,10 +279,21 @@ export class PlaygroundComponent implements OnInit {
       this.iframeLoaded = true;
     }
   }
+  private evaluateXPathInIframe(xPath: string, context: HTMLElement | Document): HTMLElement[] {
+    const iframeDocument = this.iframeRef.nativeElement.contentDocument;
+    const xpathResult = iframeDocument.evaluate(xPath, context, null, 5);
+    const nodes: HTMLElement[] = [];
+    let node = xpathResult.iterateNext();
+    while (node) {
+      nodes.push(node as HTMLElement);
+      node = xpathResult.iterateNext();
+    }
+    return nodes;
+  }
   public updateScores(): void {
     const iframeDocument = this.iframeRef.nativeElement.contentDocument;
     this.rules.forEach(rule => {
-      const articles = Array.from(iframeDocument.querySelectorAll(rule.contextPath))
+      const articles = this.evaluateXPathInIframe(rule.contextXPath, iframeDocument)
           // remove hidden articles
           .filter((elem: any) => !!(elem.offsetWidth || elem.offsetHeight))
         // remove empty articles
@@ -262,8 +302,21 @@ export class PlaygroundComponent implements OnInit {
       ;
       if (articles.length === 0) {
         rule.score -= 20;
+        // rule.hidden = true;
       }
     });
     this.changeDetectorRef.detectChanges();
+  }
+
+  private updateParserOptions() {
+    this.options = {
+      output: OutputType.ATOM,
+      excludeItemsThatContainOneOf: this.excludeItemsThatContain ? this.excludeItemsThatContainTexts : '',
+      excludeBrokenItems: this.excludeBrokenItems
+    };
+
+    if (this.currentRule) {
+      this.options.rule = this.currentRule.id;
+    }
   }
 }
