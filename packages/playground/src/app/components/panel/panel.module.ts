@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {PanelComponent} from './panel.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
+import {PanelComponent} from './panel.component';
 
 
 @NgModule({
@@ -18,4 +18,5 @@ import {PanelComponent} from './panel.component';
     PanelComponent
   ]
 })
-export class PanelModule { }
+export class PanelModule {
+}

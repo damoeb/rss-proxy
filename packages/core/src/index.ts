@@ -1,22 +1,23 @@
 import {
-  FeedParser,
-  LinkPointer,
-  ArticleRule,
-  TitleFeatures,
-  FeedParserOptions,
-  SimpleFeedResult,
-  ContentResolutionType,
-  SourceType,
-  OutputType,
   Article,
-  Logger,
-  FeedUrl,
   ArticleContext,
+  ArticleRule,
+  ContentResolutionType,
+  ContentType,
+  FeedParser,
+  FeedParserOptions,
   FeedParserResult,
-  LinkGroup
+  FeedUrl,
+  LinkGroup,
+  LinkPointer,
+  Logger,
+  OutputType,
+  SimpleFeedResult,
+  SourceType,
+  TitleFeatures
 } from './feed-parser';
 
-import {LogCollector} from './log-collector'
+import {LogCollector} from './log-collector';
 
 export {
   FeedParser,
@@ -29,6 +30,7 @@ export {
   FeedParserResult,
   FeedParserOptions,
   LinkPointer,
+  ContentType,
   LogCollector,
   ArticleRule,
   TitleFeatures,

@@ -1,9 +1,8 @@
 import request from 'request';
-import {GetResponse} from './feedService';
 import {JSDOM} from 'jsdom';
-import {uniq} from 'lodash';
-import Readability from 'mozilla-readability';
 import createDOMPurify from 'dompurify';
+
+import {GetResponse} from './feedService';
 import {config} from '../config';
 
 export interface SiteMeta {
@@ -15,25 +14,7 @@ export interface SiteMeta {
   copyright: string
 }
 
-export interface SiteAnalysis {
-  readability: Readability.ParseResult,
-  meta: SiteMeta,
-  links: string[]
-}
-
 export const siteService = new class SiteService {
-  analyze(url: string): Promise<SiteAnalysis> {
-    return this.download(url).then(response => {
-      const doc = this.toDom(response.body);
-
-      return {
-        meta: this.getMeta(doc),
-        readability: this.getReadability(doc),
-        links: uniq(Array.from(doc.querySelectorAll('a[href]')).map(element => element.getAttribute('href')))
-      };
-    });
-  }
-
   getMeta(doc: Document): SiteMeta {
 
     return {
@@ -45,7 +26,42 @@ export const siteService = new class SiteService {
       copyright: this.getMetatag(doc, 'dcterms.rightsHolder')
         || this.getMetatag(doc, 'dcterms.rights')
         || this.getMetatag(doc, 'copyright'),
-    }
+    };
+  }
+
+  public download(url: string): Promise<GetResponse> {
+    return new Promise<GetResponse>((resolve, reject) => {
+      const options = {
+        method: 'GET', url, headers: {
+          'Accepts': 'text/html',
+          'User-Agent': config.userAgent
+        }
+      };
+      request(options, (error, serverResponse, html) => {
+        if (!error && serverResponse && serverResponse.statusCode === 200) {
+          resolve({
+            body: html,
+            type: 'GetResponse',
+            contentType: serverResponse.headers['content-type']
+          },);
+        } else {
+          reject({message: `Unable to download ${url}, cause ${error}`});
+        }
+      });
+    });
+  }
+
+  toDom(html: string): Document {
+    const {window} = new JSDOM('');
+    const DOMPurify = createDOMPurify(window);
+
+    const clean = DOMPurify.sanitize(html, {
+      WHOLE_DOCUMENT: true,
+      FORBID_TAGS: ['style', 'script'],
+      ADD_TAGS: ['meta', 'html', 'link'],
+      ADD_ATTR: ['lang', 'content', 'name', 'type', 'href']
+    });
+    return new JSDOM(clean).window.document;
   }
 
   private getMetatag(doc: Document, name: string): string {
@@ -72,39 +88,5 @@ export const siteService = new class SiteService {
         return null;
       }
     };
-  }
-
-  public download(url: string): Promise<GetResponse> {
-    return new Promise<GetResponse>((resolve, reject) => {
-      const options = {method:'GET', url, headers: {
-        "Accepts": "text/html",
-        "User-Agent": config.userAgent
-        }};
-      request(options, (error, serverResponse, html) => {
-        if (!error && serverResponse && serverResponse.statusCode === 200) {
-          resolve({
-            body: html,
-            type: 'GetResponse',
-            contentType: serverResponse.headers['content-type']},);
-        } else {
-          reject({ message: `Unable to download ${url}, cause ${error}`});
-        }
-      });
-    });
-  }
-
-  toDom(html: string): Document {
-    const {window} = new JSDOM('');
-    const DOMPurify = createDOMPurify(window);
-
-    const clean = DOMPurify.sanitize(html, {WHOLE_DOCUMENT: true,
-      FORBID_TAGS: ['style', 'script'],
-      ADD_TAGS:['meta', 'html', 'link'],
-      ADD_ATTR:['lang', 'content', 'name', 'type', 'href']});
-    return new JSDOM(clean).window.document;
-  }
-
-  private getReadability(doc: Document): Readability.ParseResult {
-    return new Readability(doc).parse();
   }
 };

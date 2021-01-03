@@ -3,8 +3,47 @@
   <component name="ChangeListManager">
     <list default="true" id="be223c1e-fb57-4edb-9549-acf979246252" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/feed-parser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/core/src/feed-parser.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/core/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/log-collector.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/core/src/log-collector.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/core/src/raw-websites.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/app-routing.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/app.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/assets/x.svg" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/assets/x.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/polyfills.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/polyfills.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/test.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/proxy/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/config.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/proxy/src/endpoints/feedEndpoint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/endpoints/feedEndpoint.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/endpoints/proxyEndpoint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/endpoints/proxyEndpoint.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/httpUtil.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/logger.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/logger.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/analyticsService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/services/analyticsService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/cacheService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/services/cacheService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/feedService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/services/feedService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/proxyService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/services/proxyService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/readerService.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/siteService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/src/services/siteService.ts" afterDir="false" />
     </list>
     <list id="0fdeac33-4664-41b2-9080-89bed972c3c4" name="ignore" comment="build 2" />
     <option name="SHOW_DIALOG" value="false" />
@@ -61,7 +100,7 @@
     <property name="editor.config.ad.shown" value="true" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/docs" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/packages/core/src/raw-websites" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs.mocha.mocha_node_package_dir" value="$PROJECT_DIR$/packages/core/node_modules/mocha" />
@@ -85,11 +124,11 @@
       <recent name="$PROJECT_DIR$/test" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/packages/core/src/raw-websites" />
       <recent name="$PROJECT_DIR$/docs" />
       <recent name="$PROJECT_DIR$/packages/proxy/src/endpoints" />
       <recent name="$PROJECT_DIR$/packages/proxy/src/services" />
       <recent name="$PROJECT_DIR$/packages/proxy/docker/prod" />
-      <recent name="$PROJECT_DIR$/packages/playground/src/app/components/playground" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start">
@@ -201,63 +240,7 @@
       <workItem from="1608116303394" duration="1743000" />
       <workItem from="1608129317522" duration="6292000" />
       <workItem from="1608301727461" duration="35945000" />
-      <workItem from="1609024659581" duration="73176000" />
-    </task>
-    <task id="LOCAL-00004" summary="reformatting">
-      <created>1567449869704</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1567449869705</updated>
-    </task>
-    <task id="LOCAL-00005" summary="prepare test setup">
-      <created>1567450181384</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1567450181384</updated>
-    </task>
-    <task id="LOCAL-00006" summary="first test works">
-      <created>1567503664160</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1567503664160</updated>
-    </task>
-    <task id="LOCAL-00007" summary="tests">
-      <created>1571164689864</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1571164689864</updated>
-    </task>
-    <task id="LOCAL-00008" summary="ng app works">
-      <created>1571165578527</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1571165578527</updated>
-    </task>
-    <task id="LOCAL-00009" summary="build">
-      <created>1585174740711</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1585174740711</updated>
-    </task>
-    <task id="LOCAL-00010" summary="build 2">
-      <created>1585218897444</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1585218897444</updated>
-    </task>
-    <task id="LOCAL-00011" summary="build 2">
-      <created>1585223079223</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1585223079223</updated>
+      <workItem from="1609024659581" duration="114459000" />
     </task>
     <task id="LOCAL-00012" summary="build 2">
       <created>1585223661143</created>
@@ -546,7 +529,63 @@
       <option name="project" value="LOCAL" />
       <updated>1609634389036</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="xpath">
+      <created>1609635221000</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1609635221001</updated>
+    </task>
+    <task id="LOCAL-00054" summary="xpath">
+      <created>1609635443416</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1609635443416</updated>
+    </task>
+    <task id="LOCAL-00055" summary="patches">
+      <created>1609713218290</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1609713218290</updated>
+    </task>
+    <task id="LOCAL-00056" summary="patches">
+      <created>1609758593920</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1609758593920</updated>
+    </task>
+    <task id="LOCAL-00057" summary="patches">
+      <created>1609759934275</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1609759934275</updated>
+    </task>
+    <task id="LOCAL-00058" summary="patches">
+      <created>1609760008325</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1609760008325</updated>
+    </task>
+    <task id="LOCAL-00059" summary="patches">
+      <created>1609764329764</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1609764329765</updated>
+    </task>
+    <task id="LOCAL-00060" summary="patches">
+      <created>1609764414352</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1609764414352</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -555,7 +594,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="logging, build info" />
     <MESSAGE value="better logging" />
     <MESSAGE value="error handling" />
     <MESSAGE value="ui" />
@@ -580,90 +618,95 @@
     <MESSAGE value="pg" />
     <MESSAGE value="proxy viz" />
     <MESSAGE value="xpath" />
-    <option name="LAST_COMMIT_MESSAGE" value="xpath" />
+    <MESSAGE value="patches" />
+    <option name="LAST_COMMIT_MESSAGE" value="patches" />
   </component>
   <component name="WindowStateProjectService">
     <state x="665" y="324" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1607630896389">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="665" y="324" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1044@0.0.1920.1044" timestamp="1607630896389" />
-    <state x="533" y="59" width="803" height="926" key="CommitChangelistDialog2" timestamp="1609634387191">
+    <state x="697" y="270" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1609766800394">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="533" y="59" width="803" height="926" key="CommitChangelistDialog2/0.0.1920.1044@0.0.1920.1044" timestamp="1609634387191" />
+    <state x="697" y="270" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1609766800394" />
+    <state x="533" y="59" width="803" height="926" key="CommitChangelistDialog2" timestamp="1609764412624">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="533" y="59" width="803" height="926" key="CommitChangelistDialog2/0.0.1920.1044@0.0.1920.1044" timestamp="1609764412624" />
     <state x="533" y="118" key="CommitChangelistDialog2/0.0.1920.2094@0.0.1920.2094" timestamp="1608164652787" />
     <state width="696" height="506" key="DebuggerActiveHint" timestamp="1609623837609">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state width="696" height="506" key="DebuggerActiveHint/0.0.1920.1044@0.0.1920.1044" timestamp="1609623837609" />
-    <state x="100" y="100" width="1720" height="844" key="DiffContextDialog" timestamp="1608996384954">
+    <state x="100" y="100" width="1720" height="754" key="DiffContextDialog" timestamp="1609766067470">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="100" y="100" width="1720" height="844" key="DiffContextDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1608996384954" />
-    <state width="1872" height="338" key="GridCell.Tab.0.bottom" timestamp="1609634369871">
+    <state x="100" y="100" width="1720" height="754" key="DiffContextDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1609766067470" />
+    <state width="1872" height="338" key="GridCell.Tab.0.bottom" timestamp="1609766688414">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.0.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369871" />
-    <state width="1872" height="338" key="GridCell.Tab.0.center" timestamp="1609634369865">
+    <state width="1872" height="338" key="GridCell.Tab.0.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688414" />
+    <state width="1872" height="338" key="GridCell.Tab.0.center" timestamp="1609766688413">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.0.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369865" />
-    <state width="1872" height="338" key="GridCell.Tab.0.left" timestamp="1609634369864">
+    <state width="1872" height="338" key="GridCell.Tab.0.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688413" />
+    <state width="1872" height="338" key="GridCell.Tab.0.left" timestamp="1609766688413">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.0.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369864" />
-    <state width="1872" height="338" key="GridCell.Tab.0.right" timestamp="1609634369870">
+    <state width="1872" height="338" key="GridCell.Tab.0.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688413" />
+    <state width="1872" height="338" key="GridCell.Tab.0.right" timestamp="1609766688414">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369870" />
-    <state width="1872" height="338" key="GridCell.Tab.1.bottom" timestamp="1609634369875">
+    <state width="1872" height="338" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688414" />
+    <state width="1872" height="338" key="GridCell.Tab.1.bottom" timestamp="1609766688415">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.1.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369875" />
-    <state width="1872" height="338" key="GridCell.Tab.1.center" timestamp="1609634369874">
+    <state width="1872" height="338" key="GridCell.Tab.1.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688415" />
+    <state width="1872" height="338" key="GridCell.Tab.1.center" timestamp="1609766688414">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.1.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369874" />
-    <state width="1872" height="338" key="GridCell.Tab.1.left" timestamp="1609634369873">
+    <state width="1872" height="338" key="GridCell.Tab.1.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688414" />
+    <state width="1872" height="338" key="GridCell.Tab.1.left" timestamp="1609766688414">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.1.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369873" />
-    <state width="1872" height="338" key="GridCell.Tab.1.right" timestamp="1609634369875">
+    <state width="1872" height="338" key="GridCell.Tab.1.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688414" />
+    <state width="1872" height="338" key="GridCell.Tab.1.right" timestamp="1609766688415">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.1.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369875" />
-    <state width="1872" height="338" key="GridCell.Tab.2.bottom" timestamp="1609634369877">
+    <state width="1872" height="338" key="GridCell.Tab.1.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688415" />
+    <state width="1872" height="338" key="GridCell.Tab.2.bottom" timestamp="1609766688416">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.2.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369877" />
-    <state width="1872" height="338" key="GridCell.Tab.2.center" timestamp="1609634369876">
+    <state width="1872" height="338" key="GridCell.Tab.2.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688416" />
+    <state width="1872" height="338" key="GridCell.Tab.2.center" timestamp="1609766688416">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.2.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369876" />
-    <state width="1872" height="338" key="GridCell.Tab.2.left" timestamp="1609634369875">
+    <state width="1872" height="338" key="GridCell.Tab.2.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688416" />
+    <state width="1872" height="338" key="GridCell.Tab.2.left" timestamp="1609766688415">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.2.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369875" />
-    <state width="1872" height="338" key="GridCell.Tab.2.right" timestamp="1609634369876">
+    <state width="1872" height="338" key="GridCell.Tab.2.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688415" />
+    <state width="1872" height="338" key="GridCell.Tab.2.right" timestamp="1609766688416">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.2.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369876" />
-    <state width="1872" height="338" key="GridCell.Tab.3.bottom" timestamp="1609634369878">
+    <state width="1872" height="338" key="GridCell.Tab.2.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688416" />
+    <state width="1872" height="338" key="GridCell.Tab.3.bottom" timestamp="1609766688417">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.3.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369878" />
-    <state width="1872" height="338" key="GridCell.Tab.3.center" timestamp="1609634369877">
+    <state width="1872" height="338" key="GridCell.Tab.3.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688417" />
+    <state width="1872" height="338" key="GridCell.Tab.3.center" timestamp="1609766688417">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.3.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369877" />
-    <state width="1872" height="338" key="GridCell.Tab.3.left" timestamp="1609634369877">
+    <state width="1872" height="338" key="GridCell.Tab.3.center/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688417" />
+    <state width="1872" height="338" key="GridCell.Tab.3.left" timestamp="1609766688417">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.3.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369877" />
-    <state width="1872" height="338" key="GridCell.Tab.3.right" timestamp="1609634369878">
+    <state width="1872" height="338" key="GridCell.Tab.3.left/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688417" />
+    <state width="1872" height="338" key="GridCell.Tab.3.right" timestamp="1609766688417">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state width="1872" height="338" key="GridCell.Tab.3.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609634369878" />
+    <state width="1872" height="338" key="GridCell.Tab.3.right/0.0.1920.1044@0.0.1920.1044" timestamp="1609766688417" />
     <state x="327" y="89" key="MergeDialog" timestamp="1607789256659">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
@@ -672,14 +715,14 @@
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="851" y="389" width="490" height="265" key="MultipleFileMergeDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1604964899683" />
-    <state x="774" y="205" key="RollbackChangesDialog" timestamp="1608969261686">
+    <state x="774" y="205" key="RollbackChangesDialog" timestamp="1609764587602">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="774" y="205" key="RollbackChangesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1608969261686" />
-    <state x="559" y="243" key="Vcs.Push.Dialog.v2" timestamp="1609355748196">
+    <state x="774" y="205" key="RollbackChangesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1609764587602" />
+    <state x="559" y="243" key="Vcs.Push.Dialog.v2" timestamp="1609635481003">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="559" y="243" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1609355748196" />
+    <state x="559" y="243" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1609635481003" />
     <state x="460" y="219" key="Vcs.Push.Dialog.v2/0.0.1920.2094@0.0.1920.2094" timestamp="1608164657976" />
     <state x="100" y="100" width="1720" height="844" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1609171617175">
       <screen x="0" y="0" width="1920" height="1044" />
@@ -693,22 +736,26 @@
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="757" y="436" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1044@0.0.1920.1044" timestamp="1605188829026" />
-    <state x="664" y="265" width="675" height="570" key="find.popup" timestamp="1609623415329">
+    <state x="664" y="265" width="675" height="570" key="find.popup" timestamp="1609766454851">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="664" y="265" width="675" height="570" key="find.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1609623415329" />
+    <state x="664" y="265" width="675" height="570" key="find.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1609766454851" />
     <state x="721" y="215" key="git4idea.branch.GitSmartOperationDialog" timestamp="1607789251606">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="721" y="215" key="git4idea.branch.GitSmartOperationDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1607789251606" />
-    <state x="624" y="238" key="run.anything.popup" timestamp="1609622572172">
+    <state x="685" y="294" key="refactoring.ChangeSignatureDialog" timestamp="1609749928750">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="624" y="238" key="run.anything.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1609622572172" />
-    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1609612918190">
+    <state x="685" y="294" key="refactoring.ChangeSignatureDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1609749928750" />
+    <state x="624" y="238" key="run.anything.popup" timestamp="1609756425455">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1609612918190" />
+    <state x="624" y="238" key="run.anything.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1609756425455" />
+    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1609766838122">
+      <screen x="0" y="0" width="1920" height="1044" />
+    </state>
+    <state x="623" y="230" width="672" height="678" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1609766838122" />
     <state x="623" y="461" width="672" height="1360" key="search.everywhere.popup/0.0.1920.2094@0.0.1920.2094" timestamp="1608153806667" />
   </component>
   <component name="XDebuggerManager">
@@ -716,21 +763,23 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/packages/core/dist/feed-parser.js</url>
-          <line>291</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="25" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/packages/core/dist/feed-parser.js</url>
           <line>331</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/packages/proxy/src/services/feedService.ts</url>
+          <line>140</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="65" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="js.build_tools.npm">
         <watch expression="FeedParser.evaluateXPath(rule.contextXPath, this.document.body, this.document)" />
+        <watch expression="new URI(meta.favicon.replace('about:/'))" language="TypeScript" />
+        <watch expression="new URI('/favicon_tp.ico')" language="TypeScript" />
       </configuration>
     </watches-manager>
   </component>

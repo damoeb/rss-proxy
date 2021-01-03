@@ -1,7 +1,7 @@
 import {Logger} from './feed-parser';
 
 export class LogCollector implements Logger {
-  private _logs:string[] = [];
+  private _logs: string[] = [];
 
   constructor(private parentLogger: Logger = undefined) {
 
@@ -13,6 +13,7 @@ export class LogCollector implements Logger {
     }
     this._logs.push([...params].join(' '));
   }
+
   log(...params: any[]) {
     if (this.parentLogger) {
       this.parentLogger.log(...params);

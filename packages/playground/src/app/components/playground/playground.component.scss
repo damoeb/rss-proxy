@@ -14,31 +14,38 @@
         margin-top: 10rem;
         text-align: center;
       }
+
       .form {
         text-align: center;
       }
     }
+
     &--slim {
       h1 {
         display: none;
       }
     }
   }
+
   .list-of-feeds {
     list-style: circle;
+
     li {
       font-size: larger;
     }
   }
+
   .wizard_section {
     margin-top: 40px;
     font-size: larger;
   }
 }
+
 button.inactive {
   background: transparent;
   border: 1px solid black;
 }
+
 //a {
 //  color: black;
 //  border-bottom: 2px solid black;
@@ -55,28 +62,35 @@ input[type=checkbox]:focus,
 input[type=checkbox]:hover {
   background-color: white;
 }
+
 .playground__header {
   padding: 10px;
 }
+
 .playground__buttons {
   padding: 10px;
   text-align: center;
 }
+
 .playground__panels {
   display: flex;
   max-height: 100vh;
   flex: 1;
 }
+
 app-panel {
   flex: 1;
 }
+
 #console {
   white-space: pre-line;
 }
+
 textarea {
   width: 98%;
   height: 70vh;
 }
+
 .feed-url {
   white-space: nowrap;
   text-align: center;
@@ -87,6 +101,7 @@ textarea {
   font-size: 1.2em;
   padding-bottom: 15px;
 }
+
 pre {
   margin-left: 0;
   margin-right: 0;
@@ -100,6 +115,7 @@ pre span {
   line-height: 1.5rem;
   counter-increment: line;
 }
+
 pre span:before {
 
   content: counter(line);
@@ -109,9 +125,11 @@ pre span:before {
   margin-right: .5em;
   color: #888
 }
+
 .rule__selectors div {
   padding-left: 1em;
 }
+
 app-panel {
   padding: 5px;
   border-top: 1px solid #b5b792;
@@ -119,6 +137,7 @@ app-panel {
   display: flex;
   flex-direction: column;
 }
+
 .rule {
   cursor: pointer;
 }
@@ -133,9 +152,20 @@ app-panel {
 .btn-primary {
   color: var(--primary-color);
 }
+
 .btn-secondary {
   color: var(--secondary-color);
 }
+
 .feed-specified {
   background-color: #d9ffd9;
+}
+
+.error {
+  color: #dc3545;
+  text-align: center;
+}
+
+.unsupported-website {
+  background-color: #ffa5a5;
 }
