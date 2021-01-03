@@ -117,14 +117,26 @@ describe('FeedParser', () => {
     expect(nodes.map(node => node.parentElement.tagName)).to.eql(['A', 'SPAN', 'EM', 'P', 'A', 'EM', 'P', 'A', 'I', 'A']);
   });
 
-  it('generalizeXPaths', () => {
+  it('generalizeXPathsSimple', () => {
     const xpaths = [
-'//body/table[1]/tbody[1]/tr[1]/td[3]/table[1]/tbody[1]/tr[1]/td[1]/font[1]/a[1]',
-'//body/table[1]/tbody[1]/tr[1]/td[3]/table[1]/tbody[1]/tr[1]/td[1]/font[1]/a[2]',
-'//body/table[1]/tbody[1]/tr[1]/td[3]/table[1]/tbody[1]/tr[1]/td[1]/font[1]/a[3]',
-'//body/table[1]/tbody[1]/tr[1]/td[3]/table[2]/tbody[1]/tr[2]/td[1]/font[1]/a[1]',
-'//body/table[1]/tbody[1]/tr[1]/td[3]/table[2]/tbody[1]/tr[4]/td[1]/font[1]/a[1]'
+      '//body/table[1]/tbody[1]/tr[1]/td[3]/table[1]/tbody[1]/tr[1]/td[1]/font[1]/a[1]',
+      '//body/table[1]/tbody[1]/tr[1]/td[3]/table[1]/tbody[1]/tr[1]/td[1]/font[1]/a[2]',
+      '//body/table[1]/tbody[1]/tr[1]/td[3]/table[1]/tbody[1]/tr[1]/td[1]/font[1]/a[3]',
+      '//body/table[1]/tbody[1]/tr[1]/td[3]/table[2]/tbody[1]/tr[2]/td[1]/font[1]/a[1]',
+      '//body/table[1]/tbody[1]/tr[1]/td[3]/table[2]/tbody[1]/tr[4]/td[1]/font[1]/a[1]'
     ];
     expect(FeedParser.generalizeXPaths(xpaths)).to.eq('//body/table[1]/tbody[1]/tr[1]/td[3]/table/tbody[1]/tr/td[1]/font[1]/a');
+  });
+
+  it('generalizeXPathsComplex', () => {
+    const xpaths = [
+      '//*[@id=\'democracy\']/ul[1]/li[2]',
+      '//*[@id=\'democracy\']/ul[1]/li[5]',
+      '//*[@id=\'democracy\']/ul[1]/li[9]',
+      '//*[@id=\'economy\']/ul[1]/li[1]',
+      '//*[@id=\'economy\']/ul[1]/li[8]',
+      '//*[@id=\'health\']/ul[1]/li[10]'
+    ];
+    expect(FeedParser.generalizeXPaths(xpaths)).to.eq('//*[contains(id, \'democracy\') or contains(id, \'economy\') or contains(id, \'health\')]/ul[1]/li');
   });
 });

@@ -1,10 +1,12 @@
 import Memcached from 'memcached';
+
 import {config} from '../config';
 
-export const cacheService =  new class CacheService {
+export const cacheService = new class CacheService {
   private memcached: Memcached;
+
   constructor() {
-    this.memcached = new Memcached('localhost:11211', {retries:10,retry:10000});
+    this.memcached = new Memcached('localhost:11211', {retries: 10, retry: 10000});
   }
 
   public get<T>(key: string): Promise<T> {

@@ -5,24 +5,25 @@
       <a (click)="resetAll()" class="button" style="text-align: center">Reset Changes</a>
       <div style="flex: 1 100px; overflow-y: auto">
         <div class="form">
-          <p class="wizard_section"><strong>1.</strong> Please enter the URL of the website you want an RSS Feed from.</p>
+          <p class="wizard_section"><strong>1.</strong> Please enter the URL of the website you want an RSS Feed from.
+          </p>
           <ng-form (ngSubmit)="parseFromUrl()">
-            <div style="text-align: left" class="row">
-              <div class="tooltip bottom col-lg-8" aria-label="The URL you want to RSSify">
-                <input [(ngModel)]="url"
-                       type="url"
+            <div class="row" style="text-align: left">
+              <div aria-label="The URL you want to RSSify" class="tooltip bottom col-lg-8">
+                <input (keyup.enter)="parseFromUrl()"
+                       [(ngModel)]="url"
+                       [autofocus]="true"
                        [ngClass]="{'active': !hasResults}"
-                       style="width: 100%"
+                       autocomplete="off"
                        autofocus
                        name="url"
-                       [autofocus]="true"
-                       autocomplete="off"
+                       placeholder="Enter the Url to convert into RSS"
                        required="true"
-                       (keyup.enter)="parseFromUrl()"
-                       placeholder="Enter the Url to convert into RSS">
+                       style="width: 100%"
+                       type="url">
               </div>
               <div class="col-lg-4">
-                <a href="javascript:void(0)" class="button secondary" (click)="parseFromUrl()">
+                <a (click)="parseFromUrl()" class="button secondary" href="javascript:void(0)">
                   Explore Feed
                 </a>
               </div>
@@ -32,7 +33,7 @@
               <div *ngIf="!isLoading && !hasResults && history.length > 0">
                 <p><strong>Previous Queries</strong></p>
                 <p *ngFor="let url of history">
-                  <a href="javascript:void(0)" (click)="parseFromHistoryUrl(url)">{{ url }}</a>
+                  <a (click)="parseFromHistoryUrl(url)" href="javascript:void(0)">{{ url }}</a>
                 </p>
               </div>
             </div>
@@ -50,12 +51,12 @@
         <div *ngIf="rules?.length > 0" style="margin-top: 10px">
           <p>There are {{rules?.length}} feeds in this site, pick one:</p>
           <ol class="list-of-feeds">
-            <li *ngFor="let rule of rules?.slice(0, 15); let i = index "
-                class="rule tooltip"
-                style="display: block"
-                aria-label="Try to visualize and scroll to articles in website"
+            <li (click)="applyRule(rule)"
+                *ngFor="let rule of rules?.slice(0, 15); let i = index "
                 [ngClass]="{'active': isCurrentRule(rule)}"
-                (click)="applyRule(rule)">
+                aria-label="Try to visualize and scroll to articles in website"
+                class="rule tooltip"
+                style="display: block">
               <a href="javascript:void(0)">Feed with <strong>{{ rule.count }}</strong> articles</a>
               <span *ngIf="i === 0">
                 <strong> - highest score</strong>
@@ -65,28 +66,41 @@
         </div>
 
         <div *ngIf="currentRule">
-          <p class="wizard_section"><strong>3.</strong> Filter the feed</p>
+          <p class="wizard_section"><strong>3.</strong> Advanced Settings</p>
           <ul style="list-style: none">
-            <li><input type="checkbox" [(ngModel)]="excludeItemsThatContain"> Remove items that contain <a href="https://github.com/damoeb/rss-proxy/wiki/Filters#text-filter" target="_blank">one of</a> (comma separated) <input type="text" name="excludeItemsThatContainTexts" [(ngModel)]="excludeItemsThatContainTexts"></li>
-<!--            <li><input type="checkbox" checked> Remove items with <a href="">odd content structure</a></li>-->
-            <li><input type="checkbox" [(ngModel)]="excludeBrokenItems"> Remove items that contain <a href="https://github.com/damoeb/rss-proxy/wiki/Filters#bad-content-filter" target="_blank">no relevant text</a></li>
+            <!--            todo mag enable -->
+            <!--            <li><input type="checkbox" [(ngModel)]="excludeItemsThatContain"> Remove items that contain <a href="https://github.com/damoeb/rss-proxy/wiki/Filters#text-filter" target="_blank">one of</a> (comma separated) <input type="text" name="excludeItemsThatContainTexts" [(ngModel)]="excludeItemsThatContainTexts"></li>-->
+            <li>
+              <p>Output Format</p>
+              <label><input [(ngModel)]="options.o" name="feedType" type="radio" value="ATOM"><strong>ATOM</strong>
+                (default)</label>
+              <label><input [(ngModel)]="options.o" name="feedType" type="radio" value="RSS">RSS</label>
+            </li>
+            <li>
+              <p>Feed Entry Content</p>
+              <label><input [(ngModel)]="options.c" name="entryContent" type="radio" value="RAW"><strong>Raw</strong>
+                (default)</label>
+              <label><input [(ngModel)]="options.c" name="entryContent" type="radio" value="TEXT">Text</label>
+            </li>
           </ul>
 
         </div>
 
-        <div style="display:flex;justify-content:center; align-items:center;"
-             *ngIf="isLoading && !iframeLoaded">
+        <div *ngIf="isLoading && !iframeLoaded"
+             style="display:flex;justify-content:center; align-items:center;">
           <div class="spinner"></div>
         </div>
       </div>
-      <div [ngClass]="{'feed-specified': currentRule}"
+      <div [ngClass]="{'feed-specified': currentRule, 'unsupported-website': error}"
            style="border-top: 1px solid black; height: 150px">
         <div class="feed-url">
-          <a *ngIf="currentRule" class="button secondary large" [href]="getFeedUrl()" target="_blank">Your ATOM Feed</a>
-          <h3 *ngIf="!currentRule">Your ATOM Feed not yet specified</h3>
+          <a *ngIf="currentRule" [href]="getFeedUrl()" class="button secondary large" target="_blank">Your ATOM Feed</a>
+          <h3 *ngIf="!currentRule && !error">Your ATOM Feed not yet specified</h3>
+          <h3 *ngIf="error">Errors processing website</h3>
         </div>
         <div class="playground__footer">
-          <a href="https://github.com/damoeb/rss-proxy">rss-proxy</a> v. {{ getVersions().version }}@{{ getVersions().revision }} build on {{ getBuildDate() }}
+          <a href="https://github.com/damoeb/rss-proxy">rss-proxy</a> v. {{ getVersions().version }}
+          @{{ getVersions().revision }} build on {{ getBuildDate() }}
           <a href="https://twitter.com/damoeb">contact</a>
         </div>
       </div>
@@ -94,25 +108,27 @@
 
     <div style="flex: 1; display: flex; flex-direction: column; border-left: 1px solid black; background: white">
 
-      <div style="display:flex;justify-content:center; align-items:center;"
-           *ngIf="isLoading && !iframeLoaded">
+      <div *ngIf="isLoading && !iframeLoaded"
+           style="display:flex;justify-content:center; align-items:center;">
         <div class="spinner"></div>
       </div>
 
-      <div *ngIf="error">
-        {{error}}
+      <div *ngIf="error" style="margin: 10px">
+        <h2 class="error">{{error}}</h2>
+        Most likely the website is JavaScript generated, which is not supported by rss-proxy directly.
+        Check the <a href="https://github.com/damoeb/rss-proxy/wiki">documentation</a> for further help.
       </div>
 
       <div class="playground__panels">
 
         <!-- Visualization --------------------------------------------------------------------------------------------- -->
 
-        <iframe [src]="proxyUrl"
+        <iframe #iframeElement
+                (load)="onIframeLoad()"
                 *ngIf="proxyUrl"
                 [hidden]="isLoading"
-                #iframeElement
-                (load)="onIframeLoad()"
-                sandbox="allow-scripts allow-same-origin allow-scripts"
+                [src]="proxyUrl"
+                sandbox="allow-same-origin"
                 style="flex: 1; border: none"></iframe>
 
       </div>

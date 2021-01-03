@@ -1,11 +1,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import helmet from 'helmet';
 
-import logger from './logger'
-import { feedEndpoint } from './endpoints/feedEndpoint';
+import logger from './logger';
+import {feedEndpoint} from './endpoints/feedEndpoint';
 import {config} from './config';
-import {analyticsService} from './services/analyticsService';
 import {proxyEndpoint} from './endpoints/proxyEndpoint';
 import {cacheService} from './services/cacheService';
 
@@ -23,6 +23,7 @@ logger.info(`env: ${config.env}`);
 const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+app.use(helmet());
 
 export interface ErrorMsg {
   message: string,
@@ -41,11 +42,6 @@ if (config.env !== 'prod') {
 }
 app.use('/', express.static('static'));
 
-if (analyticsService.active()) {
-  logger.info('+ Enabling analytics');
-} else {
-  logger.info('- Disabling analytics');
-}
 if (cacheService.active()) {
   logger.info('+ Enabling cache');
 } else {
@@ -56,8 +52,8 @@ proxyEndpoint.register(app);
 
 
 logger.debug('Available REST methods');
-app._router.stack.forEach((route:any) => {
-  if (route.route && route.route.path){
+app._router.stack.forEach((route: any) => {
+  if (route.route && route.route.path) {
     logger.debug(`${route.route.stack[0].method.toUpperCase()} ${route.route.path}`);
   }
 });

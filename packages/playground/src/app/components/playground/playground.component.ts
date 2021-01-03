@@ -1,11 +1,12 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {FeedService} from '../../services/feed.service';
-import {Article, ArticleRule, FeedParser, FeedParserOptions, FeedUrl, OutputType, SourceType} from '../../../../../core/src';
-import {build} from '../../../environments/build';
 import {isEmpty} from 'lodash';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {ActivatedRoute, Params, Router} from '@angular/router';
+
+import {FeedService} from '../../services/feed.service';
+import {Article, ArticleRule, FeedParser, FeedParserOptions, FeedUrl, OutputType} from '../../../../../core/src';
+import {build} from '../../../environments/build';
 
 interface ArticleCandidate {
   elem: HTMLElement;
@@ -20,7 +21,28 @@ interface ArticleCandidate {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlaygroundComponent implements OnInit {
-  private iframeLoaded = false;
+
+  @ViewChild('iframeElement', {static: false}) iframeRef: ElementRef;
+  html = '';
+  feedData = '';
+  rules: Array<ArticleRule>;
+  currentRule: ArticleRule;
+  url = 'https://www.heise.de';
+  showViz = 'viz';
+  hasResults = false;
+  iframeLoaded = false;
+  options: FeedParserOptions = {} as FeedParserOptions;
+  logs: string[];
+  articles: Article[];
+  feeds: FeedUrl[];
+  isLoading = false;
+  isGenerated = false;
+  error: string;
+  history: string[];
+  proxyUrl: SafeResourceUrl;
+  currentTab: string;
+  excludeItemsThatContain = false;
+  excludeItemsThatContainTexts = 'Newsletter, Advertisement';
 
   constructor(private httpClient: HttpClient,
               private sanitizer: DomSanitizer,
@@ -31,32 +53,6 @@ export class PlaygroundComponent implements OnInit {
     this.resetAll();
     this.history = PlaygroundComponent.getHistory();
   }
-
-  @ViewChild('iframeElement', {static: false}) iframeRef: ElementRef;
-  html = '';
-  feedData = '';
-  rules: Array<ArticleRule>;
-  currentRule: ArticleRule;
-  url = 'https://www.heise.de';
-  showViz = 'viz';
-  hasResults = false;
-
-  options: FeedParserOptions;
-
-  optionsFromParser: Partial<FeedParserOptions> = {};
-
-  logs: string[];
-  articles: Article[];
-  feeds: FeedUrl[];
-  isLoading = false;
-  isGenerated = false;
-  error: string;
-  history: string[];
-  proxyUrl: SafeResourceUrl;
-  currentTab: string;
-  excludeItemsThatContain = true;
-  excludeItemsThatContainTexts = 'Newsletter, Advertisement';
-  excludeBrokenItems = true;
 
   private static getHistory(): string[] {
     return JSON.parse(localStorage.getItem('history') || JSON.stringify([]));
@@ -71,10 +67,11 @@ export class PlaygroundComponent implements OnInit {
     });
   }
 
-  private applyRule(rule: ArticleRule) {
+  public applyRule(rule: ArticleRule) {
     console.log('apply rule', rule);
     this.currentRule = rule;
-    this.options.rule = `${rule.contextXPath}||${rule.linkXPath}`;
+    this.options.pContext = rule.contextXPath;
+    this.options.pLink = rule.linkXPath;
     this.feedService.applyRule(this.html, this.url, rule, this.options).subscribe(articles => {
       this.articles = articles;
     });
@@ -83,8 +80,10 @@ export class PlaygroundComponent implements OnInit {
   }
 
   public async parseFromUrl() {
-    if (this.isLoading) { return; }
-    const queryParams: Params = { url: this.url };
+    if (this.isLoading) {
+      return;
+    }
+    const queryParams: Params = {url: this.url};
 
     return this.router.navigate(
       [],
@@ -93,6 +92,72 @@ export class PlaygroundComponent implements OnInit {
         queryParams,
         queryParamsHandling: 'merge', // remove to replace all query params by provided
       });
+  }
+
+  public getFeedUrl() {
+    return this.feedService.getDirectFeedUrl(this.url, this.options);
+  }
+
+  getVersions() {
+    return build;
+  }
+
+  public resetAll() {
+    this.options = {
+      o: OutputType.ATOM,
+      xq: this.excludeItemsThatContainTexts,
+    };
+    this.html = '';
+    this.error = '';
+    this.hasResults = false;
+    this.iframeLoaded = false;
+    this.feeds = [];
+    this.currentRule = null;
+    this.logs = [];
+    // this.url = null;
+    this.rules = null;
+    this.proxyUrl = null;
+    this.feedData = '';
+  }
+
+  public getBuildDate() {
+    const date = new Date(parseInt(this.getVersions().date, 10));
+    return `${date.getUTCDate()}-${date.getUTCMonth()}-${date.getUTCFullYear()}`;
+  }
+
+  public parseFromHistoryUrl(url: string) {
+    this.url = url;
+    return this.parseFromUrl();
+  }
+
+  public isCurrentRule(rule: ArticleRule): boolean {
+    return this.currentRule === rule;
+  }
+
+  public onIframeLoad(): void {
+    if (this.rules) {
+      this.updateScores();
+    } else {
+      this.iframeLoaded = true;
+    }
+  }
+
+  public updateScores(): void {
+    const iframeDocument = this.iframeRef.nativeElement.contentDocument;
+    this.rules.forEach(rule => {
+      const articles = this.evaluateXPathInIframe(rule.contextXPath, iframeDocument)
+          // remove hidden articles
+          .filter((elem: any) => !!(elem.offsetWidth || elem.offsetHeight))
+        // remove empty articles
+        // .filter((elem: any) => elem.textContent.trim() > 0)
+        // .filter((elem: any) => Array.from(elem.querySelectorAll(rule.linkPath)).length > 0);
+      ;
+      if (articles.length === 0) {
+        rule.score -= 20;
+        // rule.hidden = true;
+      }
+    });
+    this.changeDetectorRef.detectChanges();
   }
 
   private parseFromUrlInternal(): void {
@@ -144,7 +209,9 @@ export class PlaygroundComponent implements OnInit {
             this.error = response.message;
           }
 
-          console.error('Proxy replies an error.', response.message);
+          console.error('Proxy replied an error.', response.message);
+          // tslint:disable-next-line:max-line-length
+          this.error = `Looks like this site does not contain any feed data.`;
         } else {
           this.isGenerated = true;
           console.log('Proxy replies an generated feed');
@@ -155,7 +222,10 @@ export class PlaygroundComponent implements OnInit {
           this.setCurrentTab(this.showViz);
           this.feeds = response.feeds;
           this.feedData = response.feed;
-          this.optionsFromParser = response.options;
+          const optionsFromParser = response.options;
+          this.options.c = optionsFromParser.c;
+          this.options.o = optionsFromParser.o;
+          // todo mag add fallback option
           this.changeDetectorRef.detectChanges();
         }
       }, (error: HttpErrorResponse) => {
@@ -166,62 +236,20 @@ export class PlaygroundComponent implements OnInit {
       });
   }
 
-  public getFeedUrl() {
-    return this.feedService.getDirectFeedUrl(this.url, this.options);
-  }
-
-  getVersions() {
-    return build;
-  }
-
-  public resetAll() {
-    this.options = {
-      output: OutputType.ATOM,
-      excludeItemsThatContainOneOf: this.excludeItemsThatContainTexts,
-      excludeBrokenItems: this.excludeBrokenItems
-    };
-    this.optionsFromParser = {};
-    this.html = '';
-    this.error = '';
-    this.hasResults = false;
-    this.iframeLoaded = false;
-    this.feeds = [];
-    this.currentRule = null;
-    this.logs = [];
-    // this.url = null;
-    this.rules = null;
-    this.proxyUrl = null;
-    this.feedData = '';
-  }
-
-  public getBuildDate() {
-    const date = new Date(parseInt(this.getVersions().date, 10));
-    return `${date.getUTCDate()}-${date.getUTCMonth()}-${date.getUTCFullYear()}`;
-  }
-
   private addToHistory(url: string) {
     let history = this.history.filter(otherUrl => otherUrl !== url);
     history = history.reverse();
     history.push(url);
     history = history.reverse();
-    history = history.filter((otherUrl, index) => index < 5);
+    history = history.filter((otherUrl, index) => index < 15);
 
     this.history = history;
 
     localStorage.setItem('history', JSON.stringify(history));
   }
 
-  public parseFromHistoryUrl(url: string) {
-    this.url = url;
-    return this.parseFromUrl();
-  }
-
   private setCurrentTab(tab: string) {
     this.currentTab = tab;
-  }
-
-  public isCurrentRule(rule: ArticleRule): boolean {
-    return this.currentRule === rule;
   }
 
   private prepareIframe(url: string) {
@@ -242,22 +270,27 @@ export class PlaygroundComponent implements OnInit {
     styleNode.setAttribute('id', id);
     const allMatches: HTMLElement[] = this.evaluateXPathInIframe(rule.contextXPath, iframeDocument);
 
-    const qualifiedAsArticle = (elem: HTMLElement, index: number): boolean => {
+    const qualifiedAsArticle = (elem: HTMLElement): boolean => {
       // todo apply filters
       return FeedParser.qualifiesAsArticle(elem, rule, iframeDocument);
     };
-    const matchingIndexes = allMatches.map((elem, index) => {
-      return {
-       elem,
-       index,
-       qualified: qualifiedAsArticle(elem, index)
-      } as ArticleCandidate;
-    }).filter(candidate => candidate.qualified).map(candidate => candidate.index);
+    const matchingIndexes = allMatches
+      .map(elem => {
+        const index = Array.from(elem.parentElement.children)
+          .findIndex(otherElem => otherElem === elem);
+        const qualified = qualifiedAsArticle(elem);
+        if (!qualified) {
+          console.log(`Removing unqualified element ${index}`, elem);
+        }
+        return {elem, index, qualified} as ArticleCandidate;
+      })
+      .filter(candidate => candidate.qualified)
+      .map(candidate => candidate.index);
 
     const cssSelectorContextPath = 'body>' + FeedParser.getRelativePath(allMatches[0], iframeDocument.body);
 
-    const code = `${matchingIndexes.map(index => `${cssSelectorContextPath}:nth-of-type(${index + 1})`).join(', ')} {
-            border: 2px dotted red!important;
+    const code = `${matchingIndexes.map(index => `${cssSelectorContextPath}:nth-child(${index + 1})`).join(', ')} {
+            border: 3px dotted red!important;
             margin-bottom: 5px!important;
             display: block;
           }
@@ -272,13 +305,6 @@ export class PlaygroundComponent implements OnInit {
     iframeDocument.head.appendChild(styleNode);
   }
 
-  public onIframeLoad(): void {
-    if (this.rules) {
-      this.updateScores();
-    } else {
-      this.iframeLoaded = true;
-    }
-  }
   private evaluateXPathInIframe(xPath: string, context: HTMLElement | Document): HTMLElement[] {
     const iframeDocument = this.iframeRef.nativeElement.contentDocument;
     const xpathResult = iframeDocument.evaluate(xPath, context, null, 5);
@@ -290,33 +316,17 @@ export class PlaygroundComponent implements OnInit {
     }
     return nodes;
   }
-  public updateScores(): void {
-    const iframeDocument = this.iframeRef.nativeElement.contentDocument;
-    this.rules.forEach(rule => {
-      const articles = this.evaluateXPathInIframe(rule.contextXPath, iframeDocument)
-          // remove hidden articles
-          .filter((elem: any) => !!(elem.offsetWidth || elem.offsetHeight))
-        // remove empty articles
-        // .filter((elem: any) => elem.textContent.trim() > 0)
-        // .filter((elem: any) => Array.from(elem.querySelectorAll(rule.linkPath)).length > 0);
-      ;
-      if (articles.length === 0) {
-        rule.score -= 20;
-        // rule.hidden = true;
-      }
-    });
-    this.changeDetectorRef.detectChanges();
-  }
 
   private updateParserOptions() {
-    this.options = {
-      output: OutputType.ATOM,
-      excludeItemsThatContainOneOf: this.excludeItemsThatContain ? this.excludeItemsThatContainTexts : '',
-      excludeBrokenItems: this.excludeBrokenItems
-    };
+    if (this.excludeItemsThatContain) {
+      this.options.xq = this.excludeItemsThatContainTexts;
+    } else {
+      delete this.options.xq;
+    }
 
     if (this.currentRule) {
-      this.options.rule = this.currentRule.id;
+      this.options.pContext = this.currentRule.contextXPath;
+      this.options.pLink = this.currentRule.linkXPath;
     }
   }
 }

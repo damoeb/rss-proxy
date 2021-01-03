@@ -1,8 +1,16 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
-import {Article, ArticleRule, FeedParser, FeedParserOptions, FeedParserResult, LogCollector, OutputType} from '../../../../core/src';
-import {environment} from '../../environments/environment';
+import {
+  Article,
+  ArticleRule,
+  ContentType,
+  FeedParser,
+  FeedParserOptions,
+  FeedParserResult,
+  LogCollector,
+  OutputType
+} from '../../../../core/src';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +18,12 @@ import {environment} from '../../environments/environment';
 export class FeedService {
 
   private defaultOptions: FeedParserOptions = {
-    output: OutputType.RSS,
+    o: OutputType.ATOM,
+    c: ContentType.RAW
   };
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+  }
 
   // fromHTML(html: string, options: FeedParserOptions): Observable<FeedParserResult> {
   //   const domParser = new DOMParser();
@@ -34,7 +44,7 @@ export class FeedService {
   //   return of(result);
   // }
 
-  applyRule(html: string, url: string, rule: ArticleRule, options: FeedParserOptions): Observable<Article[]> {
+  public applyRule(html: string, url: string, rule: ArticleRule, options: FeedParserOptions): Observable<Article[]> {
     const logCollector = new LogCollector();
 
     const htmlDoc = new DOMParser().parseFromString(html, 'text/html');
@@ -44,27 +54,29 @@ export class FeedService {
     return of(feedParser.getArticlesByRule(rule));
   }
 
-  getDirectFeedUrl(url: string, options: FeedParserOptions): string {
-    return `${this.getApiBase()}api/feed?url=${encodeURIComponent(url)}`
-      + this.feedUrlFragment('rule', options)
-      + this.feedUrlFragment('output', options)
-      + this.feedUrlFragment('excludeItemsThatContainOneOf', options)
-      + this.feedUrlFragment('excludeBrokenItems', options)
+  public getDirectFeedUrl(url: string, options: FeedParserOptions): string {
+    return `/api/feed?url=${encodeURIComponent(url)}`
+      + this.feedUrlFragment('pContext', options)
+      + this.feedUrlFragment('pLink', options)
+      + this.feedUrlFragment('o', options)
+      + this.feedUrlFragment('c', options)
+      + this.feedUrlFragment('xq', options)
       ;
   }
 
-  fromUrl(url: string, options: FeedParserOptions): Observable<FeedParserResult> {
-    const parserUrl = `${this.getApiBase()}api/feed/live?url=${encodeURIComponent(url)}`
-      + this.feedUrlFragment('rule', options)
-      + this.feedUrlFragment('output', options)
-      + this.feedUrlFragment('excludeItemsThatContainOneOf', options)
-      + this.feedUrlFragment('excludeBrokenItems', options)
+  public fromUrl(url: string, options: FeedParserOptions): Observable<FeedParserResult> {
+    const parserUrl = `/api/feed/live?url=${encodeURIComponent(url)}`
+      + this.feedUrlFragment('pContext', options)
+      + this.feedUrlFragment('pLink', options)
+      + this.feedUrlFragment('o', options)
+      + this.feedUrlFragment('c', options)
+      + this.feedUrlFragment('xq', options)
     ;
 
     return this.httpClient.get(parserUrl) as Observable<FeedParserResult>;
   }
 
-  private feedUrlFragment(id: 'output'|'excludeItemsThatContainOneOf'|'excludeBrokenItems'|'rule', options: FeedParserOptions) {
+  private feedUrlFragment(id: 'c' | 'o' | 'xq' | 'pContext' | 'pLink', options: FeedParserOptions) {
 
     function prop<T, K extends keyof T>(obj: T, key: K) {
       return obj[key];
@@ -74,9 +86,5 @@ export class FeedService {
       return `&${id}=${encodeURIComponent(prop(options, id))}`;
     }
     return '';
-  }
-
-  private getApiBase() {
-    return environment.apiBase || location.href;
   }
 }

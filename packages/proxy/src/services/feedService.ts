@@ -1,17 +1,21 @@
 import {
-  Article, ArticleRule,
+  Article,
+  ArticleRule,
+  ContentType,
   FeedParser,
   FeedParserOptions,
   FeedParserResult,
   FeedUrl,
-  OutputType,
   LogCollector,
+  OutputType,
   SimpleFeedResult
 } from '@rss-proxy/core';
 import {Feed} from 'feed';
-import {isEmpty} from 'lodash';
-import {siteService} from './siteService';
+import crypto from 'crypto';
+import {isEmpty, isUndefined} from 'lodash';
 import {Request} from 'express';
+
+import {siteService} from './siteService';
 import logger from '../logger';
 import {config} from '../config';
 import {cacheService} from './cacheService';
@@ -24,7 +28,8 @@ export interface GetResponse {
 }
 
 const defaultOptions: FeedParserOptions = {
-  output: OutputType.ATOM,
+  o: OutputType.ATOM,
+  c: ContentType.RAW
 };
 
 export interface FeedParserError {
@@ -34,21 +39,35 @@ export interface FeedParserError {
 }
 
 
-export const feedService =  new class FeedService {
-  async mapToFeed(url: string, options: FeedParserOptions, canUseNativeFeed: boolean, liveSource: boolean): Promise<FeedParserResult | GetResponse> {
+export const feedService = new class FeedService {
+  private static toCacheKey(url: string, options: FeedParserOptions): string {
+    // hash to limit length
+    const sha1 = crypto.createHash('sha1');
+    sha1.update(JSON.stringify(options));
+    return `feed/${url}/${sha1.digest('hex')}`;
+  }
+
+  private static toURI(article: Article) {
+    return `tag:rss-proxy.migor.org:${article.link}`;
+  }
+
+  private static isDefined(value: string) {
+    return !isUndefined(value) && value !== 'undefined';
+  }
+
+  async mapToFeed(url: string, options: FeedParserOptions, liveSource: boolean): Promise<FeedParserResult | GetResponse> {
 
     const response = await siteService.download(url);
 
     const contentType = response.contentType.split(';')[0].toLowerCase();
-    logger.info(`Fetched ${url} with contentType ${response.contentType} -> main type ${contentType}`);
 
     const doc = siteService.toDom(response.body);
 
     switch (contentType) {
       case 'text/html':
         const feedUrls = this.findFeedUrls(doc, url);
-        const returnNativeFeed = canUseNativeFeed && config.preferNativeFeed && feedUrls.length > 0
-          && isEmpty(options.rule);
+        const returnNativeFeed = options.fallback && config.preferNativeFeed && feedUrls.length > 0
+          && isEmpty(options.pContext);
         if (returnNativeFeed) {
           return await siteService.download(feedUrls[0].url);
         } else {
@@ -57,11 +76,17 @@ export const feedService =  new class FeedService {
 
       default:
         // todo xml2json
-        return Promise.reject({message: `Content of type ${response.contentType} is not supported`} as FeedParserError)
+        return Promise.reject({message: `Content of type ${response.contentType} is not supported`} as FeedParserError);
     }
   }
 
-  public parseFeedCached(url: string, options: FeedParserOptions, canUseNativeFeed: boolean = false): Promise<SimpleFeedResult | GetResponse> {
+  public parseFeedCached(url: string, options: FeedParserOptions): Promise<SimpleFeedResult | GetResponse> {
+    if (isUndefined(options.pContext)) {
+      return Promise.reject(new Error('query param pContext is not defined'));
+    }
+    if (isUndefined(options.pLink)) {
+      return Promise.reject(new Error('query param pLink is not defined'));
+    }
     const cacheKey = FeedService.toCacheKey(url, options);
     return cacheService.get<SimpleFeedResult | GetResponse>(cacheKey)
       .then((response) => {
@@ -70,7 +95,7 @@ export const feedService =  new class FeedService {
       })
       .catch(async () => {
         logger.debug('Cache miss');
-        const response = await feedService.parseFeed(url, options, canUseNativeFeed);
+        const response = await feedService.parseFeed(url, options);
         if ((response as any)['type'] !== 'GetResponse') {
           cacheService.put(cacheKey, {feed: (response as FeedParserResult).feed});
         } else {
@@ -82,32 +107,49 @@ export const feedService =  new class FeedService {
 
   public toOptions(request: Request): FeedParserOptions {
     const actualOptions: Partial<FeedParserOptions> = {};
-    if (request.query.output) {
-      actualOptions.output = request.query.output as OutputType;
+    if (FeedService.isDefined(request.query.c as any)) {
+      actualOptions.c = request.query.c as ContentType;
     }
-    if (request.query.rule) {
-      actualOptions.rule = request.query.rule as string;
+    if (FeedService.isDefined(request.query.o as any)) {
+      actualOptions.o = request.query.o as OutputType;
+    }
+    if (FeedService.isDefined(request.query.xq as any)) {
+      actualOptions.xq = request.query.xq as string;
+    }
+    if (FeedService.isDefined(request.query.pContext as any)) {
+      actualOptions.pContext = request.query.pContext as string;
+    }
+    if (FeedService.isDefined(request.query.pLink as any)) {
+      actualOptions.pLink = request.query.pLink as string;
     }
     return {...defaultOptions, ...actualOptions};
   }
 
-  public parseFeed(url: string, options: FeedParserOptions, canUseNativeFeed: boolean, liveSource = false): Promise<FeedParserResult | GetResponse> {
+  public parseFeed(url: string, options: FeedParserOptions, liveSource = false): Promise<FeedParserResult | GetResponse> {
 
-      logger.info(`Parsing ${url} with options ${JSON.stringify(options)}`);
+    logger.info(`Parsing ${url} with options ${JSON.stringify(options)}`);
 
-      if (!url) {
-        return Promise.reject({message: 'Param url is missing'} as FeedParserError);
-      }
-      return feedService.mapToFeed(url, options, canUseNativeFeed, liveSource);
+    if (!url) {
+      return Promise.reject({message: 'Param url is missing'} as FeedParserError);
     }
+    return feedService.mapToFeed(url, options, liveSource);
+  }
 
-  public mapErrorToFeed(url: string, message: string): string {
+  public mapErrorToFeed(url: string, message: string, options: FeedParserOptions): string {
+    let id = 'tag:rss-proxy.migor.org:error';
+    if (options) {
+      id = `${id}-contextXPath:${options.pContext}-linkXPath:${options.pLink}`;
+    } else {
+      // render one internal error per month
+      const today = new Date();
+      id = `${id}:internal-error:${today.getFullYear()}-${today.getMonth()}`;
+    }
     const feed = new Feed({
       title: 'rss-proxy error',
-      id: url,
+      id,
       link: url,
-      generator: "rss-proxy",
-      copyright: "rss-proxy"
+      generator: 'rss-proxy',
+      copyright: 'rss-proxy'
     });
 
     feed.addItem({
@@ -115,7 +157,7 @@ export const feedService =  new class FeedService {
       link: `https://rssproxy.migor.org?url=${encodeURIComponent(url)}`,
       published: new Date(),
       date: new Date(),
-      content: `${message} Try to resolve the issue on provide link.`
+      content: `${message} Try to resolve the issue on provided link.`
     });
     return feed.atom1();
   }
@@ -132,19 +174,15 @@ export const feedService =  new class FeedService {
     const feedParser = new FeedParser(doc, url, options, logCollector);
 
     const meta = siteService.getMeta(doc);
-
     const feed = new Feed({
-      title: doc.title,
-      // description: doc.,
+      title: doc.title + ' via rss-proxy',
       id: url,
       link: url,
-      // author: this.getMetatag(doc, ''),
       language: meta.language,
-      favicon: meta.favicon,
       copyright: meta.copyright,
-      // updated: new Date(2013, 6, 14), // optional, default = today
-      generator: "rss-proxy", // optional, default = 'Feed for Node.js'
-      feedLinks: feeds.reduce((map:any, feed) => {
+      docs: 'https://github.com/damoeb/rss-proxy',
+      generator: `rss-proxy ${config.build.version}`,
+      feedLinks: feeds.reduce((map: any, feed) => {
         map[feed.name] = feed.url;
         return map;
       }, {})
@@ -154,14 +192,13 @@ export const feedService =  new class FeedService {
     let rule: ArticleRule;
     if (liveSource) {
       rules = feedParser.getArticleRules();
-      rule = this.getArticleRule(rules, options.rule, liveSource);
+      rule = this.getArticleRule(rules, options.pContext + options.pLink, liveSource);
     } else {
       rules = [];
-      const parts = options.rule.split('||');
       rule = {
-        contextXPath: parts[0],
-        linkXPath: parts[1],
-        id: parts[1]
+        contextXPath: options.pContext,
+        linkXPath: options.pLink,
+        id: options.pLink
       };
     }
 
@@ -170,12 +207,12 @@ export const feedService =  new class FeedService {
       articles = feedParser.getArticlesByRule(rule);
       articles.forEach((article: Article) => {
         feed.addItem({
+          id: FeedService.toURI(article),
           title: article.title,
-          link: article.link,
+          link: article.link, // todo mag ATOM feeds render unescaped & which causes an invalid xml, RSS feeds work fine
           published: new Date(),
           date: new Date(),
-          // description: article.summary.join(' / '),
-          content: article.content
+          content: options.c === ContentType.RAW ? article.content : article.text
         });
       });
 
@@ -187,8 +224,8 @@ export const feedService =  new class FeedService {
         feeds,
         html,
         articles: articles,
-        feedOutputType: options.output,
-        feed: this.renderFeed(options.output)(feed)
+        feedOutputType: options.o,
+        feed: this.renderFeed(options.o)(feed)
       });
 
     } else {
@@ -198,7 +235,7 @@ export const feedService =  new class FeedService {
           logs: logCollector.logs(),
           feeds,
           html,
-          feedOutputType: options.output
+          feedOutputType: options.o
         }
       } as FeedParserError);
 
@@ -207,7 +244,7 @@ export const feedService =  new class FeedService {
 
   private findFeedUrls(doc: Document, url: string): FeedUrl[] {
 
-    const types = ["application/atom+xml", "application/rss+xml", "application/json"];
+    const types = ['application/atom+xml', 'application/rss+xml', 'application/json'];
 
     const feedUrls = types.map(type => Array.from(doc.querySelectorAll(`link[href][type="${type}"]`)))
       .flat(1)
@@ -224,7 +261,7 @@ export const feedService =  new class FeedService {
         return {
           name: linkElement.getAttribute('title'),
           url: feedUrl
-        }
+        };
       });
 
     logger.debug(`Found ${feedUrls.length} native feeds in site ${url}`);
@@ -235,14 +272,14 @@ export const feedService =  new class FeedService {
   private renderFeed(output: OutputType) {
     return (feed: Feed) => {
       switch (output) {
-            case OutputType.ATOM:
-              return feed.atom1();
-            case OutputType.RSS:
-              return feed.rss2();
-            default:
-            case OutputType.JSON:
-              return feed.json1()
-          }
+        case OutputType.ATOM:
+          return feed.atom1();
+        case OutputType.RSS:
+          return feed.rss2();
+        default:
+        case OutputType.JSON:
+          return feed.json1();
+      }
     };
   }
 
@@ -262,9 +299,5 @@ export const feedService =  new class FeedService {
         }
       }
     }
-  }
-
-  private static toCacheKey(url: string, options: FeedParserOptions): string {
-    return `feed/${url}/${JSON.stringify(options)}`;
   }
 };

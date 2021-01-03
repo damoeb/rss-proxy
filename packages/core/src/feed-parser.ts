@@ -1,5 +1,3 @@
-
-
 export interface FeedUrl {
   name: string;
   url: string;
@@ -20,6 +18,10 @@ export interface ArticleRule {
   id: string;
 }
 
+export enum ContentType {
+  RAW = 'RAW', TEXT = 'TEXT'
+}
+
 export enum OutputType {
   JSON = 'JSON', RSS = 'RSS', ATOM = 'ATOM'
 }
@@ -35,6 +37,7 @@ export enum ContentResolutionType {
 export interface SimpleFeedResult {
   feed?: any;
 }
+
 export interface FeedParserResult extends SimpleFeedResult {
   usesExistingFeed: boolean;
   feeds?: FeedUrl[];
@@ -49,10 +52,12 @@ export interface FeedParserResult extends SimpleFeedResult {
 }
 
 export interface FeedParserOptions {
-  output: OutputType;
-  rule?: string,
-  excludeItemsThatContainOneOf?: string,
-  excludeBrokenItems?: boolean
+  o: OutputType;
+  c?: ContentType,
+  pContext?: string,
+  pLink?: string,
+  fallback?: boolean, // falls back to dirst native feed
+  xq?: string, // exclude query
 }
 
 export interface TitleFeatures {
@@ -66,6 +71,7 @@ export interface Article {
   link: string;
   summary?: string[];
   content?: string;
+  text?: string;
 }
 
 export interface ArticleContext {
@@ -80,8 +86,8 @@ export interface LinkGroup {
 }
 
 export interface Logger {
-  log: (...params:any[]) => void
-  error: (...params:any[]) => void
+  log: (...params: any[]) => void
+  error: (...params: any[]) => void
 }
 
 export class FeedParser {
@@ -95,33 +101,6 @@ export class FeedParser {
               private options: FeedParserOptions,
               private logger: Logger) {
     this.url = new URL(url);
-  }
-
-
-  private getDocumentRoot(): HTMLElement {
-    return this.document.getElementsByTagName('body').item(0);
-  }
-
-  private static getRelativeXPath(element: HTMLElement, context: HTMLElement): string {
-    if (element.id !== '')
-      return "//*[@id='"+element.id+"']";
-
-    if (element === context)
-      return '//' + element.tagName.toLowerCase();
-
-    let ix = 0;
-    const siblings = element.parentElement.children;
-    for (let i = 0; i < siblings.length; i ++) {
-      const sibling = siblings[i];
-
-      if (sibling === element) {
-        return `${this.getRelativeXPath(element.parentElement, context)}/${element.tagName.toLowerCase()}[${ix + 1}]`;
-      }
-
-      if (sibling.nodeType===1 && sibling.tagName === element.tagName) {
-        ix++;
-      }
-    }
   }
 
   public static getRelativePath(node: HTMLElement, context: HTMLElement, withClassNames = false) {
@@ -141,67 +120,114 @@ export class FeedParser {
     return path;
   }
 
-  private findLinks(): HTMLElement[] {
-    return Array.from(this.document.getElementsByTagName('A')) as HTMLElement[];
-  }
-
-  private findArticleRootElement(linkElements: HTMLElement[]): HTMLElement[] {
-    while (true) {
-      const parentNodes = linkElements.map(currentNode => currentNode.parentElement);
-      if (!parentNodes || parentNodes.length === 0) {
-        break;
-      }
-      if (parentNodes[0].isSameNode(parentNodes[1])) {
-        break;
-      }
-      linkElements = parentNodes as HTMLElement[];
-    }
-    return linkElements;
-  }
-
-  private findArticleContext(linkGroup: LinkGroup): ArticleContext[] {
-    const linkPointers = linkGroup.links;
-    const linkElements = linkPointers.map((nodeElement: LinkPointer) => nodeElement.element);
-    const articleRootElements = this.findArticleRootElement(linkElements);
-
-    const id = linkPointers[0].path;
-    // this.logger.log(`context #${index} group ${id} ${this.getRelativePath(articleRootElements[0], root, false)}`);
-
-    return linkPointers.map((linkPointer, linkPointerIndex) => {
-      const linkElement = linkPointer.element;
-      const contextElement = articleRootElements[linkPointerIndex];
-
-      const articleContext: ArticleContext = {
-        id,
-        linkElement,
-        contextElement,
-      };
-      return articleContext;
-    });
-  }
-
   static toWords(text: string): string[] {
     return text.trim().split(' ').filter(word => word.length > 0);
   }
 
-  public findTextNodesInContext(context: HTMLElement): HTMLElement[] {
-    const textNodes: HTMLElement[] = [];
-    const walk = this.document.createTreeWalker(context, -1, null, false);
-    while (true) {
-      const node = walk.nextNode();
+  public static toAbsoluteUrl(url: URL, link: string) {
+    if (link.endsWith('//')) {
+      link = link.substring(0, link.length - 1);
+    }
+    if (link.startsWith('http://') || link.startsWith('https://')) {
+      return link;
+    }
+    if (link.startsWith('//')) {
+      return `${url.protocol}${link}`;
+    }
+    if (link.startsWith('/')) {
+      return `${url.origin}${link}`;
+    }
+    return `${url.origin}/${link}`;
+  }
 
-      if (!node) {
-        break;
-      }
+  public static qualifiesAsArticle(elem: HTMLElement, rule: ArticleRule, document: Document): boolean {
+    if (elem.textContent.replace(/[\r\n\t ]+/g, '').length === 0) {
+      return false;
+    }
+    const links = this.evaluateXPath(rule.linkXPath, elem, document);
+    if (links.length === 0) {
+      return false;
+    }
+    return true;
+  }
 
-      const isTextNode = node.cloneNode(false).textContent.trim().length > 0;
-      const moreGeneralParentIsAlreadyPushed = textNodes.indexOf(node.parentElement) > -1;
-      if (isTextNode && !moreGeneralParentIsAlreadyPushed) {
-        textNodes.push(node as HTMLElement);
+  public static generalizeXPaths(xpaths: string[]): string {
+    // console.log('generalize', JSON.stringify(xpaths));
+    const tokenized = xpaths.map(xpath => xpath.split('/')
+      .map(p => {
+        const attrNodeMatch = /\[@id=(.*)\]/g.exec(p);
+        const indexNodeMatch = /([^\[]+)\[([0-9]+)\]?/g.exec(p);
+        if (indexNodeMatch) {
+          return {
+            p,
+            match: {
+              path: indexNodeMatch[1],
+              index: indexNodeMatch[2]
+            }
+          };
+        }
+        if (attrNodeMatch) {
+          return {
+            p,
+            id: attrNodeMatch[1]
+          };
+        } else {
+          return {p};
+        }
+      })
+    );
+    const templateXPath = tokenized[0].map((pathToken, index) => {
+      if (pathToken.id) {
+        const allIds = tokenized.map(tokens => tokens[index].id).reduce((uniqueIds: string[], id: string) => {
+          if (uniqueIds.indexOf(id) === -1) {
+            uniqueIds.push(id);
+          }
+          return uniqueIds;
+        }, []);
+        if (allIds.length === 0 || allIds.length > 3) {
+          return '*[@id]';
+        }
+        if (allIds.length === 1) {
+          return `*[@id=${allIds[0]}]`;
+        }
+        return `*[${allIds.map(id => `contains(id, ${id})`).join(' or ')}]`
+      } else if (pathToken.match) {
+        const changingIndex = tokenized.some(tokens => !tokens[index].match || tokens[index].match.index !== pathToken.match.index)
+        if (changingIndex) {
+          return pathToken.match.path
+        } else {
+          return `${pathToken.match.path}[${pathToken.match.index}]`
+        }
+      } else {
+        return pathToken.p
       }
+    });
+
+    return templateXPath.join('/');
+  }
+
+  private static getRelativeXPath(element: HTMLElement, context: HTMLElement): string {
+    if (element.id !== '') {
+      return '//*[@id=\'' + element.id + '\']';
     }
 
-    return textNodes;
+    if (element === context) {
+      return '//' + element.tagName.toLowerCase();
+    }
+
+    let ix = 0;
+    const siblings = element.parentElement.children;
+    for (let i = 0; i < siblings.length; i++) {
+      const sibling = siblings[i];
+
+      if (sibling === element) {
+        return `${this.getRelativeXPath(element.parentElement, context)}/${element.tagName.toLowerCase()}[${ix + 1}]`;
+      }
+
+      if (sibling.nodeType === 1 && sibling.tagName === element.tagName) {
+        ix++;
+      }
+    }
   }
 
   private static getTagName(node: HTMLElement, withClassNames: boolean): string {
@@ -227,8 +253,46 @@ export class FeedParser {
     }, []);
   }
 
-  private uniqueArticles(value: Article, index: number, self: Article[]) {
-    return self.indexOf(self.find(article => article.link === value.link)) === index;
+  private static evaluateXPath(xPath: string, context: HTMLElement | Document, document: Document): HTMLElement[] {
+    const xpathResult = document.evaluate(xPath, context, null, 5);
+    const nodes: HTMLElement[] = [];
+    let node = xpathResult.iterateNext();
+    while (node) {
+      nodes.push(node as HTMLElement);
+      node = xpathResult.iterateNext();
+    }
+    return nodes;
+  }
+
+  /**
+   * drops the last index if available
+   */
+  private static generalizeContextXPath(contexts: ArticleContext[], root: HTMLElement): string {
+    return this.generalizeXPaths(contexts.map(context => FeedParser.getRelativeXPath(context.contextElement, root)));
+  }
+
+  private static fixLinkXPath(xpath: string) {
+    return xpath.replace(/\/\/[a-z]+/, '.');
+  }
+
+  public findTextNodesInContext(context: HTMLElement): HTMLElement[] {
+    const textNodes: HTMLElement[] = [];
+    const walk = this.document.createTreeWalker(context, -1, null, false);
+    while (true) {
+      const node = walk.nextNode();
+
+      if (!node) {
+        break;
+      }
+
+      const isTextNode = node.cloneNode(false).textContent.trim().length > 0;
+      const moreGeneralParentIsAlreadyPushed = textNodes.indexOf(node.parentElement) > -1;
+      if (isTextNode && !moreGeneralParentIsAlreadyPushed) {
+        textNodes.push(node as HTMLElement);
+      }
+    }
+
+    return textNodes;
   }
 
   public getArticleRules(): ArticleRule[] {
@@ -274,7 +338,7 @@ export class FeedParser {
       })
       .map(linkGroup => this.findArticleContext(linkGroup))
       .filter(value => value)
-      .map(contexts => this.convertContextsToRule(contexts, body))
+      .map(contexts => this.convertContextsToRule(contexts, body));
 
 
     this.logger.log(`${articleRules.length} article rules left`);
@@ -284,12 +348,18 @@ export class FeedParser {
 
     return articleRules
       .map(rule => {
-
+        /*
+        Here the scoring measure represents how good article rule or feed candidate is in order to be used
+        in a feed. In part 1 below the scoring function uses features from the context of a rule - the
+        semantics of the elements it is embedded into - , internal features - text length, link count
+        and in part 2, the confidence in comparison with other similar rules.
+         */
+        // scoring part 1
         const contextPathContains = (s: string) => rule.contextXPath.toLowerCase().indexOf(s.toLowerCase()) > -1;
         const linkPathContains = (s: string) => rule.linkXPath.toLowerCase().indexOf(s.toLowerCase()) > -1;
         const texts = rule.contexts.map(context => context.contextElement.textContent || '');
         const linkElementsPerContext = rule.contexts.map(context => Array.from(context.contextElement.querySelectorAll('a[href]')));
-        const linksPerContext = linkElementsPerContext.map(linkElements => FeedParser.uniq(linkElements.map((elem:any) => elem.getAttribute('href'))))
+        const linksPerContext = linkElementsPerContext.map(linkElements => FeedParser.uniq(linkElements.map((elem: any) => elem.getAttribute('href'))));
         let score = 0;
         if (contextPathContains('header')) score -= 2;
         if (contextPathContains('nav')) score --;
@@ -327,13 +397,15 @@ export class FeedParser {
         return rule;
       })
       .reduce((rules, rule) => {
-        const similarRule = rules.find((otherRule: ArticleRule) => otherRule.contextXPath === rule.contextXPath)
+        // scoring part 2
+        const similarRule = rules.find((otherRule: ArticleRule) => otherRule.contextXPath === rule.contextXPath);
         if (similarRule) {
           similarRule.score += 3;
         } else {
           rules.push(rule);
         }
 
+        // punishment for rules that share the same context
         // /a/b
         // /a
         const subRules = rules.filter((extendedRule: ArticleRule) => {
@@ -344,39 +416,19 @@ export class FeedParser {
           return rule.contextXPath.startsWith(superRule.contextXPath);
         })
           .forEach((superRule: ArticleRule) => {
-          superRule.score --;
-        });
+            superRule.score--;
+          });
 
         return rules;
       }, [])
       .sort((a, b) => b.score - a.score);
   }
 
-  private avg(values: number[]){
-    return values.reduce((sum, count) => {
-      return sum + count;
-    }, 0) / values.length;
-  }
-
-  private median(values: number[]){
-    if(values.length ===0) return 0;
-
-    values.sort((a,b) => a-b );
-
-    const half = Math.floor(values.length / 2);
-
-    if (values.length % 2) {
-      return values[half];
-    }
-
-    return (values[half - 1] + values[half]) / 2.0;
-  }
-
   public getArticles(): Article[] {
 
     const rules = this.getArticleRules();
     if (rules.length === 0) {
-      throw new Error('No rules available')
+      throw new Error('No rules available');
     }
     const bestRule = rules[0];
     return this.getArticlesByRule(bestRule);
@@ -393,9 +445,10 @@ export class FeedParser {
           const linkText = link.textContent;
           const href = link.getAttribute('href');
           const article: Article = {
-            title: linkText,
+            title: linkText.replace(/^[\n\t\r ]+|[\n\t\r ]+$/g, ''),
             link: FeedParser.toAbsoluteUrl(this.url, href),
-            content: element.outerHTML,
+            content: element.outerHTML, // todo mag fix urls to be absolute
+            text: element.textContent,
           };
 
           if (!FeedParser.qualifiesAsArticle(element, rule, this.document)) {
@@ -410,20 +463,12 @@ export class FeedParser {
       .filter(article => article);
   }
 
-  public static toAbsoluteUrl(url: URL, link: string) {
-    if (link.endsWith('//')) {
-      link = link.substring(0, link.length-1);
-    }
-    if (link.startsWith('http://') || link.startsWith('https://')) {
-      return link;
-    }
-    if (link.startsWith('//')) {
-      return `${url.protocol}${link}`;
-    }
-    if (link.startsWith('/')) {
-      return `${url.origin}${link}`;
-    }
-    return `${url.origin}/${link}`;
+  private getDocumentRoot(): HTMLElement {
+    return this.document.getElementsByTagName('body').item(0);
+  }
+
+  private findLinks(): HTMLElement[] {
+    return Array.from(this.document.getElementsByTagName('A')) as HTMLElement[];
   }
 
   // private static querySelector(contextElement: HTMLElement, pathToTextNode: string): HTMLElement {
@@ -434,81 +479,78 @@ export class FeedParser {
   //   return pathToTextNode === 'self' ? [contextElement] : Array.from(contextElement.querySelectorAll(pathToTextNode));
   // }
 
+  private findArticleRootElement(linkElements: HTMLElement[]): HTMLElement[] {
+    while (true) {
+      const parentNodes = linkElements.map(currentNode => currentNode.parentElement);
+      if (!parentNodes || parentNodes.length === 0) {
+        break;
+      }
+      if (parentNodes[0].isSameNode(parentNodes[1])) {
+        break;
+      }
+      linkElements = parentNodes as HTMLElement[];
+    }
+    return linkElements;
+  }
+
+  private findArticleContext(linkGroup: LinkGroup): ArticleContext[] {
+    const linkPointers = linkGroup.links;
+    const linkElements = linkPointers.map((nodeElement: LinkPointer) => nodeElement.element);
+    const articleRootElements = this.findArticleRootElement(linkElements);
+
+    const id = linkPointers[0].path;
+    // this.logger.log(`context #${index} group ${id} ${this.getRelativePath(articleRootElements[0], root, false)}`);
+
+    return linkPointers.map((linkPointer, linkPointerIndex) => {
+      const linkElement = linkPointer.element;
+      const contextElement = articleRootElements[linkPointerIndex];
+
+      const articleContext: ArticleContext = {
+        id,
+        linkElement,
+        contextElement,
+      };
+      return articleContext;
+    });
+  }
+
+  private uniqueArticles(value: Article, index: number, self: Article[]) {
+    return self.indexOf(self.find(article => article.link === value.link)) === index;
+  }
+
+  private avg(values: number[]) {
+    return values.reduce((sum, count) => {
+      return sum + count;
+    }, 0) / values.length;
+  }
+
+  private median(values: number[]) {
+    if (values.length === 0) {
+      return 0;
+    }
+
+    values.sort((a, b) => a - b);
+
+    const half = Math.floor(values.length / 2);
+
+    if (values.length % 2) {
+      return values[half];
+    }
+
+    return (values[half - 1] + values[half]) / 2.0;
+  }
+
   private convertContextsToRule(contexts: ArticleContext[], root: HTMLElement): ArticleRule {
     const referenceArticle = contexts[0];
+    const linkXPath = FeedParser.fixLinkXPath(FeedParser.getRelativeXPath(referenceArticle.linkElement, referenceArticle.contextElement));
+    const contextXPath = FeedParser.generalizeContextXPath(contexts, root);
     return {
       count: contexts.length,
       score: 0,
       contexts,
-      linkXPath: FeedParser.fixLinkXPath(FeedParser.getRelativeXPath(referenceArticle.linkElement, referenceArticle.contextElement)),
-      contextXPath: FeedParser.generalizeContextXPath(contexts, root),
-      id: contexts[0].id
+      linkXPath,
+      contextXPath,
+      id: contextXPath + linkXPath
     };
-  }
-
-  private static evaluateXPath(xPath: string, context: HTMLElement | Document, document: Document): HTMLElement[] {
-    const xpathResult = document.evaluate(xPath, context, null, 5);
-    const nodes: HTMLElement[] = [];
-    let node = xpathResult.iterateNext();
-    while (node) {
-      nodes.push(node as HTMLElement);
-      node = xpathResult.iterateNext();
-    }
-    return nodes;
-  }
-
-  /**
-   * drops the last index if available
-   */
-  private static generalizeContextXPath(contexts: ArticleContext[], root: HTMLElement): string {
-    return this.generalizeXPaths(contexts.map(context => FeedParser.getRelativeXPath(context.contextElement, root)));
-  }
-
-  public static qualifiesAsArticle(elem: HTMLElement, rule: ArticleRule, document: Document): boolean {
-    if (elem.textContent.replace(/[\r\n\t ]+/g, '').length === 0) {
-      return false;
-    }
-    const links = this.evaluateXPath(rule.linkXPath, elem, document);
-    if (links.length === 0) {
-      return false;
-    }
-    return true;
-  }
-
-  private static fixLinkXPath(xpath: string) {
-    return xpath.replace(/\/\/[a-z]+/, '.');
-  }
-
-  public static generalizeXPaths(xpaths: string[]): string {
-    const tokenized = xpaths.map(xpath => xpath.split('/')
-      .map(p => {
-        const match = /([^\[]+)\[([0-9]+)\]?/g.exec(p);
-        if (match) {
-          return {
-            p,
-            match: {
-              path: match[1],
-              index: match[2]
-            }
-          }
-        } else {
-          return {p}
-        }
-      })
-    );
-    const templateXPath = tokenized[0].map((pathToken, index) => {
-      if (pathToken.match) {
-        const changingIndex = tokenized.some(tokens => !tokens[index].match || tokens[index].match.index !== pathToken.match.index)
-        if (changingIndex) {
-          return pathToken.match.path
-        } else {
-          return `${pathToken.match.path}[${pathToken.match.index}]`
-        }
-      } else {
-        return pathToken.p
-      }
-    });
-
-    return templateXPath.join('/');
   }
 }

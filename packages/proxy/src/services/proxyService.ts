@@ -1,5 +1,5 @@
-import * as http from "http";
-import * as https from "https";
+import * as http from 'http';
+import * as https from 'https';
 import {URL} from 'url';
 import {JSDOM} from 'jsdom';
 import URI from 'urijs';
@@ -23,13 +23,12 @@ export const proxyService = new class ProxyService {
         if (response.statusCode === 301 || response.statusCode === 302) {
           response.resume();
           reject(`Attempts to redirect to ${response.headers.location}`);
-        } else
-        if (response.statusCode !== 200) {
+        } else if (response.statusCode !== 200) {
           response.resume();
           reject(`Cannot resolve url. Received HttpCode: ${response.statusCode}`);
-        } else
-
+        } else {
           response.setEncoding('utf8');
+        }
         let rawData = '';
         response.on('data', (chunk) => {
           rawData += chunk;
@@ -41,16 +40,16 @@ export const proxyService = new class ProxyService {
             contentType: 'text/html'
           });
           const base = window.document.createElement('base');
-          base.setAttribute('href', `/api/proxy?url=${encodeURIComponent(url)}`)
+          base.setAttribute('href', `/api/proxy?url=${encodeURIComponent(url)}`);
 
           const script = window.document.createElement('script');
           script.type = 'text/javascript';
 
-          window.document.getElementsByTagName('head').item(0).appendChild(base)
+          window.document.getElementsByTagName('head').item(0).appendChild(base);
           Array.from(window.document.querySelectorAll('[href]')).forEach(el => {
             try {
-              const absoluteUrl = new URI(el.getAttribute('href')).absoluteTo(url)
-              el.setAttribute('href', absoluteUrl.toString())
+              const absoluteUrl = new URI(el.getAttribute('href')).absoluteTo(url);
+              el.setAttribute('href', absoluteUrl.toString());
             } catch (e) {
               // console.error(e);
             }

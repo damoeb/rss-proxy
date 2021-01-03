@@ -1,7 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { FeedService } from './feed.service';
-import {PlaygroundModule} from '../components/playground/playground.module';
+import {FeedService} from './feed.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('FeedService', () => {

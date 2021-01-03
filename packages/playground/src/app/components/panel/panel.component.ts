@@ -16,7 +16,8 @@ export class PanelComponent implements OnInit {
   @Output()
   hide = new EventEmitter();
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
