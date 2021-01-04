@@ -7,6 +7,7 @@
 - Improves UI to visualize feed output
 - Uses XPaths instead of CSS Selectors to identify feeds
 - Hardened API
+- Renders parsing errors in a valid feed
 - Bugfixes
 - Adds Retry-After Header
 
