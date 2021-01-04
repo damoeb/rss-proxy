@@ -1,9 +1,8 @@
 import request from 'request';
-import {GetResponse} from './feedService';
 import {JSDOM} from 'jsdom';
-import {uniq} from 'lodash';
-import Readability from 'mozilla-readability';
 import createDOMPurify from 'dompurify';
+
+import {GetResponse} from './feedService';
 import {config} from '../config';
 import puppeteerService from './puppeteerService';
 import logger from '../logger';
@@ -17,25 +16,7 @@ export interface SiteMeta {
   copyright: string
 }
 
-export interface SiteAnalysis {
-  readability: Readability.ParseResult,
-  meta: SiteMeta,
-  links: string[]
-}
-
 export const siteService = new class SiteService {
-  analyze(url: string): Promise<SiteAnalysis> {
-    return this.download(url, false).then(response => {
-      const doc = this.toDom(response.body);
-
-      return {
-        meta: this.getMeta(doc),
-        readability: this.getReadability(doc),
-        links: uniq(Array.from(doc.querySelectorAll('a[href]')).map(element => element.getAttribute('href')))
-      };
-    });
-  }
-
   getMeta(doc: Document): SiteMeta {
 
     return {
@@ -47,32 +28,6 @@ export const siteService = new class SiteService {
       copyright: this.getMetatag(doc, 'dcterms.rightsHolder')
         || this.getMetatag(doc, 'dcterms.rights')
         || this.getMetatag(doc, 'copyright'),
-    };
-  }
-
-  private getMetatag(doc: Document, name: string): string {
-    const metaElement = doc.querySelector(`meta[name="${name}"`);
-    if (metaElement) {
-      return metaElement.getAttribute('content');
-    }
-  }
-
-  private getFavIcon(doc: Document): string {
-    const favIconElement = doc.querySelector('link[rel="shortcut icon"]');
-
-    if (favIconElement) {
-      return doc.location.protocol + favIconElement.getAttribute('href');
-    }
-  }
-
-  private el(element: HTMLHtmlElement): any {
-    if (element) {
-      return element;
-    }
-    return {
-      getAttribute(qualifiedName: string): string {
-        return null;
-      }
     };
   }
 
@@ -136,7 +91,29 @@ export const siteService = new class SiteService {
     return new JSDOM(clean).window.document;
   }
 
-  private getReadability(doc: Document): Readability.ParseResult {
-    return new Readability(doc).parse();
+  private getMetatag(doc: Document, name: string): string {
+    const metaElement = doc.querySelector(`meta[name="${name}"`);
+    if (metaElement) {
+      return metaElement.getAttribute('content');
+    }
+  }
+
+  private getFavIcon(doc: Document): string {
+    const favIconElement = doc.querySelector('link[rel="shortcut icon"]');
+
+    if (favIconElement) {
+      return doc.location.protocol + favIconElement.getAttribute('href');
+    }
+  }
+
+  private el(element: HTMLHtmlElement): any {
+    if (element) {
+      return element;
+    }
+    return {
+      getAttribute(qualifiedName: string): string {
+        return null;
+      }
+    };
   }
 };

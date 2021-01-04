@@ -1,22 +1,39 @@
 import {Express, Request, Response} from 'express';
 import cors from 'cors';
+import iconv from 'iconv-lite';
+
+import {FeedParserOptions, FeedParserResult, OutputType, SimpleFeedResult} from '@rss-proxy/core';
 import logger from '../logger';
 import {FeedParserError, feedService, GetResponse} from '../services/feedService';
-import {FeedParserResult, OutputType} from '@rss-proxy/core';
-import {analyticsService} from '../services/analyticsService';
 
 export const feedEndpoint = new class FeedEndpoint {
+  private static returnErrorFeed(url: string, message: string, options: FeedParserOptions, response: Response) {
+    const errorFeed = feedService.mapErrorToFeed(url, message, options);
+    response.setHeader('Content-Type', 'application/atom+xml');
+    response.write(errorFeed);
+    response.end();
+  }
+
+  private static outputToContentType(outputType: OutputType): string {
+    switch (outputType) {
+      case OutputType.RSS:
+        return 'application/rss+xml';
+      case OutputType.JSON:
+        return 'application/json';
+      case OutputType.ATOM:
+      default:
+        return 'application/atom+xml';
+
+    }
+  }
+
   register(app: Express) {
 
     app.get('/api/feed/live', cors(), (request: Request, response: Response) => {
       try {
-        const url: string = request.query.url as string;
-        const renderJavaScript: boolean = request.query.js as boolean || false;
-        logger.info(`live feed-mapping of ${url}, JavaScript=${renderJavaScript}`);
+        const url = request.query.url as string;
 
-        analyticsService.track('live-feed', request, {url});
-
-        feedService.parseFeed(url, renderJavaScript, request)
+        feedService.parseFeed(url, feedService.toOptions(request), true)
           .then((feedParserResult: FeedParserResult) => {
             response.json(feedParserResult);
 
@@ -32,47 +49,38 @@ export const feedEndpoint = new class FeedEndpoint {
     });
 
     app.get('/api/feed', cors(), (request: Request, response: Response) => {
+      const url = request.query.url as string;
       try {
-        const url: string = request.query.url as string;
-        const renderJavaScript: boolean = request.query.js === 'true' || false;
-        logger.info(`feed-mapping of ${url}, JavaScript=${renderJavaScript}`);
+        const options = feedService.toOptions(request);
 
-        analyticsService.track('feed', request, {url});
+        // see https://www.geeksforgeeks.org/http-headers-retry-after/
+        response.setHeader('Retry-After', 600); // 10 minutes
 
-        feedService.parseFeed(url, renderJavaScript, request, true)
-          .then((feedData: FeedParserResult | GetResponse) => {
+        feedService.parseFeedCached(url, options)
+          .then((feedData: SimpleFeedResult | GetResponse) => {
             if ((feedData as any)['type'] === 'GetResponse') {
               const getResponse = feedData as GetResponse;
-              response.setHeader('Content-Type', getResponse.contentType);
-              response.send(getResponse.body);
+              response.set('Charset', 'utf-8');
+              response.setHeader('Content-Type', getResponse.contentType + '; charset=utf-8');
+              response.write(iconv.encode(getResponse.body, 'utf8'));
+              response.end();
             } else {
               const feedParserResult = feedData as FeedParserResult;
-              response.setHeader('Content-Type', this.outputToContentType(feedParserResult.feedOutputType));
-              response.send(feedParserResult.feed);
+              response.set('Charset', 'utf-8');
+              response.setHeader('Content-Type', FeedEndpoint.outputToContentType(options.o) + '; charset=utf-8');
+              response.write(iconv.encode(feedParserResult.feed, 'utf8'));
+              response.end();
             }
 
           })
-          .catch((err: FeedParserError) => {
-            logger.error(`Failed to proxy ${url}, cause ${err.message}`);
-            response.json(err);
+          .catch((err: Error) => {
+            FeedEndpoint.returnErrorFeed(url, err.message, options, response);
           });
 
       } catch (e) {
-        response.json({message: e.message} as FeedParserError);
+        logger.error(`Internal error when proxying ${url}, cause ${e}`);
+        FeedEndpoint.returnErrorFeed(url, e.message, null, response);
       }
     });
-
-  }
-
-  private outputToContentType(outputType: OutputType): string {
-    switch (outputType) {
-      case OutputType.ATOM:
-        return 'application/atom+xml';
-      case OutputType.RSS:
-        return 'application/rss+xml';
-      case OutputType.JSON:
-      default:
-        return 'application/json';
-    }
   }
 };

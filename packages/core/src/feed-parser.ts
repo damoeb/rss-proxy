@@ -8,8 +8,18 @@ export interface LinkPointer {
   path: string;
 }
 
-export interface ArticleRule extends PartialArticlesWithDescription {
-  score: number;
+export interface ArticleRule {
+  hidden?: boolean;
+  count?: number;
+  score?: number;
+  contexts?: ArticleContext[];
+  linkXPath: string;
+  contextXPath: string;
+  id: string;
+}
+
+export enum ContentType {
+  RAW = 'RAW', TEXT = 'TEXT'
 }
 
 export enum OutputType {
@@ -24,7 +34,11 @@ export enum ContentResolutionType {
   STATIC = 'STATIC', DEEP = 'DEEP'
 }
 
-export interface FeedParserResult {
+export interface SimpleFeedResult {
+  feed?: any;
+}
+
+export interface FeedParserResult extends SimpleFeedResult {
   usesExistingFeed: boolean;
   feeds?: FeedUrl[];
   message?: string;
@@ -38,22 +52,12 @@ export interface FeedParserResult {
 }
 
 export interface FeedParserOptions {
-  output: OutputType;
-  source: SourceType;
-  rule?: string,
-  content: ContentResolutionType;
-}
-
-export interface RawArticleRule {
-  contextElementPath: string;
-  linkPath: string;
-}
-
-export interface PartialArticlesWithStructure {
-  id: string;
-  articles: ArticleContext[];
-  commonTextNodePath: string[];
-  rule: RawArticleRule;
+  o: OutputType;
+  c?: ContentType,
+  pContext?: string,
+  pLink?: string,
+  fallback?: boolean, // falls back to dirst native feed
+  xq?: string, // exclude query
 }
 
 export interface TitleFeatures {
@@ -62,45 +66,12 @@ export interface TitleFeatures {
   hasHeaderInPath: boolean;
 }
 
-export interface TitleRule {
-  features: TitleFeatures;
-  textNodePath: string;
-  score?: number;
-}
-
-export interface DescriptionFeatures {
-  variance: number;
-  avgWordCount: number;
-}
-
-export interface DescriptionRule {
-  features: DescriptionFeatures;
-  useCommonPaths: boolean;
-}
-
-export interface Stats {
-  title: TitleRule;
-  description?: DescriptionRule;
-}
-
-export interface StatsWrapper {
-  stats: Stats;
-}
-
 export interface Article {
   title: string;
   link: string;
   summary?: string[];
   content?: string;
-}
-
-export interface PartialArticlesWithTitle extends PartialArticlesWithStructure, StatsWrapper {
-  linkPath: string;
-  titlePath: string;
-}
-
-export interface PartialArticlesWithDescription extends PartialArticlesWithTitle {
-  dummy?: boolean;
+  text?: string;
 }
 
 export interface ArticleContext {
@@ -115,16 +86,15 @@ export interface LinkGroup {
 }
 
 export interface Logger {
-  log: (...params:any[]) => void
-  error: (...params:any[]) => void
+  log: (...params: any[]) => void
+  error: (...params: any[]) => void
 }
 
 export class FeedParser {
 
   private readonly url: URL;
   private readonly minLinkGroupSize = 2;
-  private readonly maxWordLength = 50;
-  private readonly maxWordCount = 500;
+  private readonly minWordCountOFLink: number = 1;
 
   constructor(private document: HTMLDocument,
               url: string,
@@ -133,66 +103,176 @@ export class FeedParser {
     this.url = new URL(url);
   }
 
-
-  private getDocumentRoot(): HTMLElement {
-    return this.document.getElementsByTagName('body').item(0);
-  }
-
-  private getRelativePath(node: HTMLElement, context: HTMLElement, withClassNames = false) {
+  public static getRelativePath(node: HTMLElement, context: HTMLElement, withClassNames = false) {
+    if (node.nodeType === 3 || node === context) {
+      // todo mag this is not applicable
+      return 'self';
+    }
     let path = node.tagName; // tagName for text nodes is undefined
     while (node.parentNode !== context) {
       node = node.parentNode as HTMLElement;
       if (typeof (path) === 'undefined') {
-        path = this.getTagName(node, withClassNames);
+        path = FeedParser.getTagName(node, withClassNames);
       } else {
-        path = `${this.getTagName(node, withClassNames)}>${path}`;
+        path = `${FeedParser.getTagName(node, withClassNames)}>${path}`;
       }
     }
     return path;
   }
 
-  private findLinks(): HTMLElement[] {
-    return Array.from(this.document.getElementsByTagName('A')) as HTMLElement[];
-  }
-
-  private findArticleRootElement(currentElement: HTMLElement[]): HTMLElement[] {
-    while (true) {
-      const parentNodes = currentElement.map(currentNode => currentNode.parentNode);
-      // todo all parent nodes are the same
-      if (!parentNodes || parentNodes.length === 0) {
-        break;
-      }
-      if (parentNodes[0].isSameNode(parentNodes[1])) {
-        break;
-      }
-      currentElement = parentNodes as HTMLElement[];
-    }
-    return currentElement;
-  }
-
-  private findArticleContext(linkGroup: LinkGroup, root: HTMLElement, index: number): ArticleContext[] {
-    const linkPointers = linkGroup.links;
-    const linkElements = linkPointers.map((nodeElement: LinkPointer) => nodeElement.element);
-    const articleRootElements = this.findArticleRootElement(linkElements);
-
-    const id = linkPointers[0].path;
-    // this.logger.log(`context #${index} group ${id} ${this.getRelativePath(articleRootElements[0], root, false)}`);
-
-    return linkPointers.map((linkPointer, linkPointerIndex) => {
-      const linkElement = linkPointer.element;
-      const contextElement = articleRootElements[linkPointerIndex];
-
-      const articleContext: ArticleContext = {
-        id,
-        linkElement,
-        contextElement,
-      };
-      return articleContext;
-    });
-  }
-
   static toWords(text: string): string[] {
     return text.trim().split(' ').filter(word => word.length > 0);
+  }
+
+  public static toAbsoluteUrl(url: URL, link: string) {
+    if (link.endsWith('//')) {
+      link = link.substring(0, link.length - 1);
+    }
+    if (link.startsWith('http://') || link.startsWith('https://')) {
+      return link;
+    }
+    if (link.startsWith('//')) {
+      return `${url.protocol}${link}`;
+    }
+    if (link.startsWith('/')) {
+      return `${url.origin}${link}`;
+    }
+    return `${url.origin}/${link}`;
+  }
+
+  public static qualifiesAsArticle(elem: HTMLElement, rule: ArticleRule, document: Document): boolean {
+    if (elem.textContent.replace(/[\r\n\t ]+/g, '').length === 0) {
+      return false;
+    }
+    const links = this.evaluateXPath(rule.linkXPath, elem, document);
+    if (links.length === 0) {
+      return false;
+    }
+    return true;
+  }
+
+  public static generalizeXPaths(xpaths: string[]): string {
+    // console.log('generalize', JSON.stringify(xpaths));
+    const tokenized = xpaths.map(xpath => xpath.split('/')
+      .map(p => {
+        const attrNodeMatch = /\[@id=(.*)\]/g.exec(p);
+        const indexNodeMatch = /([^\[]+)\[([0-9]+)\]?/g.exec(p);
+        if (indexNodeMatch) {
+          return {
+            p,
+            match: {
+              path: indexNodeMatch[1],
+              index: indexNodeMatch[2]
+            }
+          };
+        }
+        if (attrNodeMatch) {
+          return {
+            p,
+            id: attrNodeMatch[1]
+          };
+        } else {
+          return {p};
+        }
+      })
+    );
+    const templateXPath = tokenized[0].map((pathToken, index) => {
+      if (pathToken.id) {
+        const allIds = tokenized.map(tokens => tokens[index].id).reduce((uniqueIds: string[], id: string) => {
+          if (uniqueIds.indexOf(id) === -1) {
+            uniqueIds.push(id);
+          }
+          return uniqueIds;
+        }, []);
+        if (allIds.length === 0 || allIds.length > 3) {
+          return '*[@id]';
+        }
+        if (allIds.length === 1) {
+          return `*[@id=${allIds[0]}]`;
+        }
+        return `*[${allIds.map(id => `contains(id, ${id})`).join(' or ')}]`
+      } else if (pathToken.match) {
+        const changingIndex = tokenized.some(tokens => !tokens[index].match || tokens[index].match.index !== pathToken.match.index)
+        if (changingIndex) {
+          return pathToken.match.path
+        } else {
+          return `${pathToken.match.path}[${pathToken.match.index}]`
+        }
+      } else {
+        return pathToken.p
+      }
+    });
+
+    return templateXPath.join('/');
+  }
+
+  private static getRelativeXPath(element: HTMLElement, context: HTMLElement): string {
+    if (element.id !== '') {
+      return '//*[@id=\'' + element.id + '\']';
+    }
+
+    if (element === context) {
+      return '//' + element.tagName.toLowerCase();
+    }
+
+    let ix = 0;
+    const siblings = element.parentElement.children;
+    for (let i = 0; i < siblings.length; i++) {
+      const sibling = siblings[i];
+
+      if (sibling === element) {
+        return `${this.getRelativeXPath(element.parentElement, context)}/${element.tagName.toLowerCase()}[${ix + 1}]`;
+      }
+
+      if (sibling.nodeType === 1 && sibling.tagName === element.tagName) {
+        ix++;
+      }
+    }
+  }
+
+  private static getTagName(node: HTMLElement, withClassNames: boolean): string {
+    if (!withClassNames) {
+      return node.tagName;
+    }
+    const classList = Array.from(node.classList)
+      .filter(cn => cn.match('[0-9]+') === null);
+    if (classList.length > 0) {
+      return `${node.tagName}.${classList.join('.')}`;
+    }
+    return node.tagName;
+  }
+
+  private static uniq(list: string[]): string[] {
+    return list.reduce((uniqList, item) => {
+
+      if (uniqList.indexOf(item) === -1) {
+        uniqList.push(item);
+      }
+
+      return uniqList;
+    }, []);
+  }
+
+  private static evaluateXPath(xPath: string, context: HTMLElement | Document, document: Document): HTMLElement[] {
+    const xpathResult = document.evaluate(xPath, context, null, 5);
+    const nodes: HTMLElement[] = [];
+    let node = xpathResult.iterateNext();
+    while (node) {
+      nodes.push(node as HTMLElement);
+      node = xpathResult.iterateNext();
+    }
+    return nodes;
+  }
+
+  /**
+   * drops the last index if available
+   */
+  private static generalizeContextXPath(contexts: ArticleContext[], root: HTMLElement): string {
+    return this.generalizeXPaths(contexts.map(context => FeedParser.getRelativeXPath(context.contextElement, root)));
+  }
+
+  private static fixLinkXPath(xpath: string) {
+    return xpath.replace(/\/\/[a-z]+/, '.');
   }
 
   public findTextNodesInContext(context: HTMLElement): HTMLElement[] {
@@ -215,170 +295,27 @@ export class FeedParser {
     return textNodes;
   }
 
-  private findCommonTextNodes(articles: ArticleContext[], root: HTMLElement, index: number): PartialArticlesWithStructure {
-
-    const referenceArticle = articles[0];
-    const referenceArticleNode = referenceArticle.contextElement;
-    this.logger.log(`Looking for common text-nodes in ${referenceArticle.id} (index ${index})`);
-
-    const textNodes = this.findTextNodesInContext(referenceArticleNode);
-
-    const commonTextNodes = textNodes
-      .map(textNode => this.getRelativePath(textNode, referenceArticleNode))
-      .filter((pathToTextNode) => {
-        // check every article contains the path
-        const frequency = articles.filter(article => {
-          const resolvedTextNode = article.contextElement.querySelector(pathToTextNode);
-          // article.commonTextNodes.push(resolvedTextNode);
-          return !pathToTextNode || resolvedTextNode !== null;
-        }).length / articles.length;
-
-        if (frequency >= 0.7) {
-          this.logger.log(`Adding text-node ${pathToTextNode}, frequency= ${frequency * 100}%`);
-          return true;
-        } else {
-          this.logger.log(`Ignoring text-node ${pathToTextNode}, frequency= ${frequency * 100}%`);
-          return false;
-        }
-      });
-
-    try {
-      return {
-        id: referenceArticle.id,
-        articles,
-        rule: {
-          linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
-          contextElementPath: this.getRelativePath(referenceArticle.contextElement, root)
-        },
-        commonTextNodePath: commonTextNodes.filter(this.onlyUnique),
-      };
-    } catch (e) {
-      this.logger.log(`Dropping ${referenceArticle.id}`);
-      this.logger.error(e);
-      return null;
-    }
-  }
-
-  private getTagName(node: HTMLElement, withClassNames: boolean): string {
-    if (!withClassNames) {
-      return node.tagName;
-    }
-    const classList = Array.from(node.classList)
-      .filter(cn => cn.match('[0-9]+') === null);
-    if (classList.length > 0) {
-      return `${node.tagName}.${classList.join('.')}`;
-    }
-    return node.tagName;
-  }
-
-  private uniq(list: string[]): string[] {
-    return list.reduce((uniqList, item) => {
-
-      if (uniqList.indexOf(item) === -1) {
-        uniqList.push(item);
-      }
-
-      return uniqList;
-    }, []);
-  }
-
-  private findTitles(group: PartialArticlesWithStructure, index: number): PartialArticlesWithTitle {
-    try {
-
-      this.logger.log(`Looking for title-node in #${group.id} (index ${index})`);
-      // todo common path should use index or classes
-      const sortedTitleNodes: TitleRule[] = group.commonTextNodePath.map((textNodePath) => {
-        return {features: this.getTitleFeatures(group, textNodePath), textNodePath} as TitleRule;
-      })
-        .map((title) => {
-          // score
-          title.score = (this.scoreWordLength(title.features.avgWordLength)
-            + (title.features.hasHeaderInPath ? 1 : 0)
-            + title.features.variance) / 3;
-          return title;
-        })
-        .sort((a, b) => {
-          return b.score - a.score;
-        });
-
-      const referenceArticle = group.articles[0];
-
-      if (sortedTitleNodes.length === 0) {
-        this.logger.log(`Drop ${group.id} - no titles found`);
-        // throw new Error('No textNode found that looks like a title');
-        return null;
-      }
-
-      const titlePath = sortedTitleNodes[0];
-      this.logger.log(`group ${group.id} has title ${titlePath.textNodePath}`);
-
-      return {
-        id: group.id,
-        stats: {title: titlePath},
-        articles: group.articles,
-        rule: group.rule,
-        linkPath: this.getRelativePath(referenceArticle.linkElement, referenceArticle.contextElement),
-        titlePath: titlePath.textNodePath,
-        commonTextNodePath: group.commonTextNodePath.filter(path => path && path !== titlePath.textNodePath),
-      };
-    } catch (e) {
-      this.logger.error('Cannot extract title', e);
-      return null;
-    }
-  }
-
-  public onlyUnique(value: string, index: number, self: string[]) {
-    return self.indexOf(value) === index;
-  }
-
-  public uniqueArticles(value: Article, index: number, self: Article[]) {
-    return self.indexOf(self.find(article => article.link === value.link)) === index;
-  }
-
-  public filterSubpath(value: string, index: number, self: string[]) {
-    return self.indexOf(value) === index;
-  }
-
-  private findDescriptions(group: PartialArticlesWithTitle): PartialArticlesWithDescription {
-    group.stats.description = {
-      features: this.getDescriptionFeatures(group),
-      useCommonPaths: true
-    };
-    group.commonTextNodePath = group.commonTextNodePath
-      .filter(textPath => !textPath.startsWith(group.titlePath))
-      // .sort((a, b) => a.length - b.length)
-      .reduce((commonTextNodePaths, textNodePath) => {
-
-        if (!textNodePath.endsWith('A') && !commonTextNodePaths.some(commonTextNodePath => textNodePath.startsWith(commonTextNodePath))) {
-          commonTextNodePaths.push(textNodePath);
-        }
-
-        return commonTextNodePaths;
-      }, []);
-    return group;
-  }
-
   public getArticleRules(): ArticleRule[] {
 
     const body = this.getDocumentRoot();
 
     // find links
     const linkElements: LinkPointer[] = this.findLinks()
-      .filter(element => FeedParser.toWords(element.textContent).length > 3)
+      .filter(element => FeedParser.toWords(element.textContent).length >= this.minWordCountOFLink)
       .map(element => {
         return {
           element,
-          path: this.getRelativePath(element, body)
+          path: FeedParser.getRelativePath(element, body, true)
         };
       });
 
     // group links with similar path in document
-    const linksGroupedByPath = linkElements.reduce((linksGroup, linkPath) => {
-      if (!linksGroup[linkPath.path]) {
-        linksGroup[linkPath.path] = {links: []};
+    const linksGroupedByPath = linkElements.reduce((linkGroup, linkPath) => {
+      if (!linkGroup[linkPath.path]) {
+        linkGroup[linkPath.path] = {links: []};
       }
-      linksGroup[linkPath.path].links.push(linkPath);
-      return linksGroup;
+      linkGroup[linkPath.path].links.push(linkPath);
+      return linkGroup;
     }, {} as any);
 
 
@@ -389,59 +326,110 @@ export class FeedParser {
     // todo merge rules that just have a different context
 
     this.logger.log(`Dropping irrelevant link-groups with less than ${this.minLinkGroupSize} members`);
-    const relevantGroups: PartialArticlesWithDescription[] = groups
+    const articleRules: ArticleRule[] = groups
       .filter(linkGroup => {
         const hasEnoughMembers = linkGroup.links.length >= this.minLinkGroupSize;
 
         if (!hasEnoughMembers) {
-          this.logger.log(`Dropping link-group ${linkGroup.links[0].path} of size ${linkGroup.links.length}`);
+          this.logger.log(`Dropping link-group ${linkGroup.links[0].path}, cause it is too small (${linkGroup.links.length})`);
         }
 
         return hasEnoughMembers;
       })
-      .map((linkGroup, index) => this.findArticleContext(linkGroup, body, index))
-      .map((articlesInGroup, index) => this.findCommonTextNodes(articlesInGroup, body, index))
+      .map(linkGroup => this.findArticleContext(linkGroup))
       .filter(value => value)
-      // find title: title is the first text node that has in avg 3+ words and is wrapped by the link
-      .map((articlesInGroup, index) => this.findTitles(articlesInGroup, index))
-      .filter(value => value)
-      // find description
-      .map(articlesInGroup => this.findDescriptions(articlesInGroup));
+      .map(contexts => this.convertContextsToRule(contexts, body));
 
 
-    this.logger.log(`${relevantGroups.length} article rules left`);
-    relevantGroups.forEach(group => this.logger.log(group.id));
+    this.logger.log(`${articleRules.length} article rules left`);
+    articleRules.forEach(group => this.logger.log(group.id));
 
-    // relevantGroups.map(group => {
-    //     (group as any).groupHash = `${group.titlePath}::${group.linkPath}::${group.commonTextNodePath.join(',')}`;
-    //     return group;
-    //   }).reduce((merged, group) => {
-    //
-    // }, {});
-    // groupBy(relevantGroups.map(group => {
-    //   (group as any).groupHash = `${group.titlePath}::${group.linkPath}::${group.commonTextNodePath.join(',')}`;
-    //   return group;
-    // }, 'groupHash'))
+    const words = (text: string) => text.split(' ').filter(word => word.length > 0);
 
-    return relevantGroups
-      .map(group => {
+    return articleRules
+      .map(rule => {
+        /*
+        Here the scoring measure represents how good article rule or feed candidate is in order to be used
+        in a feed. In part 1 below the scoring function uses features from the context of a rule - the
+        semantics of the elements it is embedded into - , internal features - text length, link count
+        and in part 2, the confidence in comparison with other similar rules.
+         */
+        // scoring part 1
+        const contextPathContains = (s: string) => rule.contextXPath.toLowerCase().indexOf(s.toLowerCase()) > -1;
+        const linkPathContains = (s: string) => rule.linkXPath.toLowerCase().indexOf(s.toLowerCase()) > -1;
+        const texts = rule.contexts.map(context => context.contextElement.textContent || '');
+        const linkElementsPerContext = rule.contexts.map(context => Array.from(context.contextElement.querySelectorAll('a[href]')));
+        const linksPerContext = linkElementsPerContext.map(linkElements => FeedParser.uniq(linkElements.map((elem: any) => elem.getAttribute('href'))));
+        let score = 0;
+        if (contextPathContains('header')) score -= 2;
+        if (contextPathContains('nav')) score --;
+        if (contextPathContains('article')) score += 2;
+        if (contextPathContains('main')) score += 2;
+        if (contextPathContains('aside')) score -= 2;
+        if (contextPathContains('footer')) score -= 2;
+        if (contextPathContains('ul>li')) score --;
+        if (linkPathContains('h1')) score += 4;
+        if (linkPathContains('h2')) score += 3;
+        if (linkPathContains('h3')) score += 2;
+        if (linkPathContains('h4')) score ++;
+        if (linkPathContains('strong')) score ++;
+        if (linkPathContains('aside')) score --;
+        if (linkPathContains('article')) score += 2;
+        // if (rule.linkPath.toLowerCase() === 'a') score --;
+        if (rule.contextXPath.toLowerCase().endsWith('a')) score -= 5;
+        if (rule.linkXPath.toLowerCase() === 'self') score --;
 
-        const rule = group as ArticleRule;
+        // punish multiple links elements
+        score = score - this.avg(linkElementsPerContext.map(linkElements => linkElements.length)) + 1;
+        // punish multiple links
+        score = score - this.avg(linksPerContext.map(links => links.length)) + 1;
+        if (this.median(texts.map(text => words(text).length)) < 3) score -= 10;
+        if (this.median(texts.map(text => text.length)) > 150) score += 2;
+        if (this.median(texts.map(text => text.length)) > 450) score += 4;
+        if (this.median(texts.map(text => text.length)) > 450) score += 1;
+        if (texts.some(text => text.length < 50)) score --;
+        if (rule.contexts.length < 3) score --;
+        if (rule.contexts.length > 5) score ++;
+        if (rule.contexts.length > 10) score ++;
 
-        rule.score = (group.stats.title.features.variance
-          + this.scoreWordLength(group.stats.title.features.avgWordLength)
-          + group.stats.description.features.variance
-          + Math.min(group.stats.description.features.avgWordCount, this.maxWordCount) / this.maxWordCount
-        ) / 4;
+        rule.score = score;
 
         return rule;
       })
+      .reduce((rules, rule) => {
+        // scoring part 2
+        const similarRule = rules.find((otherRule: ArticleRule) => otherRule.contextXPath === rule.contextXPath);
+        if (similarRule) {
+          similarRule.score += 3;
+        } else {
+          rules.push(rule);
+        }
+
+        // punishment for rules that share the same context
+        // /a/b
+        // /a
+        const subRules = rules.filter((extendedRule: ArticleRule) => {
+          return extendedRule.contextXPath.startsWith(rule.contextXPath);
+        });
+        rule.score -= subRules.length;
+        rules.filter((superRule: ArticleRule) => {
+          return rule.contextXPath.startsWith(superRule.contextXPath);
+        })
+          .forEach((superRule: ArticleRule) => {
+            superRule.score--;
+          });
+
+        return rules;
+      }, [])
       .sort((a, b) => b.score - a.score);
   }
 
   public getArticles(): Article[] {
 
     const rules = this.getArticleRules();
+    if (rules.length === 0) {
+      throw new Error('No rules available');
+    }
     const bestRule = rules[0];
     return this.getArticlesByRule(bestRule);
   }
@@ -450,94 +438,119 @@ export class FeedParser {
 
     this.logger.log('apply rule', rule.id);
 
-    return Array.from(this.document.querySelectorAll(rule.rule.contextElementPath))
+    return FeedParser.evaluateXPath(rule.contextXPath, this.document.body, this.document)
       .map(element => {
         try {
-          const titles = Array.from(element.querySelectorAll(rule.titlePath)).map(node => node.textContent.trim());
-          const link = element.querySelector(rule.linkPath).getAttribute('href');
-          if (titles.length === 0 || titles.join('').trim().length === 0) {
+          const link = FeedParser.evaluateXPath(rule.linkXPath, element, this.document)[0];
+          const linkText = link.textContent;
+          const href = link.getAttribute('href');
+          const article: Article = {
+            title: linkText.replace(/^[\n\t\r ]+|[\n\t\r ]+$/g, ''),
+            link: FeedParser.toAbsoluteUrl(this.url, href),
+            content: element.outerHTML, // todo mag fix urls to be absolute
+            text: element.textContent,
+          };
+
+          if (!FeedParser.qualifiesAsArticle(element, rule, this.document)) {
             return undefined;
           }
-
-          const article: Article = {
-            title: titles.join(' / '),
-            link: FeedParser.toAbsoluteUrl(this.url, link),
-            content: element.outerHTML,
-            summary: rule.commonTextNodePath.map(textNodePath => {
-              return Array.from(element.querySelectorAll(textNodePath))
-                .map(textNode => textNode.textContent.trim());
-            })
-              .flat(1)
-              .filter(this.onlyUnique)
-              .filter(text => text.split(' ').length > 5)
-          };
 
           return article;
         } catch (err) {
           return undefined;
         }
       })
-      .filter(article => article)
-      .filter(this.uniqueArticles);
+      .filter(article => article);
   }
 
-  private getTitleFeatures(group: PartialArticlesWithStructure, textNodePath: string): TitleFeatures {
-    const wordsInTitles = group.articles
-      .map(article => {
-        const otherTextNode = article.contextElement.querySelector(textNodePath);
-        if (!otherTextNode) {
-          return [];
-        }
-        return FeedParser.toWords(otherTextNode.textContent);
-      });
-    const words = wordsInTitles.flat(1);
-    const variance = words.filter(this.onlyUnique).length / Math.max(words.length, 1);
-
-    const totalWordLengthSum = wordsInTitles.map(wordsInTitle => wordsInTitle.length).reduce((sum, wordCount) => sum + wordCount, 0);
-    const avgWordLength = totalWordLengthSum / wordsInTitles.length;
-
-    return {variance, avgWordLength, hasHeaderInPath: /h[0-9]|header/i.test(textNodePath)};
+  private getDocumentRoot(): HTMLElement {
+    return this.document.getElementsByTagName('body').item(0);
   }
 
-  private getDescriptionFeatures(group: PartialArticlesWithTitle) {
-    // todo exclude title
-    const articleWords = group.articles.map(article => {
-      return group.commonTextNodePath
-        .map(path => Array.from(article.contextElement.querySelectorAll(path))
-          .map(textNode => textNode.textContent)
-        )
-        .flat(1)
-        .map(text => FeedParser.toWords(text))
-        .flat(1);
+  private findLinks(): HTMLElement[] {
+    return Array.from(this.document.getElementsByTagName('A')) as HTMLElement[];
+  }
+
+  // private static querySelector(contextElement: HTMLElement, pathToTextNode: string): HTMLElement {
+  //   return pathToTextNode === 'self' ? contextElement : contextElement.querySelector(pathToTextNode);
+  // }
+
+  // private static querySelectorAll(contextElement: HTMLElement, pathToTextNode: string): HTMLElement[] {
+  //   return pathToTextNode === 'self' ? [contextElement] : Array.from(contextElement.querySelectorAll(pathToTextNode));
+  // }
+
+  private findArticleRootElement(linkElements: HTMLElement[]): HTMLElement[] {
+    while (true) {
+      const parentNodes = linkElements.map(currentNode => currentNode.parentElement);
+      if (!parentNodes || parentNodes.length === 0) {
+        break;
+      }
+      if (parentNodes[0].isSameNode(parentNodes[1])) {
+        break;
+      }
+      linkElements = parentNodes as HTMLElement[];
+    }
+    return linkElements;
+  }
+
+  private findArticleContext(linkGroup: LinkGroup): ArticleContext[] {
+    const linkPointers = linkGroup.links;
+    const linkElements = linkPointers.map((nodeElement: LinkPointer) => nodeElement.element);
+    const articleRootElements = this.findArticleRootElement(linkElements);
+
+    const id = linkPointers[0].path;
+    // this.logger.log(`context #${index} group ${id} ${this.getRelativePath(articleRootElements[0], root, false)}`);
+
+    return linkPointers.map((linkPointer, linkPointerIndex) => {
+      const linkElement = linkPointer.element;
+      const contextElement = articleRootElements[linkPointerIndex];
+
+      const articleContext: ArticleContext = {
+        id,
+        linkElement,
+        contextElement,
+      };
+      return articleContext;
     });
+  }
 
-    const totalWordCount = articleWords.reduce((sum, words) => {
-      return sum + words.length;
-    }, 0);
+  private uniqueArticles(value: Article, index: number, self: Article[]) {
+    return self.indexOf(self.find(article => article.link === value.link)) === index;
+  }
 
+  private avg(values: number[]) {
+    return values.reduce((sum, count) => {
+      return sum + count;
+    }, 0) / values.length;
+  }
+
+  private median(values: number[]) {
+    if (values.length === 0) {
+      return 0;
+    }
+
+    values.sort((a, b) => a - b);
+
+    const half = Math.floor(values.length / 2);
+
+    if (values.length % 2) {
+      return values[half];
+    }
+
+    return (values[half - 1] + values[half]) / 2.0;
+  }
+
+  private convertContextsToRule(contexts: ArticleContext[], root: HTMLElement): ArticleRule {
+    const referenceArticle = contexts[0];
+    const linkXPath = FeedParser.fixLinkXPath(FeedParser.getRelativeXPath(referenceArticle.linkElement, referenceArticle.contextElement));
+    const contextXPath = FeedParser.generalizeContextXPath(contexts, root);
     return {
-      variance: this.uniq(articleWords.flat(1)).length / Math.max(articleWords.flat(1).length, 1),
-      avgWordCount: totalWordCount / group.articles.length
+      count: contexts.length,
+      score: 0,
+      contexts,
+      linkXPath,
+      contextXPath,
+      id: contextXPath + linkXPath
     };
-  }
-
-  public static toAbsoluteUrl(url: URL, link: string) {
-    if (link.endsWith('//')) {
-      link = link.substring(0, link.length-1);
-    }
-    if (link.startsWith('http://') || link.startsWith('https://')) {
-      return link;
-    }
-    if (link.startsWith('//')) {
-      return `${url.protocol}${link}`;
-    }
-    if (link.startsWith('/')) {
-      return `${url.origin}${link}`;
-    }
-    return `${url.origin}/${link}`;
-  }
-
-  private scoreWordLength(wordLength: number) {
-    return Math.min(wordLength, this.maxWordLength) / this.maxWordLength;
   }
 }

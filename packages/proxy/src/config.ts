@@ -5,9 +5,9 @@ export const config = {
   port: process.env.PORT || 3000,
   env: process.env.RP_ENV || 'dev',
   hostname: 'localhost',
-  analytics: {
-    enabled: process.env.RP_ENV === 'deploy' || false,
-    segmentKey: process.env.SEGMENT_COM_KEY
+  cache: {
+    enabled: process.env.RP_CACHE === 'true' || false,
+    lifetimeSec: 60 * 10
   },
   supportJavaScript: process.env.RP_SUPPORT_JAVASCRIPT === 'true' || true,
   preferNativeFeed: true,

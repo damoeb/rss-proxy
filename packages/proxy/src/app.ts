@@ -1,11 +1,13 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import helmet from 'helmet';
 
 import logger from './logger';
 import {feedEndpoint} from './endpoints/feedEndpoint';
 import {config} from './config';
-import {analyticsService} from './services/analyticsService';
+import {proxyEndpoint} from './endpoints/proxyEndpoint';
+import {cacheService} from './services/cacheService';
 
 // see http://patorjk.com/software/taag/#p=display&f=Chunky&t=rss%20proxy
 console.log(`
@@ -21,6 +23,7 @@ logger.info(`env: ${config.env}`);
 const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+app.use(helmet());
 
 export interface ErrorMsg {
   message: string,
@@ -34,18 +37,18 @@ export interface ErrorsResponse {
 // -- endpoints
 
 if (config.env !== 'prod') {
-  logger.info('+ Enabling cors');
+  logger.info('+ Enabling cors on dev env');
   app.use(cors());
 }
 app.use('/', express.static('static'));
 
-if (analyticsService.active()) {
-  logger.info('+ Enabling analytics');
+if (cacheService.active()) {
+  logger.info('+ Enabling cache');
 } else {
-  logger.info('- Disabling analytics');
+  logger.info('- Disabling cache');
 }
-
 feedEndpoint.register(app);
+proxyEndpoint.register(app);
 
 
 logger.debug('Available REST methods');

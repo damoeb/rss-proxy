@@ -12,14 +12,14 @@
   "types": "dist/index.d.ts",
   "dependencies": {},
   "devDependencies": {
-    "@types/chai": "^4.2.7",
+    "@types/chai": "^4.2.14",
     "@types/jsdom": "^12.2.4",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^8.9.5",
+    "@types/node": "^8.10.66",
     "chai": "^4.2.0",
-    "fast-check": "^1.21.0",
+    "fast-check": "^1.26.0",
     "jsdom": "^15.2.1",
-    "mocha": "^6.2.2",
+    "mocha": "^6.2.3",
     "tslint": "~5.15.0",
     "typescript": "~3.5.3"
   }
