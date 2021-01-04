@@ -27,9 +27,8 @@ RUN apt-get update \
 COPY --from=0 /opt/rss-proxy-build/ ./
 
 USER node
-
+ENV RP_ENV=prod
+ENV NODE_ENV=prod
 CMD memcached -u node -A & pm2-runtime start ecosystem.config.js
-
-USER root
 
 EXPOSE 3000

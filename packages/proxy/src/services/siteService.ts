@@ -33,25 +33,10 @@ export const siteService = new class SiteService {
 
   public download(url: string, renderJavaScript: boolean = false): Promise<GetResponse> {
     let source = url;
-    if (config.supportJavaScript && renderJavaScript) {
-      source = `/api/`;
+    if (config.enableJavaScript && renderJavaScript) {
+      source = `http://localhost:${config.port}/api/dynamic?url=${url}`;
     }
-    return this.downloadStatic(url);
-  }
-
-  public downloadDynamic(url: string): Promise<GetResponse> {
-    return new Promise<GetResponse>((resolve, reject) => {
-      logger.info(`puppeteering ${url}`);
-      puppeteerService.getMarkup(url).then(html => {
-        resolve({
-          body: html,
-          type: 'GetResponse',
-          contentType: 'text/html'
-        });
-      }).catch(error => {
-        reject({message: `Unable to download ${url}, cause ${error}`});
-      });
-    });
+    return this.downloadStatic(source);
   }
 
   private downloadStatic(url: string): Promise<GetResponse> {
@@ -76,7 +61,7 @@ export const siteService = new class SiteService {
     });
   }
 
-  toDom(html: string): Document {
+  public toDom(html: string): Document {
     const {window} = new JSDOM('');
     const DOMPurify = createDOMPurify(window);
 

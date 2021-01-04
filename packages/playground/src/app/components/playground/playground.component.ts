@@ -5,9 +5,10 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 
 import {FeedService} from '../../services/feed.service';
-import {Article, ArticleRule, FeedParser, FeedParserOptions, FeedUrl, OutputType} from '../../../../../core/src';
+import {Article, ArticleRule, FeedParser, FeedParserOptions, FeedUrl, OutputType, FeedParserResult} from '../../../../../core/src';
 import {build} from '../../../environments/build';
 import * as URI from 'urijs';
+import {SettingsService} from '../../services/settings.service';
 
 interface ArticleCandidate {
   elem: HTMLElement;
@@ -26,6 +27,7 @@ export class PlaygroundComponent implements OnInit {
   constructor(private httpClient: HttpClient,
               private sanitizer: DomSanitizer,
               private router: Router,
+              private settings: SettingsService,
               private activatedRoute: ActivatedRoute,
               private changeDetectorRef: ChangeDetectorRef,
               private feedService: FeedService) {
@@ -55,6 +57,7 @@ export class PlaygroundComponent implements OnInit {
   excludeItemsThatContainTexts = 'Newsletter, Advertisement';
 
   private proxyUrl: string;
+  hasJsSupport = false;
 
   private static getHistory(): string[] {
     return JSON.parse(localStorage.getItem('history') || JSON.stringify([]));
@@ -66,6 +69,10 @@ export class PlaygroundComponent implements OnInit {
         this.url = params.url;
         this.parseFromUrlInternal();
       }
+    });
+
+    this.settings.settings().then(settings => {
+      this.hasJsSupport = settings.jsSupport;
     });
   }
 
@@ -85,15 +92,19 @@ export class PlaygroundComponent implements OnInit {
     if (this.isLoading) {
       return;
     }
-    const queryParams: Params = {url: this.url};
+    if (this.activatedRoute.snapshot.queryParams.url === this.url) {
+     this.parseFromUrlInternal();
+    } else {
+      const queryParams: Params = {url: this.url};
 
-    return this.router.navigate(
-      [],
-      {
-        relativeTo: this.activatedRoute,
-        queryParams,
-        queryParamsHandling: 'merge', // remove to replace all query params by provided
-      });
+      return this.router.navigate(
+        [],
+        {
+          relativeTo: this.activatedRoute,
+          queryParams,
+          queryParamsHandling: 'merge', // remove to replace all query params by provided
+        });
+    }
   }
 
   public getFeedUrl() {
@@ -190,55 +201,68 @@ export class PlaygroundComponent implements OnInit {
 
     this.updateParserOptions();
 
+    if (this.options.js) {
+      this.fromDynamicSource();
+    } else {
+      this.fromStaticSource();
+    }
+  }
+
+  private fromStaticSource() {
+    console.log('from static source');
     this.feedService.fromUrl(this.url, this.options)
-      .subscribe(response => {
-        this.hasResults = true;
-        this.isLoading = false;
-        if (response.message) {
-          this.isGenerated = false;
-
-          try {
-            const {html, feeds, logs} = (response as any).data;
-            if (html) {
-              this.feeds = feeds;
-              this.html = html;
-              this.prepareIframe(this.url, html);
-            }
-            if (logs) {
-              this.logs = [...logs, response.message];
-            } else {
-              this.error = response.message;
-            }
-          } catch (e) {
-            this.error = response.message;
-          }
-
-          console.error('Proxy replied an error.', response.message);
-          // tslint:disable-next-line:max-line-length
-          this.error = `Looks like this site does not contain any feed data.`;
-        } else {
-          this.isGenerated = true;
-          console.log('Proxy replies an generated feed');
-          this.rules = response.rules;
-          this.prepareIframe(this.url, response.html);
-          setTimeout(() => {
-            this.applyRule(this.rules[0]);
-          }, 1000);
-          this.setCurrentTab(this.showViz);
-          this.feeds = response.feeds;
-          this.feedData = response.feed;
-          const optionsFromParser = response.options;
-          this.options.c = optionsFromParser.c;
-          this.options.o = optionsFromParser.o;
-          // todo mag add fallback option
-          this.changeDetectorRef.detectChanges();
-        }
-      }, (error: HttpErrorResponse) => {
+      .subscribe(this.handleParserResponse(), (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.hasResults = false;
         this.error = error.message;
         this.changeDetectorRef.detectChanges();
       });
+  }
+
+  private handleParserResponse() {
+    return (response: FeedParserResult) => {
+      this.hasResults = true;
+      this.isLoading = false;
+      if (response.message) {
+        this.isGenerated = false;
+
+        try {
+          const {html, feeds, logs} = (response as any).data;
+          if (html) {
+            this.feeds = feeds;
+            this.html = html;
+            this.prepareIframe(this.patchHtml(html, this.url));
+          }
+          if (logs) {
+            this.logs = [...logs, response.message];
+          } else {
+            this.error = response.message;
+          }
+        } catch (e) {
+          this.error = response.message;
+        }
+
+        console.error('Proxy replied an error.', response.message);
+        // tslint:disable-next-line:max-line-length
+        this.error = `Looks like this site does not contain any feed data.`;
+      } else {
+        this.isGenerated = true;
+        console.log('Proxy replies an generated feed');
+        this.rules = response.rules;
+        this.prepareIframe(this.patchHtml(response.html, this.url));
+        setTimeout(() => {
+          this.applyRule(this.rules[0]);
+        }, 1000);
+        this.setCurrentTab(this.showViz);
+        this.feeds = response.feeds;
+        this.feedData = response.feed;
+        const optionsFromParser = response.options;
+        this.options.c = optionsFromParser.c;
+        this.options.o = optionsFromParser.o;
+        // todo mag add fallback option
+        this.changeDetectorRef.detectChanges();
+      }
+    };
   }
 
   private addToHistory(url: string) {
@@ -257,11 +281,22 @@ export class PlaygroundComponent implements OnInit {
     this.currentTab = tab;
   }
 
-  private prepareIframe(url: string, html: string) {
+  private assignToIframe(html: string) {
+    this.proxyUrl = window.URL.createObjectURL(new Blob([html], {
+      type: 'text/html'
+    }));
+    this.iframeRef.nativeElement.src = this.proxyUrl;
+    this.changeDetectorRef.detectChanges();
+  }
+
+  private prepareIframe(html: string) {
+    this.assignToIframe(html);
+  }
+
+  private patchHtml(html: string, url: string): string {
     const doc = new DOMParser().parseFromString(html, 'text/html');
 
     const base = doc.createElement('base');
-    // base.setAttribute('href', location.origin + `/api/proxy?url=${encodeURIComponent(url)}`);
     base.setAttribute('href', url);
     doc.getElementsByTagName('head').item(0).appendChild(base);
 
@@ -275,10 +310,7 @@ export class PlaygroundComponent implements OnInit {
     });
 
 
-    this.proxyUrl = window.URL.createObjectURL(new Blob([doc.documentElement.innerHTML], {
-      type: 'text/html'
-    }));
-    this.iframeRef.nativeElement.src = this.proxyUrl;
+    return doc.documentElement.innerHTML;
   }
 
   private highlightRule(rule: ArticleRule): void {
@@ -353,5 +385,16 @@ export class PlaygroundComponent implements OnInit {
       this.options.pContext = this.currentRule.contextXPath;
       this.options.pLink = this.currentRule.linkXPath;
     }
+  }
+
+  private fromDynamicSource() {
+    console.log('from dynamic source');
+    const url = this.url;
+    this.feedService.getDynamicContent(url).subscribe(html => {
+      this.isLoading = false;
+      const patchedHtml = this.patchHtml(html, url);
+      this.feedService.fromHTML(patchedHtml, this.options, url).subscribe(this.handleParserResponse(), console.error);
+      this.prepareIframe(patchedHtml );
+    });
   }
 }

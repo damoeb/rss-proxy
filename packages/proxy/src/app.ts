@@ -8,6 +8,7 @@ import {feedEndpoint} from './endpoints/feedEndpoint';
 import {config} from './config';
 import {proxyEndpoint} from './endpoints/proxyEndpoint';
 import {cacheService} from './services/cacheService';
+import {settingsEndpoint} from './endpoints/settingsEndpoint';
 
 // see http://patorjk.com/software/taag/#p=display&f=Chunky&t=rss%20proxy
 console.log(`
@@ -37,11 +38,16 @@ app.use(helmet.xssFilter());
 // -- endpoints
 
 if (config.env !== 'prod') {
-  logger.info('+ Enabling cors on dev env');
+  logger.info('+ Enabling cors');
   app.use(cors());
 }
 app.use('/', express.static('static'));
 
+if (config.enableJavaScript) {
+  logger.info('+ Enabling JavaScript');
+} else {
+  logger.info('- Disabling JavaScript');
+}
 if (cacheService.active()) {
   logger.info('+ Enabling cache');
 } else {
@@ -49,7 +55,7 @@ if (cacheService.active()) {
 }
 feedEndpoint.register(app);
 proxyEndpoint.register(app);
-
+settingsEndpoint.register(app);
 
 logger.debug('Available REST methods');
 app._router.stack.forEach((route: any) => {

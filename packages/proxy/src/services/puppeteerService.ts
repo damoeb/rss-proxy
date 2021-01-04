@@ -67,7 +67,7 @@ export class PuppeteerService {
     await page.waitForTimeout(3000);
 
     const markup = await page.evaluate(() => {
-      return document.documentElement.innerHTML;
+      return document.documentElement.outerHTML;
     });
 
     page.browser().close().catch(console.error);

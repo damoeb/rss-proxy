@@ -16,8 +16,8 @@
     "luxon": "^1.25.0",
     "memcached": "^2.2.2",
     "morgan": "^1.10.0",
-    "request": "^2.88.2",
     "puppeteer": "^5.4.1",
+    "request": "^2.88.2",
     "urijs": "^1.19.5",
     "winston": "^3.3.3"
   },

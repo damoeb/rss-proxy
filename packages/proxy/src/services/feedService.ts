@@ -29,7 +29,8 @@ export interface GetResponse {
 
 const defaultOptions: FeedParserOptions = {
   o: OutputType.ATOM,
-  c: ContentType.RAW
+  c: ContentType.RAW,
+  js: false
 };
 
 export interface FeedParserError {
@@ -57,7 +58,7 @@ export const feedService = new class FeedService {
 
   async mapToFeed(url: string, options: FeedParserOptions, liveSource: boolean): Promise<FeedParserResult | GetResponse> {
 
-    const response = await siteService.download(url);
+    const response = await siteService.download(url, options.js);
 
     const contentType = response.contentType.split(';')[0].toLowerCase();
 
@@ -109,6 +110,9 @@ export const feedService = new class FeedService {
     const actualOptions: Partial<FeedParserOptions> = {};
     if (FeedService.isDefined(request.query.c as any)) {
       actualOptions.c = request.query.c as ContentType;
+    }
+    if (FeedService.isDefined(request.query.js as any)) {
+      actualOptions.js = request.query.js === 'true';
     }
     if (FeedService.isDefined(request.query.o as any)) {
       actualOptions.o = request.query.o as OutputType;
