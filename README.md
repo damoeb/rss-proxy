@@ -38,7 +38,7 @@ cd packages/playground && npm run start
 ```
 
 ## JavaScript Support
-`rss-proxy` supports dynamic webapps in a separate docker image `damoeb/rss-proxy:js`. Running this image will render a checkbox in the User Interface to pre-render a website in a headless browser, rather than using the static response.
+`rss-proxy` supports dynamic webapps in a separate docker image `damoeb/rss-proxy:js`. Running this image will render a [checkbox](https://github.com/damoeb/rss-proxy/blob/master/docs/js-support.png) in the User Interface to pre-render a website in a headless browser, rather than using the static response.
 
 ```
 docker pull damoeb/rss-proxy:js
