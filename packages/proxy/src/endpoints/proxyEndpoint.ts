@@ -15,5 +15,17 @@ export const proxyEndpoint = new class ProxyEndpoint {
         response.end();
       });
     });
+
+
+    app.get('/api/dynamic', (request: Request, response: Response) => {
+      proxyService.getProxiedDynamicHtml(request.query.url as string).then(proxyResponse => {
+        response.status(200);
+        response.send(proxyResponse.body);
+      }).catch(err => {
+        response.status(500);
+        response.json({error: true, message: err});
+        response.end();
+      });
+    });
   }
 };

@@ -31,12 +31,10 @@ export const siteService = new class SiteService {
     };
   }
 
-  public download(url: string, renderJavaScript: boolean): Promise<GetResponse> {
+  public download(url: string, renderJavaScript: boolean = false): Promise<GetResponse> {
+    let source = url;
     if (config.supportJavaScript && renderJavaScript) {
-      return Promise.race([
-        this.downloadDynamic(url),
-        new Promise<GetResponse>((resolve, reject) => setTimeout(() => reject(new Error(`Timeout when fetching ${url}`)), 5000))
-      ]);
+      source = `/api/`;
     }
     return this.downloadStatic(url);
   }

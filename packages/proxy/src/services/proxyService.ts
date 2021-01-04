@@ -3,6 +3,7 @@ import * as https from 'https';
 import {URL} from 'url';
 import {JSDOM} from 'jsdom';
 import URI from 'urijs';
+import puppeteerService from './puppeteerService';
 
 export interface ProxyResponse {
   headers: any
@@ -11,6 +12,14 @@ export interface ProxyResponse {
 
 export const proxyService = new class ProxyService {
 
+  public async getProxiedDynamicHtml(url: string): Promise<ProxyResponse> {
+    return puppeteerService.getMarkup(url).then(markup => {
+      return {
+       headers: [],
+       body: markup
+      };
+    });
+ }
   public async getProxiedHtml(url: string): Promise<ProxyResponse> {
     const parsed = new URL(url);
 
