@@ -1,6 +1,6 @@
 {
   "name": "@rss-proxy/playground",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "ng": "ng",
     "build:core": "cd ../core && npm run build",
@@ -30,6 +30,7 @@
     "mini.css": "^3.0.1",
     "rxjs": "~6.4.0",
     "tslib": "^1.14.1",
+    "urijs": "^1.19.5",
     "zone.js": "~0.9.1"
   },
   "engines": {
@@ -44,6 +45,7 @@
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/lodash": "^4.14.167",
+    "@types/urijs": "^1.19.13",
     "codelyzer": "^5.2.2",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
