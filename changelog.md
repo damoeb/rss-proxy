@@ -2,6 +2,7 @@
 
 ## Unreleased
 - Removes proxy endpoint
+- Adds support for dynamic websites (JavaScript)
 
 ## 1.0.0 - 04.01.2021
 - Improves UI to visualize feed output

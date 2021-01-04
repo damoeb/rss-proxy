@@ -4,6 +4,8 @@ import createDOMPurify from 'dompurify';
 
 import {GetResponse} from './feedService';
 import {config} from '../config';
+import puppeteerService from './puppeteerService';
+import logger from '../logger';
 
 export interface SiteMeta {
   language: string
@@ -29,7 +31,15 @@ export const siteService = new class SiteService {
     };
   }
 
-  public download(url: string): Promise<GetResponse> {
+  public download(url: string, renderJavaScript: boolean = false): Promise<GetResponse> {
+    let source = url;
+    if (config.enableJavaScript && renderJavaScript) {
+      source = `http://localhost:${config.port}/api/dynamic?url=${url}`;
+    }
+    return this.downloadStatic(source);
+  }
+
+  private downloadStatic(url: string): Promise<GetResponse> {
     return new Promise<GetResponse>((resolve, reject) => {
       const options = {
         method: 'GET', url, headers: {
@@ -51,7 +61,7 @@ export const siteService = new class SiteService {
     });
   }
 
-  toDom(html: string): Document {
+  public toDom(html: string): Document {
     const {window} = new JSDOM('');
     const DOMPurify = createDOMPurify(window);
 

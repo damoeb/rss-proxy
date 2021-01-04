@@ -52,6 +52,7 @@ export interface FeedParserResult extends SimpleFeedResult {
 }
 
 export interface FeedParserOptions {
+  js?: boolean;
   o: OutputType;
   c?: ContentType,
   pContext?: string,

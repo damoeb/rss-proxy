@@ -19,30 +19,30 @@ export class FeedService {
 
   private defaultOptions: FeedParserOptions = {
     o: OutputType.ATOM,
-    c: ContentType.RAW
+    c: ContentType.RAW,
+    js: false
   };
 
   constructor(private httpClient: HttpClient) {
   }
 
-  // fromHTML(html: string, options: FeedParserOptions): Observable<FeedParserResult> {
-  //   const domParser = new DOMParser();
-  //   const htmlDoc = domParser.parseFromString(html, 'text/html');
-  //
-  //   const logCollector = new LogCollector();
-  //   const url = 'http://example.com';
-  //   const feedParser = new FeedParser(htmlDoc, url, options, logCollector);
-  //
-  //   const result: FeedParserResult = {
-  //     logs: logCollector.logs(),
-  //     usesExistingFeed: false,
-  //     options,
-  //     rules: feedParser.getArticleRules(),
-  //     articles: feedParser.getArticles(),
-  //     html
-  //   };
-  //   return of(result);
-  // }
+  public fromHTML(html: string, options: FeedParserOptions, url: string): Observable<FeedParserResult> {
+    const domParser = new DOMParser();
+    const htmlDoc = domParser.parseFromString(html, 'text/html');
+
+    const logCollector = new LogCollector();
+    const feedParser = new FeedParser(htmlDoc, url, options, logCollector);
+
+    const result: FeedParserResult = {
+      logs: logCollector.logs(),
+      usesExistingFeed: false,
+      options,
+      rules: feedParser.getArticleRules(),
+      articles: feedParser.getArticles(),
+      html
+    };
+    return of(result);
+  }
 
   public applyRule(html: string, url: string, rule: ArticleRule, options: FeedParserOptions): Observable<Article[]> {
     const logCollector = new LogCollector();
@@ -57,26 +57,30 @@ export class FeedService {
   public getDirectFeedUrl(url: string, options: FeedParserOptions): string {
     return `/api/feed?url=${encodeURIComponent(url)}`
       + this.feedUrlFragment('pContext', options)
+      + this.feedUrlFragment('js', options)
       + this.feedUrlFragment('pLink', options)
       + this.feedUrlFragment('o', options)
       + this.feedUrlFragment('c', options)
       + this.feedUrlFragment('xq', options)
+      // + `&js=${renderJavaScript}`;
       ;
   }
 
   public fromUrl(url: string, options: FeedParserOptions): Observable<FeedParserResult> {
     const parserUrl = `/api/feed/live?url=${encodeURIComponent(url)}`
       + this.feedUrlFragment('pContext', options)
+      + this.feedUrlFragment('js', options)
       + this.feedUrlFragment('pLink', options)
       + this.feedUrlFragment('o', options)
       + this.feedUrlFragment('c', options)
       + this.feedUrlFragment('xq', options)
+      // + `&js=${renderJavaScript}`;
     ;
 
     return this.httpClient.get(parserUrl) as Observable<FeedParserResult>;
   }
 
-  private feedUrlFragment(id: 'c' | 'o' | 'xq' | 'pContext' | 'pLink', options: FeedParserOptions) {
+  private feedUrlFragment(id: 'c' | 'o' | 'xq' | 'pContext' | 'pLink' | 'js', options: FeedParserOptions) {
 
     function prop<T, K extends keyof T>(obj: T, key: K) {
       return obj[key];
@@ -86,5 +90,9 @@ export class FeedService {
       return `&${id}=${encodeURIComponent(prop(options, id))}`;
     }
     return '';
+  }
+
+  public getDynamicContent(url: string): Observable<string> {
+    return this.httpClient.get(`/api/dynamic?url=${url}`, {responseType: 'text'}) as Observable<string>;
   }
 }

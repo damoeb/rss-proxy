@@ -5,8 +5,6 @@
       <a (click)="resetAll()" class="button" style="text-align: center">Reset Changes</a>
       <div style="flex: 1 100px; overflow-y: auto">
         <div class="form">
-          <p class="wizard_section"><strong>1.</strong> Please enter the URL of the website you want an RSS Feed from.
-          </p>
           <ng-form (ngSubmit)="parseFromUrl()">
             <div class="row" style="text-align: left">
               <div aria-label="The URL you want to RSSify" class="tooltip bottom col-lg-8">
@@ -28,6 +26,10 @@
                 </a>
               </div>
             </div>
+            <div *ngIf="hasJsSupport"
+                 style="border-bottom: 1px solid #cccccc; padding-bottom: 10px; margin-bottom: 20px">
+              <label><input [(ngModel)]="options.js" name="jsSupport" type="checkbox">Enable JavaScript Support</label>
+            </div>
             <div>
 
               <div *ngIf="!isLoading && !hasResults && history.length > 0">
@@ -38,6 +40,8 @@
               </div>
             </div>
           </ng-form>
+          <p class="wizard_section"><strong>1.</strong> Please enter the URL of the website you want an RSS Feed from.
+          </p>
         </div>
 
         <div *ngIf="feeds?.length > 0">
@@ -66,7 +70,7 @@
         </div>
 
         <div *ngIf="currentRule">
-          <p class="wizard_section"><strong>3.</strong> Advanced Settings</p>
+          <p class="wizard_section"><strong>2.</strong> Advanced Settings</p>
           <ul style="list-style: none">
             <!--            todo mag enable -->
             <!--            <li><input type="checkbox" [(ngModel)]="excludeItemsThatContain"> Remove items that contain <a href="https://github.com/damoeb/rss-proxy/wiki/Filters#text-filter" target="_blank">one of</a> (comma separated) <input type="text" name="excludeItemsThatContainTexts" [(ngModel)]="excludeItemsThatContainTexts"></li>-->
@@ -86,7 +90,7 @@
 
         </div>
 
-        <div *ngIf="isLoading && !iframeLoaded"
+        <div *ngIf="isLoading"
              style="display:flex;justify-content:center; align-items:center;">
           <div class="spinner"></div>
         </div>
@@ -108,7 +112,7 @@
 
     <div style="flex: 1; display: flex; flex-direction: column; border-left: 1px solid black; background: white">
 
-      <div *ngIf="isLoading && !iframeLoaded"
+      <div *ngIf="isLoading"
            style="display:flex;justify-content:center; align-items:center;">
         <div class="spinner"></div>
       </div>

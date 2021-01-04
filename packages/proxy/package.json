@@ -16,7 +16,9 @@
     "luxon": "^1.25.0",
     "memcached": "^2.2.2",
     "morgan": "^1.10.0",
+    "puppeteer": "^5.4.1",
     "request": "^2.88.2",
+    "urijs": "^1.19.5",
     "winston": "^3.3.3"
   },
   "scripts": {
@@ -51,7 +53,7 @@
     "@types/luxon": "^1.25.0",
     "@types/memcached": "^2.2.6",
     "@types/mocha": "^5.2.7",
-    "@types/mozilla-readability": "^0.1.4",
+    "@types/puppeteer": "^5.4.0",
     "@types/request": "^2.48.5",
     "chai": "^4.2.0",
     "mocha": "^6.2.3",
