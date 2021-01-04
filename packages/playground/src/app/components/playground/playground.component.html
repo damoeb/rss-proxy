@@ -44,7 +44,7 @@
           <p class="wizard_section"><strong>2.</strong> Choose a feed</p>
           <p>Native Feeds Found in DOM:</p>
           <ul class="list-of-feeds">
-            <li *ngFor="let feed of feeds"><a [href]="feed.url" target="_blank">{{ feed.name }}</a></li>
+            <li *ngFor="let feed of feeds"><a [href]="feed.url" target="_blank">{{ feed.name || 'Feed' }}</a></li>
           </ul>
         </div>
 
@@ -125,9 +125,7 @@
 
         <iframe #iframeElement
                 (load)="onIframeLoad()"
-                *ngIf="proxyUrl"
                 [hidden]="isLoading"
-                [src]="proxyUrl"
                 sandbox="allow-same-origin"
                 style="flex: 1; border: none"></iframe>
 

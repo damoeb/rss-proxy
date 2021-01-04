@@ -1,6 +1,6 @@
 {
   "name": "@rss-proxy/proxy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@rss-proxy/core": "file:../core",
@@ -17,7 +17,6 @@
     "memcached": "^2.2.2",
     "morgan": "^1.10.0",
     "request": "^2.88.2",
-    "urijs": "^1.19.5",
     "winston": "^3.3.3"
   },
   "scripts": {
@@ -54,7 +53,6 @@
     "@types/mocha": "^5.2.7",
     "@types/mozilla-readability": "^0.1.4",
     "@types/request": "^2.48.5",
-    "@types/urijs": "^1.19.13",
     "chai": "^4.2.0",
     "mocha": "^6.2.3",
     "nodemon": "^1.18.4",

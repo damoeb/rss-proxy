@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Removes proxy endpoint
+
 ## 1.0.0 - 04.01.2021
 - Improves UI to visualize feed output
 - Uses XPaths instead of CSS Selectors to identify feeds

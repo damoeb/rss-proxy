@@ -1,12 +1,13 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {isEmpty} from 'lodash';
-import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 
 import {FeedService} from '../../services/feed.service';
 import {Article, ArticleRule, FeedParser, FeedParserOptions, FeedUrl, OutputType} from '../../../../../core/src';
 import {build} from '../../../environments/build';
+import * as URI from 'urijs';
 
 interface ArticleCandidate {
   elem: HTMLElement;
@@ -21,6 +22,16 @@ interface ArticleCandidate {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlaygroundComponent implements OnInit {
+
+  constructor(private httpClient: HttpClient,
+              private sanitizer: DomSanitizer,
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private changeDetectorRef: ChangeDetectorRef,
+              private feedService: FeedService) {
+    this.resetAll();
+    this.history = PlaygroundComponent.getHistory();
+  }
 
   @ViewChild('iframeElement', {static: false}) iframeRef: ElementRef;
   html = '';
@@ -39,20 +50,11 @@ export class PlaygroundComponent implements OnInit {
   isGenerated = false;
   error: string;
   history: string[];
-  proxyUrl: SafeResourceUrl;
   currentTab: string;
   excludeItemsThatContain = false;
   excludeItemsThatContainTexts = 'Newsletter, Advertisement';
 
-  constructor(private httpClient: HttpClient,
-              private sanitizer: DomSanitizer,
-              private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private changeDetectorRef: ChangeDetectorRef,
-              private feedService: FeedService) {
-    this.resetAll();
-    this.history = PlaygroundComponent.getHistory();
-  }
+  private proxyUrl: string;
 
   private static getHistory(): string[] {
     return JSON.parse(localStorage.getItem('history') || JSON.stringify([]));
@@ -116,8 +118,10 @@ export class PlaygroundComponent implements OnInit {
     this.logs = [];
     // this.url = null;
     this.rules = null;
-    this.proxyUrl = null;
     this.feedData = '';
+    if (this.proxyUrl) {
+     window.URL.revokeObjectURL(this.proxyUrl);
+    }
   }
 
   public getBuildDate() {
@@ -182,7 +186,6 @@ export class PlaygroundComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.prepareIframe(this.url);
     this.changeDetectorRef.detectChanges();
 
     this.updateParserOptions();
@@ -199,6 +202,7 @@ export class PlaygroundComponent implements OnInit {
             if (html) {
               this.feeds = feeds;
               this.html = html;
+              this.prepareIframe(this.url, html);
             }
             if (logs) {
               this.logs = [...logs, response.message];
@@ -216,6 +220,7 @@ export class PlaygroundComponent implements OnInit {
           this.isGenerated = true;
           console.log('Proxy replies an generated feed');
           this.rules = response.rules;
+          this.prepareIframe(this.url, response.html);
           setTimeout(() => {
             this.applyRule(this.rules[0]);
           }, 1000);
@@ -252,8 +257,28 @@ export class PlaygroundComponent implements OnInit {
     this.currentTab = tab;
   }
 
-  private prepareIframe(url: string) {
-    this.proxyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`/api/proxy?url=${encodeURIComponent(url)}`);
+  private prepareIframe(url: string, html: string) {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+
+    const base = doc.createElement('base');
+    // base.setAttribute('href', location.origin + `/api/proxy?url=${encodeURIComponent(url)}`);
+    base.setAttribute('href', url);
+    doc.getElementsByTagName('head').item(0).appendChild(base);
+
+    Array.from(doc.querySelectorAll('[href]')).forEach(el => {
+      try {
+        const absoluteUrl = new URI(el.getAttribute('href')).absoluteTo(url);
+        el.setAttribute('href', absoluteUrl.toString());
+      } catch (e) {
+        // console.error(e);
+      }
+    });
+
+
+    this.proxyUrl = window.URL.createObjectURL(new Blob([doc.documentElement.innerHTML], {
+      type: 'text/html'
+    }));
+    this.iframeRef.nativeElement.src = this.proxyUrl;
   }
 
   private highlightRule(rule: ArticleRule): void {

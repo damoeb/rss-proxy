@@ -30,10 +30,6 @@ export interface ErrorMsg {
   code: number
 }
 
-export interface ErrorsResponse {
-  errors: ErrorMsg[]
-}
-
 // -- endpoints
 
 if (config.env !== 'prod') {

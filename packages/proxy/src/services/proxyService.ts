@@ -1,8 +1,6 @@
 import * as http from 'http';
 import * as https from 'https';
 import {URL} from 'url';
-import {JSDOM} from 'jsdom';
-import URI from 'urijs';
 
 export interface ProxyResponse {
   headers: any
@@ -34,32 +32,9 @@ export const proxyService = new class ProxyService {
           rawData += chunk;
         });
         response.on('end', () => {
-
-          const {window} = new JSDOM(rawData, {
-            url,
-            contentType: 'text/html'
-          });
-          const base = window.document.createElement('base');
-          base.setAttribute('href', `/api/proxy?url=${encodeURIComponent(url)}`);
-
-          const script = window.document.createElement('script');
-          script.type = 'text/javascript';
-
-          window.document.getElementsByTagName('head').item(0).appendChild(base);
-          Array.from(window.document.querySelectorAll('[href]')).forEach(el => {
-            try {
-              const absoluteUrl = new URI(el.getAttribute('href')).absoluteTo(url);
-              el.setAttribute('href', absoluteUrl.toString());
-            } catch (e) {
-              // console.error(e);
-            }
-          });
-
-          const body = window.document.documentElement.innerHTML;
-
           resolve({
             headers: response.headers,
-            body
+            body: rawData
           });
 
         });
