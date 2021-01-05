@@ -6,16 +6,31 @@ Use the dropdown (see screenshot below of a blog) to choose the feed the suits y
 
 ![Playground](https://github.com/damoeb/rss-proxy/raw/master/docs/rssproxy-candidates.png "Playground")
 
-## Running RSS-proxy using docker
+## Quickstart using docker
 
 The simplest way to use RSS-proxy is using [docker](https://docs.docker.com/install/)
 
 ```
- docker run -p 3000:3000 -it damoeb/rss-proxy
+docker pull damoeb/rss-proxy
+docker run -p 3000:3000 -it damoeb/rss-proxy
 ```
+
 Then open [localhost:3000](http://localhost:3000) in the browser.
 
-## Running RSS-proxy from source
+## JavaScript Support
+`rss-proxy` supports dynamic webapps in a separate docker image `damoeb/rss-proxy:js` cause it is with 1GB quite large. Running this image will [render a checkbox](https://github.com/damoeb/rss-proxy/blob/master/docs/js-support.png) in the User Interface to pre-render a website in a headless browser, rather than using the static response.
+
+```
+docker pull damoeb/rss-proxy:js
+docker run -p 3000:3000 -it damoeb/rss-proxy:js
+```
+
+## Developing RSS-proxy
+
+The project is separated into three modules
+- [core](packages/core/README.md): the feed parser logic, plain JavaScript
+- [playground](packages/playground/README.md): the web app to visualize and explore feed generation
+- [proxy](packages/proxy/README.md): the expressjs server
 
 For local development you need [node 12+](https://nodejs.org/en/). Then follow these steps:
 
@@ -37,20 +52,6 @@ cd packages/playground && npm run start
 
 ```
 
-## JavaScript Support
-`rss-proxy` supports dynamic webapps in a separate docker image `damoeb/rss-proxy:js`. Running this image will render a [checkbox](https://github.com/damoeb/rss-proxy/blob/master/docs/js-support.png) in the User Interface to pre-render a website in a headless browser, rather than using the static response.
-
-```
-docker pull damoeb/rss-proxy:js
-docker run -p 3000:3000 -it damoeb/rss-proxy:js
-```
-
-## Developing RSS-proxy
-
-The project is separated into three modules
-- [core](packages/core/README.md): the feed parser logic, plain JavaScript
-- [playground](packages/playground/README.md): the web app to visualize and explore feed generation
-- [proxy](packages/proxy/README.md): the expressjs server
 
 ## Troubleshooting
 
