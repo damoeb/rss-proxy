@@ -37,7 +37,7 @@ app.use(helmet.xssFilter());
 
 // -- endpoints
 
-if (config.env !== 'prod') {
+if (!config.env.startsWith('prod')) {
   logger.info('+ Enabling cors');
   app.use(cors());
 }

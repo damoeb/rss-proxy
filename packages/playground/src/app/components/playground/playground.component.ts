@@ -5,7 +5,16 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 
 import {FeedService} from '../../services/feed.service';
-import {Article, ArticleRule, FeedParser, FeedParserOptions, FeedUrl, OutputType, FeedParserResult} from '../../../../../core/src';
+import {
+  Article,
+  ArticleRule,
+  ContentType,
+  FeedParser,
+  FeedParserOptions,
+  FeedParserResult,
+  FeedUrl,
+  OutputType
+} from '../../../../../core/src';
 import {build} from '../../../environments/build';
 import * as URI from 'urijs';
 import {SettingsService} from '../../services/settings.service';
@@ -23,6 +32,7 @@ interface ArticleCandidate {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlaygroundComponent implements OnInit {
+  footer: { visible: boolean; message: string };
 
   constructor(private httpClient: HttpClient,
               private sanitizer: DomSanitizer,
@@ -31,7 +41,6 @@ export class PlaygroundComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private changeDetectorRef: ChangeDetectorRef,
               private feedService: FeedService) {
-    this.resetAll();
     this.history = PlaygroundComponent.getHistory();
   }
 
@@ -64,6 +73,7 @@ export class PlaygroundComponent implements OnInit {
   }
 
   public ngOnInit() {
+    this.resetAll();
     this.activatedRoute.queryParams.subscribe(params => {
       if (params.url) {
         this.url = params.url;
@@ -73,6 +83,11 @@ export class PlaygroundComponent implements OnInit {
 
     this.settings.settings().then(settings => {
       this.hasJsSupport = settings.jsSupport;
+      this.footer = {
+        visible: settings.showFooterBanner,
+        message: settings.footerMessage
+      };
+      this.changeDetectorRef.detectChanges();
     });
   }
 
@@ -118,10 +133,10 @@ export class PlaygroundComponent implements OnInit {
   public resetAll() {
     this.options = {
       o: OutputType.ATOM,
+      c: ContentType.NONE,
       xq: this.excludeItemsThatContainTexts,
     };
     this.html = '';
-    this.error = '';
     this.hasResults = false;
     this.iframeLoaded = false;
     this.feeds = [];
@@ -131,8 +146,14 @@ export class PlaygroundComponent implements OnInit {
     this.rules = null;
     this.feedData = '';
     if (this.proxyUrl) {
-     window.URL.revokeObjectURL(this.proxyUrl);
+      window.URL.revokeObjectURL(this.proxyUrl);
     }
+    this.resetErrors();
+    this.changeDetectorRef.detectChanges();
+  }
+
+  public resetErrors() {
+    this.error = null;
   }
 
   public getBuildDate() {
@@ -182,6 +203,7 @@ export class PlaygroundComponent implements OnInit {
       return;
     }
 
+    this.resetErrors();
     this.addToHistory(this.url);
 
     if (!this.url.startsWith('http://') && !this.url.startsWith('https://')) {

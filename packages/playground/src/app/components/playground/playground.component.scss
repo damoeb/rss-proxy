@@ -4,10 +4,6 @@
   background-color: #ffffff;
   flex-direction: column;
 
-  &__footer {
-    text-align: center;
-  }
-
   &__header {
     &--large {
       h1 {
@@ -139,6 +135,10 @@ app-panel {
 }
 
 .rule {
+  &:hover,
+  &.active {
+    background-color: #efefef;
+  }
   cursor: pointer;
 }
 
@@ -149,16 +149,8 @@ app-panel {
   }
 }
 
-.btn-primary {
-  color: var(--primary-color);
-}
-
-.btn-secondary {
-  color: var(--secondary-color);
-}
-
 .feed-specified {
-  background-color: #d9ffd9;
+  //background-color: #d9ffd9;
 }
 
 .error {
