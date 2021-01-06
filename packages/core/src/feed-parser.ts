@@ -409,6 +409,7 @@ export class FeedParser {
         // punishment for rules that share the same context
         // /a/b
         // /a
+        // todo mag merge rule and use link with shortest path to A. Consider only those hrefs that differ from article to article
         const subRules = rules.filter((extendedRule: ArticleRule) => {
           return extendedRule.contextXPath.startsWith(rule.contextXPath);
         });
