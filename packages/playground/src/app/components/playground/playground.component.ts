@@ -23,6 +23,7 @@ interface ArticleCandidate {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlaygroundComponent implements OnInit {
+  footer: { visible: boolean; message: string };
 
   constructor(private httpClient: HttpClient,
               private sanitizer: DomSanitizer,
@@ -73,6 +74,10 @@ export class PlaygroundComponent implements OnInit {
 
     this.settings.settings().then(settings => {
       this.hasJsSupport = settings.jsSupport;
+      this.footer = {
+        visible: settings.showFooterBanner,
+        message: settings.footerMessage
+      };
     });
   }
 
