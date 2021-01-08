@@ -56,6 +56,7 @@ export interface FeedParserOptions {
   o: OutputType;
   c?: ContentType,
   pContext?: string,
+  pDescription?: string,
   pLink?: string,
   fallback?: boolean, // falls back to dirst native feed
   xq?: string, // exclude query

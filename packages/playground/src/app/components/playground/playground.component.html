@@ -90,7 +90,39 @@
                 <label><input [(ngModel)]="options.c" name="entryContent" type="radio" value="NONE">Empty</label>
               </li>
             </ul>
+          </div>
 
+          <div *ngIf="currentRule"
+               [ngClass]="{'expert-section--hidden': !expertMode}"
+               class="expert-section">
+            <p class="wizard_section"
+               (click)="expertMode = !expertMode"><strong>3.</strong> Expert Settings</p>
+            <ul style="list-style: none" *ngIf="expertMode">
+              <li>
+                <p>Context XPath</p>
+                <input [(ngModel)]="options.pContext"
+                       name="pContext"
+                       type="text"
+                       readonly
+                       style="border: 2px dashed red">
+              </li>
+              <li>
+                <p>Link XPath</p>
+                <input [(ngModel)]="options.pLink"
+                       name="pLink"
+                       type="text"
+                       readonly
+                       style="border: 2px solid blue">
+              </li>
+              <li>
+                <p>Description XPath</p>
+                <input [(ngModel)]="options.pDescription"
+                       name="pDescription"
+                       type="text"
+                       placeholder="When empty defaults to context path"
+                       style="border: 2px solid green">
+              </li>
+            </ul>
           </div>
 
           <div *ngIf="isLoading"
@@ -126,22 +158,23 @@
         </div>
       </div>
     </div>
-    <div style="padding: 10px; display: flex; border-top: 1px solid black;"
-         [ngClass]="{'feed-specified': currentRule, 'unsupported-website': error}">
-<!--      todo mag subsribe -->
-<!--      <div>-->
-<!--        <a href="" class="button secondary large">Subscribe for more</a>-->
-<!--      </div>-->
-      <div style="flex: 1; text-align: center; line-height: 50px">
+    <div class="footer" style=""
+         [ngClass]="{'unsupported-website': error}">
+      <div>
+        <a href="" class="button secondary large">Support this project</a>
+      </div>
+      <div style="text-align: center; line-height: 50px">
         <a href="https://github.com/damoeb/rss-proxy">rss-proxy</a> v. {{ getVersions().version }}
         @{{ getVersions().revision }} build on {{ getBuildDate() }}
         <a href="https://twitter.com/damoeb">contact</a>
       </div>
-      <div>
+      <div style="padding-right: 10px; text-align: right">
         <a *ngIf="currentRule"
            [href]="getFeedUrl()"
            class="button secondary large"
-           target="_blank">Your ATOM Feed</a>
+           target="_blank">
+          <span class="icon-rss inverse"></span>
+          Your {{options.o}} Feed</a>
         <h3 *ngIf="!currentRule && !error">Your RSS Feed not yet specified</h3>
         <h3 *ngIf="error">Errors processing website</h3>
       </div>

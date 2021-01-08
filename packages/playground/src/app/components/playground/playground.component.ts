@@ -67,6 +67,7 @@ export class PlaygroundComponent implements OnInit {
 
   private proxyUrl: string;
   hasJsSupport = false;
+  expertMode: boolean;
 
   private static getHistory(): string[] {
     return JSON.parse(localStorage.getItem('history') || JSON.stringify([]));
@@ -133,7 +134,7 @@ export class PlaygroundComponent implements OnInit {
   public resetAll() {
     this.options = {
       o: OutputType.ATOM,
-      c: ContentType.NONE,
+      c: ContentType.RAW,
       xq: this.excludeItemsThatContainTexts,
     };
     this.html = '';

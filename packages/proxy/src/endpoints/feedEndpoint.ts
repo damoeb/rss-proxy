@@ -56,6 +56,7 @@ export const feedEndpoint = new class FeedEndpoint {
         // see https://www.geeksforgeeks.org/http-headers-retry-after/
         response.setHeader('Retry-After', 600); // 10 minutes
 
+        const startTime = new Date().getTime();
         feedService.parseFeedCached(url, options)
           .then((feedData: SimpleFeedResult | GetResponse) => {
             if ((feedData as any)['type'] === 'GetResponse') {
@@ -75,6 +76,9 @@ export const feedEndpoint = new class FeedEndpoint {
           })
           .catch((err: Error) => {
             FeedEndpoint.returnErrorFeed(url, err.message, options, response);
+          })
+          .finally(() => {
+            logger.debug(`feed generated in ${new Date().getTime() - startTime} ms`);
           });
 
       } catch (e) {

@@ -133,7 +133,17 @@ app-panel {
   display: flex;
   flex-direction: column;
 }
+.footer {
+  padding: 10px; display: flex; border-top: 1px solid black;
 
+  a.button {
+    width: 250px; text-align: center; font-size: larger;
+  }
+
+  div {
+    flex: 1;
+  }
+}
 .rule {
   &:hover,
   &.active {
@@ -149,10 +159,6 @@ app-panel {
   }
 }
 
-.feed-specified {
-  //background-color: #d9ffd9;
-}
-
 .error {
   color: #dc3545;
   text-align: center;
@@ -160,4 +166,17 @@ app-panel {
 
 .unsupported-website {
   background-color: #ffa5a5;
+}
+.expert-section {
+  .wizard_section {
+    cursor: pointer;
+  }
+  &--hidden {
+    .wizard_section {
+      color: #cccccc;
+    }
+  }
+  input {
+    width: 100%;
+  }
 }

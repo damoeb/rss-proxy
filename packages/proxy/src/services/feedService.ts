@@ -58,7 +58,9 @@ export const feedService = new class FeedService {
 
   async mapToFeed(url: string, options: FeedParserOptions, liveSource: boolean): Promise<FeedParserResult | GetResponse> {
 
+    const startTime = new Date().getTime();
     const response = await siteService.download(url, options.js);
+    logger.info(`dl took ${new Date().getTime() - startTime} ${url}`);
 
     const contentType = response.contentType.split(';')[0].toLowerCase();
 
