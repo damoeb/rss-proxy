@@ -216,7 +216,7 @@ export const feedService = new class FeedService {
           link: article.link, // todo mag ATOM feeds render unescaped & which causes an invalid xml, RSS feeds work fine
           published: new Date(),
           date: new Date(),
-          content: options.c === ContentType.RAW ? article.content : article.text
+          content: FeedService.getContent(options, article)
         });
       });
 
@@ -244,6 +244,20 @@ export const feedService = new class FeedService {
       } as FeedParserError);
 
     }
+  }
+
+  private static getContent(options: FeedParserOptions, article: Article) {
+    if (options.c === ContentType.RAW) {
+      return article.content
+    }
+    if (options.c === ContentType.TEXT) {
+      return article.text
+    }
+    if (article.title.length > 0) {
+      return ''
+    }
+
+    return article.text;
   }
 
   private findFeedUrls(doc: Document, url: string): FeedUrl[] {

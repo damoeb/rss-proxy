@@ -19,7 +19,7 @@ export interface ArticleRule {
 }
 
 export enum ContentType {
-  RAW = 'RAW', TEXT = 'TEXT'
+  RAW = 'RAW', TEXT = 'TEXT', NONE = 'NONE'
 }
 
 export enum OutputType {
@@ -397,32 +397,33 @@ export class FeedParser {
 
         return rule;
       })
-      .reduce((rules, rule) => {
-        // scoring part 2
-        const similarRule = rules.find((otherRule: ArticleRule) => otherRule.contextXPath === rule.contextXPath);
-        if (similarRule) {
-          similarRule.score += 3;
+      .reduce((rulesGroupedByContextList, rule) => {
+
+        const matchingGroup = rulesGroupedByContextList.find(group => group.contextXPath === rule.contextXPath);
+
+        if (matchingGroup) {
+          if (matchingGroup.rules.every((existingRule: ArticleRule) => existingRule.linkXPath !== rule.linkXPath)) {
+            matchingGroup.rules.push(rule);
+          }
         } else {
-          rules.push(rule);
+          rulesGroupedByContextList.push({contextXPath: rule.contextXPath, rules: [rule]})
         }
 
-        // punishment for rules that share the same context
-        // /a/b
-        // /a
-        // todo mag merge rule and use link with shortest path to A. Consider only those hrefs that differ from article to article
-        const subRules = rules.filter((extendedRule: ArticleRule) => {
-          return extendedRule.contextXPath.startsWith(rule.contextXPath);
-        });
-        rule.score -= subRules.length;
-        rules.filter((superRule: ArticleRule) => {
-          return rule.contextXPath.startsWith(superRule.contextXPath);
-        })
-          .forEach((superRule: ArticleRule) => {
-            superRule.score--;
-          });
-
-        return rules;
+        return rulesGroupedByContextList;
       }, [])
+      .map(rulesGroupedByContext => {
+        if (rulesGroupedByContext.rules.length === 1) {
+          return rulesGroupedByContext.rules[0];
+        } else {
+          const goodRules: ArticleRule[] = rulesGroupedByContext.rules.filter((rule: ArticleRule) => {
+            const hrefs = rule.contexts.map(context => context.linkElement.getAttribute("href"));
+            return FeedParser.uniq(hrefs).length === hrefs.length;
+          }).sort((aGoodRule: ArticleRule, bGoodRule: ArticleRule) => {
+            return bGoodRule.linkXPath.split('/').length - aGoodRule.linkXPath.split('/').length
+          });
+          return goodRules[0];
+        }
+      })
       .sort((a, b) => b.score - a.score);
   }
 
@@ -514,10 +515,6 @@ export class FeedParser {
       };
       return articleContext;
     });
-  }
-
-  private uniqueArticles(value: Article, index: number, self: Article[]) {
-    return self.indexOf(self.find(article => article.link === value.link)) === index;
   }
 
   private avg(values: number[]) {
