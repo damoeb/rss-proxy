@@ -2,6 +2,7 @@
 
 ## Unreleased
 - Removes proxy endpoint
+- Merging rules and picking the right link
 - Adds support for dynamic websites (JavaScript)
 
 ## 1.0.0 - 04.01.2021
