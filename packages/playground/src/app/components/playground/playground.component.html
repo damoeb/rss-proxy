@@ -141,7 +141,7 @@
         <a *ngIf="currentRule"
            [href]="getFeedUrl()"
            class="button secondary large"
-           target="_blank">Your ATOM Feed</a>
+           target="_blank">Your {{ options.o }} Feed</a>
         <h3 *ngIf="!currentRule && !error">Your RSS Feed not yet specified</h3>
         <h3 *ngIf="error">Errors processing website</h3>
       </div>

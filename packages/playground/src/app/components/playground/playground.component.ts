@@ -133,7 +133,7 @@ export class PlaygroundComponent implements OnInit {
   public resetAll() {
     this.options = {
       o: OutputType.ATOM,
-      c: ContentType.NONE,
+      c: ContentType.RAW,
       xq: this.excludeItemsThatContainTexts,
     };
     this.html = '';

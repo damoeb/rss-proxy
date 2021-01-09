@@ -448,7 +448,7 @@ export class FeedParser {
           const linkText = link.textContent;
           const href = link.getAttribute('href');
           const article: Article = {
-            title: linkText.replace(/^[\n\t\r ]+|[\n\t\r ]+$/g, ''),
+            title: linkText.replace(/^[\n\t\r ]+|[\n\t\r ]+$/g, ' '),
             link: FeedParser.toAbsoluteUrl(this.url, href),
             content: element.outerHTML, // todo mag fix urls to be absolute
             text: element.textContent,
