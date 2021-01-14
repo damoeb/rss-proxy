@@ -57,11 +57,11 @@ export class PuppeteerService {
     return page;
   }
 
-  public async getMarkup(url: string): Promise<string> {
+  public async getMarkup(url: string, timeoutMillis: number): Promise<string> {
     const page = await this.createPage();
     await page.goto(url, {
       waitUntil: 'domcontentloaded',
-      timeout: 15000
+      timeout: timeoutMillis
     });
 
     await page.waitForTimeout(3000);
