@@ -4,8 +4,6 @@ import createDOMPurify from 'dompurify';
 
 import {GetResponse} from './feedService';
 import {config} from '../config';
-import puppeteerService from './puppeteerService';
-import logger from '../logger';
 
 export interface SiteMeta {
   language: string
@@ -31,15 +29,16 @@ export const siteService = new class SiteService {
     };
   }
 
-  public download(url: string, renderJavaScript: boolean = false): Promise<GetResponse> {
+  public download(url: string, renderJavaScript: boolean = false, timeoutSec: number = 10): Promise<GetResponse> {
     let source = url;
+    const timeoutSecWithBounds = Math.min(Math.max(timeoutSec + 2, 0), 30);
     if (config.enableJavaScript && renderJavaScript) {
-      source = `http://localhost:${config.port}/api/dynamic?url=${url}`;
+      source = `http://localhost:${config.port}/api/dynamic?url=${url}&timeout=${timeoutSecWithBounds}`;
     }
-    return this.downloadStatic(source);
+    return this.downloadStatic(source, timeoutSecWithBounds + 2);
   }
 
-  private downloadStatic(url: string): Promise<GetResponse> {
+  private downloadStatic(url: string, timeoutSec: number): Promise<GetResponse> {
     return new Promise<GetResponse>((resolve, reject) => {
       const options = {
         method: 'GET', url, headers: {
@@ -47,6 +46,7 @@ export const siteService = new class SiteService {
           'User-Agent': config.userAgent
         }
       };
+      // todo mag add timeout
       request(options, (error, serverResponse, html) => {
         if (!error && serverResponse && serverResponse.statusCode === 200) {
           resolve({
