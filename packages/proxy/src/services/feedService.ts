@@ -58,7 +58,7 @@ export const feedService = new class FeedService {
 
   async mapToFeed(url: string, options: FeedParserOptions, liveSource: boolean): Promise<FeedParserResult | GetResponse> {
 
-    const response = await siteService.download(url, options.js);
+    const response = await siteService.download(url, options.js, options.timeoutSec);
 
     const contentType = response.contentType.split(';')[0].toLowerCase();
 
@@ -125,6 +125,9 @@ export const feedService = new class FeedService {
     }
     if (FeedService.isDefined(request.query.pLink as any)) {
       actualOptions.pLink = request.query.pLink as string;
+    }
+    if (FeedService.isDefined(request.query.to as any)) {
+      actualOptions.timeoutSec = parseInt(request.query.tos as string, 10);
     }
     return {...defaultOptions, ...actualOptions};
   }

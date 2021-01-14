@@ -17,7 +17,7 @@ describe('Raw Websites', () => {
     // log them on console
     files
       .filter(file => file.endsWith('input.html'))
-      // .filter((file, index) => index === 6)
+      // .filter((file, index) => index === 7)
       .forEach(file => {
 
         it(`validate feed generation from ${file}`, () => {

@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Remove using ids in xpaths, cause they are not abstract enough
+
 ## 1.0.2 - 09.01.2021
 - Merging rules and picking the right link
 

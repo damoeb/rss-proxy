@@ -55,6 +55,7 @@ export interface FeedParserOptions {
   js?: boolean;
   o: OutputType;
   c?: ContentType,
+  timeoutSec?: number,
   pContext?: string,
   pLink?: string,
   fallback?: boolean, // falls back to dirst native feed
@@ -208,9 +209,6 @@ export class FeedParser {
   }
 
   private static getRelativeXPath(element: HTMLElement, context: HTMLElement): string {
-    if (element.id !== '') {
-      return '//*[@id=\'' + element.id + '\']';
-    }
 
     if (element === context) {
       return '//' + element.tagName.toLowerCase();
