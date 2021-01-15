@@ -49,7 +49,7 @@ export class PlaygroundComponent implements OnInit {
   feedData = '';
   rules: Array<ArticleRule>;
   currentRule: ArticleRule;
-  url = 'https://www.heise.de';
+  url: string;
   showViz = 'viz';
   hasResults = false;
   iframeLoaded = false;
@@ -361,7 +361,9 @@ export class PlaygroundComponent implements OnInit {
         const index = Array.from(elem.parentElement.children)
           .findIndex(otherElem => otherElem === elem);
         const qualified = qualifiedAsArticle(elem);
-        if (!qualified) {
+        if (qualified) {
+          console.log(`Keeping element ${index}`, elem);
+        } else {
           console.log(`Removing unqualified element ${index}`, elem);
         }
         return {elem, index, qualified} as ArticleCandidate;
@@ -369,8 +371,8 @@ export class PlaygroundComponent implements OnInit {
       .filter(candidate => candidate.qualified)
       .map(candidate => candidate.index);
 
-    const cssSelectorContextPath = 'body>' + FeedParser.getRelativePath(allMatches[0], iframeDocument.body);
-
+    const cssSelectorContextPath = 'body>' + FeedParser.getRelativeCssPath(allMatches[0], iframeDocument.body, true);
+    console.log(cssSelectorContextPath);
     const code = `${matchingIndexes.map(index => `${cssSelectorContextPath}:nth-child(${index + 1})`).join(', ')} {
             border: 3px dotted red!important;
             margin-bottom: 5px!important;

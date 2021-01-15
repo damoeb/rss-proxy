@@ -108,7 +108,7 @@ export class FeedParser {
     this.url = new URL(url);
   }
 
-  public static getRelativePath(node: HTMLElement, context: HTMLElement, withClassNames = false) {
+  public static getRelativeCssPath(node: HTMLElement, context: HTMLElement, withClassNames = false) {
     if (node.nodeType === 3 || node === context) {
       // todo mag this is not applicable
       return 'self';
@@ -227,7 +227,7 @@ export class FeedParser {
     return extendContext;
   }
 
-  private static getRelativeXPath(element: HTMLElement, context: HTMLElement): string {
+  static getRelativeXPath(element: HTMLElement, context: HTMLElement): string {
 
     if (element === context) {
       return '//' + element.tagName.toLowerCase();
@@ -347,7 +347,7 @@ export class FeedParser {
         return {
           element,
           index: this.getChildIndex(element),
-          path: FeedParser.getRelativePath(element, body, true)
+          path: FeedParser.getRelativeCssPath(element, body, true)
         };
       });
 
@@ -461,7 +461,7 @@ export class FeedParser {
             const hrefs = rule.contexts.map(context => context.linkElement.getAttribute("href"));
             return FeedParser.uniq(hrefs).length === hrefs.length;
           }).sort((aGoodRule: ArticleRule, bGoodRule: ArticleRule) => {
-            return bGoodRule.linkXPath.split('/').length - aGoodRule.linkXPath.split('/').length
+            return aGoodRule.linkXPath.split('/').length - bGoodRule.linkXPath.split('/').length
           });
           return goodRules[0];
         }
