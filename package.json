@@ -1,6 +1,6 @@
 {
   "name": "@rss-proxy/root",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "RSS-proxy is a tool that allows you to do create an RSS/ATOM or JSON feed of almost any website, purely by analyzing just the static HTML structure.",
   "author": "damoeb",
   "license": "CC-NC",
