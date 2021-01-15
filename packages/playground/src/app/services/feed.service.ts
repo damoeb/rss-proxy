@@ -62,6 +62,7 @@ export class FeedService {
       + this.feedUrlFragment('o', options)
       + this.feedUrlFragment('c', options)
       + this.feedUrlFragment('xq', options)
+      + this.feedUrlFragment('x', options)
       // + `&js=${renderJavaScript}`;
       ;
   }
@@ -80,7 +81,7 @@ export class FeedService {
     return this.httpClient.get(parserUrl) as Observable<FeedParserResult>;
   }
 
-  private feedUrlFragment(id: 'c' | 'o' | 'xq' | 'pContext' | 'pLink' | 'js', options: FeedParserOptions) {
+  private feedUrlFragment(id: 'c' | 'o' | 'xq' | 'pContext' | 'pLink' | 'js' | 'x', options: FeedParserOptions) {
 
     function prop<T, K extends keyof T>(obj: T, key: K) {
       return obj[key];

@@ -96,6 +96,7 @@ export class PlaygroundComponent implements OnInit {
     this.currentRule = rule;
     this.options.pContext = rule.contextXPath;
     this.options.pLink = rule.linkXPath;
+    this.options.x = rule.extendContext;
     this.feedService.applyRule(this.html, this.url, rule, this.options).subscribe(articles => {
       this.articles = articles;
     });
@@ -135,6 +136,8 @@ export class PlaygroundComponent implements OnInit {
       o: OutputType.ATOM,
       c: ContentType.RAW,
       xq: this.excludeItemsThatContainTexts,
+      js: false,
+      x: 's'
     };
     this.html = '';
     this.hasResults = false;

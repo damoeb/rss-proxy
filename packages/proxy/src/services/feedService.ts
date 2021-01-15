@@ -30,7 +30,8 @@ export interface GetResponse {
 const defaultOptions: FeedParserOptions = {
   o: OutputType.ATOM,
   c: ContentType.RAW,
-  js: false
+  js: false,
+  // x: 's'
 };
 
 export interface FeedParserError {
@@ -126,6 +127,9 @@ export const feedService = new class FeedService {
     if (FeedService.isDefined(request.query.pLink as any)) {
       actualOptions.pLink = request.query.pLink as string;
     }
+    if (FeedService.isDefined(request.query.x as any)) {
+      actualOptions.x = request.query.x as string;
+    }
     if (FeedService.isDefined(request.query.to as any)) {
       actualOptions.timeoutSec = parseInt(request.query.tos as string, 10);
     }
@@ -205,7 +209,8 @@ export const feedService = new class FeedService {
       rule = {
         contextXPath: options.pContext,
         linkXPath: options.pLink,
-        id: options.pLink
+        id: options.pLink,
+        extendContext: options.x
       };
     }
 
