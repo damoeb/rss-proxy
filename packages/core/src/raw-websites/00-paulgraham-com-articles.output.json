@@ -1,7 +1,4 @@
 [
-  "http://example.com/vb.html",
-  "http://example.com/ds.html",
-  "http://example.com/re.html",
   "http://example.com/early.html",
   "http://example.com/wtax.html",
   "http://example.com/conformism.html",
@@ -194,6 +191,5 @@
   "https://sep.yimg.com/ty/cdn/paulgraham/acl1.txt?t=1604912297&",
   "https://sep.yimg.com/ty/cdn/paulgraham/acl2.txt?t=1604912297&",
   "http://example.com/progbot.html",
-  "http://example.com/prop62.html",
-  "http://example.com/rss.html"
+  "http://example.com/prop62.html"
 ]

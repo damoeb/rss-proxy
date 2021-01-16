@@ -2,7 +2,7 @@ import puppeteerService from './puppeteerService';
 
 export const proxyService = new class ProxyService {
 
-  public async getProxiedDynamicHtml(url: string, timeoutSec: number): Promise<string> {
+  public async getProxiedDynamicHtml(url: string, timeoutSec: number = 20): Promise<string> {
     const timeoutMillisWithBounds = Math.min(Math.max(timeoutSec + 2, 0), 30) * 1000;
     return Promise.race([
       ProxyService.downloadDynamic(url, timeoutMillisWithBounds),

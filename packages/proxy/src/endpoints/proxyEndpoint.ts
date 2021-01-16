@@ -6,7 +6,7 @@ export const proxyEndpoint = new class ProxyEndpoint {
     if (timeout) {
       return parseInt(timeout);
     }
-    return 0;
+    return;
   }
 
   public register(app: Express) {

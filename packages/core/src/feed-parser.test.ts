@@ -117,6 +117,24 @@ describe('FeedParser', () => {
     expect(nodes.map(node => node.parentElement.tagName)).to.eql(['A', 'SPAN', 'EM', 'P', 'A', 'EM', 'P', 'A', 'I', 'A']);
   });
 
+  it('relativeXpath', () => {
+    const markup = `<tr class="athing comtr " id="25781813"><td>
+            <table border="0">  <tbody><tr>    <td class="ind"><img src="s.gif" height="1" width="80"></td><td valign="top" class="votelinks">
+      <center><a id="up_25781813" href="https://news.ycombinator.com/vote?id=25781813&amp;how=up&amp;goto=item%3Fid%3D25775872"><div class="votearrow" title="upvote"></div></a></center>    </td><td class="default"><div style="margin-top:2px; margin-bottom:-10px;"><span class="comhead">
+          <a href="https://news.ycombinator.com/user?id=jnwatson" class="hnuser">jnwatson</a> <span class="age"><a href="https://news.ycombinator.com/item?id=25781813">1 day ago</a></span> <span id="unv_25781813"></span><span class="par"></span> <a class="togg" n="17" href="javascript:void(0)" onclick="return toggle(event, 25781813)"></a>          <span class="storyon"></span>
+                  </span></div><br><div class="comment">
+                  <span class="commtext c00">"I'm the idea guy" out of someone's mouth is the stark red-flag warning that their net contribution is 0.</span>
+              <div class="reply">        <p><font size="1">
+                      <u><a id="foo" href="https://news.ycombinator.com/reply?id=25781813&amp;goto=item%3Fid%3D25775872%2325781813">reply</a></u>
+                  </font>
+      </p></div></div></td></tr>
+      </tbody></table></td></tr>`;
+    const doc = toDocument(markup);
+    const link = doc.getElementById('foo');
+
+    expect(FeedParser.getRelativeXPath(link, doc.body)).to.eq('//body/table[1]/tbody[1]/tr[1]/td[3]/div[2]/div[1]/p[1]/font[1]/u[1]/a[1]');
+  });
+
   it('generalizeXPathsSimple', () => {
     const xpaths = [
       '//body/table[1]/tbody[1]/tr[1]/td[3]/table[1]/tbody[1]/tr[1]/td[1]/font[1]/a[1]',
