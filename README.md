@@ -60,13 +60,11 @@ See [troubleshooting](troubleshooting.md).
 
 See [changelog](changelog.md).
 
-## Contributors
 
-* [damoeb](https://github.com/damoeb)
+## Related Projects
 
-## Contact
-
-* https://twitter.com/damoeb
+* https://github.com/RSS-Bridge/rss-bridge
+* https://github.com/DIYgod/RSSHub 
 
 ## License
 
