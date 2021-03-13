@@ -63,8 +63,8 @@ See [changelog](changelog.md).
 
 ## Related Projects
 
-* https://github.com/RSS-Bridge/rss-bridge
-* https://github.com/DIYgod/RSSHub 
+* [rss-bridge](https://github.com/RSS-Bridge/rss-bridge)
+* [RSSHub](https://github.com/DIYgod/RSSHub) 
 
 ## License
 
