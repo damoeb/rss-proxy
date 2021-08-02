@@ -1,4 +1,4 @@
-import request from 'request';
+import fetch from 'node-fetch';
 import {JSDOM} from 'jsdom';
 import createDOMPurify from 'dompurify';
 
@@ -39,31 +39,31 @@ export const siteService = new class SiteService {
   }
 
   private downloadStatic(url: string, timeoutSec: number): Promise<GetResponse> {
-    return new Promise<GetResponse>((resolve, reject) => {
-      const options = {
-        method: 'GET', url, headers: {
-          'Accepts': 'text/html',
-          'User-Agent': config.userAgent
-        }
-      };
+    return new Promise<GetResponse>(async (resolve, reject) => {
+      const headers = {
+        'Accepts': 'text/html',
+        'User-Agent': config.userAgent
+      }
+
       // todo mag add timeout
-      request(options, (error, serverResponse, html) => {
-        if (!error && serverResponse && serverResponse.statusCode === 200) {
-          resolve({
-            body: html,
-            type: 'GetResponse',
-            contentType: serverResponse.headers['content-type']
-          },);
-        } else {
-          reject({message: `Unable to download ${url}, cause ${error}`});
-        }
-      });
+      const response = await fetch(url, {headers, method: 'GET'})
+
+      if (response.status === 200) {
+        resolve({
+          body: await response.text(),
+          type: 'GetResponse',
+          contentType: response.headers.get('content-type')
+        },);
+      } else {
+        reject({message: `Unable to download ${url}, cause ${response.statusText}`});
+      }
+
     });
   }
 
   public toDom(html: string): Document {
     const {window} = new JSDOM('');
-    const DOMPurify = createDOMPurify(window);
+    const DOMPurify = createDOMPurify(window as any);
 
     const clean = DOMPurify.sanitize(html, {
       WHOLE_DOCUMENT: true,
