@@ -50,6 +50,8 @@ export class PlaygroundComponent implements OnInit {
   rules: Array<ArticleRule>;
   currentRule: ArticleRule;
   url: string;
+  customContextXPath: string;
+  customLinkXPath: string;
   showViz = 'viz';
   hasResults = false;
   iframeLoaded = false;
@@ -123,6 +125,20 @@ export class PlaygroundComponent implements OnInit {
     }
   }
 
+  public applyCustomRule() {
+    if (this.isLoading) {
+      return;
+    }
+    const rule: ArticleRule = {
+      hidden: true,
+      linkXPath: this.customLinkXPath,
+      extendContext: 's',
+      contextXPath: this.customContextXPath,
+      id: 'custom',
+    };
+    this.applyRule(rule);
+  }
+
   public getFeedUrl() {
     return this.feedService.getDirectFeedUrl(this.url, this.options);
   }
@@ -146,6 +162,8 @@ export class PlaygroundComponent implements OnInit {
     this.currentRule = null;
     this.logs = [];
     // this.url = null;
+    // this.customContextXPath = '';
+    // this.customLinkXPath = '';
     this.rules = null;
     this.feedData = '';
     if (this.proxyUrl) {

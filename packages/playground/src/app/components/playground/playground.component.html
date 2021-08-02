@@ -70,6 +70,27 @@
             </ol>
           </div>
 
+          <div *ngIf="isGenerated">
+            <p>Or enter custom rule:</p>
+            <ng-form (ngSubmit)="applyCustomRule()">
+              <div class="row" style="text-align: left">
+                <div aria-label="Elements XPath (e.g. //body//ul[1]/li)" class="tooltip bottom col-lg-8">
+                  <input [(ngModel)]="customContextXPath" autocomplete="off" autofocus name="context"
+                    style="width: 100%" placeholder="Elements XPath">
+                </div>
+                <div aria-label="Links relative XPath (e.g. ./a[1])" class="tooltip bottom col-lg-8">
+                  <input [(ngModel)]="customLinkXPath" autocomplete="off" name="link" style="width: 100%"
+                    placeholder="Links relative XPath">
+                </div>
+                <div class="col-lg-4">
+                  <a (click)="applyCustomRule()" class="button secondary" href="javascript:void(0)">
+                    Apply
+                  </a>
+                </div>
+              </div>
+            </ng-form>
+          </div>
+
           <div *ngIf="currentRule">
             <p class="wizard_section"><strong>2.</strong> Advanced Settings</p>
             <ul style="list-style: none">
