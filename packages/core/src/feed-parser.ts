@@ -57,10 +57,10 @@ export interface FeedParserOptions {
   js?: boolean;
   o: OutputType;
   c?: ContentType,
-  timeoutSec?: number,
+  timeoutSec?: number, // server only
   pContext?: string,
   pLink?: string,
-  fallback?: boolean, // falls back to dirst native feed
+  fallback?: boolean, // falls back to first native feed (server only)
   xq?: string, // exclude query
   x?: string // context extension
 }
@@ -95,6 +95,15 @@ export interface Logger {
   error: (...params: any[]) => void
 }
 
+const defaultParserOptions: FeedParserOptions = {
+  o: OutputType.ATOM
+}
+
+interface GroupedArticleRules {
+  contextXPath: string,
+  rules: ArticleRule[]
+}
+
 export class FeedParser {
 
   private readonly url: URL;
@@ -103,12 +112,12 @@ export class FeedParser {
 
   constructor(private document: HTMLDocument,
               url: string,
-              private options: FeedParserOptions,
-              private logger: Logger) {
+              private options: FeedParserOptions = defaultParserOptions,
+              private logger: Logger = console) {
     this.url = new URL(url);
   }
 
-  public static getRelativeCssPath(node: HTMLElement, context: HTMLElement, withClassNames = false) {
+  public static getRelativeCssPath(node: HTMLElement, context: HTMLElement, withClassNames = false): string {
     if (node.nodeType === 3 || node === context) {
       // todo mag this is not applicable
       return 'self';
@@ -129,7 +138,7 @@ export class FeedParser {
     return text.trim().split(' ').filter(word => word.length > 0);
   }
 
-  public static toAbsoluteUrl(url: URL, link: string) {
+  public static toAbsoluteUrl(url: URL, link: string): string {
     if (link.endsWith('//')) {
       link = link.substring(0, link.length - 1);
     }
@@ -150,10 +159,8 @@ export class FeedParser {
       return false;
     }
     const links = this.evaluateXPath(rule.linkXPath, elem, document);
-    if (links.length === 0) {
-      return false;
-    }
-    return true;
+    return links.length !== 0;
+
   }
 
   public static generalizeXPaths(xpaths: string[]): string {
@@ -390,7 +397,7 @@ export class FeedParser {
     const words = (text: string) => text.split(' ').filter(word => word.length > 0);
 
     return articleRules
-      .map(rule => {
+      .map((rule: ArticleRule) => {
         /*
         Here the scoring measure represents how good article rule or feed candidate is in order to be used
         in a feed. In part 1 below the scoring function uses features from the context of a rule - the
@@ -439,7 +446,7 @@ export class FeedParser {
 
         return rule;
       })
-      .reduce((rulesGroupedByContextList, rule) => {
+      .reduce((rulesGroupedByContextList: GroupedArticleRules[], rule) => {
 
         const matchingGroup = rulesGroupedByContextList.find(group => group.contextXPath === rule.contextXPath);
 
@@ -453,7 +460,7 @@ export class FeedParser {
 
         return rulesGroupedByContextList;
       }, [])
-      .map(rulesGroupedByContext => {
+      .map((rulesGroupedByContext: GroupedArticleRules) => {
         if (rulesGroupedByContext.rules.length === 1) {
           return rulesGroupedByContext.rules[0];
         } else {
@@ -466,7 +473,12 @@ export class FeedParser {
           return goodRules[0];
         }
       })
-      .sort((a, b) => b.score - a.score);
+      .sort((a, b) => b.score - a.score)
+      .map(rule => {
+        // cleanup
+        delete rule.contexts;
+        return rule;
+      });
   }
 
   public getArticles(): Article[] {

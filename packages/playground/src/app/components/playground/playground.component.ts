@@ -4,17 +4,7 @@ import {isEmpty} from 'lodash';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 
-import {FeedService} from '../../services/feed.service';
-import {
-  Article,
-  ArticleRule,
-  ContentType,
-  FeedParser,
-  FeedParserOptions,
-  FeedParserResult,
-  FeedUrl,
-  OutputType
-} from '../../../../../core/src';
+import {Article, FeedDetectionResponse, FeedService, GenericFeedRule, NativeFeedRef} from '../../services/feed.service';
 import {build} from '../../../environments/build';
 import * as URI from 'urijs';
 import {SettingsService} from '../../services/settings.service';
@@ -25,6 +15,38 @@ interface ArticleCandidate {
   qualified: boolean;
 }
 
+
+function getRelativeCssPath(node: HTMLElement, context: HTMLElement, withClassNames = false): string {
+  if (node.nodeType === 3 || node === context) {
+    // todo mag this is not applicable
+    return 'self';
+  }
+  let path = node.tagName; // tagName for text nodes is undefined
+  while (node.parentNode !== context) {
+    node = node.parentNode as HTMLElement;
+    if (typeof (path) === 'undefined') {
+      path = getTagName(node, withClassNames);
+    } else {
+      path = `${getTagName(node, withClassNames)}>${path}`;
+    }
+  }
+  return path;
+}
+
+function getTagName(node: HTMLElement, withClassNames: boolean): string {
+  if (!withClassNames) {
+    return node.tagName;
+  }
+  const classList = Array.from(node.classList)
+    .filter(cn => cn.match('[0-9]+') === null);
+  if (classList.length > 0) {
+    return `${node.tagName}.${classList.join('.')}`;
+  }
+  return node.tagName;
+}
+
+
+
 @Component({
   selector: 'app-playground',
   templateUrl: './playground.component.html',
@@ -32,7 +54,8 @@ interface ArticleCandidate {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlaygroundComponent implements OnInit {
-  footer: { visible: boolean; message: string };
+  response: FeedDetectionResponse;
+  error: string;
 
   constructor(private httpClient: HttpClient,
               private sanitizer: DomSanitizer,
@@ -45,23 +68,15 @@ export class PlaygroundComponent implements OnInit {
   }
 
   @ViewChild('iframeElement', {static: false}) iframeRef: ElementRef;
-  html = '';
-  feedData = '';
-  rules: Array<ArticleRule>;
-  currentRule: ArticleRule;
+  currentRule: GenericFeedRule;
   url: string;
   customContextXPath: string;
   customLinkXPath: string;
   showViz = 'viz';
   hasResults = false;
   iframeLoaded = false;
-  options: FeedParserOptions = {} as FeedParserOptions;
-  logs: string[];
-  articles: Article[];
-  feeds: FeedUrl[];
+  options: any = {};
   isLoading = false;
-  isGenerated = false;
-  error: string;
   history: string[];
   currentTab: string;
   excludeItemsThatContain = false;
@@ -85,23 +100,19 @@ export class PlaygroundComponent implements OnInit {
 
     this.settings.settings().then(settings => {
       this.hasJsSupport = settings.jsSupport;
-      this.footer = {
-        visible: settings.showFooterBanner,
-        message: settings.footerMessage
-      };
       this.changeDetectorRef.detectChanges();
     });
   }
 
-  public applyRule(rule: ArticleRule) {
+  public applyRule(rule: GenericFeedRule) {
     console.log('apply rule', rule);
     this.currentRule = rule;
     this.options.pContext = rule.contextXPath;
     this.options.pLink = rule.linkXPath;
     this.options.x = rule.extendContext;
-    this.feedService.applyRule(this.html, this.url, rule, this.options).subscribe(articles => {
-      this.articles = articles;
-    });
+    // this.feedService.applyRule(this.html, this.url, rule, this.options).subscribe(articles => {
+    //   this.articles = articles;
+    // });
     this.highlightRule(rule);
     this.changeDetectorRef.detectChanges();
   }
@@ -129,18 +140,18 @@ export class PlaygroundComponent implements OnInit {
     if (this.isLoading) {
       return;
     }
-    const rule: ArticleRule = {
-      hidden: true,
-      linkXPath: this.customLinkXPath,
-      extendContext: 's',
-      contextXPath: this.customContextXPath,
-      id: 'custom',
-    };
-    this.applyRule(rule);
+    // const rule: GenericFeedRule = {
+    //   hidden: true,
+    //   linkXPath: this.customLinkXPath,
+    //   extendContext: 's',
+    //   contextXPath: this.customContextXPath,
+    //   id: 'custom',
+    // };
+    // this.applyRule(rule);
   }
 
   public getFeedUrl() {
-    return this.feedService.getDirectFeedUrl(this.url, this.options);
+    return this.currentRule.feedUrl;
   }
 
   getVersions() {
@@ -149,23 +160,16 @@ export class PlaygroundComponent implements OnInit {
 
   public resetAll() {
     this.options = {
-      o: OutputType.ATOM,
-      c: ContentType.RAW,
-      xq: this.excludeItemsThatContainTexts,
-      js: false,
-      x: 's'
+      // o: OutputType.ATOM,
+      // c: ContentType.RAW,
+      // xq: this.excludeItemsThatContainTexts,
+      // js: false,
+      // x: 's'
     };
-    this.html = '';
+    this.response = null;
     this.hasResults = false;
     this.iframeLoaded = false;
-    this.feeds = [];
     this.currentRule = null;
-    this.logs = [];
-    // this.url = null;
-    // this.customContextXPath = '';
-    // this.customLinkXPath = '';
-    this.rules = null;
-    this.feedData = '';
     if (this.proxyUrl) {
       window.URL.revokeObjectURL(this.proxyUrl);
     }
@@ -187,35 +191,35 @@ export class PlaygroundComponent implements OnInit {
     return this.parseFromUrl();
   }
 
-  public isCurrentRule(rule: ArticleRule): boolean {
+  public isCurrentRule(rule: GenericFeedRule): boolean {
     return this.currentRule === rule;
   }
 
   public onIframeLoad(): void {
-    if (this.rules) {
-      this.updateScores();
-    } else {
+    // if (this.response.results.genericFeedRules) {
+    //   this.updateScores();
+    // } else {
       this.iframeLoaded = true;
-    }
+    // }
   }
 
-  public updateScores(): void {
-    const iframeDocument = this.iframeRef.nativeElement.contentDocument;
-    this.rules.forEach(rule => {
-      const articles = this.evaluateXPathInIframe(rule.contextXPath, iframeDocument)
-          // remove hidden articles
-          .filter((elem: any) => !!(elem.offsetWidth || elem.offsetHeight))
-        // remove empty articles
-        // .filter((elem: any) => elem.textContent.trim() > 0)
-        // .filter((elem: any) => Array.from(elem.querySelectorAll(rule.linkPath)).length > 0);
-      ;
-      if (articles.length === 0) {
-        rule.score -= 20;
-        // rule.hidden = true;
-      }
-    });
-    this.changeDetectorRef.detectChanges();
-  }
+  // public updateScores(): void {
+  //   const iframeDocument = this.iframeRef.nativeElement.contentDocument;
+  //   this.rules.forEach(rule => {
+  //     const articles = this.evaluateXPathInIframe(rule.contextXPath, iframeDocument)
+  //         // remove hidden articles
+  //         .filter((elem: any) => !!(elem.offsetWidth || elem.offsetHeight))
+  //       // remove empty articles
+  //       // .filter((elem: any) => elem.textContent.trim() > 0)
+  //       // .filter((elem: any) => Array.from(elem.querySelectorAll(rule.linkPath)).length > 0);
+  //     ;
+  //     if (articles.length === 0) {
+  //       rule.score -= 20;
+  //       // rule.hidden = true;
+  //     }
+  //   });
+  //   this.changeDetectorRef.detectChanges();
+  // }
 
   private parseFromUrlInternal(): void {
     if (isEmpty(this.url)) {
@@ -244,16 +248,12 @@ export class PlaygroundComponent implements OnInit {
 
     this.updateParserOptions();
 
-    if (this.options.js) {
-      this.fromDynamicSource();
-    } else {
-      this.fromStaticSource();
-    }
+    this.fromStaticSource();
   }
 
   private fromStaticSource() {
     console.log('from static source');
-    this.feedService.fromUrl(this.url, this.options)
+    this.feedService.fromUrl(this.url)
       .subscribe(this.handleParserResponse(), (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.hasResults = false;
@@ -263,45 +263,28 @@ export class PlaygroundComponent implements OnInit {
   }
 
   private handleParserResponse() {
-    return (response: FeedParserResult) => {
+    return (response: FeedDetectionResponse) => {
+      const results = response.results;
+      this.response = response;
       this.hasResults = true;
       this.isLoading = false;
-      if (response.message) {
-        this.isGenerated = false;
+      this.url = response.options.harvestUrl;
+      if (results.failed) {
+        this.prepareIframe(this.patchHtml(results.body, this.url));
 
-        try {
-          const {html, feeds, logs} = (response as any).data;
-          if (html) {
-            this.feeds = feeds;
-            this.html = html;
-            this.prepareIframe(this.patchHtml(html, this.url));
-          }
-          if (logs) {
-            this.logs = [...logs, response.message];
-          } else {
-            this.error = response.message;
-          }
-        } catch (e) {
-          this.error = response.message;
-        }
-
-        console.error('Proxy replied an error.', response.message);
+        console.error('Proxy replied an error.', results.errorMessage);
         // tslint:disable-next-line:max-line-length
         this.error = `Looks like this site does not contain any feed data.`;
       } else {
-        this.isGenerated = true;
         console.log('Proxy replies an generated feed');
-        this.rules = response.rules;
-        this.prepareIframe(this.patchHtml(response.html, this.url));
+        this.prepareIframe(this.patchHtml(results.body, this.url));
         setTimeout(() => {
-          this.applyRule(this.rules[0]);
+          this.applyRule(results.genericFeedRules[0]);
         }, 1000);
         this.setCurrentTab(this.showViz);
-        this.feeds = response.feeds;
-        this.feedData = response.feed;
-        const optionsFromParser = response.options;
-        this.options.c = optionsFromParser.c;
-        this.options.o = optionsFromParser.o;
+        // const optionsFromParser = response.options;
+        // this.options.c = optionsFromParser.c;
+        // this.options.o = optionsFromParser.o;
         // todo mag add fallback option
         this.changeDetectorRef.detectChanges();
       }
@@ -356,7 +339,7 @@ export class PlaygroundComponent implements OnInit {
     return doc.documentElement.innerHTML;
   }
 
-  private highlightRule(rule: ArticleRule): void {
+  private highlightRule(rule: GenericFeedRule): void {
     const iframeDocument = this.iframeRef.nativeElement.contentDocument;
     const id = 'rss-proxy-style';
 
@@ -370,15 +353,11 @@ export class PlaygroundComponent implements OnInit {
     styleNode.setAttribute('id', id);
     const allMatches: HTMLElement[] = this.evaluateXPathInIframe(rule.contextXPath, iframeDocument);
 
-    const qualifiedAsArticle = (elem: HTMLElement): boolean => {
-      // todo apply filters
-      return FeedParser.qualifiesAsArticle(elem, rule, iframeDocument);
-    };
     const matchingIndexes = allMatches
       .map(elem => {
         const index = Array.from(elem.parentElement.children)
           .findIndex(otherElem => otherElem === elem);
-        const qualified = qualifiedAsArticle(elem);
+        const qualified = true;
         if (qualified) {
           console.log(`Keeping element ${index}`, elem);
         } else {
@@ -389,7 +368,7 @@ export class PlaygroundComponent implements OnInit {
       .filter(candidate => candidate.qualified)
       .map(candidate => candidate.index);
 
-    const cssSelectorContextPath = 'body>' + FeedParser.getRelativeCssPath(allMatches[0], iframeDocument.body, true);
+    const cssSelectorContextPath = 'body>' + getRelativeCssPath(allMatches[0], iframeDocument.body, true);
     console.log(cssSelectorContextPath);
     const code = `${matchingIndexes.map(index => `${cssSelectorContextPath}:nth-child(${index + 1})`).join(', ')} {
             border: 3px dotted red!important;
@@ -432,14 +411,11 @@ export class PlaygroundComponent implements OnInit {
     }
   }
 
-  private fromDynamicSource() {
-    console.log('from dynamic source');
-    const url = this.url;
-    this.feedService.getDynamicContent(url).subscribe(html => {
-      this.isLoading = false;
-      const patchedHtml = this.patchHtml(html, url);
-      this.feedService.fromHTML(patchedHtml, this.options, url).subscribe(this.handleParserResponse(), console.error);
-      this.prepareIframe(patchedHtml );
-    });
+  canChooseFeed(): boolean {
+    try {
+      return this.response.results.nativeFeeds.length > 0
+    } catch (e) {
+      return false;
+    }
   }
 }
