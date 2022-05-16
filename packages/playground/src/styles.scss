@@ -2,9 +2,18 @@ $primary: blue;
 @import 'variables.scss';
 @import '~bulma/bulma';
 
-
 body {
   margin: 0;
   padding: 0;
   height: 100vh;
+}
+
+a {
+  color: blue;
+  border-bottom: 2px solid black;
+
+  &:hover {
+    text-decoration: none;
+    border-bottom-style: hidden;
+  }
 }

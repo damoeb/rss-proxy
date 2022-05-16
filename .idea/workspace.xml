@@ -5,64 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f354cf1d-853a-464e-8e85-6575024551e6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/packages/playground/yarn.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/accordion/accordion.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/accordion/accordion.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/accordion/accordion.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/accordion/accordion.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/accordion/accordion.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/dot/dot.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/dot/dot.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/dot/dot.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/dot/dot.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/dot/dot.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/.npmignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/feed-parser.test.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/feed-parser.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/log-collector.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites.test.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/00-paulgraham-com-articles.input.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/00-paulgraham-com-articles.output.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/01-spencermounta-in.input.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/01-spencermounta-in.output.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/02-spotify-com.input.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/02-spotify-com.output.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/03-telepolis-de.input.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/03-telepolis-de.output.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/04-arzg-github-io-lang.input.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/04-arzg-github-io-lang.output.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/05-www-brandonsmith-ninja.input.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/05-www-brandonsmith-ninja.output.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/06-jon-bo-posts.input.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/06-jon-bo-posts.output.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/07-craigslist.input.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/07-craigslist.output.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/tsconfig.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/tsconfig.test.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/styles.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/confidential.example.env" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/docker/prod/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/docker/prod/ecosystem.config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/docker/prod/puppeteer/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/nodemon.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/app.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/config.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/endpoints/feedEndpoint.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/endpoints/proxyEndpoint.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/endpoints/settingsEndpoint.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/logger.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/models.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/cacheService.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/feedService.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/proxyService.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/puppeteerService.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/siteService.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/src/static/.gitkeep" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/tsconfig.json" beforeDir="false" />
     </list>
     <list id="f638d3ef-7a6d-4052-aad1-f24fc9f0e590" name="ignore" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -313,7 +272,7 @@
       <workItem from="1646694810978" duration="33000" />
       <workItem from="1652522638737" duration="914000" />
       <workItem from="1652614671734" duration="4276000" />
-      <workItem from="1652635091758" duration="35124000" />
+      <workItem from="1652635091758" duration="47601000" />
     </task>
     <task id="LOCAL-00017" summary="better logging">
       <created>1585428585627</created>

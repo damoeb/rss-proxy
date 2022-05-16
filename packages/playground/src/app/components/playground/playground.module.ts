@@ -5,6 +5,8 @@ import {RouterModule} from '@angular/router';
 
 import {PlaygroundComponent} from './playground.component';
 import {PanelModule} from '../panel/panel.module';
+import {AccordionModule} from '../accordion/accordion.module';
+import {DotModule} from '../dot/dot.module';
 
 
 @NgModule({
@@ -15,7 +17,9 @@ import {PanelModule} from '../panel/panel.module';
     CommonModule,
     FormsModule,
     RouterModule,
-    PanelModule
+    PanelModule,
+    AccordionModule,
+    DotModule
   ]
 })
 export class PlaygroundModule {

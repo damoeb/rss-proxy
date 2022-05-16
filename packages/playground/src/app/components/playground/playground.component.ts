@@ -75,7 +75,6 @@ export class PlaygroundComponent implements OnInit {
   response: FeedDetectionResponse;
   error: string;
   readonly steps: StepName2Step;
-  private pickedRule: GenericFeedRule;
 
   constructor(private httpClient: HttpClient,
               private sanitizer: DomSanitizer,
@@ -87,33 +86,27 @@ export class PlaygroundComponent implements OnInit {
     this.history = PlaygroundComponent.getHistory();
     this.steps = {
       url: {isFinished: () => !isUndefined(this.actualUrl)},
-      feed: {isFinished: () => !isUndefined(this.pickedRule), previousStep: 'url'},
+      feed: {isFinished: () => false, previousStep: 'url'},
       filter: {isFinished: () => false, previousStep: 'feed'},
       content: {isFinished: () => false, previousStep: 'filter'},
       checkout: {isFinished: () => false, previousStep: 'content'}
     }
   }
 
-//   try {
-//   return this.response.results.nativeFeeds.length > 0
-// } catch (e) {
-//   return false;
-// }
-
-  @ViewChild('iframeElement', {static: false}) iframeRef: ElementRef;
-  currentRule: GenericFeedRule = clone(defaultCurrentRule);
+  @ViewChild('iframeElement', {static: false})
+  iframeRef: ElementRef;
+  currentRule: GenericFeedRule = null;
   url: string;
   actualUrl: string;
   customContextXPath: string;
-  showViz = 'viz';
   hasResults = false;
   iframeLoaded = false;
   isLoading = false;
   history: string[];
-  currentTab: string;
 
   private proxyUrl: string;
   hasJsSupport = false;
+  showHistory: boolean;
 
   private static getHistory(): string[] {
     return JSON.parse(localStorage.getItem('history') || JSON.stringify([]));
@@ -172,7 +165,7 @@ export class PlaygroundComponent implements OnInit {
     this.response = null;
     this.hasResults = false;
     this.iframeLoaded = false;
-    this.currentRule = clone(defaultCurrentRule);
+    this.currentRule = null;
     if (this.proxyUrl) {
       window.URL.revokeObjectURL(this.proxyUrl);
     }
@@ -195,7 +188,7 @@ export class PlaygroundComponent implements OnInit {
   }
 
   public isCurrentRule(rule: GenericFeedRule): boolean {
-    return this.currentRule.linkXPath === rule.linkXPath
+    return this.currentRule && this.currentRule.linkXPath === rule.linkXPath
       && this.currentRule.contextXPath === rule.contextXPath
       && this.currentRule.dateXPath === rule.dateXPath
       && this.currentRule.extendContext === rule.extendContext;
@@ -282,13 +275,9 @@ export class PlaygroundComponent implements OnInit {
       } else {
         console.log('Proxy replies an generated feed');
         this.prepareIframe(this.patchHtml(results.body, this.url));
-        setTimeout(() => {
-          this.applyRule(results.genericFeedRules[0]);
-        }, 1000);
-        this.setCurrentTab(this.showViz);
-        // const optionsFromParser = response.options;
-        // this.options.c = optionsFromParser.c;
-        // this.options.o = optionsFromParser.o;
+        // setTimeout(() => {
+        //   this.applyRule(results.genericFeedRules[0]);
+        // }, 1000);
         // todo mag add fallback option
         this.changeDetectorRef.detectChanges();
       }
@@ -305,10 +294,6 @@ export class PlaygroundComponent implements OnInit {
     this.history = history;
 
     localStorage.setItem('history', JSON.stringify(history));
-  }
-
-  private setCurrentTab(tab: string) {
-    this.currentTab = tab;
   }
 
   private assignToIframe(html: string) {
@@ -372,11 +357,12 @@ export class PlaygroundComponent implements OnInit {
       .filter(candidate => candidate.qualified)
       .map(candidate => candidate.index);
 
-    const cssSelectorContextPath = 'body>' + getRelativeCssPath(allMatches[0], iframeDocument.body, true);
+    const cssSelectorContextPath = 'body>' + getRelativeCssPath(allMatches[0], iframeDocument.body, false);
     console.log(cssSelectorContextPath);
     const code = `${matchingIndexes.map(index => `${cssSelectorContextPath}:nth-child(${index + 1})`).join(', ')} {
-            border: 3px dotted red!important;
-            margin-bottom: 5px!important;
+            border: 2px dotted red!important;
+            margin: 2px!important;
+            padding: 2px!important;
             display: block;
           }
           `;
@@ -387,6 +373,10 @@ export class PlaygroundComponent implements OnInit {
     }
 
     styleNode.appendChild(iframeDocument.createTextNode(code));
+    const existingStyleNode = iframeDocument.head.querySelector(`#${id}`);
+    if (existingStyleNode) {
+      existingStyleNode.remove()
+    }
     iframeDocument.head.appendChild(styleNode);
   }
 
@@ -415,15 +405,4 @@ export class PlaygroundComponent implements OnInit {
     return this.isFinishedStep(previousStep) && step.isFinished();
   }
 
-  pickCurrentRule() {
-    this.pickedRule = clone(this.currentRule);
-  }
-
-  pickFilterRules() {
-
-  }
-
-  back() {
-
-  }
 }
