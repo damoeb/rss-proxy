@@ -5,17 +5,66 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f354cf1d-853a-464e-8e85-6575024551e6" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/packages/core/src/feed-parser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/core/src/feed-parser.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/proxy.conf.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/proxy.conf.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" afterDir="false" />
-    </list>
-    <list id="f638d3ef-7a6d-4052-aad1-f24fc9f0e590" name="ignore" comment="">
+      <change afterPath="$PROJECT_DIR$/packages/playground/yarn.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/.npmignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/feed-parser.test.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/feed-parser.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/log-collector.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites.test.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/00-paulgraham-com-articles.input.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/00-paulgraham-com-articles.output.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/01-spencermounta-in.input.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/01-spencermounta-in.output.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/02-spotify-com.input.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/02-spotify-com.output.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/03-telepolis-de.input.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/03-telepolis-de.output.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/04-arzg-github-io-lang.input.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/04-arzg-github-io-lang.output.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/05-www-brandonsmith-ninja.input.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/05-www-brandonsmith-ninja.output.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/06-jon-bo-posts.input.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/06-jon-bo-posts.output.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/07-craigslist.input.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/raw-websites/07-craigslist.output.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/tsconfig.test.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/confidential.example.env" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/docker/prod/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/docker/prod/ecosystem.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/docker/prod/puppeteer/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/nodemon.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/app.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/config.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/endpoints/feedEndpoint.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/endpoints/proxyEndpoint.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/endpoints/settingsEndpoint.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/logger.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/models.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/cacheService.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/feedService.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/proxyService.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/puppeteerService.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/services/siteService.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/src/static/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/tsconfig.json" beforeDir="false" />
     </list>
+    <list id="f638d3ef-7a6d-4052-aad1-f24fc9f0e590" name="ignore" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -68,7 +117,6 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
-    <property name="GO_FMT" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -90,7 +138,7 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="settings.nodejs" />
-    <property name="ts.external.directory.path" value="$PROJECT_DIR$/packages/core/node_modules/typescript/lib" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/packages/playground/node_modules/typescript/lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="Push.Settings">
@@ -99,19 +147,19 @@
     </force-push-targets>
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/packages/playground/src/app" />
-      <recent name="$PROJECT_DIR$/packages/proxy/docker/prod/puppeteer" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/modules/rss-it-app" />
-      <recent name="$PROJECT_DIR$/test" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/packages/playground/src/app/services" />
       <recent name="$PROJECT_DIR$/packages/proxy/src/endpoints" />
       <recent name="$PROJECT_DIR$/packages/core/src/raw-websites" />
       <recent name="$PROJECT_DIR$/docs" />
       <recent name="$PROJECT_DIR$/packages/proxy/src/services" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/packages/proxy" />
+      <recent name="$PROJECT_DIR$/packages/playground/src/app" />
+      <recent name="$PROJECT_DIR$/packages/proxy/docker/prod/puppeteer" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/modules/rss-it-app" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start">
@@ -265,7 +313,7 @@
       <workItem from="1646694810978" duration="33000" />
       <workItem from="1652522638737" duration="914000" />
       <workItem from="1652614671734" duration="4276000" />
-      <workItem from="1652635091758" duration="10051000" />
+      <workItem from="1652635091758" duration="35124000" />
     </task>
     <task id="LOCAL-00017" summary="better logging">
       <created>1585428585627</created>
@@ -629,7 +677,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="history" />
     <MESSAGE value="readme" />
     <MESSAGE value="screenshots" />
     <MESSAGE value="build info, bug fixes" />
@@ -654,7 +701,8 @@
     <MESSAGE value="dyn proxy" />
     <MESSAGE value="js support" />
     <MESSAGE value="updated dependencies" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated dependencies" />
+    <MESSAGE value="basic support" />
+    <option name="LAST_COMMIT_MESSAGE" value="basic support" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

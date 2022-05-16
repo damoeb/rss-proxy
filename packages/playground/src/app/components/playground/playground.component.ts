@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {isEmpty} from 'lodash';
+import {isEmpty, isUndefined, clone, assignIn} from 'lodash';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 
@@ -45,7 +45,25 @@ function getTagName(node: HTMLElement, withClassNames: boolean): string {
   return node.tagName;
 }
 
+type StepName = 'url' | 'feed' | 'filter' | 'content' | 'checkout';
 
+interface Step {
+  isFinished: () => boolean
+  previousStep?: StepName
+}
+
+type StepName2Step = Record<StepName, Step>;
+
+const defaultCurrentRule: GenericFeedRule = {
+  samples: [],
+  dateXPath: null,
+  linkXPath: null,
+  feedUrl: null,
+  score: null,
+  count: null,
+  contextXPath: null,
+  extendContext: null,
+}
 
 @Component({
   selector: 'app-playground',
@@ -56,6 +74,8 @@ function getTagName(node: HTMLElement, withClassNames: boolean): string {
 export class PlaygroundComponent implements OnInit {
   response: FeedDetectionResponse;
   error: string;
+  readonly steps: StepName2Step;
+  private pickedRule: GenericFeedRule;
 
   constructor(private httpClient: HttpClient,
               private sanitizer: DomSanitizer,
@@ -65,22 +85,32 @@ export class PlaygroundComponent implements OnInit {
               private changeDetectorRef: ChangeDetectorRef,
               private feedService: FeedService) {
     this.history = PlaygroundComponent.getHistory();
+    this.steps = {
+      url: {isFinished: () => !isUndefined(this.actualUrl)},
+      feed: {isFinished: () => !isUndefined(this.pickedRule), previousStep: 'url'},
+      filter: {isFinished: () => false, previousStep: 'feed'},
+      content: {isFinished: () => false, previousStep: 'filter'},
+      checkout: {isFinished: () => false, previousStep: 'content'}
+    }
   }
 
+//   try {
+//   return this.response.results.nativeFeeds.length > 0
+// } catch (e) {
+//   return false;
+// }
+
   @ViewChild('iframeElement', {static: false}) iframeRef: ElementRef;
-  currentRule: GenericFeedRule;
+  currentRule: GenericFeedRule = clone(defaultCurrentRule);
   url: string;
+  actualUrl: string;
   customContextXPath: string;
-  customLinkXPath: string;
   showViz = 'viz';
   hasResults = false;
   iframeLoaded = false;
-  options: any = {};
   isLoading = false;
   history: string[];
   currentTab: string;
-  excludeItemsThatContain = false;
-  excludeItemsThatContainTexts = 'Newsletter, Advertisement';
 
   private proxyUrl: string;
   hasJsSupport = false;
@@ -106,13 +136,7 @@ export class PlaygroundComponent implements OnInit {
 
   public applyRule(rule: GenericFeedRule) {
     console.log('apply rule', rule);
-    this.currentRule = rule;
-    this.options.pContext = rule.contextXPath;
-    this.options.pLink = rule.linkXPath;
-    this.options.x = rule.extendContext;
-    // this.feedService.applyRule(this.html, this.url, rule, this.options).subscribe(articles => {
-    //   this.articles = articles;
-    // });
+    this.currentRule = assignIn({}, defaultCurrentRule, rule);
     this.highlightRule(rule);
     this.changeDetectorRef.detectChanges();
   }
@@ -136,20 +160,6 @@ export class PlaygroundComponent implements OnInit {
     }
   }
 
-  public applyCustomRule() {
-    if (this.isLoading) {
-      return;
-    }
-    // const rule: GenericFeedRule = {
-    //   hidden: true,
-    //   linkXPath: this.customLinkXPath,
-    //   extendContext: 's',
-    //   contextXPath: this.customContextXPath,
-    //   id: 'custom',
-    // };
-    // this.applyRule(rule);
-  }
-
   public getFeedUrl() {
     return this.currentRule.feedUrl;
   }
@@ -159,17 +169,10 @@ export class PlaygroundComponent implements OnInit {
   }
 
   public resetAll() {
-    this.options = {
-      // o: OutputType.ATOM,
-      // c: ContentType.RAW,
-      // xq: this.excludeItemsThatContainTexts,
-      // js: false,
-      // x: 's'
-    };
     this.response = null;
     this.hasResults = false;
     this.iframeLoaded = false;
-    this.currentRule = null;
+    this.currentRule = clone(defaultCurrentRule);
     if (this.proxyUrl) {
       window.URL.revokeObjectURL(this.proxyUrl);
     }
@@ -192,34 +195,37 @@ export class PlaygroundComponent implements OnInit {
   }
 
   public isCurrentRule(rule: GenericFeedRule): boolean {
-    return this.currentRule === rule;
+    return this.currentRule.linkXPath === rule.linkXPath
+      && this.currentRule.contextXPath === rule.contextXPath
+      && this.currentRule.dateXPath === rule.dateXPath
+      && this.currentRule.extendContext === rule.extendContext;
   }
 
   public onIframeLoad(): void {
     // if (this.response.results.genericFeedRules) {
-    //   this.updateScores();
+    // this.updateScores();
     // } else {
-      this.iframeLoaded = true;
+    this.iframeLoaded = true;
     // }
   }
 
-  // public updateScores(): void {
-  //   const iframeDocument = this.iframeRef.nativeElement.contentDocument;
-  //   this.rules.forEach(rule => {
-  //     const articles = this.evaluateXPathInIframe(rule.contextXPath, iframeDocument)
-  //         // remove hidden articles
-  //         .filter((elem: any) => !!(elem.offsetWidth || elem.offsetHeight))
-  //       // remove empty articles
-  //       // .filter((elem: any) => elem.textContent.trim() > 0)
-  //       // .filter((elem: any) => Array.from(elem.querySelectorAll(rule.linkPath)).length > 0);
-  //     ;
-  //     if (articles.length === 0) {
-  //       rule.score -= 20;
-  //       // rule.hidden = true;
-  //     }
-  //   });
-  //   this.changeDetectorRef.detectChanges();
-  // }
+  public updateScores(): void {
+    const iframeDocument = this.iframeRef.nativeElement.contentDocument;
+    this.response.results.genericFeedRules.forEach(rule => {
+      const articles = this.evaluateXPathInIframe(rule.contextXPath, iframeDocument)
+          // remove hidden articles
+          .filter((elem: any) => !!(elem.offsetWidth || elem.offsetHeight))
+        // remove empty articles
+        // .filter((elem: any) => elem.textContent.trim() > 0)
+        // .filter((elem: any) => Array.from(elem.querySelectorAll(rule.linkPath)).length > 0);
+      ;
+      if (articles.length === 0) {
+        rule.score -= 20;
+        // rule.hidden = true;
+      }
+    });
+    this.changeDetectorRef.detectChanges();
+  }
 
   private parseFromUrlInternal(): void {
     if (isEmpty(this.url)) {
@@ -246,8 +252,6 @@ export class PlaygroundComponent implements OnInit {
     this.isLoading = true;
     this.changeDetectorRef.detectChanges();
 
-    this.updateParserOptions();
-
     this.fromStaticSource();
   }
 
@@ -268,7 +272,7 @@ export class PlaygroundComponent implements OnInit {
       this.response = response;
       this.hasResults = true;
       this.isLoading = false;
-      this.url = response.options.harvestUrl;
+      this.actualUrl = response.options.harvestUrl;
       if (results.failed) {
         this.prepareIframe(this.patchHtml(results.body, this.url));
 
@@ -398,24 +402,28 @@ export class PlaygroundComponent implements OnInit {
     return nodes;
   }
 
-  private updateParserOptions() {
-    if (this.excludeItemsThatContain) {
-      this.options.xq = this.excludeItemsThatContainTexts;
-    } else {
-      delete this.options.xq;
-    }
-
-    if (this.currentRule) {
-      this.options.pContext = this.currentRule.contextXPath;
-      this.options.pLink = this.currentRule.linkXPath;
-    }
+  showStep(step: Step): boolean {
+    const previousStep = this.steps[step.previousStep]
+    return this.isFinishedStep(previousStep) && !step.isFinished();
   }
 
-  canChooseFeed(): boolean {
-    try {
-      return this.response.results.nativeFeeds.length > 0
-    } catch (e) {
-      return false;
+  isFinishedStep(step: Step): boolean {
+    if (!step) {
+      return true;
     }
+    const previousStep = this.steps[step.previousStep]
+    return this.isFinishedStep(previousStep) && step.isFinished();
+  }
+
+  pickCurrentRule() {
+    this.pickedRule = clone(this.currentRule);
+  }
+
+  pickFilterRules() {
+
+  }
+
+  back() {
+
   }
 }

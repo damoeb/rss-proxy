@@ -1,5 +1,7 @@
+$primary: blue;
 @import 'variables.scss';
-@import '~mini.css/src/flavors/mini-default.scss';
+@import '~bulma/bulma';
+
 
 body {
   margin: 0;
