@@ -1,8 +1,0 @@
-<div>
-  <div class="accordion-header" [ngClass]="{'interactive': canToggle}" (click)="tryToggle()">
-    <ng-content select="label"></ng-content>
-  </div>
-  <div class="accordion-body" [hidden]="!expanded">
-    <ng-content select="div"></ng-content>
-  </div>
-</div>

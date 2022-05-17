@@ -1,10 +1,10 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {isEmpty, isUndefined, clone, assignIn} from 'lodash';
+import {isEmpty, isUndefined, assignIn} from 'lodash';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 
-import {Article, FeedDetectionResponse, FeedService, GenericFeedRule, NativeFeedRef} from '../../services/feed.service';
+import {FeedDetectionResponse, FeedService, GenericFeedRule, NativeFeedRef} from '../../services/feed.service';
 import {build} from '../../../environments/build';
 import * as URI from 'urijs';
 import {SettingsService} from '../../services/settings.service';
@@ -76,6 +76,7 @@ export class PlaygroundComponent implements OnInit {
   error: string;
   readonly steps: StepName2Step;
   private currentTabName = 'source';
+  currentNativeFeed: NativeFeedRef;
 
   constructor(private httpClient: HttpClient,
               private sanitizer: DomSanitizer,
@@ -165,6 +166,7 @@ export class PlaygroundComponent implements OnInit {
   public resetAll() {
     this.response = null;
     this.hasResults = false;
+    this.actualUrl = null;
     this.iframeLoaded = false;
     this.currentRule = null;
     if (this.proxyUrl) {
@@ -189,10 +191,7 @@ export class PlaygroundComponent implements OnInit {
   }
 
   public isCurrentRule(rule: GenericFeedRule): boolean {
-    return this.currentRule && this.currentRule.linkXPath === rule.linkXPath
-      && this.currentRule.contextXPath === rule.contextXPath
-      && this.currentRule.dateXPath === rule.dateXPath
-      && this.currentRule.extendContext === rule.extendContext;
+    return this.currentRule && this.currentRule.id === rule.id;
   }
 
   public onIframeLoad(): void {
@@ -263,7 +262,14 @@ export class PlaygroundComponent implements OnInit {
   private handleParserResponse() {
     return (response: FeedDetectionResponse) => {
       const results = response.results;
+
+      results.genericFeedRules = results.genericFeedRules.map((gr, index) => {
+        gr.id = index;
+        return gr;
+      })
+
       this.response = response;
+
       this.hasResults = true;
       this.isLoading = false;
       this.actualUrl = response.options.harvestUrl;
@@ -406,11 +412,15 @@ export class PlaygroundComponent implements OnInit {
     return this.isFinishedStep(previousStep) && step.isFinished();
   }
 
-  isTab(tabName: string): boolean {
-    return this.currentTabName === tabName
-  }
-
   toggleTab(tabName: string) {
     this.currentTabName = tabName
+  }
+
+  isNativeFeed(): boolean {
+    return !(this.response && this.response.results && this.response.results.mimeType.startsWith('text/html'))
+  }
+
+  pickNativeFeed(feed: NativeFeedRef) {
+    this.currentNativeFeed = feed;
   }
 }

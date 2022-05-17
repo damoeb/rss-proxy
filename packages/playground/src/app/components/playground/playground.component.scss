@@ -1,83 +1,25 @@
 $primary: blue;
 
-.step-content {
-  flex: 1;
-  display: flex;
-  > dl {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-}
-.nav {
-  width: 100px;
-  list-style: none;
-  li {
-    .dot {
-      height: 10px;
-      width: 10px;
-      border-radius: 50%;
-      border: 1px solid black;
-      display: inline-block;
-      margin-right: 5px;
-    }
-
-    &.done {
-      //font-weight: bold;
-    }
-    &.done,
-    &.active {
-      color: $primary;
-
-      .dot {
-        background: $primary;
-        border-color: $primary;
-      }
-    }
-  }
-}
-.samples {
-  margin-left: 5px;
-  padding-left: 5px;
+.sample {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   line-break: unset;
   font-size: small;
-  > .sample {
-    margin-bottom: 5px;
-  }
+  margin-left: 5px;
+  padding: 5px;
+  border-left: 1px solid #ccc;
 }
 
-iframe {
-  border: 1px solid black;
+.source-iframe {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  border: 3px solid $primary;
   background: white;
-}
-
-.choose-feed {
-  margin-right: 10px;
-}
-
-.menu-item {
-  display: block;
-  padding: 3px 2px;
-  color: blue;
-  //border-bottom: 1px solid blue;
-  //background: rgba(0, 0, 255, 0.07);
-  border-radius: 8px;
-  cursor: pointer;
-
-  &--disabled {
-    color: #888;
-    //border-bottom: 1px solid #ccc;
-    border: none;
-    //background: none;
-    cursor: auto;
+  > * {
+    flex: 1;
   }
-}
-.menu-body {
-  //background: #efefef;
-  border-left: 5px solid blue;
 }
 
 .playground {
@@ -101,3 +43,9 @@ button.inactive {
 .unsupported-website {
   background-color: #ffa5a5;
 }
+
+.feed {
+  flex: 1;
+  border: 3px solid $primary;
+}
+

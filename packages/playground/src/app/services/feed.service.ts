@@ -18,6 +18,7 @@ export interface Article {
 }
 
 export interface GenericFeedRule {
+  id?: number
   linkXPath: string
   extendContext: string
   contextXPath: string
