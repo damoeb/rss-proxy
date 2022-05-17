@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
+import {ContentResolution, ItemFilter} from '../components/playground/playground.component';
 
 export interface Article {
   id: string,
@@ -56,6 +57,8 @@ export interface FeedDetectionResponse {
   results: FeedDetectionResults
 }
 
+export type FeedFormat = 'atom' | 'rss' | 'json'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -69,7 +72,12 @@ export class FeedService {
       // + `&prerender=${renderJavaScript}`;
     ;
 
-    return this.httpClient.get(parserUrl) as Observable<FeedDetectionResponse>;
+    return this.httpClient.get(parserUrl, {withCredentials:true}) as Observable<FeedDetectionResponse>;
   }
 
+  transform(url: string, filters: ItemFilter[], contentResolution: ContentResolution, target: FeedFormat = 'json') {
+    const parserUrl = `/api/feeds/transform?feedUrl=${encodeURIComponent(url)}&targetFormat=${target}&resolution=${contentResolution}`;
+
+    return this.httpClient.get(parserUrl, {withCredentials:true}) as  Observable<any>;
+  }
 }

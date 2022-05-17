@@ -224,10 +224,11 @@
                   <ul style="list-style: none">
                     <li>
                       <p>Feed Entry Content</p>
-                      <!--                <label><input [(ngModel)]="options.c" name="entryContent" type="radio" value="RAW"><strong>Raw</strong>-->
-                      <!--                  (default)</label>-->
-                      <!--                <label><input [(ngModel)]="options.c" name="entryContent" type="radio" value="FULLTEXT">FullText</label>-->
-                      <!--                <label><input [(ngModel)]="options.c" name="entryContent" type="radio" value="OC_TAGS">OC Tags</label>-->
+                      <select class="select" [(ngModel)]="contentResolution">
+                        <option value="default">default</option>
+                        <option value="fulltext">fulltext</option>
+                        <option value="oc">OC Tags</option>
+                      </select>
                     </li>
                   </ul>
                 </div>
@@ -237,9 +238,9 @@
           <li>
             <a>Feeds</a>
             <ul>
-              <li><a [ngClass]="{'is-active': currentRule}">Atom</a></li>
-              <li><a>Rss</a></li>
-              <li><a>Json</a></li>
+              <li><a [ngClass]="{'is-active': currentRule}">Copy Atom URL</a></li>
+              <li><a>Copy Rss URL</a></li>
+              <li><a>Copy Json URL</a></li>
             </ul>
           </li>
         </ul>

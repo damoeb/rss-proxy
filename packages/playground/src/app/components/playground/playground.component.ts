@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {isEmpty, isUndefined, assignIn} from 'lodash';
+import {assignIn, isEmpty, isUndefined} from 'lodash';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 
@@ -8,6 +8,7 @@ import {FeedDetectionResponse, FeedService, GenericFeedRule, NativeFeedRef} from
 import {build} from '../../../environments/build';
 import * as URI from 'urijs';
 import {SettingsService} from '../../services/settings.service';
+import {firstValueFrom} from 'rxjs/dist/types';
 
 interface ArticleCandidate {
   elem: HTMLElement;
@@ -65,6 +66,15 @@ const defaultCurrentRule: GenericFeedRule = {
   extendContext: null,
 }
 
+export type ContentResolution = 'default' | 'fulltext' | 'oc';
+export type FilterType = '+' | '-'
+
+export interface ItemFilter {
+  type: FilterType
+  field: string
+  matches: string
+}
+
 @Component({
   selector: 'app-playground',
   templateUrl: './playground.component.html',
@@ -77,6 +87,8 @@ export class PlaygroundComponent implements OnInit {
   readonly steps: StepName2Step;
   private currentTabName = 'source';
   currentNativeFeed: NativeFeedRef;
+  contentResolution: ContentResolution;
+  private filters: ItemFilter[];
 
   constructor(private httpClient: HttpClient,
               private sanitizer: DomSanitizer,
@@ -134,6 +146,7 @@ export class PlaygroundComponent implements OnInit {
     this.currentRule = assignIn({}, defaultCurrentRule, rule);
     this.highlightRule(rule);
     this.changeDetectorRef.detectChanges();
+    this.fetchJsonFeedFromCurrentRule(rule);
   }
 
   public async parseFromUrl() {
@@ -422,5 +435,22 @@ export class PlaygroundComponent implements OnInit {
 
   pickNativeFeed(feed: NativeFeedRef) {
     this.currentNativeFeed = feed;
+    this.fetchJsonFeedFromNativeFeed(feed)
+  }
+
+  private fetchJsonFeedFromCurrentRule(rule: GenericFeedRule) {
+    this.transform(rule.feedUrl);
+  }
+
+  private fetchJsonFeedFromNativeFeed(feed: NativeFeedRef) {
+    this.transform(feed.url)
+  }
+
+  private transform(feedUrl: string) {
+    this.feedService.transform(feedUrl, this.filters, this.contentResolution)
+      .toPromise()
+      .then(response => {
+      console.log(response);
+    })
   }
 }
