@@ -75,6 +75,7 @@ export class PlaygroundComponent implements OnInit {
   response: FeedDetectionResponse;
   error: string;
   readonly steps: StepName2Step;
+  private currentTabName = 'source';
 
   constructor(private httpClient: HttpClient,
               private sanitizer: DomSanitizer,
@@ -88,8 +89,8 @@ export class PlaygroundComponent implements OnInit {
       url: {isFinished: () => !isUndefined(this.actualUrl)},
       feed: {isFinished: () => false, previousStep: 'url'},
       filter: {isFinished: () => false, previousStep: 'feed'},
-      content: {isFinished: () => false, previousStep: 'filter'},
-      checkout: {isFinished: () => false, previousStep: 'content'}
+      content: {isFinished: () => false, previousStep: 'feed'},
+      checkout: {isFinished: () => false, previousStep: 'feed'}
     }
   }
 
@@ -405,4 +406,11 @@ export class PlaygroundComponent implements OnInit {
     return this.isFinishedStep(previousStep) && step.isFinished();
   }
 
+  isTab(tabName: string): boolean {
+    return this.currentTabName === tabName
+  }
+
+  toggleTab(tabName: string) {
+    this.currentTabName = tabName
+  }
 }

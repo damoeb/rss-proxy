@@ -1,5 +1,5 @@
 <div class="playground">
-  <div>
+  <div style="padding-bottom: 5px;">
     <ng-form (ngSubmit)="parseFromUrl()">
       <div class="field has-addons is-expanded">
         <div class="control is-expanded" [ngClass]="{'is-loading': isLoading}">
@@ -27,30 +27,24 @@
       Check the <a href="https://github.com/damoeb/rss-proxy/wiki">documentation</a> for further help.
     </div>
 
-<!--    <div *ngIf="showHistory && history.length > 0">-->
-<!--      <p>-->
-<!--        <strong>Previous URLs</strong>-->
-<!--      </p>-->
-<!--      <p *ngFor="let url of history">-->
-<!--        <a (click)="parseFromHistoryUrl(url)"-->
-<!--           href="javascript:void(0)">{{ url }}</a>-->
-<!--      </p>-->
-<!--    </div>-->
+    <!--    <div *ngIf="showHistory && history.length > 0">-->
+    <!--      <p>-->
+    <!--        <strong>Previous URLs</strong>-->
+    <!--      </p>-->
+    <!--      <p *ngFor="let url of history">-->
+    <!--        <a (click)="parseFromHistoryUrl(url)"-->
+    <!--           href="javascript:void(0)">{{ url }}</a>-->
+    <!--      </p>-->
+    <!--    </div>-->
   </div>
 
   <div style="display: flex; flex-direction: row; flex: 1">
-    <aside style="width: 300px; display: flex; flex-direction: column;">
-      <div class="tabs">
-        <ul>
-          <li><a>Configuration</a></li>
-        </ul>
-      </div>
-
+    <aside style="width: 350px; display: flex; flex-direction: column;">
       <app-accordeon [expanded]="false">
-        <label class="menu-item menu-item--disabled">
+        <label class="menu-item">
           Native Feeds
         </label>
-        <div *ngIf="showStep(steps.feed)">
+        <div *ngIf="showStep(steps.feed)" class="menu-body">
           <ol type="1">
             <li *ngFor="let feed of response.results.nativeFeeds">
               <a [href]="feed.url"
@@ -63,161 +57,165 @@
         </div>
       </app-accordeon>
 
-      <div style="flex: 1 0 100px; overflow-y: auto;">
-        <app-accordeon [expanded]="showStep(steps.feed)">
-          <label class="menu-item">
-            Generic Feeds <app-dot *ngIf="!currentRule"></app-dot>
-          </label>
 
-          <div *ngIf="showStep(steps.feed)"
-               class="choose-feed content">
-            <div *ngIf="response?.results?.genericFeedRules?.length > 0">
-              <ol type="1">
-                <li *ngFor="let rule of response.results.genericFeedRules; let i = index "
-                    [ngClass]="{'active': isCurrentRule(rule)}">
-                  Feed with <strong>{{ rule.count }}</strong> articles
-                  <button class="button is-small is-primary"
-                          (click)="applyRule(rule)">Pick</button>
-                  <div class="samples">
-                    <div *ngFor="let article of rule.samples.slice(0, 2);" class="sample">
-                      <div>
-                        {{article.title}}
-                      </div>
-                      <div>
-                        {{article.date_published}}
-                      </div>
+      <app-accordeon [expanded]="showStep(steps.feed)">
+        <label class="menu-item">
+          Generic Feeds
+          <app-dot *ngIf="!currentRule"></app-dot>
+        </label>
+
+        <div *ngIf="showStep(steps.feed)"
+             style="max-height: 50vh; overflow-y: auto;"
+             class="choose-feed content menu-body">
+          <div *ngIf="response?.results?.genericFeedRules?.length > 0">
+            <ol type="1">
+              <li *ngFor="let rule of response.results.genericFeedRules; let i = index "
+                  [ngClass]="{'active': isCurrentRule(rule)}">
+                Feed with <strong>{{ rule.count }}</strong> articles
+                <button class="button is-small is-primary"
+                        (click)="applyRule(rule)">Pick
+                </button>
+                <div class="samples">
+                  <div *ngFor="let article of rule.samples.slice(0, 2);" class="sample">
+                    <div>
+                      {{article.title}}
+                    </div>
+                    <div>
+                      {{article.date_published}}
                     </div>
                   </div>
-                </li>
-              </ol>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </app-accordeon>
+
+      <app-accordeon [expanded]="showStep(steps.filter)">
+        <label class="menu-item" [ngClass]="{'menu-item--disabled': !currentRule }">
+          Effective Feed
+          <app-dot *ngIf="currentRule"></app-dot>
+        </label>
+        <div *ngIf="currentRule" class="menu-body">
+          <ng-form (ngSubmit)="applyRule(currentRule)">
+            <div class="row" style="text-align: left">
+
+              <div>
+                <label class="label is-small">Context</label>
+              </div>
+              <div class="field has-addons"
+                   aria-label="Elements XPath (e.g. //body//ul[1]/li)">
+                <div class="control is-expanded">
+                  <input [(ngModel)]="currentRule.contextXPath"
+                         class="input is-small"
+                         autocomplete="off"
+                         type="text"
+                         autofocus name="context"
+                         placeholder="Elements XPath">
+                </div>
+                <div class="control">
+                  <button class="button is-small">
+                    *
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label class="label is-small">Link</label>
+              </div>
+              <div class="field has-addons"
+                   aria-label="Links relative XPath (e.g. ./a[1])">
+                <div class="control is-expanded">
+                  <input [(ngModel)]="currentRule.linkXPath"
+                         class="input is-small"
+                         autocomplete="off"
+                         autofocus
+                         type="text"
+                         name="link"
+                         placeholder="Link XPath">
+                </div>
+                <div class="control">
+                  <button class="button is-small">
+                    *
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label class="label is-small">Date</label>
+              </div>
+              <div class="field has-addons"
+                   aria-label="Date relative XPath (e.g. ./a[1])">
+                <div class="control is-expanded">
+                  <input [(ngModel)]="currentRule.dateXPath"
+                         class="input is-small"
+                         autocomplete="off"
+                         autofocus
+                         type="text"
+                         name="link"
+                         placeholder="Date XPath">
+                </div>
+                <div class="control">
+                  <button class="button is-small">
+                    *
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-form>
+        </div>
+      </app-accordeon>
+
+      <app-accordeon [expanded]="showStep(steps.filter)">
+        <label class="menu-item" [ngClass]="{'menu-item--disabled': !currentRule }">
+          Filter
+        </label>
+        <div class="menu-body">
+          <div class="is-horizontal">
+            <div class="select is-small">
+              <select>
+                <option>Keep</option>
+                <option>Reject</option>
+              </select>
+            </div>
+            <div class="select is-small">
+              <select>
+                <option>Title</option>
+                <option>Body</option>
+              </select>
+            </div>
+            <div class="select is-small">
+              <select>
+                <option>Contains</option>
+                <option>Not Contains</option>
+              </select>
             </div>
           </div>
-        </app-accordeon>
+          <input class="input is-small">
+          <!--          <button>x</button>-->
+          <button class="button is-small">Add Filter</button>
+        </div>
+      </app-accordeon>
 
-        <app-accordeon [expanded]="showStep(steps.filter)">
-          <label class="menu-item" [ngClass]="{'menu-item--disabled': !currentRule }">
-            Effective Feed <app-dot *ngIf="currentRule"></app-dot>
-          </label>
+      <app-accordeon [expanded]="showStep(steps.content)">
+        <label class="menu-item" [ngClass]="{'menu-item--disabled': !currentRule }">
+          Content
+        </label>
+        <div class="menu-body">
           <div *ngIf="currentRule">
-            <ng-form (ngSubmit)="applyRule(currentRule)">
-              <div class="row" style="text-align: left">
-
-                <div>
-                  <label class="label is-small">Context</label>
-                </div>
-                <div class="field has-addons"
-                     aria-label="Elements XPath (e.g. //body//ul[1]/li)">
-                  <div class="control is-expanded">
-                    <input [(ngModel)]="currentRule.contextXPath"
-                           class="input is-small"
-                           autocomplete="off"
-                           type="text"
-                           autofocus name="context"
-                           placeholder="Elements XPath">
-                  </div>
-                  <div class="control">
-                    <button class="button is-small">
-                      *
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <label class="label is-small">Link</label>
-                </div>
-                <div class="field has-addons"
-                     aria-label="Links relative XPath (e.g. ./a[1])">
-                  <div class="control is-expanded">
-                    <input [(ngModel)]="currentRule.linkXPath"
-                           class="input is-small"
-                           autocomplete="off"
-                           autofocus
-                           type="text"
-                           name="link"
-                           placeholder="Link XPath">
-                  </div>
-                  <div class="control">
-                    <button class="button is-small">
-                      *
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <label class="label is-small">Date</label>
-                </div>
-                <div class="field has-addons"
-                     aria-label="Date relative XPath (e.g. ./a[1])">
-                  <div class="control is-expanded">
-                    <input [(ngModel)]="currentRule.dateXPath"
-                           class="input is-small"
-                           autocomplete="off"
-                           autofocus
-                           type="text"
-                           name="link"
-                           placeholder="Date XPath">
-                  </div>
-                  <div class="control">
-                    <button class="button is-small">
-                      *
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </ng-form>
+            <ul style="list-style: none">
+              <li>
+                <p>Feed Entry Content</p>
+<!--                <label><input [(ngModel)]="options.c" name="entryContent" type="radio" value="RAW"><strong>Raw</strong>-->
+<!--                  (default)</label>-->
+<!--                <label><input [(ngModel)]="options.c" name="entryContent" type="radio" value="FULLTEXT">FullText</label>-->
+<!--                <label><input [(ngModel)]="options.c" name="entryContent" type="radio" value="OC_TAGS">OC Tags</label>-->
+              </li>
+            </ul>
           </div>
-        </app-accordeon>
+        </div>
+      </app-accordeon>
 
-        <app-accordeon [expanded]="showStep(steps.filter)">
-          <label class="menu-item">
-            Filter
-          </label>
-          <div>
-            <div class="is-horizontal">
-              <div class="select is-small">
-                <select>
-                  <option>Keep</option>
-                  <option>Reject</option>
-                </select>
-              </div>
-              <div class="select is-small">
-                <select>
-                  <option>Title</option>
-                  <option>Body</option>
-                </select>
-              </div>
-              <div class="select is-small">
-                <select>
-                  <option>Contains</option>
-                  <option>Not Contains</option>
-                </select>
-              </div>
-            </div>
-            <input class="input is-small">
-            <!--          <button>x</button>-->
-            <button class="button is-small">Add Filter</button>
-          </div>
-        </app-accordeon>
-
-        <!--          <app-accordeon [expanded]="showStep(steps.content)">-->
-        <!--            <label>-->
-        <!--              Content-->
-        <!--            </label>-->
-        <!--            <div>-->
-        <!--        <div *ngIf="currentRule">-->
-        <!--          <ul style="list-style: none">-->
-        <!--          <li>-->
-        <!--            <p>Feed Entry Content</p>-->
-        <!--            <label><input [(ngModel)]="options.c" name="entryContent" type="radio" value="RAW"><strong>Raw</strong>-->
-        <!--              (default)</label>-->
-        <!--            <label><input [(ngModel)]="options.c" name="entryContent" type="radio" value="FULLTEXT">FullText</label>-->
-        <!--            <label><input [(ngModel)]="options.c" name="entryContent" type="radio" value="OC_TAGS">OC Tags</label>-->
-        <!--          </li>-->
-        <!--          </ul>-->
-        <!--        </div>-->
-        <!--            </div>-->
-        <!--          </app-accordeon>-->
-      </div>
 
       <div>
         <button class="button">Atom</button>
@@ -230,16 +228,20 @@
     <div style="flex: 1; display: flex; flex-direction: column">
       <div class="tabs">
         <ul>
-          <li class="is-active"><a>Source</a></li>
-          <li class="is-disabled"><a>Feed</a></li>
+          <li class="is-active"
+              [ngClass]="{'is-active': isTab('source')}"
+              (click)="toggleTab('source')"><a>Source</a></li>
+          <li class="is-disabled"
+              [ngClass]="{'is-active': isTab('feed')}"
+              (click)="toggleTab('feed')"><a class="is-disabled">Feed</a></li>
         </ul>
       </div>
       <iframe #iframeElement
               (load)="onIframeLoad()"
-              [hidden]="isLoading"
+              [hidden]="isLoading || !isTab('source')"
               sandbox="allow-same-origin"
               style="flex: 1; max-height: 100vh;"></iframe>
-
+      <div *ngIf="isTab('feed')"></div>
     </div>
 
   </div>

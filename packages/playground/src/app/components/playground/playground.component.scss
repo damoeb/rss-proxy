@@ -62,12 +62,22 @@ iframe {
   display: block;
   padding: 3px 2px;
   color: blue;
-  border-bottom: 1px solid blue;
+  //border-bottom: 1px solid blue;
+  //background: rgba(0, 0, 255, 0.07);
+  border-radius: 8px;
+  cursor: pointer;
 
   &--disabled {
     color: #888;
-    border-bottom: 1px solid #ccc;
+    //border-bottom: 1px solid #ccc;
+    border: none;
+    //background: none;
+    cursor: auto;
   }
+}
+.menu-body {
+  //background: #efefef;
+  border-left: 5px solid blue;
 }
 
 .playground {
@@ -75,7 +85,6 @@ iframe {
   display: flex;
   padding-left: 5px;
   padding-top: 5px;
-  background-color: beige;
   flex-direction: column;
 }
 
