@@ -7,12 +7,16 @@ body {
   height: 100vh;
 }
 
-a {
-  color: blue;
-  //border-bottom: 2px solid black;
-
-  &:hover {
-    text-decoration: none;
-    border-bottom-style: hidden;
-  }
+html {
+  overflow-y: hidden;
 }
+
+//a {
+//  color: blue;
+//  //border-bottom: 2px solid black;
+//
+//  &:hover {
+//    text-decoration: none;
+//    border-bottom-style: hidden;
+//  }
+//}

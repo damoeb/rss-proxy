@@ -4,7 +4,6 @@ import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 
 import {PlaygroundComponent} from './playground.component';
-import {PanelModule} from '../panel/panel.module';
 
 
 @NgModule({
@@ -15,7 +14,6 @@ import {PanelModule} from '../panel/panel.module';
     CommonModule,
     FormsModule,
     RouterModule,
-    PanelModule,
   ]
 })
 export class PlaygroundModule {

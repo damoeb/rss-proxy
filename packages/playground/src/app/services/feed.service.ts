@@ -19,7 +19,7 @@ export interface Article {
 }
 
 export interface GenericFeedRule {
-  id?: number
+  id?: number|string;
   linkXPath: string
   extendContext: string
   contextXPath: string
@@ -75,8 +75,8 @@ export class FeedService {
     return this.httpClient.get(parserUrl, {withCredentials:true}) as Observable<FeedDetectionResponse>;
   }
 
-  transform(url: string, filters: ItemFilter[], contentResolution: ContentResolution, target: FeedFormat = 'json') {
-    const parserUrl = `/api/feeds/transform?feedUrl=${encodeURIComponent(url)}&targetFormat=${target}&resolution=${contentResolution}`;
+  transform(url: string, filters: ItemFilter[], contentResolution: ContentResolution, targetFormat: FeedFormat = 'atom') {
+    const parserUrl = `/api/feeds/transform?feedUrl=${encodeURIComponent(url)}&targetFormat=${targetFormat}&resolution=${contentResolution}`;
 
     return this.httpClient.get(parserUrl, {withCredentials:true}) as  Observable<any>;
   }

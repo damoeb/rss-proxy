@@ -1,11 +1,11 @@
-<div class="playground">
+<div class="playground is-size-6">
   <div style="padding-bottom: 5px;">
-    <ng-form (ngSubmit)="parseFromUrl()">
+    <form (ngSubmit)="parseFromUrl()">
       <div class="field has-addons is-expanded">
         <div class="control is-expanded" [ngClass]="{'is-loading': isLoading}">
           <input class="input is-expanded"
                  type="url"
-                 placeholder="Enter a URL"
+                 placeholder="Enter a URL of website or feed"
                  [(ngModel)]="url"
                  [autofocus]="true"
                  autocomplete="off"
@@ -14,15 +14,19 @@
                  required>
         </div>
         <div class="control">
-          <button class="button" (click)="resetAll()">
+          <button class="button"
+                  *ngIf="actualUrl"
+                  (click)="resetAll()">
             X
           </button>
-          <button class="button is-primary" (click)="parseFromUrl()">
-            Load
+          <button class="button"
+                  [ngClass]="{'is-primary': !actualUrl}"
+                  (click)="parseFromUrl()">
+            Parse
           </button>
         </div>
       </div>
-    </ng-form>
+    </form>
 
     <div *ngIf="error">
       <h2 class="error">{{error}}</h2>
@@ -41,225 +45,181 @@
     </div>
   </div>
 
-  <div style="display: flex; flex-direction: row; flex: 1" [ngClass]="{'is-hidden': !actualUrl}">
-    <div style="display: flex; flex-direction: row; flex: 1">
-      <aside style="width: 350px; overflow-x: hidden; display: flex; flex-direction: column;">
+  <div style="display: flex; flex-direction: row; flex: 1; overflow-y: auto; overflow-x: hidden">
+    <div style="display: flex; flex-direction: column; flex: 1"
+         [ngClass]="{'is-hidden': !actualUrl}">
 
-        <p class="menu-label">
-          Available Feeds
-        </p>
-        <ul class="menu-list" *ngIf="showStep(steps.feed)">
-          <li>
-            <a>Native Feeds</a>
-            <ul>
-              <li *ngFor="let feed of response?.results?.nativeFeeds">
-                <a href="javascript:void(0)"
-                   (click)="pickNativeFeed(feed)"
-                   style="white-space: nowrap">
-                  {{ feed.title }}
-                </a>
-              </li>
-            </ul>
-          <li *ngIf="response?.results?.genericFeedRules?.length > 0">
-            <a class="is-active">Potential Feeds</a>
-            <ul style="max-height: 70vh; overflow-y: auto">
-              <li *ngFor="let rule of response.results.genericFeedRules; let i = index ">
-                <a href="javascript:void(0)"
-                   [ngClass]="{'is-active': isCurrentRule(rule)}"
-                   (click)="applyRule(rule)">
-                  with <strong>{{ rule.count }}</strong> articles
+      <div style="display: flex; flex-direction: row; flex: 1">
+        <aside style="flex: 0 0 auto; width: 400px; overflow-y: auto; overflow-x: hidden; flex-direction: column">
+          <div class="section-title">Choose Feed</div>
 
-                  <div class="sample" *ngFor="let article of rule.samples.slice(0, 2);">
-                    {{article.title}}
-                  </div>
-                </a>
-                <!--                <button class="button is-small is-primary"-->
-                <!--                        (click)="applyRule(rule)">Pick-->
-                <!--                </button>-->
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </aside>
+          <ul class="menu-list" *ngIf="showStep(steps.feed)">
+            <li>
+              <a>
+                {{response?.results?.nativeFeeds?.length}} Native Feeds
+              </a>
+              <ul>
+                <li *ngFor="let feed of response?.results?.nativeFeeds">
+                  <a href="javascript:void(0)"
+                     [ngClass]="{'is-active': currentNativeFeed == feed, 'highlight': !hasPickedFeed()}"
+                     (click)="pickNativeFeed(feed)"
+                     style="white-space: nowrap">
+                    {{ feed.title }}
+                  </a>
+                </li>
+              </ul>
+            <li *ngIf="response?.results?.genericFeedRules?.length > 0">
+              <a>
+                {{response?.results?.genericFeedRules?.length}} Feeds in Markup
+              </a>
+              <ul style="overflow-y: auto; margin-right: 0; max-height: 250px;">
+                <li *ngFor="let rule of response.results.genericFeedRules; let i = index ">
+                  <a href="javascript:void(0)"
+                     [ngClass]="{'is-active': isCurrentRule(rule), 'highlight': !hasPickedFeed()}"
+                     (click)="applyRule(rule)">
+                    with <strong>{{ rule.count }}</strong> articles
 
-      <div class="source-iframe">
-        <iframe #iframeElement
-                (load)="onIframeLoad()"
-                [hidden]="isLoading || isNativeFeed()"
-                sandbox="allow-same-origin"></iframe>
-        <div *ngIf="isNativeFeed()" style="flex: 1; display: flex; align-items: center; background: #efefef">
-          <div style="text-align: center; flex: 1">URL is a native feed</div>
+                    <div class="sample" *ngFor="let article of rule.samples.slice(0, 2);">
+                      {{article.title}}
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li *ngIf="currentRule">
+              <a class="is-bold" [ngClass]="{'is-active': currentRule?.id === 'custom'}">Optimize Feed Candidate</a>
+              <p style="margin-left: 10px">
+                Feed with {{currentRule.count}} articles
+              </p>
+              <ul>
+                <li>
+                  <form (ngSubmit)="applyCustomRule(currentRule)">
+                    <div>
+                      <div>
+                        <label class="label is-small">Context*</label>
+                      </div>
+                      <div class="field has-addons"
+                           aria-label="Elements XPath (e.g. //body//ul[1]/li)">
+                        <div class="control is-expanded is-primary">
+                          <input [(ngModel)]="customContextXPath"
+                                 class="input is-small is-primary"
+                                 type="text"
+                                 name="context"
+                                 placeholder="Elements XPath">
+                        </div>
+                      </div>
+
+                      <div>
+                        <label class="label is-small">Link*</label>
+                      </div>
+                      <div class="field has-addons"
+                           aria-label="Links relative XPath (e.g. ./a[1])">
+                        <div class="control is-expanded">
+                          <input [(ngModel)]="customLinkXPath"
+                                 class="input is-small is-primary"
+                                 type="text"
+                                 name="link"
+                                 placeholder="Link XPath">
+                        </div>
+                      </div>
+
+                      <div>
+                        <label class="label is-small">Date</label>
+                      </div>
+                      <div class="field has-addons"
+                           aria-label="Date relative XPath (e.g. ./a[1])">
+                        <div class="control is-expanded">
+                          <input [(ngModel)]="customDateXPath"
+                                 class="input is-small is-primary"
+                                 type="text"
+                                 name="date"
+                                 placeholder="Date XPath">
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <button class="button is-secondary is-pulled-right"
+                              (click)="applyCustomRule(currentRule)">
+                        Apply
+                      </button>
+                    </div>
+                  </form>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </aside>
+
+        <div class="source">
+          <iframe #iframeElement
+                  (load)="onIframeLoad()"
+                  [hidden]="isLoading || isNativeFeed() || !hasPickedFeed()"
+                  sandbox="allow-same-origin"></iframe>
+          <div *ngIf="hasPickedFeed() && isNativeFeed()"
+               style="flex: 1; display: flex; align-items: center; background: #efefef">
+            <div style="text-align: center; flex: 1">URL is a native feed</div>
+          </div>
+          <div *ngIf="!hasPickedFeed()"
+               style="flex: 1; display: flex; align-items: center; background: #efefef">
+            <div style="text-align: center; flex: 1">Choose a feed</div>
+          </div>
         </div>
+
       </div>
 
-    </div>
+      <div style="border-bottom: 5px solid blue"></div>
 
-    <div style="display: flex; flex-direction: row; flex: 1">
-      <div *ngIf="!currentRule && !currentNativeFeed" style="flex: 1; display: flex; align-items: center; background: #efefef">
-        <div style="text-align: center; flex: 1">Feed not defined yet</div>
+      <div style="display: flex; flex-direction: row; flex: 1;">
+        <div *ngIf="!currentRule && !currentNativeFeed"
+             style="flex: 1; display: flex; align-items: center; background: #efefef">
+          <div style="text-align: center; flex: 1">Feed not defined yet</div>
+        </div>
+        <aside style="width: 400px; display: flex; flex-direction: column;"
+               *ngIf="currentRule || currentNativeFeed">
+          <div class="section-title">Refine Feed</div>
+          <ul class="menu-list">
+            <li *ngIf="currentNativeFeed">
+              <a>Feed</a>
+              <p style="margin-left: 10px">
+                URL <a [href]="currentNativeFeed.url"
+                       referrerpolicy="no-referrer"
+                       target="_blank">{{currentNativeFeed.title}}</a>
+              </p>
+            </li>
+            <li>
+              <a>Filter</a>
+              <input class="input is-expanded" name="filter" placeholder="+keep -drop">
+              <button class="button is-small is-pulled-right">Apply Filter</button>
+            </li>
+            <li>
+              <a>Content Resolution</a>
+              <div class="select">
+                <select [(ngModel)]="contentResolution"
+                        class="is-expanded">
+                  <option value="default">default</option>
+                  <option value="fulltext">fulltext</option>
+                  <option value="oc">OC Tags</option>
+                </select>
+              </div>
+            </li>
+            <li>
+              <a>Feeds</a>
+              <ul>
+                <li><a>Copy Atom URL</a></li>
+                <li><a>Copy Rss URL</a></li>
+                <li><a>Copy Json URL</a></li>
+              </ul>
+            </li>
+          </ul>
+        </aside>
+
+        <div class="feed" *ngIf="currentRule || currentNativeFeed">
+            <pre>
+              {{rawFeed}}
+            </pre>
+        </div>
+
       </div>
-      <aside style="width: 350px; display: flex; flex-direction: column;"
-             *ngIf="currentRule || currentNativeFeed">
-        <ul class="menu-list">
-          <li *ngIf="currentNativeFeed">
-            <a>Native Feed</a>
-            <p style="margin-left: 10px">
-              URL <a [href]="currentNativeFeed.url"
-                     referrerpolicy="no-referrer"
-                     target="_blank">{{currentNativeFeed.title}}</a>
-            </p>
-          </li>
-          <li *ngIf="currentRule">
-            <a>Optimize Feed Candidate</a>
-            <p style="margin-left: 10px">
-              Feed with {{currentRule.count}} articles
-            </p>
-            <ul>
-              <li>
-                <ng-form (ngSubmit)="applyRule(currentRule)">
-                  <div>
-                    <div>
-                      <label class="label is-small">Context*</label>
-                    </div>
-                    <div class="field has-addons"
-                         aria-label="Elements XPath (e.g. //body//ul[1]/li)">
-                      <div class="control is-expanded">
-                        <input [(ngModel)]="currentRule.contextXPath"
-                               class="input is-small"
-                               autocomplete="off"
-                               type="text"
-                               autofocus name="context"
-                               placeholder="Elements XPath">
-                      </div>
-                      <div class="control">
-                        <button class="button is-small">
-                          *
-                        </button>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label class="label is-small">Link*</label>
-                    </div>
-                    <div class="field has-addons"
-                         aria-label="Links relative XPath (e.g. ./a[1])">
-                      <div class="control is-expanded">
-                        <input [(ngModel)]="currentRule.linkXPath"
-                               class="input is-small"
-                               autocomplete="off"
-                               autofocus
-                               type="text"
-                               name="link"
-                               placeholder="Link XPath">
-                      </div>
-                      <div class="control">
-                        <button class="button is-small">
-                          *
-                        </button>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label class="label is-small">Date</label>
-                    </div>
-                    <div class="field has-addons"
-                         aria-label="Date relative XPath (e.g. ./a[1])">
-                      <div class="control is-expanded">
-                        <input [(ngModel)]="currentRule.dateXPath"
-                               class="input is-small"
-                               autocomplete="off"
-                               autofocus
-                               type="text"
-                               name="link"
-                               placeholder="Date XPath">
-                      </div>
-                      <div class="control">
-                        <button class="button is-small">
-                          *
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </ng-form>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a [ngClass]="{'is-active': currentRule}">Filter</a>
-            <ul>
-              <li>-title:abo</li>
-              <li>
-<!--                <div class="is-horizontal">-->
-<!--                  <div class="select is-small">-->
-<!--                    <select>-->
-<!--                      <option>Keep</option>-->
-<!--                      <option>Reject</option>-->
-<!--                    </select>-->
-<!--                  </div>-->
-<!--                  <div class="select is-small">-->
-<!--                    <select>-->
-<!--                      <option>Title</option>-->
-<!--                      <option>Body</option>-->
-<!--                    </select>-->
-<!--                  </div>-->
-<!--                  <div class="select is-small">-->
-<!--                    <select>-->
-<!--                      <option>Contains</option>-->
-<!--                      <option>Not Contains</option>-->
-<!--                    </select>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <input class="input is-small">-->
-                <!--          <button>x</button>-->
-                <button class="button is-small">Add Filter</button>
-
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a>Content</a>
-            <ul>
-              <li>
-                <div *ngIf="currentRule">
-                  <ul style="list-style: none">
-                    <li>
-                      <p>Feed Entry Content</p>
-                      <select class="select" [(ngModel)]="contentResolution">
-                        <option value="default">default</option>
-                        <option value="fulltext">fulltext</option>
-                        <option value="oc">OC Tags</option>
-                      </select>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a>Feeds</a>
-            <ul>
-              <li><a [ngClass]="{'is-active': currentRule}">Copy Atom URL</a></li>
-              <li><a>Copy Rss URL</a></li>
-              <li><a>Copy Json URL</a></li>
-            </ul>
-          </li>
-        </ul>
-      </aside>
-
-      <div class="feed" *ngIf="currentRule || currentNativeFeed">
-        <!--      <div class="tabs">-->
-        <!--        <ul>-->
-        <!--          <li class="is-active"-->
-        <!--              [ngClass]="{'is-active': isTab('source')}"-->
-        <!--              (click)="toggleTab('source')"><a>Source</a></li>-->
-        <!--          <li class="is-disabled"-->
-        <!--              [ngClass]="{'is-active': isTab('feed')}"-->
-        <!--              (click)="toggleTab('feed')"><a class="is-disabled">Feed</a></li>-->
-        <!--        </ul>-->
-        <!--      </div>-->
-        JSON Feed
-      </div>
-
     </div>
   </div>
 

@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {assignIn, isEmpty, isUndefined} from 'lodash';
+import {assign, clone, isEmpty, isNull, isUndefined, toLower} from 'lodash';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 
@@ -8,7 +8,6 @@ import {FeedDetectionResponse, FeedService, GenericFeedRule, NativeFeedRef} from
 import {build} from '../../../environments/build';
 import * as URI from 'urijs';
 import {SettingsService} from '../../services/settings.service';
-import {firstValueFrom} from 'rxjs/dist/types';
 
 interface ArticleCandidate {
   elem: HTMLElement;
@@ -55,17 +54,6 @@ interface Step {
 
 type StepName2Step = Record<StepName, Step>;
 
-const defaultCurrentRule: GenericFeedRule = {
-  samples: [],
-  dateXPath: null,
-  linkXPath: null,
-  feedUrl: null,
-  score: null,
-  count: null,
-  contextXPath: null,
-  extendContext: null,
-}
-
 export type ContentResolution = 'default' | 'fulltext' | 'oc';
 export type FilterType = '+' | '-'
 
@@ -85,10 +73,10 @@ export class PlaygroundComponent implements OnInit {
   response: FeedDetectionResponse;
   error: string;
   readonly steps: StepName2Step;
-  private currentTabName = 'source';
   currentNativeFeed: NativeFeedRef;
-  contentResolution: ContentResolution;
+  contentResolution: ContentResolution = 'default';
   private filters: ItemFilter[];
+  rawFeed: string;
 
   constructor(private httpClient: HttpClient,
               private sanitizer: DomSanitizer,
@@ -112,7 +100,6 @@ export class PlaygroundComponent implements OnInit {
   currentRule: GenericFeedRule = null;
   url: string;
   actualUrl: string;
-  customContextXPath: string;
   hasResults = false;
   iframeLoaded = false;
   isLoading = false;
@@ -121,12 +108,15 @@ export class PlaygroundComponent implements OnInit {
   private proxyUrl: string;
   hasJsSupport = false;
   showHistory: boolean;
+  customDateXPath = 'datex';
+  customLinkXPath = 'linkx';
+  customContextXPath = '';
 
   private static getHistory(): string[] {
     return JSON.parse(localStorage.getItem('history') || JSON.stringify([]));
   }
 
-  public ngOnInit() {
+  ngOnInit() {
     this.resetAll();
     this.activatedRoute.queryParams.subscribe(params => {
       if (params.url) {
@@ -141,15 +131,18 @@ export class PlaygroundComponent implements OnInit {
     });
   }
 
-  public applyRule(rule: GenericFeedRule) {
-    console.log('apply rule', rule);
-    this.currentRule = assignIn({}, defaultCurrentRule, rule);
+  applyRule(rule: GenericFeedRule) {
+    this.currentNativeFeed = null;
+    this.currentRule = rule;
+    this.customContextXPath = this.currentRule.contextXPath;
+    this.customDateXPath = this.currentRule.dateXPath;
+    this.customLinkXPath = this.currentRule.linkXPath;
     this.highlightRule(rule);
-    this.changeDetectorRef.detectChanges();
     this.fetchJsonFeedFromCurrentRule(rule);
+    this.changeDetectorRef.detectChanges();
   }
 
-  public async parseFromUrl() {
+  async parseFromUrl() {
     if (this.isLoading) {
       return;
     }
@@ -168,7 +161,7 @@ export class PlaygroundComponent implements OnInit {
     }
   }
 
-  public getFeedUrl() {
+  getFeedUrl() {
     return this.currentRule.feedUrl;
   }
 
@@ -176,7 +169,7 @@ export class PlaygroundComponent implements OnInit {
     return build;
   }
 
-  public resetAll() {
+  resetAll() {
     this.response = null;
     this.hasResults = false;
     this.actualUrl = null;
@@ -189,25 +182,25 @@ export class PlaygroundComponent implements OnInit {
     this.changeDetectorRef.detectChanges();
   }
 
-  public resetErrors() {
+  resetErrors() {
     this.error = null;
   }
 
-  public getBuildDate() {
+  getBuildDate() {
     const date = new Date(parseInt(this.getVersions().date, 10));
     return `${date.getUTCDate()}-${date.getUTCMonth()}-${date.getUTCFullYear()}`;
   }
 
-  public parseFromHistoryUrl(url: string) {
+  parseFromHistoryUrl(url: string) {
     this.url = url;
     return this.parseFromUrl();
   }
 
-  public isCurrentRule(rule: GenericFeedRule): boolean {
+  isCurrentRule(rule: GenericFeedRule): boolean {
     return this.currentRule && this.currentRule.id === rule.id;
   }
 
-  public onIframeLoad(): void {
+  onIframeLoad(): void {
     // if (this.response.results.genericFeedRules) {
     // this.updateScores();
     // } else {
@@ -215,7 +208,7 @@ export class PlaygroundComponent implements OnInit {
     // }
   }
 
-  public updateScores(): void {
+  updateScores(): void {
     const iframeDocument = this.iframeRef.nativeElement.contentDocument;
     this.response.results.genericFeedRules.forEach(rule => {
       const articles = this.evaluateXPathInIframe(rule.contextXPath, iframeDocument)
@@ -366,31 +359,25 @@ export class PlaygroundComponent implements OnInit {
       .map(elem => {
         const index = Array.from(elem.parentElement.children)
           .findIndex(otherElem => otherElem === elem);
-        const qualified = true;
-        if (qualified) {
-          console.log(`Keeping element ${index}`, elem);
-        } else {
-          console.log(`Removing unqualified element ${index}`, elem);
-        }
-        return {elem, index, qualified} as ArticleCandidate;
+        // const qualified = true;
+        // if (qualified) {
+        //   console.log(`Keeping element ${index}`, elem);
+        // } else {
+        //   console.log(`Removing unqualified element ${index}`, elem);
+        // }
+        return {elem, index} as ArticleCandidate;
       })
-      .filter(candidate => candidate.qualified)
       .map(candidate => candidate.index);
 
     const cssSelectorContextPath = 'body>' + getRelativeCssPath(allMatches[0], iframeDocument.body, false);
     console.log(cssSelectorContextPath);
     const code = `${matchingIndexes.map(index => `${cssSelectorContextPath}:nth-child(${index + 1})`).join(', ')} {
-            border: 2px dotted red!important;
+            border: 2px dotted blue!important;
             margin: 2px!important;
             padding: 2px!important;
             display: block;
           }
           `;
-
-    const firstMatch = allMatches[0];
-    if (firstMatch) {
-      firstMatch.scrollIntoView();
-    }
 
     styleNode.appendChild(iframeDocument.createTextNode(code));
     const existingStyleNode = iframeDocument.head.querySelector(`#${id}`);
@@ -398,6 +385,12 @@ export class PlaygroundComponent implements OnInit {
       existingStyleNode.remove()
     }
     iframeDocument.head.appendChild(styleNode);
+    setTimeout(() => {
+      const firstMatch = allMatches[0];
+      if (firstMatch) {
+        firstMatch.scrollIntoView({behavior:'smooth'});
+      }
+    }, 500);
   }
 
   private evaluateXPathInIframe(xPath: string, context: HTMLElement | Document): HTMLElement[] {
@@ -425,16 +418,13 @@ export class PlaygroundComponent implements OnInit {
     return this.isFinishedStep(previousStep) && step.isFinished();
   }
 
-  toggleTab(tabName: string) {
-    this.currentTabName = tabName
-  }
-
   isNativeFeed(): boolean {
-    return !(this.response && this.response.results && this.response.results.mimeType.startsWith('text/html'))
+    return !(this.response && this.response.results && this.response.results.mimeType && this.response.results.mimeType.startsWith('text/html')) || !!this.currentNativeFeed
   }
 
   pickNativeFeed(feed: NativeFeedRef) {
     this.currentNativeFeed = feed;
+    this.currentRule = null;
     this.fetchJsonFeedFromNativeFeed(feed)
   }
 
@@ -450,7 +440,21 @@ export class PlaygroundComponent implements OnInit {
     this.feedService.transform(feedUrl, this.filters, this.contentResolution)
       .toPromise()
       .then(response => {
-      console.log(response);
+        this.rawFeed = JSON.stringify(response, null, 2);
+        this.changeDetectorRef.detectChanges();
     })
+  }
+
+  hasPickedFeed(): boolean {
+    return !!this.currentRule || !!this.currentNativeFeed
+  }
+
+  applyCustomRule(currentRule: GenericFeedRule) {
+    const customRule = clone(currentRule);
+    customRule.id = 'custom';
+    customRule.linkXPath = this.customLinkXPath;
+    customRule.contextXPath = this.customContextXPath;
+    customRule.dateXPath = this.customDateXPath;
+    this.applyRule(customRule);
   }
 }

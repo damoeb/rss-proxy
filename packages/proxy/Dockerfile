@@ -6,6 +6,6 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 COPY --from=0 /opt/rss-proxy-build/ ./
 
-ENV spring_profiles_active=proxy
+ENV spring_profiles_active=stateless
 
 EXPOSE 3000

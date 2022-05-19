@@ -5,23 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f354cf1d-853a-464e-8e85-6575024551e6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/accordion/accordion.component.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/accordion/accordion.component.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/accordion/accordion.component.spec.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/accordion/accordion.component.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/accordion/accordion.module.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/dot/dot.component.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/dot/dot.component.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/dot/dot.component.spec.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/dot/dot.component.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/dot/dot.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/services/auth.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/services/auth.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tasks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/angular.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/browserslist" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/browserslist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.module.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/environment.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/proxy/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/Dockerfile" afterDir="false" />
     </list>
     <list id="f638d3ef-7a6d-4052-aad1-f24fc9f0e590" name="ignore" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -123,12 +131,12 @@
   </component>
   <component name="RunManager" selected="npm.start">
     <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
-      <package-json value="$PROJECT_DIR$/packages/proxy/package.json" />
+      <package-json value="$PROJECT_DIR$/packages/playground/package.json" />
       <command value="run" />
       <scripts>
         <script value="start" />
       </scripts>
-      <node-interpreter value="$USER_HOME$/.nvm/versions/node/v12.14.0/bin/node" />
+      <node-interpreter value="$USER_HOME$/.nvm/versions/node/v16.13.0/bin/node" />
       <envs />
       <method v="2" />
     </configuration>
@@ -272,7 +280,9 @@
       <workItem from="1646694810978" duration="33000" />
       <workItem from="1652522638737" duration="914000" />
       <workItem from="1652614671734" duration="4276000" />
-      <workItem from="1652635091758" duration="47601000" />
+      <workItem from="1652635091758" duration="89321000" />
+      <workItem from="1652966229564" duration="1304000" />
+      <workItem from="1652969818351" duration="9793000" />
     </task>
     <task id="LOCAL-00017" summary="better logging">
       <created>1585428585627</created>
@@ -670,6 +680,11 @@
           <url>file://$PROJECT_DIR$/packages/core/dist/feed-parser.js</url>
           <line>330</line>
           <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/packages/playground/node_modules/@angular-devkit/build-angular/src/utils/webpack-browser-config.js</url>
+          <line>40</line>
+          <option name="timeStamp" value="42" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
