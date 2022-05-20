@@ -1,0 +1,55 @@
+<div class="flex">
+  <app-section title="Refine Feed" [active]="!hasChosen">
+    <aside style="width: 350px; display: flex; flex-direction: column;">
+      <ul class="menu-list">
+    <!--    <li *ngIf="feed">-->
+    <!--      <a>Feed</a>-->
+    <!--      <p style="margin-left: 10px">-->
+    <!--        URL <a [href]="feed.url"-->
+    <!--               referrerpolicy="no-referrer"-->
+    <!--               target="_blank">{{feed.title}}</a>-->
+    <!--      </p>-->
+    <!--    </li>-->
+        <li>
+          <a [ngClass]="{'is-active': feedUrls}"
+             (click)="useFeedUrls()">Feed URLs</a>
+        </li>
+        <li>
+          <a [ngClass]="{'is-active': pushUpdates}"
+             (click)="usePushUpdate()">Push Updates</a>
+        </li>
+        <li>
+          <a>Filter</a>
+          <input class="input is-expanded" name="filter" placeholder="+keep -drop">
+          <div>
+            <button class="button is-small is-pulled-right">Apply Filter</button>
+          </div>
+        </li>
+        <li>
+          <a>Content Resolution</a>
+          <div class="select">
+            <select [(ngModel)]="contentResolution"
+                    class="is-expanded">
+              <option value="default">default</option>
+              <option value="fulltext">fulltext</option>
+              <option value="oc">OC Tags</option>
+            </select>
+          </div>
+        </li>
+      </ul>
+    </aside>
+
+    <div class="feed">
+        <pre>
+          {{rawFeed}}
+        </pre>
+    </div>
+  </app-section>
+
+  <app-convert-format *ngIf="feedUrls"
+                      class="flex"
+                      [feedUrl]="''"></app-convert-format>
+  <app-push-updates *ngIf="pushUpdates"
+                      class="flex"
+                      [feedUrl]="''"></app-push-updates>
+</div>

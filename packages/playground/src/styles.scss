@@ -20,3 +20,30 @@ html {
 //    border-bottom-style: hidden;
 //  }
 //}
+.menu-list {
+  flex: 1;
+}
+app-section {
+  display: flex;
+  flex: 1;
+}
+app-generic-feeds {
+
+}
+app-native-feeds {
+
+}
+app-refine-feed {
+
+}
+app-options {
+  white-space: nowrap;
+}
+.flex {
+  display: flex;
+  flex: 1;
+}
+.is-disabled {
+  color: #cccccc!important;
+  pointer-events: none;
+}

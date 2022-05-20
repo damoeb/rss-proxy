@@ -20,7 +20,10 @@ export const environment = {
     'https://arxiv.org/search/?query=math&searchtype=all&source=header',
     'https://duckduckgo.com/html/?q=feynman',
     'http://paulgraham.com/articles.html',
-    'https://hystoria.100millionbooks.org/'
+    'https://hystoria.100millionbooks.org/',
+    'https://github.blog/changelog/',
+    'https://news.ycombinator.com/',
+    'https://cloud.google.com/blog/' // does not render and does not extract
   ]
 };
 

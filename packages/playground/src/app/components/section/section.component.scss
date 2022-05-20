@@ -1,0 +1,24 @@
+.section-title {
+  border-bottom: 4px solid black;
+  padding-top: 8px;
+  padding-bottom: 6px;
+  font-weight: bold;
+  text-align: center;
+
+  &.active {
+    border-bottom-color: blue;
+    color: blue;
+  }
+}
+
+.section-body {
+  display: flex;
+  flex: 1;
+}
+
+.section-wrapper {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin-right: 5px;
+}

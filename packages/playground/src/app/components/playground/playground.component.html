@@ -28,12 +28,6 @@
       </div>
     </form>
 
-    <div *ngIf="error">
-      <h2 class="error">{{error}}</h2>
-      Most likely the website is JavaScript generated, which is not supported by rss-proxy directly.
-      Check the <a href="https://github.com/damoeb/rss-proxy/wiki">documentation</a> for further help.
-    </div>
-
     <div *ngIf="!isLoading && !actualUrl && history.length > 0">
       <p>
         <strong>Previous URLs</strong>
@@ -45,182 +39,19 @@
     </div>
   </div>
 
-  <div style="display: flex; flex-direction: row; flex: 1; overflow-y: auto; overflow-x: hidden">
-    <div style="display: flex; flex-direction: column; flex: 1"
-         [ngClass]="{'is-hidden': !actualUrl}">
-
-      <div style="display: flex; flex-direction: row; flex: 1">
-        <aside style="flex: 0 0 auto; width: 400px; overflow-y: auto; overflow-x: hidden; flex-direction: column">
-          <div class="section-title">Choose Feed</div>
-
-          <ul class="menu-list" *ngIf="showStep(steps.feed)">
-            <li>
-              <a>
-                {{response?.results?.nativeFeeds?.length}} Native Feeds
-              </a>
-              <ul>
-                <li *ngFor="let feed of response?.results?.nativeFeeds">
-                  <a href="javascript:void(0)"
-                     [ngClass]="{'is-active': currentNativeFeed == feed, 'highlight': !hasPickedFeed()}"
-                     (click)="pickNativeFeed(feed)"
-                     style="white-space: nowrap">
-                    {{ feed.title }}
-                  </a>
-                </li>
-              </ul>
-            <li *ngIf="response?.results?.genericFeedRules?.length > 0">
-              <a>
-                {{response?.results?.genericFeedRules?.length}} Feeds in Markup
-              </a>
-              <ul style="overflow-y: auto; margin-right: 0; max-height: 250px;">
-                <li *ngFor="let rule of response.results.genericFeedRules; let i = index ">
-                  <a href="javascript:void(0)"
-                     [ngClass]="{'is-active': isCurrentRule(rule), 'highlight': !hasPickedFeed()}"
-                     (click)="applyRule(rule)">
-                    with <strong>{{ rule.count }}</strong> articles
-
-                    <div class="sample" *ngFor="let article of rule.samples.slice(0, 2);">
-                      {{article.title}}
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li *ngIf="currentRule">
-              <a class="is-bold" [ngClass]="{'is-active': currentRule?.id === 'custom'}">Optimize Feed Candidate</a>
-              <p style="margin-left: 10px">
-                Feed with {{currentRule.count}} articles
-              </p>
-              <ul>
-                <li>
-                  <form (ngSubmit)="applyCustomRule(currentRule)">
-                    <div>
-                      <div>
-                        <label class="label is-small">Context*</label>
-                      </div>
-                      <div class="field has-addons"
-                           aria-label="Elements XPath (e.g. //body//ul[1]/li)">
-                        <div class="control is-expanded is-primary">
-                          <input [(ngModel)]="customContextXPath"
-                                 class="input is-small is-primary"
-                                 type="text"
-                                 name="context"
-                                 placeholder="Elements XPath">
-                        </div>
-                      </div>
-
-                      <div>
-                        <label class="label is-small">Link*</label>
-                      </div>
-                      <div class="field has-addons"
-                           aria-label="Links relative XPath (e.g. ./a[1])">
-                        <div class="control is-expanded">
-                          <input [(ngModel)]="customLinkXPath"
-                                 class="input is-small is-primary"
-                                 type="text"
-                                 name="link"
-                                 placeholder="Link XPath">
-                        </div>
-                      </div>
-
-                      <div>
-                        <label class="label is-small">Date</label>
-                      </div>
-                      <div class="field has-addons"
-                           aria-label="Date relative XPath (e.g. ./a[1])">
-                        <div class="control is-expanded">
-                          <input [(ngModel)]="customDateXPath"
-                                 class="input is-small is-primary"
-                                 type="text"
-                                 name="date"
-                                 placeholder="Date XPath">
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <button class="button is-secondary is-pulled-right"
-                              (click)="applyCustomRule(currentRule)">
-                        Apply
-                      </button>
-                    </div>
-                  </form>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </aside>
-
-        <div class="source">
-          <iframe #iframeElement
-                  (load)="onIframeLoad()"
-                  [hidden]="isLoading || isNativeFeed() || !hasPickedFeed()"
-                  sandbox="allow-same-origin"></iframe>
-          <div *ngIf="hasPickedFeed() && isNativeFeed()"
-               style="flex: 1; display: flex; align-items: center; background: #efefef">
-            <div style="text-align: center; flex: 1">URL is a native feed</div>
-          </div>
-          <div *ngIf="!hasPickedFeed()"
-               style="flex: 1; display: flex; align-items: center; background: #efefef">
-            <div style="text-align: center; flex: 1">Choose a feed</div>
-          </div>
-        </div>
-
+  <div style="display: flex; flex-direction: row; flex: 1; overflow-x: auto;">
+    <article *ngIf="error" class="message is-danger">
+      <div class="message-header">
+        <p>Danger</p>
       </div>
-
-      <div style="border-bottom: 5px solid blue"></div>
-
-      <div style="display: flex; flex-direction: row; flex: 1;">
-        <div *ngIf="!currentRule && !currentNativeFeed"
-             style="flex: 1; display: flex; align-items: center; background: #efefef">
-          <div style="text-align: center; flex: 1">Feed not defined yet</div>
-        </div>
-        <aside style="width: 400px; display: flex; flex-direction: column;"
-               *ngIf="currentRule || currentNativeFeed">
-          <div class="section-title">Refine Feed</div>
-          <ul class="menu-list">
-            <li *ngIf="currentNativeFeed">
-              <a>Feed</a>
-              <p style="margin-left: 10px">
-                URL <a [href]="currentNativeFeed.url"
-                       referrerpolicy="no-referrer"
-                       target="_blank">{{currentNativeFeed.title}}</a>
-              </p>
-            </li>
-            <li>
-              <a>Filter</a>
-              <input class="input is-expanded" name="filter" placeholder="+keep -drop">
-              <button class="button is-small is-pulled-right">Apply Filter</button>
-            </li>
-            <li>
-              <a>Content Resolution</a>
-              <div class="select">
-                <select [(ngModel)]="contentResolution"
-                        class="is-expanded">
-                  <option value="default">default</option>
-                  <option value="fulltext">fulltext</option>
-                  <option value="oc">OC Tags</option>
-                </select>
-              </div>
-            </li>
-            <li>
-              <a>Feeds</a>
-              <ul>
-                <li><a>Copy Atom URL</a></li>
-                <li><a>Copy Rss URL</a></li>
-                <li><a>Copy Json URL</a></li>
-              </ul>
-            </li>
-          </ul>
-        </aside>
-
-        <div class="feed" *ngIf="currentRule || currentNativeFeed">
-            <pre>
-              {{rawFeed}}
-            </pre>
-        </div>
-
+      <div class="message-body">
+        {{error}}
       </div>
-    </div>
+    </article>
+
+    <app-options *ngIf="response && !error" [response]="response"
+                 [static]="true"
+                 style="display: flex; margin-right: 200px;"></app-options>
   </div>
 
 </div>

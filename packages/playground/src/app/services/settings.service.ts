@@ -1,19 +1,26 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {firstValueFrom} from 'rxjs';
+
+export interface ServerSettings {
+  jsSupport: boolean,
+  stateless: boolean,
+  webToFeedVersion: boolean
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class SettingsService {
   // tslint:disable-next-line:variable-name
-  private _settings: Promise<any>;
+  private _serverSettings: Promise<ServerSettings>;
 
   constructor(httpClient: HttpClient) {
-    this._settings = httpClient.get(`api/settings`).toPromise();
+    this._serverSettings = firstValueFrom(httpClient.get<ServerSettings>(`api/settings`));
   }
 
-  public settings(): Promise<any> {
-    return this._settings;
+  public serverSettings(): Promise<ServerSettings> {
+    return this._serverSettings;
   }
 
 }

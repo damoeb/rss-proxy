@@ -6,32 +6,6 @@ $primary: blue;
   }
 }
 
-.sample {
-  color: black;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  line-break: unset;
-  font-size: small;
-  margin-left: 5px;
-  padding: 5px;
-  border-left: 1px solid #ccc;
-}
-
-.source {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  border: 3px solid #efefef;
-  background: white;
-  > * {
-    flex: 1;
-  }
-  &.highlight {
-    border: 3px solid $primary;
-  }
-}
-
 .blue-frame {
   border: 3px solid $primary
 }
@@ -52,26 +26,8 @@ button.inactive {
   border: 1px solid black;
 }
 
-.error {
-  color: #dc3545;
-  text-align: center;
-}
-
 .unsupported-website {
   background-color: #ffa5a5;
-}
-
-.section-title {
-  text-align: center;
-  text-transform: capitalize;
-  font-size: small
-}
-
-.feed {
-  flex: 1 0 auto;
-  overflow: auto;
-  border: 3px solid #cccccc;
-  background: #efefef;
 }
 
 .is-bold {

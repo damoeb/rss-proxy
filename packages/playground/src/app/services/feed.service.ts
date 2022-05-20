@@ -75,9 +75,9 @@ export class FeedService {
     return this.httpClient.get(parserUrl, {withCredentials:true}) as Observable<FeedDetectionResponse>;
   }
 
-  transform(url: string, filters: ItemFilter[], contentResolution: ContentResolution, targetFormat: FeedFormat = 'atom') {
+  transform(url: string, filters: ItemFilter[], contentResolution: ContentResolution, targetFormat: FeedFormat = 'json') {
     const parserUrl = `/api/feeds/transform?feedUrl=${encodeURIComponent(url)}&targetFormat=${targetFormat}&resolution=${contentResolution}`;
 
-    return this.httpClient.get(parserUrl, {withCredentials:true}) as  Observable<any>;
+    return this.httpClient.get(parserUrl, {withCredentials:true, responseType: (targetFormat === 'json' ? 'json' : 'text') as any}) as  Observable<any>;
   }
 }
