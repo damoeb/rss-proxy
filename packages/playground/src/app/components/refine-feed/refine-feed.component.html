@@ -1,55 +1,84 @@
 <div class="flex">
-  <app-section title="Refine Feed" [active]="!hasChosen">
-    <aside style="width: 350px; display: flex; flex-direction: column;">
-      <ul class="menu-list">
-    <!--    <li *ngIf="feed">-->
-    <!--      <a>Feed</a>-->
-    <!--      <p style="margin-left: 10px">-->
-    <!--        URL <a [href]="feed.url"-->
-    <!--               referrerpolicy="no-referrer"-->
-    <!--               target="_blank">{{feed.title}}</a>-->
-    <!--      </p>-->
-    <!--    </li>-->
-        <li>
-          <a [ngClass]="{'is-active': feedUrls}"
-             (click)="useFeedUrls()">Feed URLs</a>
-        </li>
-        <li>
-          <a [ngClass]="{'is-active': pushUpdates}"
-             (click)="usePushUpdate()">Push Updates</a>
-        </li>
-        <li>
-          <a>Filter</a>
-          <input class="input is-expanded" name="filter" placeholder="+keep -drop">
-          <div>
-            <button class="button is-small is-pulled-right">Apply Filter</button>
+  <app-section title="Refine Feed"
+               [active]="!hasChosen">
+    <aside class="aside">
+      <div>
+        <div class="field"
+             *ngIf="nativeFeed">
+          <label class="label">Feed URL</label>
+          <a [href]="nativeFeed.url"
+             referrerpolicy="no-referrer"
+             target="_blank">{{nativeFeed.title}}</a>
+        </div>
+        <div class="field" *ngIf="genericFeedRule">
+          <label class="label">Feed URL</label>
+          <a [href]="genericFeedRule.feedUrl"
+             referrerpolicy="no-referrer"
+             target="_blank">Generic Feed</a>
+        </div>
+        <div class="field mt-6">
+          <label class="label">Content Mapping</label>
+          <div class="control">
+            <div class="select is-expanded">
+              <select [(ngModel)]="contentResolution"
+                      class="is-expanded"
+                      [ngClass]="{'is-primary': contentResolution !== 'none'}">
+                <option value="none">none</option>
+                <option value="fulltext">fulltext</option>
+                <option value="oc">OC Tags</option>
+              </select>
+            </div>
           </div>
-        </li>
-        <li>
-          <a>Content Resolution</a>
-          <div class="select">
-            <select [(ngModel)]="contentResolution"
-                    class="is-expanded">
-              <option value="default">default</option>
-              <option value="fulltext">fulltext</option>
-              <option value="oc">OC Tags</option>
+        </div>
+
+        <div class="field">
+          <label class="label">Filter</label>
+          <div class="select is-expanded">
+            <select class="is-expanded">
+              <option *ngFor="let filterSample of filterSamples"
+                      [value]="filterSample.value">
+                {{filterSample.name}}
+              </option>
             </select>
           </div>
-        </li>
-      </ul>
+          <div class="control">
+            <textarea class="textarea"
+                      [ngClass]="{'is-primary': filter.length > 0}"
+                      [(ngModel)]="filter"></textarea>
+          </div>
+          <button class="button is-expanded" (click)="apply()">Apply</button>
+        </div>
+
+        <label class="label mt-6"
+               [ngClass]="{'is-primary': !hasChosen}">Continue</label>
+        <ul class="menu-list">
+          <li>
+            <a [ngClass]="{'is-active': feedUrls}"
+               (click)="useFeedUrls()">Feed URLs</a>
+          </li>
+          <li>
+            <a [ngClass]="{'is-active': pushUpdates}"
+               (click)="usePushUpdate()">Push Updates</a>
+          </li>
+        </ul>
+      </div>
     </aside>
 
-    <div class="feed">
+    <div class="feed source">
         <pre>
-          {{rawFeed}}
+          <code>
+            {{rawFeed}}
+          </code>
         </pre>
     </div>
   </app-section>
 
   <app-convert-format *ngIf="feedUrls"
                       class="flex"
-                      [feedUrl]="''"></app-convert-format>
+                      [nativeFeed]="createNativeFeedWithParams()"
+                      [genericFeedRule]="createGenericFeedRuleWithParams()"></app-convert-format>
   <app-push-updates *ngIf="pushUpdates"
-                      class="flex"
-                      [feedUrl]="''"></app-push-updates>
+                    class="flex"
+                    [nativeFeed]="createNativeFeedWithParams()"
+                    [genericFeed]="createGenericFeedRuleWithParams()"></app-push-updates>
 </div>

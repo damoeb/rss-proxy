@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {GenericFeedWithParams, NativeFeedWithParams} from '../../services/feed.service';
 
 @Component({
   selector: 'app-push-updates',
@@ -9,7 +10,10 @@ export class PushUpdatesComponent implements OnInit {
   hasChosen: boolean;
 
   @Input()
-  feedUrl: string;
+  nativeFeed: NativeFeedWithParams;
+  @Input()
+  genericFeed: GenericFeedWithParams;
+
   webhook: boolean;
   pushNotification: boolean;
   email: boolean;

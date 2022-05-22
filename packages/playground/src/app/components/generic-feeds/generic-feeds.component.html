@@ -1,6 +1,6 @@
 <div class="flex">
   <app-section title="Generic Feeds" [active]="!currentRule">
-    <aside style="flex: 0 0 auto; max-height: 60vh; width: 350px; overflow-y: auto; overflow-x: hidden; flex-direction: column">
+    <aside class="aside" style="flex: 0 0 auto; max-height: 60vh; overflow-y: auto; overflow-x: hidden;">
       <ul class="menu-list">
         <li *ngFor="let rule of genericFeedRules; let i = index ">
           <a href="javascript:void(0)"

@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {isEmpty, isUndefined} from 'lodash';
+import {isEmpty} from 'lodash';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 
 import {FeedDetectionResponse, FeedService, GenericFeedRule, NativeFeedRef} from '../../services/feed.service';
@@ -8,13 +8,6 @@ import {build} from '../../../environments/build';
 import {SettingsService} from '../../services/settings.service';
 
 export type ContentResolution = 'default' | 'fulltext' | 'oc';
-export type FilterType = '+' | '-'
-
-export interface ItemFilter {
-  type: FilterType
-  field: string
-  matches: string
-}
 
 @Component({
   selector: 'app-playground',
@@ -145,7 +138,7 @@ export class PlaygroundComponent implements OnInit {
 
   private fromStaticSource() {
     console.log('from static source');
-    this.feedService.fromUrl(this.url)
+    this.feedService.discover(this.url)
       .subscribe(this.handleParserResponse(), (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.hasResults = false;
@@ -195,9 +188,4 @@ export class PlaygroundComponent implements OnInit {
 
     localStorage.setItem('history', JSON.stringify(history));
   }
-
-  isNativeFeed(): boolean {
-    return !(this.response && this.response.results && this.response.results.mimeType && this.response.results.mimeType.startsWith('text/html')) || !!this.currentNativeFeed
-  }
-
 }

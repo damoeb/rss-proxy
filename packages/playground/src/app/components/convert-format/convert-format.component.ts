@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {GenericFeedWithParams, NativeFeedWithParams} from '../../services/feed.service';
 
 @Component({
   selector: 'app-convert-format',
@@ -8,7 +9,10 @@ import {Component, Input, OnInit} from '@angular/core';
 export class ConvertFormatComponent implements OnInit {
 
   @Input()
-  feedUrl: string;
+  nativeFeed: NativeFeedWithParams;
+
+  @Input()
+  genericFeedRule: GenericFeedWithParams;
 
   constructor() { }
 

@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "prestart": "npm run gen-build-info",
-    "start": "ng serve --proxy-config proxy.conf.json",
+    "start": "ng serve --proxy-config proxy.conf.json --watch=true",
     "gen-build-info": "ts-node -O '{\"module\": \"commonjs\"}' build-info.ts",
     "prebuild": "npm run gen-build-info",
     "pretest": "npm run gen-build-info",
@@ -23,7 +23,6 @@
     "@angular/platform-browser-dynamic": "~13.1.0",
     "@angular/router": "~13.1.0",
     "bulma": "^0.9.4",
-    "highlight.js": "^11.5.1",
     "lodash": "^4.17.21",
     "rxjs": "~7.5.5",
     "tslib": "^2.4.0",

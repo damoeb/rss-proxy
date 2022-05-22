@@ -2,6 +2,9 @@
   flex: 1 0 auto;
   width: 500px;
   overflow: auto;
-  border: 3px solid #cccccc;
   background: #efefef;
+}
+
+.is-expanded {
+  width: 100%;
 }

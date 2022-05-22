@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {GenericFeedRule} from '../../services/feed.service';
+import {GenericFeedRule, GenericFeedWithParams} from '../../services/feed.service';
 import * as URI from 'urijs';
 import {clone} from 'lodash';
 
@@ -53,7 +53,7 @@ export class GenericFeedsComponent implements OnInit {
   url: string;
   @Input()
   genericFeedRules: GenericFeedRule[];
-  currentRule: GenericFeedRule;
+  currentRule: GenericFeedWithParams;
 
   @ViewChild('iframeElement', {static: true})
   iframeRef: ElementRef;
@@ -81,7 +81,7 @@ export class GenericFeedsComponent implements OnInit {
   }
 
   applyRule(rule: GenericFeedRule) {
-    this.currentRule = rule;
+    this.currentRule = {...rule, harvestUrl: this.url} as any;
     this.customContextXPath = this.currentRule.contextXPath;
     this.customDateXPath = this.currentRule.dateXPath;
     this.customLinkXPath = this.currentRule.linkXPath;
@@ -215,3 +215,7 @@ export class GenericFeedsComponent implements OnInit {
 
 
 }
+function assingIn(arg0: {}, rule: GenericFeedRule): GenericFeedRule {
+    throw new Error('Function not implemented.');
+}
+

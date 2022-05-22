@@ -47,3 +47,16 @@ app-options {
   color: #cccccc!important;
   pointer-events: none;
 }
+
+.aside {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.source {
+  max-height: 80vh;
+}
+.is-primary {
+  color: $primary;
+}

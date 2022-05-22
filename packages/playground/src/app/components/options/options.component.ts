@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {FeedDetectionResponse, GenericFeedRule, NativeFeedRef} from '../../services/feed.service';
+import {FeedDetectionResponse, GenericFeedRule, NativeFeedRef, NativeFeedWithParams} from '../../services/feed.service';
 import {SettingsService} from '../../services/settings.service';
 
 @Component({
@@ -87,5 +87,11 @@ export class OptionsComponent implements OnInit {
     this.use(() => {
       this.convertFormat = true;
     });
+  }
+
+  createNativeFeed(): NativeFeedWithParams {
+    return {
+      feedUrl: this.response.options.harvestUrl
+    }
   }
 }

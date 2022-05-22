@@ -20,7 +20,7 @@
             "tsConfig": "tsconfig.app.json",
             "aot": false,
             "sourceMap": true,
-            "progress": true,
+            "progress": false,
             "buildOptimizer": false,
             "assets": [
               "src/favicon.ico",

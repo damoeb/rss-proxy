@@ -1,6 +1,15 @@
 <app-section title="Watch Page Change" [active]="true">
-  <aside style="width: 350px; display: flex; flex-direction: column;">
-    <ul class="menu-list">
+  <aside class="aside">
+
+    <div class="select">
+      <select [(ngModel)]="mode"
+              class="is-expanded">
+        <option value="readability">readability</option>
+        <option value="selector">selector</option>
+      </select>
+    </div>
+
+    <ul class="menu-list" *ngIf="mode === 'selector'">
       <li>
         <a>Selector</a>
         <input class="input is-expanded" name="filter" placeholder="+keep -drop">
@@ -9,7 +18,7 @@
     </ul>
   </aside>
 
-  <div class="feed">
+  <div class="source">
 
   </div>
 </app-section>

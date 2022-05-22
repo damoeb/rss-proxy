@@ -49,9 +49,11 @@
       </div>
     </article>
 
-    <app-options *ngIf="response && !error" [response]="response"
+    <app-options *ngIf="response && !error"
+                 [response]="response"
                  [static]="true"
                  style="display: flex; margin-right: 200px;"></app-options>
   </div>
 
+  <app-footer></app-footer>
 </div>

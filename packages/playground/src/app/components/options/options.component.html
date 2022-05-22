@@ -1,5 +1,6 @@
-<div class="flex">
-  <app-section title="Options" [active]="!hasChosen">
+<div class="flex" *ngIf="!isNativeFeed">
+  <app-section title="Options for Website"
+               [active]="!hasChosen">
     <ul class="menu-list">
       <li>
         <a [ngClass]="{'is-active': nativeFeeds}"
@@ -17,20 +18,9 @@
         <a [ngClass]="{'is-disabled': !(jsSupport && !stateless && !isNativeFeed), 'is-active': prerender}"
            (click)="useDynamicRendering()">Feeds in Dynamic Markup</a>
       </li>
-<!--      <li>-->
-<!--        <a [ngClass]="{'is-disabled': !(isNativeFeed && !stateless)}">Aggregate</a>-->
-<!--      </li>-->
-      <li>
-        <a [ngClass]="{'is-disabled': !(isNativeFeed), 'is-active': convertFormat}"
-           (click)="useConvertFormat()">Convert Format</a>
-      </li>
-      <li>
-        <a [ngClass]="{'is-disabled': !(isNativeFeed && !stateless), 'is-active': pushUpdates}"
-           (click)="usePushUpdate()">Push Updates</a>
-      </li>
-<!--      <li>isNativeFeed: {{isNativeFeed}}</li>-->
-<!--      <li>stateless: {{stateless}}</li>-->
-<!--      <li>jsSupport: {{jsSupport}}</li>-->
+      <!--      <li>isNativeFeed: {{isNativeFeed}}</li>-->
+      <!--      <li>stateless: {{stateless}}</li>-->
+      <!--      <li>jsSupport: {{jsSupport}}</li>-->
     </ul>
   </app-section>
 
@@ -42,12 +32,6 @@
   <app-native-feeds *ngIf="nativeFeeds"
                     class="flex"
                     [nativeFeeds]="nativeFeeds"></app-native-feeds>
-  <app-push-updates *ngIf="pushUpdates"
-                    class="flex"
-                    [feedUrl]="response.options.harvestUrl"></app-push-updates>
-  <app-convert-format *ngIf="convertFormat"
-                      class="flex"
-                      [feedUrl]="response.options.harvestUrl"></app-convert-format>
   <app-watch-page-change *ngIf="watchPageChanges"
                          class="flex"
                          [siteUrl]="response.options.harvestUrl"
@@ -55,4 +39,37 @@
   <app-prerender *ngIf="prerender"
                  class="flex"
                  [siteUrl]="response.options.harvestUrl"></app-prerender>
+</div>
+
+
+<div class="flex" *ngIf="isNativeFeed">
+  <app-section title="Options for Feed" [active]="!hasChosen">
+    <ul class="menu-list">
+      <li>
+        <a [ngClass]="{'is-active': nativeFeeds}"
+           (click)="useNativeFeeds()"><strong>{{ response.results.nativeFeeds.length }}</strong> Native Feeds</a>
+      </li>
+      <!--      <li>-->
+      <!--        <a [ngClass]="{'is-disabled': !(isNativeFeed && !stateless)}">Aggregate</a>-->
+      <!--      </li>-->
+      <li>
+        <a [ngClass]="{'is-disabled': !(isNativeFeed), 'is-active': convertFormat}"
+           (click)="useConvertFormat()">Convert Format</a>
+      </li>
+      <li>
+        <a [ngClass]="{'is-disabled': !(isNativeFeed && !stateless), 'is-active': pushUpdates}"
+           (click)="usePushUpdate()">Push Updates</a>
+      </li>
+    </ul>
+  </app-section>
+
+  <app-native-feeds *ngIf="nativeFeeds"
+                    class="flex"
+                    [nativeFeeds]="nativeFeeds"></app-native-feeds>
+  <app-push-updates *ngIf="pushUpdates"
+                    class="flex"
+                    [nativeFeed]="createNativeFeed()"></app-push-updates>
+  <app-convert-format *ngIf="convertFormat"
+                      class="flex"
+                      [nativeFeed]="createNativeFeed()"></app-convert-format>
 </div>
