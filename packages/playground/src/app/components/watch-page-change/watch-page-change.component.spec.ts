@@ -8,9 +8,8 @@ describe('WatchPageChangeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WatchPageChangeComponent ]
-    })
-    .compileComponents();
+      declarations: [WatchPageChangeComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

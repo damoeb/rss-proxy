@@ -1,13 +1,12 @@
 <div class="rp-footer">
   <div>
     <a href="https://github.com/damoeb/rss-proxy" target="_blank">rss-proxy</a>
-    {{buildInfo.version}}
-    {{buildInfo.revision}}
-    {{formatDate(buildInfo.date)}}
+    {{ buildInfo.version }}
+    {{ buildInfo.revision }}
+    {{ formatDate(buildInfo.date) }}
   </div>
   <div>
-    js: {{serverSettings.jsSupport }}
-    stateless: {{serverSettings.stateless }}
-    w2f: {{serverSettings.webToFeedVersion }}
+    js: {{ serverSettings?.jsSupport }} stateless:
+    {{ serverSettings?.stateless }} w2f: {{ serverSettings?.webToFeedVersion }}
   </div>
 </div>

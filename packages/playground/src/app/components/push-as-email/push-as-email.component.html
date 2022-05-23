@@ -1,6 +1,6 @@
 <div class="flex">
   <app-section title="Push to Email" [active]="true">
-    <div class="flex" style="flex-direction: column; width: 250px;">
+    <div class="flex" style="flex-direction: column; width: 250px">
       <div class="field">
         <label class="label">Digest</label>
         <div class="control">
@@ -14,25 +14,22 @@
           </div>
         </div>
       </div>
-
+<!-- todo when pushing an event that date is a different value -->
       <div class="field">
         <label class="label">Starting at</label>
         <div class="control">
-          <input class="input" type="datetime-local" name="startingAt">
+          <input class="input" type="datetime-local" name="startingAt" />
         </div>
       </div>
 
       <div class="field">
         <label class="label">Email</label>
         <div class="control">
-          <input class="input" type="text" name="email" [(ngModel)]="email">
+          <input class="input" type="text" name="email" [(ngModel)]="email" />
         </div>
       </div>
 
-      <button class="button is-primary">
-        Save
-      </button>
+      <button class="button is-primary">Save</button>
     </div>
   </app-section>
-
 </div>

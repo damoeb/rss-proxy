@@ -1,10 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NativeFeedRef} from '../../services/feed.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { NativeFeedRef } from '../../services/feed.service';
 
 @Component({
   selector: 'app-native-feeds',
   templateUrl: './native-feeds.component.html',
-  styleUrls: ['./native-feeds.component.scss']
+  styleUrls: ['./native-feeds.component.scss'],
 })
 export class NativeFeedsComponent implements OnInit {
   @Input()
@@ -12,13 +12,12 @@ export class NativeFeedsComponent implements OnInit {
   currentNativeFeed: NativeFeedRef;
   hasChosen: boolean;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   useFeed(feed: NativeFeedRef) {
-    this.currentNativeFeed = feed
+    this.currentNativeFeed = feed;
     this.hasChosen = true;
   }
 }

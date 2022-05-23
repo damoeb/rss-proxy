@@ -8,9 +8,8 @@ describe('GenericFeedsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GenericFeedsComponent ]
-    })
-    .compileComponents();
+      declarations: [GenericFeedsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

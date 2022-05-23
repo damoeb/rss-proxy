@@ -8,9 +8,8 @@ describe('PushAsEmailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PushAsEmailComponent ]
-    })
-    .compileComponents();
+      declarations: [PushAsEmailComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -8,9 +8,8 @@ describe('PushToWebComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PushToWebComponent ]
-    })
-    .compileComponents();
+      declarations: [PushToWebComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

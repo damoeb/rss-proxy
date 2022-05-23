@@ -10,7 +10,7 @@
     "pretest": "npm run gen-build-info",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "prettier -w .",
     "e2e": "ng e2e",
     "clean": "rm -rf dist"
   },
@@ -50,6 +50,7 @@
     "karma-coverage-istanbul-reporter": "~3.0.3",
     "karma-jasmine": "~5.0.1",
     "karma-jasmine-html-reporter": "^1.7.0",
+    "prettier": "~2.6.2",
     "ng-packagr": "^13.3.1",
     "protractor": "^7.0.0",
     "ts-node": "~10.7.0",

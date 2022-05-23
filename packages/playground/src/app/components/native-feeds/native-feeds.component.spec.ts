@@ -8,9 +8,8 @@ describe('NativeFeedsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NativeFeedsComponent ]
-    })
-    .compileComponents();
+      declarations: [NativeFeedsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

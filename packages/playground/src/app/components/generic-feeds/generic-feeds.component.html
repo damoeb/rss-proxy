@@ -1,15 +1,28 @@
 <div class="flex">
-  <app-section title="Generic Feeds" [active]="!currentRule">
-    <aside class="aside" style="flex: 0 0 auto; max-height: 60vh; overflow-y: auto; overflow-x: hidden;">
+  <app-section [title]="title" [active]="!currentRule">
+    <aside
+      class="aside"
+      style="
+        flex: 0 0 auto;
+        max-height: 60vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+      "
+    >
       <ul class="menu-list">
-        <li *ngFor="let rule of genericFeedRules; let i = index ">
-          <a href="javascript:void(0)"
-             [ngClass]="{'is-active': rule.id == currentRule?.id}"
-             (click)="applyRule(rule)">
+        <li *ngFor="let rule of genericFeedRules; let i = index">
+          <a
+            href="javascript:void(0)"
+            [ngClass]="{ 'is-active': rule.id == currentRule?.id }"
+            (click)="applyRule(rule)"
+          >
             with <strong>{{ rule.count }}</strong> articles
 
-            <div class="sample" *ngFor="let article of rule.samples.slice(0, 2);">
-              {{article.title}}
+            <div
+              class="sample"
+              *ngFor="let article of rule.samples.slice(0, 2)"
+            >
+              {{ article.title }}
             </div>
           </a>
         </li>
@@ -21,48 +34,62 @@
               <div>
                 <label class="label is-small">Context*</label>
               </div>
-              <div class="field has-addons"
-                   aria-label="Elements XPath (e.g. //body//ul[1]/li)">
+              <div
+                class="field has-addons"
+                aria-label="Elements XPath (e.g. //body//ul[1]/li)"
+              >
                 <div class="control is-expanded is-primary">
-                  <input [(ngModel)]="customContextXPath"
-                         class="input is-small is-primary"
-                         type="text"
-                         name="context"
-                         placeholder="Elements XPath">
+                  <input
+                    [(ngModel)]="customContextXPath"
+                    class="input is-small is-primary"
+                    type="text"
+                    name="context"
+                    placeholder="Elements XPath"
+                  />
                 </div>
               </div>
 
               <div>
                 <label class="label is-small">Link*</label>
               </div>
-              <div class="field has-addons"
-                   aria-label="Links relative XPath (e.g. ./a[1])">
+              <div
+                class="field has-addons"
+                aria-label="Links relative XPath (e.g. ./a[1])"
+              >
                 <div class="control is-expanded">
-                  <input [(ngModel)]="customLinkXPath"
-                         class="input is-small is-primary"
-                         type="text"
-                         name="link"
-                         placeholder="Link XPath">
+                  <input
+                    [(ngModel)]="customLinkXPath"
+                    class="input is-small is-primary"
+                    type="text"
+                    name="link"
+                    placeholder="Link XPath"
+                  />
                 </div>
               </div>
 
               <div>
                 <label class="label is-small">Date</label>
               </div>
-              <div class="field has-addons"
-                   aria-label="Date relative XPath (e.g. ./a[1])">
+              <div
+                class="field has-addons"
+                aria-label="Date relative XPath (e.g. ./a[1])"
+              >
                 <div class="control is-expanded">
-                  <input [(ngModel)]="customDateXPath"
-                         class="input is-small is-primary"
-                         type="text"
-                         name="date"
-                         placeholder="Date XPath">
+                  <input
+                    [(ngModel)]="customDateXPath"
+                    class="input is-small is-primary"
+                    type="text"
+                    name="date"
+                    placeholder="Date XPath"
+                  />
                 </div>
               </div>
             </div>
             <div>
-              <button class="button is-secondary is-pulled-right"
-                      (click)="applyCustomRule(currentRule)">
+              <button
+                class="button is-secondary is-pulled-right"
+                (click)="applyCustomRule(currentRule)"
+              >
                 Apply
               </button>
             </div>
@@ -73,20 +100,26 @@
 
     <div class="source">
       <div class="iframe-wrapper" [hidden]="!currentRule">
-        <iframe #iframeElement
-                (load)="onIframeLoad()"
-                width="142.857143%"
-                height="120%"
-                sandbox="allow-same-origin"></iframe>
+        <iframe
+          #iframeElement
+          (load)="onIframeLoad()"
+          width="142.857143%"
+          height="120%"
+          sandbox="allow-same-origin"
+        ></iframe>
       </div>
-      <div *ngIf="!currentRule"
-           style="flex: 1; display: flex; align-items: center; background: #efefef">
+      <div
+        *ngIf="!currentRule"
+        style="flex: 1; display: flex; align-items: center; background: #efefef"
+      >
         <div style="text-align: center; flex: 1">Choose a feed</div>
       </div>
     </div>
   </app-section>
 
-  <app-refine-feed *ngIf="currentRule"
-                   class="flex"
-                   [genericFeedRule]="currentRule"></app-refine-feed>
+  <app-refine-feed
+    *ngIf="currentRule"
+    class="flex"
+    [genericFeedRule]="currentRule"
+  ></app-refine-feed>
 </div>

@@ -1,19 +1,29 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {FeedDetectionResponse, GenericFeedRule, NativeFeedRef, NativeFeedWithParams} from '../../services/feed.service';
-import {SettingsService} from '../../services/settings.service';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
+import {
+  FeedDetectionResponse,
+  GenericFeedRule,
+  NativeFeedRef,
+  NativeFeedWithParams,
+} from '../../services/feed.service';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
   selector: 'app-options',
   templateUrl: './options.component.html',
   styleUrls: ['./options.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OptionsComponent implements OnInit {
-
   @Input()
-  response: FeedDetectionResponse
+  response: FeedDetectionResponse;
   @Input()
-  static: boolean
+  static: boolean;
   nativeFeeds: NativeFeedRef[];
   genericFeedRules: GenericFeedRule[];
   hasChosen: boolean;
@@ -25,11 +35,14 @@ export class OptionsComponent implements OnInit {
   prerender: boolean;
   convertFormat: boolean;
 
-  constructor(private settings: SettingsService,
-              private changeDetectorRef: ChangeDetectorRef) { }
+  constructor(
+    private readonly settings: SettingsService,
+    private readonly changeDetectorRef: ChangeDetectorRef,
+  ) {}
 
   async ngOnInit(): Promise<void> {
-    this.isNativeFeed = this.response.results.mimeType.toLowerCase().indexOf('xml') > -1;
+    this.isNativeFeed =
+      this.response.results.mimeType.toLowerCase().indexOf('xml') > -1;
 
     const s = await this.settings.serverSettings();
     this.jsSupport = s.jsSupport;
@@ -91,7 +104,7 @@ export class OptionsComponent implements OnInit {
 
   createNativeFeed(): NativeFeedWithParams {
     return {
-      feedUrl: this.response.options.harvestUrl
-    }
+      feedUrl: this.response.options.harvestUrl,
+    };
   }
 }

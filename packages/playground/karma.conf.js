@@ -18,10 +18,7 @@ module.exports = function (config) {
     customLaunchers: {
       ChromeHeadlessDocker: {
         base: 'ChromeHeadless',
-        flags: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox'
-        ]
+        flags: ['--no-sandbox', '--disable-setuid-sandbox']
       }
     },
     coverageIstanbulReporter: {
@@ -37,5 +34,5 @@ module.exports = function (config) {
     browsers: ['Chrome'],
     singleRun: false,
     restartOnFileChange: true
-  });
-};
+  })
+}

@@ -2,16 +2,22 @@
   <app-section title="Push Changes" [active]="!hasChosen">
     <ul class="menu-list">
       <li>
-        <a [ngClass]="{'is-active': webhook}"
-           (click)="useWebhook()">Webhook</a>
+        <a [ngClass]="{ 'is-active': webhook }" (click)="useWebhook()"
+          >Webhook</a
+        >
       </li>
       <li>
-        <a [ngClass]="{'is-active': pushNotification}"
-           (click)="usePushNotification()">Push Notification</a>
+        <a
+          [ngClass]="{ 'is-active': pushNotification }"
+          (click)="usePushNotification()"
+          >Push Notification</a
+        >
       </li>
       <li>
-        <a [ngClass]="{'is-active': email}"
-           (click)="useEmail()">Email</a>
+        <a [ngClass]="{ 'is-active': email }" (click)="useEmail()">Email</a>
+      </li>
+      <li>
+        <a [ngClass]="{ 'is-active': calendar }" (click)="useCalendar()">Calendar</a>
       </li>
     </ul>
   </app-section>

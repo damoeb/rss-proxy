@@ -8,9 +8,8 @@ describe('PushToMobileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PushToMobileComponent ]
-    })
-    .compileComponents();
+      declarations: [PushToMobileComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

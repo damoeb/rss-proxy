@@ -1,10 +1,72 @@
 <div class="flex">
-  <app-section title="Prerender" [active]="true">
-    <ul class="menu-list">
-      <li>
-        <a [ngClass]="{'is-active': false}">Front running Script</a>
-      </li>
-    </ul>
+  <app-section title="Options for Dynamic" [active]="!hasChosen">
+    <aside class="aside">
+      <div class="field">
+        <label class="label">Puppeteer Script</label>
+        <div class="control">
+          <textarea
+            class="textarea puppeteer-script"
+            [ngClass]="{ 'is-primary': puppeteerScript?.length > 0 }"
+            [(ngModel)]="puppeteerScript"
+          ></textarea>
+        </div>
+        <button class="button is-expanded" (click)="refresh()">Refresh</button>
+      </div>
+      <ul class="menu-list">
+        <li>
+          <a
+            [ngClass]="{ 'is-active': genericFeedRules }"
+            (click)="useGenericFeeds()"
+            >Feeds in Markup</a
+          >
+        </li>
+        <li>
+          <a
+            [ngClass]="{ 'is-active': watchPageChanges }"
+            (click)="useWatchPageChanges()"
+            >Watch page changes</a
+          >
+        </li>
+      </ul>
+    </aside>
+
+    <div class="source">
+      <div>{{ errorMessage }}</div>
+      <img [src]="imageUrlSanitizes" alt="wefwef"/>
+    </div>
   </app-section>
 
+<!--    <app-generic-feeds-->
+<!--      *ngIf="genericFeedRules"-->
+<!--      class="flex"-->
+<!--      [genericFeedRules]="genericFeedRules"-->
+<!--      [url]="response.options.harvestUrl"-->
+<!--      [body]="response.results.body"-->
+<!--    ></app-generic-feeds>-->
+
+    <app-watch-page-change
+      *ngIf="watchPageChanges"
+      class="flex"
+      [siteUrl]="response.options.harvestUrl"
+      [body]="response.results.body"
+    ></app-watch-page-change>
+</div>
+
+<div>
+  <!--<div class="flex">-->
+  <!--  <app-section title="Prerender" [active]="true">-->
+  <!--    <aside>-->
+  <!--      <div class="field">-->
+  <!--        <label class="label">Front running Script</label>-->
+  <!--        <div class="control is-expanded">-->
+  <!--          <button class="button is-expanded">Record</button>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </aside>-->
+
+  <!--  </app-section>-->
+
+  <!--</div>-->
+
+  <!--<app-generic-feeds title="Generic Feeds from dynamic"></app-generic-feeds>-->
 </div>

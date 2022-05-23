@@ -8,9 +8,8 @@ describe('PrerenderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PrerenderComponent ]
-    })
-    .compileComponents();
+      declarations: [PrerenderComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

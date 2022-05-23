@@ -8,9 +8,8 @@ describe('RefineFeedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RefineFeedComponent ]
-    })
-    .compileComponents();
+      declarations: [RefineFeedComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

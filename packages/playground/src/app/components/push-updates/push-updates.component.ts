@@ -1,10 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {GenericFeedWithParams, NativeFeedWithParams} from '../../services/feed.service';
+import { Component, Input, OnInit } from '@angular/core';
+import {
+  GenericFeedWithParams,
+  NativeFeedWithParams,
+} from '../../services/feed.service';
 
 @Component({
   selector: 'app-push-updates',
   templateUrl: './push-updates.component.html',
-  styleUrls: ['./push-updates.component.scss']
+  styleUrls: ['./push-updates.component.scss'],
 })
 export class PushUpdatesComponent implements OnInit {
   hasChosen: boolean;
@@ -17,11 +20,11 @@ export class PushUpdatesComponent implements OnInit {
   webhook: boolean;
   pushNotification: boolean;
   email: boolean;
+  calendar: boolean;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   private use(fn: () => void) {
     this.reset();
@@ -45,12 +48,18 @@ export class PushUpdatesComponent implements OnInit {
   usePushNotification() {
     this.use(() => {
       this.pushNotification = true;
-    })
+    });
   }
 
   useEmail() {
     this.use(() => {
       this.email = true;
-    })
+    });
+  }
+
+  useCalendar() {
+    this.use(() => {
+      this.calendar = true;
+    });
   }
 }

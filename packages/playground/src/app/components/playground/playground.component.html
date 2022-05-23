@@ -1,27 +1,32 @@
 <div class="playground is-size-6">
-  <div style="padding-bottom: 5px;">
+  <div style="padding-bottom: 5px">
     <form (ngSubmit)="parseFromUrl()">
       <div class="field has-addons is-expanded">
-        <div class="control is-expanded" [ngClass]="{'is-loading': isLoading}">
-          <input class="input is-expanded"
-                 type="url"
-                 placeholder="Enter a URL of website or feed"
-                 [(ngModel)]="url"
-                 [autofocus]="true"
-                 autocomplete="off"
-                 autofocus
-                 name="url"
-                 required>
+        <div
+          class="control is-expanded"
+          [ngClass]="{ 'is-loading': isLoading }"
+        >
+          <input
+            class="input is-expanded"
+            type="url"
+            placeholder="Enter a URL of website or feed"
+            [(ngModel)]="url"
+            [autofocus]="true"
+            autocomplete="off"
+            autofocus
+            name="url"
+            required
+          />
         </div>
         <div class="control">
-          <button class="button"
-                  *ngIf="actualUrl"
-                  (click)="resetAll()">
+          <button class="button" *ngIf="actualUrl" (click)="resetAll()">
             X
           </button>
-          <button class="button"
-                  [ngClass]="{'is-primary': !actualUrl}"
-                  (click)="parseFromUrl()">
+          <button
+            class="button"
+            [ngClass]="{ 'is-primary': !actualUrl }"
+            (click)="parseFromUrl()"
+          >
             Parse
           </button>
         </div>
@@ -33,26 +38,29 @@
         <strong>Previous URLs</strong>
       </p>
       <p *ngFor="let url of history">
-        <a (click)="parseFromHistoryUrl(url)"
-           href="javascript:void(0)">{{ url }}</a>
+        <a (click)="parseFromHistoryUrl(url)" href="javascript:void(0)">{{
+          url
+        }}</a>
       </p>
     </div>
   </div>
 
-  <div style="display: flex; flex-direction: row; flex: 1; overflow-x: auto;">
+  <div style="display: flex; flex-direction: row; flex: 1; overflow-x: auto">
     <article *ngIf="error" class="message is-danger">
       <div class="message-header">
         <p>Danger</p>
       </div>
       <div class="message-body">
-        {{error}}
+        {{ error }}
       </div>
     </article>
 
-    <app-options *ngIf="response && !error"
-                 [response]="response"
-                 [static]="true"
-                 style="display: flex; margin-right: 200px;"></app-options>
+    <app-options
+      *ngIf="response && !error"
+      [response]="response"
+      [static]="true"
+      style="display: flex; margin-right: 200px"
+    ></app-options>
   </div>
 
   <app-footer></app-footer>

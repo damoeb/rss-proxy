@@ -1,11 +1,22 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {isEmpty} from 'lodash';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { isEmpty } from 'lodash';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
-import {FeedDetectionResponse, FeedService, GenericFeedRule, NativeFeedRef} from '../../services/feed.service';
-import {build} from '../../../environments/build';
-import {SettingsService} from '../../services/settings.service';
+import {
+  FeedDetectionResponse,
+  FeedService,
+  GenericFeedRule,
+  NativeFeedRef,
+} from '../../services/feed.service';
+import { build } from '../../../environments/build';
+import { SettingsService } from '../../services/settings.service';
+import { environment } from '../../../environments/environment';
 
 export type ContentResolution = 'default' | 'fulltext' | 'oc';
 
@@ -13,21 +24,20 @@ export type ContentResolution = 'default' | 'fulltext' | 'oc';
   selector: 'app-playground',
   templateUrl: './playground.component.html',
   styleUrls: ['./playground.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlaygroundComponent implements OnInit {
   response: FeedDetectionResponse;
   error: string;
-  currentNativeFeed: NativeFeedRef;
-  contentResolution: ContentResolution = 'default';
 
-
-  constructor(private httpClient: HttpClient,
-              private router: Router,
-              private settings: SettingsService,
-              private activatedRoute: ActivatedRoute,
-              private changeDetectorRef: ChangeDetectorRef,
-              private feedService: FeedService) {
+  constructor(
+    private readonly httpClient: HttpClient,
+    private readonly router: Router,
+    private readonly settings: SettingsService,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly changeDetectorRef: ChangeDetectorRef,
+    private readonly feedService: FeedService,
+  ) {
     this.history = PlaygroundComponent.getHistory();
   }
 
@@ -43,19 +53,20 @@ export class PlaygroundComponent implements OnInit {
   showHistory: boolean;
 
   private static getHistory(): string[] {
-    return JSON.parse(localStorage.getItem('history') || JSON.stringify([]));
+    const localHistory = localStorage.getItem('history');
+    return environment.history || localHistory ? JSON.parse(localHistory) : [];
   }
 
   ngOnInit() {
     this.resetAll();
-    this.activatedRoute.queryParams.subscribe(params => {
+    this.activatedRoute.queryParams.subscribe((params) => {
       if (params.url) {
         this.url = params.url;
         this.parseFromUrlInternal();
       }
     });
 
-    this.settings.serverSettings().then(settings => {
+    this.settings.serverSettings().then((settings) => {
       this.hasJsSupport = settings.jsSupport;
       this.changeDetectorRef.detectChanges();
     });
@@ -66,17 +77,15 @@ export class PlaygroundComponent implements OnInit {
       return;
     }
     if (this.activatedRoute.snapshot.queryParams.url === this.url) {
-     this.parseFromUrlInternal();
+      this.parseFromUrlInternal();
     } else {
-      const queryParams: Params = {url: this.url};
+      const queryParams: Params = { url: this.url };
 
-      return this.router.navigate(
-        [],
-        {
-          relativeTo: this.activatedRoute,
-          queryParams,
-          queryParamsHandling: 'merge', // remove to replace all query params by provided
-        });
+      return this.router.navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams,
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      });
     }
   }
 
@@ -138,7 +147,8 @@ export class PlaygroundComponent implements OnInit {
 
   private fromStaticSource() {
     console.log('from static source');
-    this.feedService.discover(this.url)
+    this.feedService
+      .discover(this.url)
       .subscribe(this.handleParserResponse(), (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.hasResults = false;
@@ -154,7 +164,7 @@ export class PlaygroundComponent implements OnInit {
       results.genericFeedRules = results.genericFeedRules.map((gr, index) => {
         gr.id = index;
         return gr;
-      })
+      });
 
       this.response = response;
 
@@ -162,7 +172,6 @@ export class PlaygroundComponent implements OnInit {
       this.isLoading = false;
       this.actualUrl = response.options.harvestUrl;
       if (results.failed) {
-
         console.error('Proxy replied an error.', results.errorMessage);
         // tslint:disable-next-line:max-line-length
         this.error = `Looks like this site does not contain any feed data.`;
@@ -178,7 +187,7 @@ export class PlaygroundComponent implements OnInit {
   }
 
   private addToHistory(url: string) {
-    let history = this.history.filter(otherUrl => otherUrl !== url);
+    let history = this.history.filter((otherUrl) => otherUrl !== url);
     history = history.reverse();
     history.push(url);
     history = history.reverse();

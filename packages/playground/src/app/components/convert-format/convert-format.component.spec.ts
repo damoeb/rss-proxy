@@ -8,9 +8,8 @@ describe('ConvertFormatComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ConvertFormatComponent ]
-    })
-    .compileComponents();
+      declarations: [ConvertFormatComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

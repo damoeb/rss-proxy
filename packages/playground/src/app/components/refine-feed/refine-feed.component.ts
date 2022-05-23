@@ -1,16 +1,27 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {ContentResolution} from '../playground/playground.component';
-import {FeedFormat, FeedService, GenericFeedWithParams, NativeFeedRef, NativeFeedWithParams} from '../../services/feed.service';
-import {firstValueFrom} from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
+import { ContentResolution } from '../playground/playground.component';
+import {
+  FeedFormat,
+  FeedService,
+  GenericFeedWithParams,
+  NativeFeedRef,
+  NativeFeedWithParams,
+} from '../../services/feed.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-refine-feed',
   templateUrl: './refine-feed.component.html',
   styleUrls: ['./refine-feed.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RefineFeedComponent implements OnInit {
-
   @Input()
   nativeFeed: NativeFeedRef;
 
@@ -24,12 +35,12 @@ export class RefineFeedComponent implements OnInit {
   hasChosen: boolean;
   feedUrls: boolean;
   pushUpdates: boolean;
-  filterSamples = [
-    {name:'linkCount', value: 'wefwef'}
-  ];
+  filterSamples = [{ name: 'linkCount', value: 'wefwef' }];
 
-  constructor(private changeDetectorRef: ChangeDetectorRef,
-              private feedService: FeedService) { }
+  constructor(
+    private readonly changeDetectorRef: ChangeDetectorRef,
+    private readonly feedService: FeedService,
+  ) {}
 
   ngOnInit(): void {
     this.apply();
@@ -46,23 +57,31 @@ export class RefineFeedComponent implements OnInit {
   }
 
   useFeedUrls() {
-    this.use(() => {this.feedUrls = true;})
+    this.use(() => {
+      this.feedUrls = true;
+    });
   }
 
   usePushUpdate() {
-    this.use(() => {this.pushUpdates = true;})
+    this.use(() => {
+      this.pushUpdates = true;
+    });
   }
 
   apply() {
     if (this.nativeFeed) {
-      firstValueFrom(this.feedService.transformNativeFeed(this.createNativeFeedWithParams()))
-        .then(response => this.handleResponse(response));
+      firstValueFrom(
+        this.feedService.transformNativeFeed(this.createNativeFeedWithParams()),
+      ).then((response) => this.handleResponse(response));
     }
     if (this.genericFeedRule) {
       console.log(this.genericFeedRule.feedUrl);
       // todo mag feedUrl must be constructed from params
-      firstValueFrom(this.feedService.fetchGenericFeed(this.createGenericFeedRuleWithParams()))
-        .then(response => this.handleResponse(response));
+      firstValueFrom(
+        this.feedService.fetchGenericFeed(
+          this.createGenericFeedRuleWithParams(),
+        ),
+      ).then((response) => this.handleResponse(response));
     }
   }
 
@@ -84,8 +103,8 @@ export class RefineFeedComponent implements OnInit {
       return {
         feedUrl: this.nativeFeed.url,
         filter: this.filter,
-        contentResolution: this.contentResolution
-      }
+        contentResolution: this.contentResolution,
+      };
     }
   }
 
@@ -94,8 +113,8 @@ export class RefineFeedComponent implements OnInit {
       return {
         ...this.genericFeedRule,
         filter: this.filter,
-        contentResolution: this.contentResolution
-      }
+        contentResolution: this.contentResolution,
+      };
     }
   }
 }

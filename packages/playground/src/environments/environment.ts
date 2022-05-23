@@ -23,8 +23,9 @@ export const environment = {
     'https://hystoria.100millionbooks.org/',
     'https://github.blog/changelog/',
     'https://news.ycombinator.com/',
-    'https://cloud.google.com/blog/' // does not render and does not extract
-  ]
+    'https://cloud.google.com/blog/', // does not render and does not extract
+    'https://www.fool.com/author/20415',
+  ],
 };
 
 /*

@@ -3,17 +3,16 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-push-as-notification',
   templateUrl: './push-as-notification.component.html',
-  styleUrls: ['./push-as-notification.component.scss']
+  styleUrls: ['./push-as-notification.component.scss'],
 })
 export class PushAsNotificationComponent implements OnInit {
   hasChosen: boolean;
   mobile: boolean;
   web: boolean;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   private use(fn: () => void) {
     this.reset();
@@ -27,10 +26,14 @@ export class PushAsNotificationComponent implements OnInit {
   }
 
   useMobile() {
-    this.use(() => {this.mobile = true;})
+    this.use(() => {
+      this.mobile = true;
+    });
   }
 
   useWeb() {
-    this.use(() => {this.web = true;})
+    this.use(() => {
+      this.web = true;
+    });
   }
 }

@@ -1,7 +1,18 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {GenericFeedRule, GenericFeedWithParams} from '../../services/feed.service';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {
+  GenericFeedRule,
+  GenericFeedWithParams,
+} from '../../services/feed.service';
 import * as URI from 'urijs';
-import {clone} from 'lodash';
+import { clone } from 'lodash';
 
 interface ArticleCandidate {
   elem: HTMLElement;
@@ -9,8 +20,11 @@ interface ArticleCandidate {
   qualified: boolean;
 }
 
-
-function getRelativeCssPath(node: HTMLElement, context: HTMLElement, withClassNames = false): string {
+function getRelativeCssPath(
+  node: HTMLElement,
+  context: HTMLElement,
+  withClassNames = false,
+): string {
   if (node.nodeType === 3 || node === context) {
     // todo mag this is not applicable
     return 'self';
@@ -18,7 +32,7 @@ function getRelativeCssPath(node: HTMLElement, context: HTMLElement, withClassNa
   let path = node.tagName; // tagName for text nodes is undefined
   while (node.parentNode !== context) {
     node = node.parentNode as HTMLElement;
-    if (typeof (path) === 'undefined') {
+    if (typeof path === 'undefined') {
       path = getTagName(node, withClassNames);
     } else {
       path = `${getTagName(node, withClassNames)}>${path}`;
@@ -31,8 +45,9 @@ function getTagName(node: HTMLElement, withClassNames: boolean): string {
   if (!withClassNames) {
     return node.tagName;
   }
-  const classList = Array.from(node.classList)
-    .filter(cn => cn.match('[0-9]+') === null);
+  const classList = Array.from(node.classList).filter(
+    (cn) => cn.match('[0-9]+') === null,
+  );
   if (classList.length > 0) {
     return `${node.tagName}.${classList.join('.')}`;
   }
@@ -43,19 +58,21 @@ function getTagName(node: HTMLElement, withClassNames: boolean): string {
   selector: 'app-generic-feeds',
   templateUrl: './generic-feeds.component.html',
   styleUrls: ['./generic-feeds.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GenericFeedsComponent implements OnInit {
-
   @Input()
   body: string;
   @Input()
   url: string;
   @Input()
   genericFeedRules: GenericFeedRule[];
+  @Input()
+  title = 'Generic Feeds from static';
+
   currentRule: GenericFeedWithParams;
 
-  @ViewChild('iframeElement', {static: true})
+  @ViewChild('iframeElement', { static: true })
   iframeRef: ElementRef;
 
   customDateXPath = '';
@@ -63,9 +80,8 @@ export class GenericFeedsComponent implements OnInit {
   customContextXPath = '';
 
   private proxyUrl: string;
-  iframeLoaded: boolean;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef,) { }
+  constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.prepareIframe(this.patchHtml(this.body, this.url));
@@ -81,7 +97,7 @@ export class GenericFeedsComponent implements OnInit {
   }
 
   applyRule(rule: GenericFeedRule) {
-    this.currentRule = {...rule, harvestUrl: this.url} as any;
+    this.currentRule = { ...rule, harvestUrl: this.url } as any;
     this.customContextXPath = this.currentRule.contextXPath;
     this.customDateXPath = this.currentRule.dateXPath;
     this.customLinkXPath = this.currentRule.linkXPath;
@@ -94,9 +110,11 @@ export class GenericFeedsComponent implements OnInit {
   }
 
   private assignToIframe(html: string) {
-    this.proxyUrl = window.URL.createObjectURL(new Blob([html], {
-      type: 'text/html'
-    }));
+    this.proxyUrl = window.URL.createObjectURL(
+      new Blob([html], {
+        type: 'text/html',
+      }),
+    );
     this.iframeRef.nativeElement.src = this.proxyUrl;
     this.changeDetectorRef.detectChanges();
   }
@@ -105,21 +123,21 @@ export class GenericFeedsComponent implements OnInit {
     // if (this.response.results.genericFeedRules) {
     // this.updateScores();
     // } else {
-    this.iframeLoaded = true;
     // }
   }
 
-
   updateScores(): void {
     const iframeDocument = this.iframeRef.nativeElement.contentDocument;
-    this.genericFeedRules.forEach(rule => {
-      const articles = this.evaluateXPathInIframe(rule.contextXPath, iframeDocument)
-          // remove hidden articles
-          .filter((elem: any) => !!(elem.offsetWidth || elem.offsetHeight))
-        // remove empty articles
-        // .filter((elem: any) => elem.textContent.trim() > 0)
-        // .filter((elem: any) => Array.from(elem.querySelectorAll(rule.linkPath)).length > 0);
-      ;
+    this.genericFeedRules.forEach((rule) => {
+      const articles = this.evaluateXPathInIframe(
+        rule.contextXPath,
+        iframeDocument,
+      )
+        // remove hidden articles
+        .filter((elem: any) => !!(elem.offsetWidth || elem.offsetHeight));
+      // remove empty articles
+      // .filter((elem: any) => elem.textContent.trim() > 0)
+      // .filter((elem: any) => Array.from(elem.querySelectorAll(rule.linkPath)).length > 0);
       if (articles.length === 0) {
         rule.score -= 20;
         // rule.hidden = true;
@@ -128,7 +146,6 @@ export class GenericFeedsComponent implements OnInit {
     this.changeDetectorRef.detectChanges();
   }
 
-
   private patchHtml(html: string, url: string): string {
     const doc = new DOMParser().parseFromString(html, 'text/html');
 
@@ -136,7 +153,7 @@ export class GenericFeedsComponent implements OnInit {
     base.setAttribute('href', url);
     doc.getElementsByTagName('head').item(0).appendChild(base);
 
-    Array.from(doc.querySelectorAll('[href]')).forEach(el => {
+    Array.from(doc.querySelectorAll('[href]')).forEach((el) => {
       try {
         const absoluteUrl = new URI(el.getAttribute('href')).absoluteTo(url);
         el.setAttribute('href', absoluteUrl.toString());
@@ -144,7 +161,6 @@ export class GenericFeedsComponent implements OnInit {
         // console.error(e);
       }
     });
-
 
     return doc.documentElement.innerHTML;
   }
@@ -155,31 +171,36 @@ export class GenericFeedsComponent implements OnInit {
 
     try {
       iframeDocument.getElementById(id).remove();
-    } catch (e) {
-
-    }
+    } catch (e) {}
     const styleNode = iframeDocument.createElement('style');
     styleNode.setAttribute('type', 'text/css');
     styleNode.setAttribute('id', id);
-    const allMatches: HTMLElement[] = this.evaluateXPathInIframe(rule.contextXPath, iframeDocument);
+    const allMatches: HTMLElement[] = this.evaluateXPathInIframe(
+      rule.contextXPath,
+      iframeDocument,
+    );
 
     const matchingIndexes = allMatches
-      .map(elem => {
-        const index = Array.from(elem.parentElement.children)
-          .findIndex(otherElem => otherElem === elem);
+      .map((elem) => {
+        const index = Array.from(elem.parentElement.children).findIndex(
+          (otherElem) => otherElem === elem,
+        );
         // const qualified = true;
         // if (qualified) {
         //   console.log(`Keeping element ${index}`, elem);
         // } else {
         //   console.log(`Removing unqualified element ${index}`, elem);
         // }
-        return {elem, index} as ArticleCandidate;
+        return { elem, index } as ArticleCandidate;
       })
-      .map(candidate => candidate.index);
+      .map((candidate) => candidate.index);
 
-    const cssSelectorContextPath = 'body>' + getRelativeCssPath(allMatches[0], iframeDocument.body, false);
+    const cssSelectorContextPath =
+      'body>' + getRelativeCssPath(allMatches[0], iframeDocument.body, false);
     console.log(cssSelectorContextPath);
-    const code = `${matchingIndexes.map(index => `${cssSelectorContextPath}:nth-child(${index + 1})`).join(', ')} {
+    const code = `${matchingIndexes
+      .map((index) => `${cssSelectorContextPath}:nth-child(${index + 1})`)
+      .join(', ')} {
             border: 3px solid blue!important;
             margin: 2px!important;
             padding: 2px!important;
@@ -190,18 +211,21 @@ export class GenericFeedsComponent implements OnInit {
     styleNode.appendChild(iframeDocument.createTextNode(code));
     const existingStyleNode = iframeDocument.head.querySelector(`#${id}`);
     if (existingStyleNode) {
-      existingStyleNode.remove()
+      existingStyleNode.remove();
     }
     iframeDocument.head.appendChild(styleNode);
     setTimeout(() => {
       const firstMatch = allMatches[0];
       if (firstMatch) {
-        firstMatch.scrollIntoView({behavior:'smooth'});
+        firstMatch.scrollIntoView({ behavior: 'smooth' });
       }
     }, 500);
   }
 
-  private evaluateXPathInIframe(xPath: string, context: HTMLElement | Document): HTMLElement[] {
+  private evaluateXPathInIframe(
+    xPath: string,
+    context: HTMLElement | Document,
+  ): HTMLElement[] {
     const iframeDocument = this.iframeRef.nativeElement.contentDocument;
     const xpathResult = iframeDocument.evaluate(xPath, context, null, 5);
     const nodes: HTMLElement[] = [];
@@ -212,10 +236,4 @@ export class GenericFeedsComponent implements OnInit {
     }
     return nodes;
   }
-
-
 }
-function assingIn(arg0: {}, rule: GenericFeedRule): GenericFeedRule {
-    throw new Error('Function not implemented.');
-}
-
