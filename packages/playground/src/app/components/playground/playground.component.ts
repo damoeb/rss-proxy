@@ -29,7 +29,7 @@ export type ContentResolution = 'default' | 'fulltext' | 'oc';
 })
 export class PlaygroundComponent implements OnInit {
   response: FeedDetectionResponse;
-  error: string;
+  errorMessage: string;
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -105,7 +105,7 @@ export class PlaygroundComponent implements OnInit {
   }
 
   resetErrors() {
-    this.error = null;
+    this.errorMessage = null;
   }
 
   getBuildDate() {
@@ -120,7 +120,7 @@ export class PlaygroundComponent implements OnInit {
 
   private parseFromUrlInternal(): void {
     if (isEmpty(this.url)) {
-      this.error = '';
+      this.errorMessage = '';
       this.changeDetectorRef.detectChanges();
       return;
     }
@@ -136,7 +136,7 @@ export class PlaygroundComponent implements OnInit {
       // tslint:disable-next-line:no-unused-expression
       new URL(this.url);
     } catch (e) {
-      this.error = 'Please enter a valid url';
+      this.errorMessage = 'Please enter a valid url';
       this.changeDetectorRef.detectChanges();
       return;
     }
@@ -153,7 +153,7 @@ export class PlaygroundComponent implements OnInit {
       (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.hasResults = false;
-        this.error = error.message;
+        this.errorMessage = error.message;
         this.changeDetectorRef.detectChanges();
       },
     );
@@ -176,7 +176,7 @@ export class PlaygroundComponent implements OnInit {
       if (results.failed) {
         console.error('Proxy replied an error.', results.errorMessage);
         // tslint:disable-next-line:max-line-length
-        this.error = results.errorMessage;
+        this.errorMessage = results.errorMessage;
       } else {
         console.log('Proxy replies an generated feed');
         // setTimeout(() => {

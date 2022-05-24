@@ -120,6 +120,7 @@ export class FeedService {
       genericRule.contextXPath,
     )}&filter=${encodeURIComponent(genericRule.filter)}`;
   }
+
   fetchGenericFeed(genericRule: GenericFeedWithParams): Observable<any> {
     // http://localhost:8080/api/web-to-feed?version=0.1&url=&linkXPath=&extendContext=&contextXPath=&filter=
     const parserUrl = this.createFeedUrlFromGenericFeed(genericRule);

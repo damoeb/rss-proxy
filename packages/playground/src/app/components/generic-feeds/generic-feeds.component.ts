@@ -67,8 +67,6 @@ export class GenericFeedsComponent implements OnInit {
   url: string;
   @Input()
   genericFeedRules: GenericFeedRule[];
-  @Input()
-  title = 'Generic Feeds from static';
 
   currentRule: GenericFeedWithParams;
 
@@ -80,6 +78,8 @@ export class GenericFeedsComponent implements OnInit {
   customContextXPath = '';
 
   private proxyUrl: string;
+  refine: boolean;
+  hasChosen: boolean;
 
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
 
@@ -235,5 +235,21 @@ export class GenericFeedsComponent implements OnInit {
       node = xpathResult.iterateNext();
     }
     return nodes;
+  }
+
+  private use(fn: () => void) {
+    this.reset();
+    fn();
+    this.hasChosen = true;
+  }
+
+  private reset() {
+    this.refine = null;
+  }
+
+  useRefine() {
+    this.use(() => {
+      this.refine = true;
+    });
   }
 }

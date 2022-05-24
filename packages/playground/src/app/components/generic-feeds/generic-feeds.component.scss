@@ -28,3 +28,10 @@ $primary: blue;
   transform: scale(0.7);
   transform-origin: 0 0;
 }
+
+.is-preselected {
+  border-left: 5px solid blue;
+}
+.is-expanded {
+  width: 100%;
+}

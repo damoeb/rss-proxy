@@ -1,0 +1,13 @@
+<div style="margin: 5px">
+  <div class="block">
+    <h2>{{ jsonFeed.title }}</h2>
+    <p>{{ jsonFeed.description }}</p>
+    <p>{{ jsonFeed.home_page_url }}</p>
+    <p>{{ jsonFeed.date_published }}</p>
+  </div>
+
+  <div class="content" *ngFor="let item of jsonFeed.items">
+    <h3>{{ item.title }}</h3>
+    <p>{{ item.content_text }}</p>
+  </div>
+</div>

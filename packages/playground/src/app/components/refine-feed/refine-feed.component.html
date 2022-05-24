@@ -2,7 +2,11 @@
   <app-section title="Refine Feed" [active]="!hasChosen">
     <aside class="aside">
       <div>
-        <div class="field" *ngIf="nativeFeed">
+        <div
+          class="field"
+          *ngIf="nativeFeed"
+          [ngClass]="{ 'is-hidden': hasChosen }"
+        >
           <label class="label">Feed URL</label>
           <a
             [href]="nativeFeed.url"
@@ -11,7 +15,11 @@
             >{{ nativeFeed.title }}</a
           >
         </div>
-        <div class="field" *ngIf="genericFeedRule">
+        <div
+          class="field mb-6"
+          *ngIf="genericFeedRule"
+          [ngClass]="{ 'is-hidden': hasChosen }"
+        >
           <label class="label">Feed URL</label>
           <a
             [href]="genericFeedRule.feedUrl"
@@ -20,7 +28,8 @@
             >Generic Feed</a
           >
         </div>
-        <div class="field mt-6">
+
+        <div class="field" *ngIf="!hasChosen">
           <label class="label">Content Mapping</label>
           <div class="control">
             <div class="select is-expanded">
@@ -29,15 +38,22 @@
                 class="is-expanded"
                 [ngClass]="{ 'is-primary': contentResolution !== 'none' }"
               >
-                <option value="none">none</option>
-                <option value="fulltext">fulltext</option>
-                <option value="oc">OC Tags</option>
+                <option value="default">default</option>
+<!--                <option value="fulltext">fulltext</option>-->
+                <option value="oc">OG Tags</option>
               </select>
             </div>
           </div>
         </div>
 
-        <div class="field">
+        <div class="field" *ngIf="hasChosen">
+          <label class="label">Content Mapping</label>
+          <div class="control">
+            <em>{{ contentResolution }}</em>
+          </div>
+        </div>
+
+        <div class="field" *ngIf="!hasChosen">
           <label class="label">Filter</label>
           <div class="select is-expanded">
             <select class="is-expanded">
@@ -55,11 +71,22 @@
               [ngClass]="{ 'is-primary': filter.length > 0 }"
               [(ngModel)]="filter"
             ></textarea>
+            <em>{{ filter }}</em>
           </div>
           <button class="button is-expanded" (click)="apply()">Apply</button>
         </div>
 
-        <label class="label mt-6" [ngClass]="{ 'is-primary': !hasChosen }"
+        <div class="field" *ngIf="hasChosen">
+          <label class="label">Filter</label>
+          <div class="control">
+            <em *ngIf="filter">{{ filter }}</em>
+            <em *ngIf="!filter">no filter</em>
+          </div>
+        </div>
+
+        <label
+          class="label mt-6 is-primary"
+          [ngClass]="{ 'is-hidden': hasChosen }"
           >Continue</label
         >
         <ul class="menu-list">
@@ -79,12 +106,9 @@
       </div>
     </aside>
 
-    <div class="feed source">
-      <pre>
-          <code>
-            {{rawFeed}}
-          </code>
-        </pre>
+    <div class="feed source" [ngClass]="{ 'is-hidden': hasChosen }">
+      <app-spinner *ngIf="!jsonFeed"></app-spinner>
+      <app-feed [jsonFeed]="jsonFeed" *ngIf="jsonFeed"></app-feed>
     </div>
   </app-section>
 

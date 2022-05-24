@@ -45,15 +45,20 @@
     </div>
   </div>
 
-  <div style="display: flex; flex-direction: row; flex: 1; overflow-x: auto">
-    <article *ngIf="error" class="message is-danger">
-      <div class="message-body">
-        {{ error }}
-      </div>
-    </article>
+  <app-spinner *ngIf="isLoading"></app-spinner>
 
+  <article *ngIf="response?.results?.errorMessage" class="message is-danger">
+    <div class="message-body">
+      {{ errorMessage }}
+    </div>
+  </article>
+
+  <div
+    *ngIf="response && !response?.results?.errorMessage"
+    style="display: flex; flex-direction: row; flex: 1; overflow-x: auto"
+  >
     <app-options
-      *ngIf="response && !error"
+      *ngIf="response"
       [response]="response"
       [static]="true"
       style="display: flex; margin-right: 200px"

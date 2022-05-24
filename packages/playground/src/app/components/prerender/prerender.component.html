@@ -1,28 +1,49 @@
 <div class="flex">
-  <app-section title="Options for Dynamic" [active]="!hasChosen">
+  <app-section title="Dynamic Content" [active]="!hasChosen">
     <aside class="aside">
-      <div class="field">
+      <div class="field" [hidden]="hasChosen">
         <label class="label">Puppeteer Script</label>
         <div class="control">
           <textarea
             class="textarea puppeteer-script"
             [ngClass]="{ 'is-primary': puppeteerScript?.length > 0 }"
+            [placeholder]="placeHolderScript"
             [(ngModel)]="puppeteerScript"
           ></textarea>
         </div>
-        <button class="button is-expanded is-loading" (click)="refresh()">Refresh</button>
+        <button
+          class="button is-expanded"
+          [ngClass]="{ 'is-loading': isLoading }"
+          (click)="refresh()"
+        >
+          Refresh
+        </button>
+      </div>
+      <div class="field" [hidden]="!hasChosen">
+        <label class="label">Puppeteer Script</label>
+        <p *ngIf="puppeteerScript">{{ puppeteerScript }}</p>
+        <em *ngIf="!puppeteerScript">none</em>
       </div>
       <ul class="menu-list">
         <li>
           <a
-            [ngClass]="{ 'is-active': genericFeedRules }"
+            [ngClass]="{
+              'is-active': genericFeedRules,
+              'is-disabled':
+                !response || response?.results?.genericFeedRules?.length === 0
+            }"
             (click)="useGenericFeeds()"
-            >Feeds in Markup</a
           >
+            <strong>{{ response?.results?.genericFeedRules?.length }}</strong>
+            Feeds in Markup
+          </a>
         </li>
         <li>
           <a
-            [ngClass]="{ 'is-active': watchPageChanges }"
+            [ngClass]="{
+              'is-active': watchPageChanges,
+              'is-disabled': !response
+            }"
             (click)="useWatchPageChanges()"
             >Watch page changes</a
           >
@@ -30,29 +51,27 @@
       </ul>
     </aside>
 
-    <div class="source" *ngIf="response">
-      <div class="error-message"
-           *ngIf="errorMessage">{{ errorMessage }}</div>
-      <img [src]="imageUrlSanitizes" alt="wefwef"/>
+    <div class="source" *ngIf="response" [hidden]="hasChosen">
+      <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+      <img [src]="imageUrlSanitizes" alt="wefwef" />
     </div>
     <div class="source" *ngIf="!response">
       <app-spinner></app-spinner>
     </div>
   </app-section>
 
-    <app-generic-feeds
-      *ngIf="genericFeedRules"
-      class="flex"
-      [genericFeedRules]="response.results.genericFeedRules"
-      [url]="response.options.harvestUrl"
-      [body]="response.results.body"
-    ></app-generic-feeds>
+  <app-generic-feeds
+    *ngIf="genericFeedRules"
+    class="flex"
+    [genericFeedRules]="response.results.genericFeedRules"
+    [url]="response.options.harvestUrl"
+    [body]="response.results.body"
+  ></app-generic-feeds>
 
-<!--    <app-watch-page-change-->
-<!--      *ngIf="watchPageChanges"-->
-<!--      class="flex"-->
-<!--      [siteUrl]="response.options.harvestUrl"-->
-<!--      [body]="response.results.body"-->
-<!--    ></app-watch-page-change>-->
+  <!--    <app-watch-page-change-->
+  <!--      *ngIf="watchPageChanges"-->
+  <!--      class="flex"-->
+  <!--      [siteUrl]="response.options.harvestUrl"-->
+  <!--      [body]="response.results.body"-->
+  <!--    ></app-watch-page-change>-->
 </div>
-

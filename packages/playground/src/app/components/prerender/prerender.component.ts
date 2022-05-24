@@ -24,10 +24,7 @@ export class PrerenderComponent implements OnInit, OnDestroy {
   @Input()
   siteUrl: string;
 
-  puppeteerScript = `clickXPath; //button[text()="I Accept"]
-clickXPath; //a[text()="No, Thank You"]
-select; #download-os; macOS 10.14 (Mojave)
-waitForXPath; //h2[text()="Individual Drivers"]`;
+  puppeteerScript: string;
 
   hasChosen: boolean;
   watchPageChanges: boolean;
@@ -38,6 +35,11 @@ waitForXPath; //h2[text()="Individual Drivers"]`;
 
   imageUrlSanitizes: SafeResourceUrl;
   response: FeedDetectionResponse;
+  placeHolderScript = `clickXPath; //button[text()="I Accept"]
+clickXPath; //a[text()="No, Thank You"]
+select; #download-os; macOS 10.14 (Mojave)
+waitForXPath; //h2[text()="Individual Drivers"]`;
+  isLoading: boolean;
 
   constructor(
     private readonly settings: SettingsService,
@@ -51,18 +53,7 @@ waitForXPath; //h2[text()="Individual Drivers"]`;
   }
 
   ngOnInit(): void {
-    firstValueFrom(
-      this.feed.discover(this.siteUrl, this.puppeteerScript, true),
-    ).then(
-      (successResponse) => {
-        this.error = false;
-        this.handleResponse(successResponse);
-      },
-      (errorResponse) => {
-        this.error = true;
-        this.handleResponse(errorResponse);
-      },
-    );
+    this.refresh();
   }
 
   private use(fn: () => void) {
@@ -88,7 +79,24 @@ waitForXPath; //h2[text()="Individual Drivers"]`;
     });
   }
 
-  refresh() {}
+  refresh() {
+    this.isLoading = true;
+    this.response = null;
+    return firstValueFrom(
+      this.feed.discover(this.siteUrl, this.puppeteerScript, true),
+    ).then(
+      (successResponse) => {
+        this.error = false;
+        this.isLoading = false;
+        this.handleResponse(successResponse);
+      },
+      (errorResponse) => {
+        this.error = true;
+        this.isLoading = false;
+        this.handleResponse(errorResponse);
+      },
+    );
+  }
 
   private handleResponse(response: FeedDetectionResponse) {
     console.log('response', response);

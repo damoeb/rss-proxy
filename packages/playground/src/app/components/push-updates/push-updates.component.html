@@ -1,5 +1,5 @@
 <div class="flex">
-  <app-section title="Push Changes" [active]="!hasChosen">
+  <app-section title="Push Updates" [active]="!hasChosen">
     <ul class="menu-list">
       <li>
         <a [ngClass]="{ 'is-active': webhook }" (click)="useWebhook()"
@@ -17,7 +17,9 @@
         <a [ngClass]="{ 'is-active': email }" (click)="useEmail()">Email</a>
       </li>
       <li>
-        <a [ngClass]="{ 'is-active': calendar }" (click)="useCalendar()">Calendar</a>
+        <a [ngClass]="{ 'is-active': calendar }" (click)="useCalendar()"
+          >Calendar</a
+        >
       </li>
     </ul>
   </app-section>

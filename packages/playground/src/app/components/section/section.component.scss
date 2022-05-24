@@ -4,6 +4,7 @@
   padding-bottom: 6px;
   font-weight: bold;
   text-align: center;
+  white-space: nowrap;
 
   &.active {
     border-bottom-color: blue;

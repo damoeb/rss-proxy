@@ -37,6 +37,7 @@ export class PushUpdatesComponent implements OnInit {
     this.webhook = null;
     this.email = null;
     this.pushNotification = null;
+    this.calendar = null;
   }
 
   useWebhook() {

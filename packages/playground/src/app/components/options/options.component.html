@@ -1,5 +1,7 @@
+<!-- -- GENERIC ---------------------------------------------------------------------------------------------------- -->
+
 <div class="flex" *ngIf="!isNativeFeed">
-  <app-section title="Options for Static" [active]="!hasChosen">
+  <app-section title="Static Content" [active]="!hasChosen">
     <ul class="menu-list">
       <li>
         <a [ngClass]="{ 'is-active': nativeFeeds }" (click)="useNativeFeeds()"
@@ -17,7 +19,7 @@
           ><strong *ngIf="!isNativeFeed">{{
             response.results.genericFeedRules.length
           }}</strong>
-          Feeds in Static Markup</a
+          Generic Feeds</a
         >
       </li>
       <li>
@@ -71,11 +73,18 @@
   ></app-prerender>
 </div>
 
+<!-- -- NATIVE ----------------------------------------------------------------------------------------------------- -->
+
 <div class="flex" *ngIf="isNativeFeed">
-  <app-section title="Options for Feed" [active]="!hasChosen">
+  <app-section title="Feed" [active]="!hasChosen">
     <ul class="menu-list">
       <li>
-        <a [ngClass]="{ 'is-active': nativeFeeds }" (click)="useNativeFeeds()"
+        <a
+          [ngClass]="{
+            'is-active': nativeFeeds,
+            'is-disabled': response.results.nativeFeeds.length === 0
+          }"
+          (click)="useNativeFeeds()"
           ><strong>{{ response.results.nativeFeeds.length }}</strong> Native
           Feeds</a
         >

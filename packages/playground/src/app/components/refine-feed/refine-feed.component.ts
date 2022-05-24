@@ -14,6 +14,7 @@ import {
   NativeFeedWithParams,
 } from '../../services/feed.service';
 import { firstValueFrom } from 'rxjs';
+import { JsonFeed } from '../feed/feed.component';
 
 @Component({
   selector: 'app-refine-feed',
@@ -31,7 +32,7 @@ export class RefineFeedComponent implements OnInit {
   contentResolution: ContentResolution = 'default';
   filter = '';
 
-  rawFeed: string;
+  jsonFeed: JsonFeed;
   hasChosen: boolean;
   feedUrls: boolean;
   pushUpdates: boolean;
@@ -54,6 +55,7 @@ export class RefineFeedComponent implements OnInit {
 
   private reset() {
     this.feedUrls = null;
+    this.pushUpdates = null;
   }
 
   useFeedUrls() {
@@ -86,11 +88,7 @@ export class RefineFeedComponent implements OnInit {
   }
 
   private handleResponse(response: any) {
-    try {
-      this.rawFeed = JSON.stringify(response, null, 2).trim();
-    } catch (e) {
-      this.rawFeed = response.trim();
-    }
+    this.jsonFeed = response;
     this.changeDetectorRef.detectChanges();
   }
 

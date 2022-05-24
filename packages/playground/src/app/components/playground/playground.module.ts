@@ -9,6 +9,7 @@ import { GenericFeedsModule } from '../generic-feeds/generic-feeds.module';
 import { NativeFeedsModule } from '../native-feeds/native-feeds.module';
 import { OptionsModule } from '../options/options.module';
 import { FooterModule } from '../footer/footer.module';
+import { SpinnerModule } from '../spinner/spinner.module';
 
 @NgModule({
   declarations: [PlaygroundComponent],
@@ -23,6 +24,7 @@ import { FooterModule } from '../footer/footer.module';
     NativeFeedsModule,
     OptionsModule,
     FooterModule,
+    SpinnerModule,
   ],
 })
 export class PlaygroundModule {}
