@@ -10,7 +10,7 @@
             [(ngModel)]="puppeteerScript"
           ></textarea>
         </div>
-        <button class="button is-expanded" (click)="refresh()">Refresh</button>
+        <button class="button is-expanded is-loading" (click)="refresh()">Refresh</button>
       </div>
       <ul class="menu-list">
         <li>
@@ -30,43 +30,29 @@
       </ul>
     </aside>
 
-    <div class="source">
-      <div>{{ errorMessage }}</div>
+    <div class="source" *ngIf="response">
+      <div class="error-message"
+           *ngIf="errorMessage">{{ errorMessage }}</div>
       <img [src]="imageUrlSanitizes" alt="wefwef"/>
+    </div>
+    <div class="source" *ngIf="!response">
+      <app-spinner></app-spinner>
     </div>
   </app-section>
 
-<!--    <app-generic-feeds-->
-<!--      *ngIf="genericFeedRules"-->
-<!--      class="flex"-->
-<!--      [genericFeedRules]="genericFeedRules"-->
-<!--      [url]="response.options.harvestUrl"-->
-<!--      [body]="response.results.body"-->
-<!--    ></app-generic-feeds>-->
-
-    <app-watch-page-change
-      *ngIf="watchPageChanges"
+    <app-generic-feeds
+      *ngIf="genericFeedRules"
       class="flex"
-      [siteUrl]="response.options.harvestUrl"
+      [genericFeedRules]="response.results.genericFeedRules"
+      [url]="response.options.harvestUrl"
       [body]="response.results.body"
-    ></app-watch-page-change>
+    ></app-generic-feeds>
+
+<!--    <app-watch-page-change-->
+<!--      *ngIf="watchPageChanges"-->
+<!--      class="flex"-->
+<!--      [siteUrl]="response.options.harvestUrl"-->
+<!--      [body]="response.results.body"-->
+<!--    ></app-watch-page-change>-->
 </div>
 
-<div>
-  <!--<div class="flex">-->
-  <!--  <app-section title="Prerender" [active]="true">-->
-  <!--    <aside>-->
-  <!--      <div class="field">-->
-  <!--        <label class="label">Front running Script</label>-->
-  <!--        <div class="control is-expanded">-->
-  <!--          <button class="button is-expanded">Record</button>-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--    </aside>-->
-
-  <!--  </app-section>-->
-
-  <!--</div>-->
-
-  <!--<app-generic-feeds title="Generic Feeds from dynamic"></app-generic-feeds>-->
-</div>

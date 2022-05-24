@@ -8,3 +8,10 @@ img {
 .puppeteer-script {
   min-height: 30vh;
 }
+.error-message {
+  white-space: pre-wrap;
+  color: darkred;
+  background: #ffd7d7;
+  margin-inline: 4px;
+  padding: 10px;
+}

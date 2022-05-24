@@ -4,6 +4,7 @@ import { RefineFeedComponent } from './refine-feed.component';
 import { SectionModule } from '../section/section.module';
 import { ConvertFormatModule } from '../convert-format/convert-format.module';
 import { PushUpdatesModule } from '../push-updates/push-updates.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [RefineFeedComponent],
@@ -11,6 +12,7 @@ import { PushUpdatesModule } from '../push-updates/push-updates.module';
   imports: [
     CommonModule,
     SectionModule,
+    FormsModule,
     ConvertFormatModule,
     PushUpdatesModule,
   ],

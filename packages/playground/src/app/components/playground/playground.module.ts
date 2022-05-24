@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { PlaygroundComponent } from './playground.component';
-import { OptionsComponent } from '../options/options.component';
 import { RefineFeedModule } from '../refine-feed/refine-feed.module';
 import { GenericFeedsModule } from '../generic-feeds/generic-feeds.module';
 import { NativeFeedsModule } from '../native-feeds/native-feeds.module';

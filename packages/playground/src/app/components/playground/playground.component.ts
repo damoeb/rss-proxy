@@ -17,6 +17,7 @@ import {
 import { build } from '../../../environments/build';
 import { SettingsService } from '../../services/settings.service';
 import { environment } from '../../../environments/environment';
+import { firstValueFrom } from 'rxjs';
 
 export type ContentResolution = 'default' | 'fulltext' | 'oc';
 
@@ -147,14 +148,15 @@ export class PlaygroundComponent implements OnInit {
 
   private fromStaticSource() {
     console.log('from static source');
-    this.feedService
-      .discover(this.url)
-      .subscribe(this.handleParserResponse(), (error: HttpErrorResponse) => {
+    firstValueFrom(this.feedService.discover(this.url)).then(
+      this.handleParserResponse(),
+      (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.hasResults = false;
         this.error = error.message;
         this.changeDetectorRef.detectChanges();
-      });
+      },
+    );
   }
 
   private handleParserResponse() {
@@ -174,15 +176,15 @@ export class PlaygroundComponent implements OnInit {
       if (results.failed) {
         console.error('Proxy replied an error.', results.errorMessage);
         // tslint:disable-next-line:max-line-length
-        this.error = `Looks like this site does not contain any feed data.`;
+        this.error = results.errorMessage;
       } else {
         console.log('Proxy replies an generated feed');
         // setTimeout(() => {
         //   this.applyRule(results.genericFeedRules[0]);
         // }, 1000);
         // todo mag add fallback option
-        this.changeDetectorRef.detectChanges();
       }
+      this.changeDetectorRef.detectChanges();
     };
   }
 

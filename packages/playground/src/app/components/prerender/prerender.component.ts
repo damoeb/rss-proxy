@@ -37,6 +37,7 @@ waitForXPath; //h2[text()="Individual Drivers"]`;
   private imageUrl: string;
 
   imageUrlSanitizes: SafeResourceUrl;
+  response: FeedDetectionResponse;
 
   constructor(
     private readonly settings: SettingsService,
@@ -91,29 +92,24 @@ waitForXPath; //h2[text()="Individual Drivers"]`;
 
   private handleResponse(response: FeedDetectionResponse) {
     console.log('response', response);
-    // const reader = new FileReader();
-    //
-    // reader.addEventListener('error', console.error);
-    // reader.addEventListener('loadend', (e) => {
-    //   try {
-    //     const json = JSON.parse((e.currentTarget as any).result);
-    //     this.error = json.error;
-    //
-    //     const blob = new Blob([base64ToArrayBuffer(json.screenshot)], {
-    //       type: 'image/png',
-    //     });
-    //     this.imageUrl = window.URL.createObjectURL(blob);
-    //     this.imageUrlSanitizes = this.sanitizer.bypassSecurityTrustResourceUrl(
-    //       this.imageUrl,
-    //     );
-    //     this.errorMessage = json.message;
-    //     this.changeDetectorRef.detectChanges();
-    //   } catch (e) {
-    //     console.error(e);
-    //   }
-    // });
-    //
-    // reader.readAsText(response);
+    const results = response.results;
+
+    results.genericFeedRules = results.genericFeedRules.map((gr, index) => {
+      gr.id = index;
+      return gr;
+    });
+
+    this.response = response;
+    this.errorMessage = results.errorMessage;
+
+    const blob = new Blob([base64ToArrayBuffer(results.screenshot)], {
+      type: 'image/png',
+    });
+    this.imageUrl = window.URL.createObjectURL(blob);
+    this.imageUrlSanitizes = this.sanitizer.bypassSecurityTrustResourceUrl(
+      this.imageUrl,
+    );
+    this.changeDetectorRef.detectChanges();
   }
 }
 
