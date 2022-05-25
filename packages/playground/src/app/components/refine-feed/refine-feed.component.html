@@ -9,7 +9,7 @@
         >
           <label class="label">Feed URL</label>
           <a
-            [href]="nativeFeed.url"
+            [href]="feedUrl"
             referrerpolicy="no-referrer"
             target="_blank"
             >{{ nativeFeed.title }}</a
@@ -20,63 +20,64 @@
           *ngIf="genericFeedRule"
           [ngClass]="{ 'is-hidden': hasChosen }"
         >
-          <label class="label">Feed URL</label>
-          <a
-            [href]="genericFeedRule.feedUrl"
+          <label class="label">URL</label>
+          <div>
+            <a
+            [href]="genericFeedRule.harvestUrl"
             referrerpolicy="no-referrer"
             target="_blank"
-            >Generic Feed</a
-          >
+            >Website</a
+            >
+          </div>
+          <div>
+            <a
+              [href]="feedUrl"
+              referrerpolicy="no-referrer"
+              target="_blank"
+              >Generic Feed</a
+            >
+          </div>
         </div>
 
         <div class="field" *ngIf="!hasChosen">
-          <label class="label">Content Mapping</label>
+          <label class="label">Article Recovery</label>
           <div class="control">
             <div class="select is-expanded">
               <select
-                [(ngModel)]="contentResolution"
+                [(ngModel)]="articleRecovery"
                 class="is-expanded"
-                [ngClass]="{ 'is-primary': contentResolution !== 'none' }"
+                [ngClass]="{ 'is-primary': articleRecovery !== 'none' }"
+                (ngModelChange)="apply()"
               >
-                <option value="default">default</option>
-<!--                <option value="fulltext">fulltext</option>-->
-                <option value="oc">OG Tags</option>
+                <option value="none">none</option>
+                <option value="metadata">metadata</option>
+                <option value="full">full</option>
               </select>
             </div>
           </div>
         </div>
 
         <div class="field" *ngIf="hasChosen">
-          <label class="label">Content Mapping</label>
+          <label class="label">Article Recovery</label>
           <div class="control">
-            <em>{{ contentResolution }}</em>
+            <em>{{ articleRecovery }}</em>
           </div>
         </div>
 
         <div class="field" *ngIf="!hasChosen">
           <label class="label">Filter</label>
-          <div class="select is-expanded">
-            <select class="is-expanded">
-              <option
-                *ngFor="let filterSample of filterSamples"
-                [value]="filterSample.value"
-              >
-                {{ filterSample.name }}
-              </option>
-            </select>
-          </div>
           <div class="control">
             <textarea
               class="textarea"
               [ngClass]="{ 'is-primary': filter.length > 0 }"
               [(ngModel)]="filter"
             ></textarea>
-            <em>{{ filter }}</em>
           </div>
           <button class="button is-expanded" (click)="apply()">Apply</button>
         </div>
 
-        <div class="field" *ngIf="hasChosen">
+        <div class="field"
+             *ngIf="hasChosen">
           <label class="label">Filter</label>
           <div class="control">
             <em *ngIf="filter">{{ filter }}</em>
@@ -91,7 +92,8 @@
         >
         <ul class="menu-list">
           <li>
-            <a [ngClass]="{ 'is-active': feedUrls }" (click)="useFeedUrls()"
+            <a [ngClass]="{ 'is-active': feedUrls }"
+               (click)="useFeedUrls()"
               >Feed URLs</a
             >
           </li>
@@ -106,22 +108,24 @@
       </div>
     </aside>
 
-    <div class="feed source" [ngClass]="{ 'is-hidden': hasChosen }">
+    <div class="feed source"
+         [ngClass]="{ 'is-hidden': hasChosen }">
       <app-spinner *ngIf="!jsonFeed"></app-spinner>
-      <app-feed [jsonFeed]="jsonFeed" *ngIf="jsonFeed"></app-feed>
+      <app-feed [jsonFeed]="jsonFeed"
+                *ngIf="jsonFeed"></app-feed>
     </div>
   </app-section>
 
   <app-convert-format
     *ngIf="feedUrls"
     class="flex"
-    [nativeFeed]="createNativeFeedWithParams()"
-    [genericFeedRule]="createGenericFeedRuleWithParams()"
+    [nativeFeed]="createFeedParamsForNative()"
+    [genericFeedRule]="createFeedParamsForGeneric()"
   ></app-convert-format>
   <app-push-updates
     *ngIf="pushUpdates"
     class="flex"
-    [nativeFeed]="createNativeFeedWithParams()"
-    [genericFeed]="createGenericFeedRuleWithParams()"
+    [nativeFeed]="createFeedParamsForNative()"
+    [genericFeed]="createFeedParamsForGeneric()"
   ></app-push-updates>
 </div>

@@ -5,7 +5,7 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { ContentResolution } from '../playground/playground.component';
+import { ArticleRecovery } from '../playground/playground.component';
 import {
   FeedFormat,
   FeedService,
@@ -29,14 +29,14 @@ export class RefineFeedComponent implements OnInit {
   @Input()
   genericFeedRule: GenericFeedWithParams;
 
-  contentResolution: ContentResolution = 'default';
+  articleRecovery: ArticleRecovery = 'none';
   filter = '';
 
   jsonFeed: JsonFeed;
   hasChosen: boolean;
   feedUrls: boolean;
   pushUpdates: boolean;
-  filterSamples = [{ name: 'linkCount', value: 'wefwef' }];
+  feedUrl: string;
 
   constructor(
     private readonly changeDetectorRef: ChangeDetectorRef,
@@ -72,18 +72,19 @@ export class RefineFeedComponent implements OnInit {
 
   apply() {
     if (this.nativeFeed) {
-      firstValueFrom(
-        this.feedService.transformNativeFeed(this.createNativeFeedWithParams()),
-      ).then((response) => this.handleResponse(response));
+      const params = this.createFeedParamsForNative();
+      this.feedUrl = this.feedService.createFeedUrlForNative(params);
+      firstValueFrom(this.feedService.transformNativeFeed(params)).then(
+        (response) => this.handleResponse(response),
+      );
     }
     if (this.genericFeedRule) {
-      console.log(this.genericFeedRule.feedUrl);
+      const params = this.createFeedParamsForGeneric();
+      this.feedUrl = this.feedService.createFeedUrlForGeneric(params);
       // todo mag feedUrl must be constructed from params
-      firstValueFrom(
-        this.feedService.fetchGenericFeed(
-          this.createGenericFeedRuleWithParams(),
-        ),
-      ).then((response) => this.handleResponse(response));
+      firstValueFrom(this.feedService.fetchGenericFeed(params)).then(
+        (response) => this.handleResponse(response),
+      );
     }
   }
 
@@ -92,26 +93,22 @@ export class RefineFeedComponent implements OnInit {
     this.changeDetectorRef.detectChanges();
   }
 
-  createFeedUrl(): string {
-    return this.feedService.createFeedUrlFromGenericFeed(this.genericFeedRule);
-  }
-
-  createNativeFeedWithParams(): NativeFeedWithParams {
+  createFeedParamsForNative(): NativeFeedWithParams {
     if (this.nativeFeed) {
       return {
         feedUrl: this.nativeFeed.url,
         filter: this.filter,
-        contentResolution: this.contentResolution,
+        articleRecovery: this.articleRecovery,
       };
     }
   }
 
-  createGenericFeedRuleWithParams(): GenericFeedWithParams {
+  createFeedParamsForGeneric(): GenericFeedWithParams {
     if (this.genericFeedRule) {
       return {
         ...this.genericFeedRule,
         filter: this.filter,
-        contentResolution: this.contentResolution,
+        articleRecovery: this.articleRecovery,
       };
     }
   }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ContentResolution } from '../components/playground/playground.component';
+import { ArticleRecovery } from '../components/playground/playground.component';
 
 export interface Article {
   id: string;
@@ -32,7 +32,7 @@ export interface GenericFeedRule {
 
 export interface FeedParams {
   filter?: string;
-  contentResolution?: ContentResolution;
+  articleRecovery?: ArticleRecovery;
   targetFormat?: FeedFormat;
 }
 
@@ -94,12 +94,7 @@ export class FeedService {
   }
 
   transformNativeFeed(nativeFeed: NativeFeedWithParams): Observable<any> {
-    const parserUrl = `/api/feeds/transform?feedUrl=${encodeURIComponent(
-      nativeFeed.feedUrl,
-    )}&targetFormat=${nativeFeed.targetFormat || 'json'}&resolution=${
-      nativeFeed.contentResolution
-    }&filter=${encodeURIComponent(nativeFeed.filter)}`;
-
+    const parserUrl = this.createFeedUrlForNative(nativeFeed);
     return this.httpClient.get(parserUrl, {
       withCredentials: true,
       responseType: (!nativeFeed.targetFormat ||
@@ -109,7 +104,7 @@ export class FeedService {
     }) as Observable<any>;
   }
 
-  createFeedUrlFromGenericFeed(genericRule: GenericFeedWithParams): string {
+  createFeedUrlForGeneric(genericRule: GenericFeedWithParams): string {
     return `/api/web-to-feed?version=0.1&url=${encodeURIComponent(
       genericRule.harvestUrl,
     )}&linkXPath=${encodeURIComponent(
@@ -118,13 +113,24 @@ export class FeedService {
       genericRule.extendContext,
     )}&contextXPath=${encodeURIComponent(
       genericRule.contextXPath,
+    )}&recovery=${encodeURIComponent(
+      genericRule.articleRecovery.toUpperCase(),
     )}&filter=${encodeURIComponent(genericRule.filter)}`;
+  }
+
+  createFeedUrlForNative(nativeFeed: NativeFeedWithParams): string {
+    return `/api/feeds/transform?feedUrl=${encodeURIComponent(
+      nativeFeed.feedUrl,
+    )}&targetFormat=${
+      nativeFeed.targetFormat || 'json'
+    }&resolution=${nativeFeed.articleRecovery.toUpperCase()}&recovery=${
+      nativeFeed.articleRecovery
+    }&filter=${encodeURIComponent(nativeFeed.filter)}`;
   }
 
   fetchGenericFeed(genericRule: GenericFeedWithParams): Observable<any> {
     // http://localhost:8080/api/web-to-feed?version=0.1&url=&linkXPath=&extendContext=&contextXPath=&filter=
-    const parserUrl = this.createFeedUrlFromGenericFeed(genericRule);
-
+    const parserUrl = this.createFeedUrlForGeneric(genericRule);
     return this.httpClient.get(parserUrl, {
       withCredentials: true,
       responseType: (!genericRule.targetFormat ||

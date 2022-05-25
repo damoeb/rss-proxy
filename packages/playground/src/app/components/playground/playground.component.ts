@@ -19,7 +19,7 @@ import { SettingsService } from '../../services/settings.service';
 import { environment } from '../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 
-export type ContentResolution = 'default' | 'fulltext' | 'oc';
+export type ArticleRecovery = 'none' | 'metadata' | 'full';
 
 @Component({
   selector: 'app-playground',
