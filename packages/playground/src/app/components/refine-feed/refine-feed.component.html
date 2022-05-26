@@ -66,6 +66,16 @@
 
         <div class="field" *ngIf="!hasChosen">
           <label class="label">Filter</label>
+          <div class="select is-expanded">
+            <select class="is-expanded" [(ngModel)]="currentSample" (ngModelChange)="filter = $event">
+              <option
+                *ngFor="let filterSample of filterSamples"
+                [value]="filterSample.value"
+              >
+                {{ filterSample.name }}
+              </option>
+            </select>
+          </div>
           <div class="control">
             <textarea
               class="textarea"

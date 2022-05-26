@@ -16,6 +16,11 @@ import {
 import { firstValueFrom } from 'rxjs';
 import { JsonFeed } from '../feed/feed.component';
 
+interface FilterExample {
+  name: string;
+  value: string;
+}
+
 @Component({
   selector: 'app-refine-feed',
   templateUrl: './refine-feed.component.html',
@@ -37,6 +42,25 @@ export class RefineFeedComponent implements OnInit {
   feedUrls: boolean;
   pushUpdates: boolean;
   feedUrl: string;
+  filterSamples: FilterExample[] = [
+    {
+      name: 'Choose from samples',
+      value: '',
+    },
+    {
+      name: 'Must include',
+      value: 'keyword',
+    },
+    {
+      name: 'Must not include',
+      value: '-Advertisment',
+    },
+    {
+      name: 'With link count',
+      value: 'links > 0',
+    },
+  ];
+  currentSample = '';
 
   constructor(
     private readonly changeDetectorRef: ChangeDetectorRef,

@@ -123,9 +123,9 @@ export class FeedService {
       nativeFeed.feedUrl,
     )}&targetFormat=${
       nativeFeed.targetFormat || 'json'
-    }&resolution=${nativeFeed.articleRecovery.toUpperCase()}&recovery=${
-      nativeFeed.articleRecovery
-    }&filter=${encodeURIComponent(nativeFeed.filter)}`;
+    }&recovery=${nativeFeed.articleRecovery.toUpperCase()}&filter=${encodeURIComponent(
+      nativeFeed.filter,
+    )}`;
   }
 
   fetchGenericFeed(genericRule: GenericFeedWithParams): Observable<any> {
