@@ -1,0 +1,7 @@
+.idea
+docs
+
+packages/playground/node_modules
+packages/playground/.angular
+packages/playground/e2e
+packages/playground/src

@@ -2,7 +2,9 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
+import { RssProxyEnvironment } from './rss-proxy-environment';
+
+export const environment: RssProxyEnvironment = {
   production: false,
   history: [
     'https://developers.googleblog.com/',
