@@ -8,12 +8,9 @@
           [ngClass]="{ 'is-hidden': hasChosen }"
         >
           <label class="label">Feed URL</label>
-          <a
-            [href]="feedUrl"
-            referrerpolicy="no-referrer"
-            target="_blank"
-            >{{ nativeFeed.title }}</a
-          >
+          <a [href]="feedUrl" referrerpolicy="no-referrer" target="_blank">{{
+            nativeFeed.title
+          }}</a>
         </div>
         <div
           class="field mb-6"
@@ -23,17 +20,14 @@
           <label class="label">URL</label>
           <div>
             <a
-            [href]="genericFeedRule.harvestUrl"
-            referrerpolicy="no-referrer"
-            target="_blank"
-            >Website</a
+              [href]="genericFeedRule.harvestUrl"
+              referrerpolicy="no-referrer"
+              target="_blank"
+              >Website</a
             >
           </div>
           <div>
-            <a
-              [href]="feedUrl"
-              referrerpolicy="no-referrer"
-              target="_blank"
+            <a [href]="feedUrl" referrerpolicy="no-referrer" target="_blank"
               >Generic Feed</a
             >
           </div>
@@ -67,7 +61,11 @@
         <div class="field" *ngIf="!hasChosen">
           <label class="label">Filter</label>
           <div class="select is-expanded">
-            <select class="is-expanded" [(ngModel)]="currentSample" (ngModelChange)="filter = $event">
+            <select
+              class="is-expanded"
+              [(ngModel)]="currentSample"
+              (ngModelChange)="filter = $event"
+            >
               <option
                 *ngFor="let filterSample of filterSamples"
                 [value]="filterSample.value"
@@ -86,8 +84,7 @@
           <button class="button is-expanded" (click)="apply()">Apply</button>
         </div>
 
-        <div class="field"
-             *ngIf="hasChosen">
+        <div class="field" *ngIf="hasChosen">
           <label class="label">Filter</label>
           <div class="control">
             <em *ngIf="filter">{{ filter }}</em>
@@ -102,8 +99,7 @@
         >
         <ul class="menu-list">
           <li>
-            <a [ngClass]="{ 'is-active': feedUrls }"
-               (click)="useFeedUrls()"
+            <a [ngClass]="{ 'is-active': feedUrls }" (click)="useFeedUrls()"
               >Feed URLs</a
             >
           </li>
@@ -118,11 +114,9 @@
       </div>
     </aside>
 
-    <div class="feed source"
-         [ngClass]="{ 'is-hidden': hasChosen }">
+    <div class="feed source" [ngClass]="{ 'is-hidden': hasChosen }">
       <app-spinner *ngIf="!jsonFeed"></app-spinner>
-      <app-feed [jsonFeed]="jsonFeed"
-                *ngIf="jsonFeed"></app-feed>
+      <app-feed [jsonFeed]="jsonFeed" *ngIf="jsonFeed"></app-feed>
     </div>
   </app-section>
 

@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RefineFeedComponent } from './refine-feed.component';
+import { RefineFeedModule } from './refine-feed.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('RefineFeedComponent', () => {
   let component: RefineFeedComponent;
@@ -8,7 +10,7 @@ describe('RefineFeedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [RefineFeedComponent],
+      imports: [RefineFeedModule, HttpClientTestingModule],
     }).compileComponents();
   });
 

@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PrerenderComponent } from './prerender.component';
+import { PrerenderModule } from './prerender.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PrerenderComponent', () => {
   let component: PrerenderComponent;
@@ -8,7 +10,7 @@ describe('PrerenderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PrerenderComponent],
+      imports: [PrerenderModule, HttpClientTestingModule],
     }).compileComponents();
   });
 

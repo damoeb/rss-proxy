@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FeedComponent } from './feed.component';
+import { FeedModule } from './feed.module';
 
 describe('FeedComponent', () => {
   let component: FeedComponent;
@@ -8,13 +9,16 @@ describe('FeedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FeedComponent],
+      imports: [FeedModule],
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FeedComponent);
     component = fixture.componentInstance;
+    component.jsonFeed = {
+      items: [],
+    } as any;
     fixture.detectChanges();
   });
 
