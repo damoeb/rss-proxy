@@ -1,7 +1,5 @@
-# the image
-FROM damoeb/rich-rss:core-2
-
-RUN echo 'you are here' && pwd && ls -lah
-COPY packages/playground/dist/ ./static
+FROM damoeb/rich-rss:core-0
 
 ENV spring_profiles_active=stateless
+
+COPY packages/playground/dist/ ./static

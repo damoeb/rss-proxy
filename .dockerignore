@@ -3,5 +3,6 @@ docs
 
 packages/playground/node_modules
 packages/playground/.angular
+packages/playground/.gradle
 packages/playground/e2e
 packages/playground/src

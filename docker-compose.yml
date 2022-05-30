@@ -1,0 +1,60 @@
+version: '3.4'
+
+# envs https://medium.com/softonic-eng/docker-compose-from-development-to-production-88000124a57c
+
+services:
+
+  rich-puppeteer:
+    image: damoeb/rich-rss:puppeteer
+    restart: always
+    environment:
+      - CHROME_HEADLESS_URL=http://chrome-headless:9222
+    depends_on:
+      - chrome-headless
+    networks:
+      - puppeteer_net
+
+  chrome-headless:
+    image: justinribeiro/chrome-headless
+    security_opt:
+      - seccomp=./chrome.json
+    restart: always
+#    ports:
+#      - "9222:9222"
+    networks:
+      - puppeteer_net
+
+  rss-proxy:
+    image: damoeb/rss-proxy:latest
+    restart: always
+#    healthcheck:
+#      test: curl --fail http://localhost:8080/health || exit 1
+#      interval: 10s
+#      retries: 3
+#      start_period: 10s
+#      timeout: 10s
+
+    depends_on:
+      - rich-puppeteer
+    ports:
+      - "8080:8080"
+    environment:
+      - LOG_LEVEL=info
+#      - TOKEN_SECRET=1234_top_secret
+      - APP_PUBLIC_URL=http://localhost:8080
+      - PUPPETEER_HOST=http://rich-puppeteer:3000
+    secrets:
+      - TOKEN_SECRET
+    networks:
+      - backend_net
+      - puppeteer_net
+
+secrets:
+  TOKEN_SECRET:
+    file: ./tokenSecret.txt
+
+networks:
+  puppeteer_net:
+    driver: bridge
+  backend_net:
+    driver: bridge

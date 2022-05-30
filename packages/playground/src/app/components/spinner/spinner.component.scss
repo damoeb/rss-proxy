@@ -3,7 +3,7 @@
   position: relative;
   width: 80px;
   height: 80px;
-  transform: scale(0.7);
+  transform: scale(0.5);
   transform-origin: 0 0;
 }
 .lds-facebook div {
@@ -11,7 +11,7 @@
   position: absolute;
   left: 8px;
   width: 16px;
-  background: #cccccc;
+  background: #575757;
   animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
 }
 .lds-facebook div:nth-child(1) {

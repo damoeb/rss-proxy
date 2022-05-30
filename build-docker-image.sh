@@ -3,7 +3,7 @@
 OLDPWD=`pwd`
 
 clean () {
-  cd ../playground && yarn clean
+  cd packages/playground && yarn clean
   cd $OLDPWD
 }
 

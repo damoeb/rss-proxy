@@ -54,7 +54,7 @@ export class PlaygroundComponent implements OnInit {
   showHistory: boolean;
 
   private static getHistory(): string[] {
-    const localHistory = localStorage.getItem('history');
+    const localHistory = localStorage.getItem('history') || JSON.stringify([]);
     return environment.history || localHistory ? JSON.parse(localHistory) : [];
   }
 

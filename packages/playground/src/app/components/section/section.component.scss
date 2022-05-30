@@ -5,6 +5,7 @@
   font-weight: bold;
   text-align: center;
   white-space: nowrap;
+  min-width: 200px;
 
   &.active {
     border-bottom-color: blue;
