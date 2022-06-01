@@ -5,9 +5,8 @@ import { GenericFeedsModule } from '../generic-feeds/generic-feeds.module';
 import { NativeFeedsModule } from '../native-feeds/native-feeds.module';
 import { SectionModule } from '../section/section.module';
 import { WatchPageChangeModule } from '../watch-page-change/watch-page-change.module';
-import { PushUpdatesModule } from '../push-updates/push-updates.module';
-import { ConvertFormatModule } from '../convert-format/convert-format.module';
 import { PrerenderModule } from '../prerender/prerender.module';
+import { NativeOptionsModule } from '../native-options/native-options.module';
 
 @NgModule({
   declarations: [OptionsComponent],
@@ -18,9 +17,8 @@ import { PrerenderModule } from '../prerender/prerender.module';
     NativeFeedsModule,
     SectionModule,
     WatchPageChangeModule,
-    PushUpdatesModule,
-    ConvertFormatModule,
     PrerenderModule,
+    NativeOptionsModule,
   ],
 })
 export class OptionsModule {}

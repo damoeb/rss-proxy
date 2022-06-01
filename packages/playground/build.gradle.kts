@@ -37,9 +37,14 @@ val testTask = tasks.register<YarnTask>("test") {
   outputs.upToDateWhen { true }
 }
 
+val fixVersionTask = tasks.register("fixPackageVersion", Exec::class) {
+  val proxyVersion = findProperty("proxyVersion") as String
+  commandLine("yarn version --new-version $proxyVersion".split(" "))
+}
+
 val buildTask = tasks.register<YarnTask>("build") {
   args.set(listOf("build"))
-  dependsOn(yarnInstallTask, lintTask, testTask)
+  dependsOn(yarnInstallTask, lintTask, testTask, fixVersionTask)
   inputs.dir(project.fileTree("src").exclude("**/*.spec.ts"))
   inputs.dir("node_modules")
   inputs.files("yarn.lock", "tsconfig.json", "tsconfig.build.json")

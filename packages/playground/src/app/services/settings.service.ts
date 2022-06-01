@@ -2,8 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
-export interface ServerSettings {
-  jsSupport: boolean;
+export interface AppSettings {
+  canPrerender: boolean;
+  canExtractFulltext: boolean;
+  canMail: boolean;
+  canPush: boolean;
   stateless: boolean;
   webToFeedVersion: boolean;
 }
@@ -12,16 +15,18 @@ export interface ServerSettings {
   providedIn: 'root',
 })
 export class SettingsService {
-  // tslint:disable-next-line:variable-name
-  private _serverSettings: Promise<ServerSettings>;
+  private appSettings: AppSettings;
 
   constructor(private readonly httpClient: HttpClient) {
-    this._serverSettings = firstValueFrom(
-      httpClient.get<ServerSettings>(`api/settings`),
+    this.init();
+  }
+  private async init() {
+    this.appSettings = await firstValueFrom(
+      this.httpClient.get<AppSettings>(`api/settings`),
     );
   }
 
-  public serverSettings(): Promise<ServerSettings> {
-    return this._serverSettings;
+  get(): AppSettings {
+    return this.appSettings;
   }
 }

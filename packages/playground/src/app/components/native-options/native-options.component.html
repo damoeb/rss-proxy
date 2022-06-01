@@ -1,0 +1,59 @@
+<div class="flex">
+  <app-section title="Native Options" [active]="!hasChosen">
+    <ul class="menu-list">
+      <li>
+        <a
+          [ngClass]="{
+            'is-active': convertFormat
+          }"
+          (click)="useConvertFormat()"
+          >Convert Format</a
+        >
+      </li>
+      <li>
+        <a
+          [ngClass]="{
+            'is-active': merge
+          }"
+          (click)="useMerge()"
+          >Merge with Others</a
+        >
+      </li>
+      <li>
+        <a
+          [ngClass]="{
+            'is-active': refine
+          }"
+          (click)="useRefine()"
+          >Refine</a
+        >
+      </li>
+      <li>
+        <a
+          [ngClass]="{
+            'is-active': pushUpdates
+          }"
+          (click)="usePushUpdate()"
+          >Push Updates</a
+        >
+      </li>
+    </ul>
+  </app-section>
+
+  <app-convert-format
+    *ngIf="convertFormat"
+    class="flex"
+    [nativeFeed]="nativeFeed"
+  ></app-convert-format>
+  <app-push-updates
+    *ngIf="pushUpdates"
+    class="flex"
+    [nativeFeed]="nativeFeed"
+  ></app-push-updates>
+  <app-merge-feeds
+    *ngIf="merge"
+    class="flex"
+    [nativeFeed]="nativeFeed"
+  ></app-merge-feeds>
+  <app-refine-feed *ngIf="refine" [nativeFeed]="nativeFeed"></app-refine-feed>
+</div>

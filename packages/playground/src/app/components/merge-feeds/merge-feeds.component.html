@@ -1,0 +1,50 @@
+<div class="flex">
+  <app-section title="Merge Feeds" [active]="!refine">
+    <div>
+      <ul class="menu-list">
+        <li class="mb-3">
+          <label class="label">Feeds</label>
+        </li>
+        <li *ngFor="let feed of feeds">
+          <a>
+            <strong>{{ feed.title }}</strong>
+            <p *ngIf="feed.description">{{ feed.description }}</p>
+            <p *ngIf="!feed.description"><em>no description</em></p>
+          </a>
+        </li>
+        <li [ngClass]="{ 'is-hidden': refine }">
+          <div class="field">
+            <div>
+              <input
+                type="url"
+                class="input"
+                name="q"
+                [(ngModel)]="newFeedUrl"
+                placeholder="Type here"
+              />
+            </div>
+            <div>
+              <button class="button is-expanded" (click)="append(newFeedUrl)">
+                Add
+              </button>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <label class="label mt-6 is-primary" [ngClass]="{ 'is-hidden': refine }"
+        >Continue</label
+      >
+      <ul class="menu-list">
+        <li>
+          <a
+            (click)="createMergedFeed()"
+            [ngClass]="{ 'is-disabled': feeds.length < 2 }"
+            >Refine Feed</a
+          >
+        </li>
+      </ul>
+    </div>
+  </app-section>
+
+  <app-refine-feed *ngIf="refine" [nativeFeed]="mergedFeed"></app-refine-feed>
+</div>

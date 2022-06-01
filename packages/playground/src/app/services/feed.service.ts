@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { ArticleRecovery } from '../components/playground/playground.component';
 import { AuthService } from './auth.service';
+import { JsonFeed } from '../components/feed/feed.component';
 
 export interface Article {
   id: string;
@@ -84,7 +85,7 @@ export class FeedService {
     private readonly auth: AuthService,
   ) {}
 
-  public discover(
+  discover(
     url: string,
     puppeteerScript = '',
     prerender = false,
@@ -144,13 +145,14 @@ export class FeedService {
     }) as Observable<any>;
   }
 
-  prerender(siteUrl: string, puppeteerScript: string) {
-    const url = `/api/public/puppeteer/screenshot?url=${encodeURIComponent(
-      siteUrl,
-    )}&script=${encodeURIComponent(puppeteerScript)}`;
-    return this.httpClient.get(url, {
-      withCredentials: true,
-      responseType: 'blob',
-    }) as Observable<any>;
+  explainFeed(feedUrl: string): Promise<JsonFeed> {
+    const explainUrl = `/api/feeds/explain?feedUrl=${encodeURIComponent(
+      feedUrl,
+    )}&token=${encodeURIComponent(this.auth.getToken())}`;
+    return firstValueFrom(
+      this.httpClient.get<JsonFeed>(explainUrl, {
+        withCredentials: true,
+      }),
+    );
   }
 }

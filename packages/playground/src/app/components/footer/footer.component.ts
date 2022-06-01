@@ -5,10 +5,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { build } from '../../../environments/build';
-import {
-  ServerSettings,
-  SettingsService,
-} from '../../services/settings.service';
+import { AppSettings, SettingsService } from '../../services/settings.service';
 
 @Component({
   selector: 'app-footer',
@@ -18,7 +15,7 @@ import {
 })
 export class FooterComponent implements OnInit {
   buildInfo: { date: string; version: string; revision: string };
-  serverSettings: ServerSettings;
+  appSettings: AppSettings;
 
   constructor(
     private readonly settings: SettingsService,
@@ -27,7 +24,7 @@ export class FooterComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.buildInfo = build;
-    this.serverSettings = await this.settings.serverSettings();
+    this.appSettings = this.settings.get();
     this.changeDetectorRef.detectChanges();
   }
 

@@ -5,31 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f354cf1d-853a-464e-8e85-6575024551e6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/services/auth.service.spec.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/services/auth.service.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tasks" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/angular.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/browserslist" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/browserslist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.spec.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/panel/panel.module.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/footer/footer.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/footer/footer.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/footer/footer.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/footer/footer.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/services/settings.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/services/settings.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/environment.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/styles.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/tsconfig.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/yarn.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/Dockerfile" afterDir="false" />
     </list>
     <list id="f638d3ef-7a6d-4052-aad1-f24fc9f0e590" name="ignore" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -51,12 +48,31 @@
     <expand />
     <select />
   </component>
-  <component name="DefaultGradleProjectSettings">
-    <option name="isMigrated" value="true" />
-  </component>
   <component name="ElmWorkspace">
     <elmProjects />
     <settings elmCompilerPath="" elmFormatPath="" elmTestPath="" isElmFormatOnSaveEnabled="false" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="rss-proxy" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -84,6 +100,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -103,8 +121,9 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/packages/playground/node_modules/prettier" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="settings.nodejs" />
+    <property name="settings.editor.selected.configurable" value="settings.javascript.prettier" />
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/packages/playground/node_modules/typescript/lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -283,6 +302,11 @@
       <workItem from="1652635091758" duration="89321000" />
       <workItem from="1652966229564" duration="1304000" />
       <workItem from="1652969818351" duration="9793000" />
+      <workItem from="1653986204349" duration="29000" />
+      <workItem from="1653986384993" duration="61000" />
+      <workItem from="1653991946163" duration="692000" />
+      <workItem from="1654030815939" duration="1075000" />
+      <workItem from="1654031907891" duration="16195000" />
     </task>
     <task id="LOCAL-00017" summary="better logging">
       <created>1585428585627</created>

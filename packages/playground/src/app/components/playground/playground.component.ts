@@ -50,7 +50,7 @@ export class PlaygroundComponent implements OnInit {
   isLoading = false;
   history: string[];
 
-  hasJsSupport = false;
+  canPrerender = false;
   showHistory: boolean;
 
   private static getHistory(): string[] {
@@ -67,10 +67,9 @@ export class PlaygroundComponent implements OnInit {
       }
     });
 
-    this.settings.serverSettings().then((settings) => {
-      this.hasJsSupport = settings.jsSupport;
-      this.changeDetectorRef.detectChanges();
-    });
+    const settings = this.settings.get();
+    this.canPrerender = settings.canPrerender;
+    this.changeDetectorRef.detectChanges();
   }
 
   async parseFromUrl() {

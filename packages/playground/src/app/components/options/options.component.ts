@@ -31,9 +31,7 @@ export class OptionsComponent implements OnInit {
   jsSupport: boolean;
   stateless: boolean;
   isNativeFeed: boolean;
-  pushUpdates: boolean;
   prerender: boolean;
-  convertFormat: boolean;
 
   constructor(
     private readonly settings: SettingsService,
@@ -44,9 +42,8 @@ export class OptionsComponent implements OnInit {
     this.isNativeFeed =
       this.response.results.mimeType.toLowerCase().indexOf('xml') > -1;
 
-    const s = await this.settings.serverSettings();
-    this.jsSupport = s.jsSupport;
-    // this.stateless = s.stateless;
+    const s = this.settings.get();
+    this.jsSupport = s.canPrerender;
     this.stateless = false;
     this.changeDetectorRef.detectChanges();
   }
@@ -60,10 +57,8 @@ export class OptionsComponent implements OnInit {
   private reset() {
     this.nativeFeeds = null;
     this.genericFeedRules = null;
-    this.pushUpdates = null;
     this.prerender = null;
     this.watchPageChanges = null;
-    this.convertFormat = null;
   }
 
   useNativeFeeds() {
@@ -84,21 +79,9 @@ export class OptionsComponent implements OnInit {
     });
   }
 
-  usePushUpdate() {
-    this.use(() => {
-      this.pushUpdates = true;
-    });
-  }
-
   useDynamicRendering() {
     this.use(() => {
       this.prerender = true;
-    });
-  }
-
-  useConvertFormat() {
-    this.use(() => {
-      this.convertFormat = true;
     });
   }
 
