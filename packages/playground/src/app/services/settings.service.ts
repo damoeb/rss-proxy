@@ -16,9 +16,10 @@ export interface AppSettings {
 })
 export class SettingsService {
   private appSettings: AppSettings;
+  public readonly waitForInit: Promise<void>;
 
   constructor(private readonly httpClient: HttpClient) {
-    this.init();
+    this.waitForInit = this.init();
   }
   private async init() {
     this.appSettings = await firstValueFrom(

@@ -6,6 +6,7 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+import { SettingsService } from './settings.service';
 
 interface AuthResponse {
   token: string;
@@ -18,7 +19,10 @@ interface AuthResponse {
 export class AuthService implements CanActivate {
   private token: string;
   private waitForToken: Promise<void>;
-  constructor(private httpClient: HttpClient) {
+  constructor(
+    private readonly httpClient: HttpClient,
+    private readonly settings: SettingsService,
+  ) {
     this.waitForToken = this.requestAuthTokenForAnonymous();
   }
 
@@ -26,7 +30,9 @@ export class AuthService implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Promise<boolean> {
-    return this.waitForToken.then(() => true);
+    return Promise.all([this.waitForToken, this.settings.waitForInit]).then(
+      () => true,
+    );
   }
 
   private async requestAuthTokenForAnonymous() {

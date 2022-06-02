@@ -1,14 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import {
+  GenericFeedWithParams,
+  NativeFeedWithParams,
+} from '../../services/feed.service';
 
 @Component({
   selector: 'app-push-as-notification',
-  templateUrl: './push-as-notification.component.html',
-  styleUrls: ['./push-as-notification.component.scss'],
+  templateUrl: './push-options.component.html',
+  styleUrls: ['./push-options.component.scss'],
 })
-export class PushAsNotificationComponent implements OnInit {
+export class PushOptionsComponent implements OnInit {
   hasChosen: boolean;
   mobile: boolean;
   web: boolean;
+
+  @Input()
+  nativeFeed: NativeFeedWithParams;
+  @Input()
+  genericFeedRule: GenericFeedWithParams;
 
   constructor() {}
 

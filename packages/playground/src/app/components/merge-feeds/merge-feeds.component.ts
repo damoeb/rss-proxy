@@ -11,6 +11,7 @@ import {
   NativeFeedWithParams,
 } from '../../services/feed.service';
 import { JsonFeed } from '../feed/feed.component';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
   selector: 'app-merge-feeds',
@@ -24,29 +25,76 @@ export class MergeFeedsComponent implements OnInit {
 
   feeds: JsonFeed[];
   mergedFeed: NativeFeedRef;
-  refine: boolean;
+  hasChosen: boolean;
   newFeedUrl = '';
+  feedSuggestions: any;
+  isStateless: boolean;
+  errorMessage: string;
+  refine: boolean;
+  export: boolean;
 
   constructor(
     private readonly feedService: FeedService,
+    private readonly settings: SettingsService,
     private readonly changeRef: ChangeDetectorRef,
   ) {}
 
   async ngOnInit(): Promise<void> {
     this.feeds = [];
+    this.isStateless = this.settings.get().stateless;
+
     await this.append(this.nativeFeed.feedUrl);
   }
 
   async append(feedUrl: string) {
-    const feedRef = await this.feedService.explainFeed(feedUrl);
-    this.feeds.push(feedRef);
+    this.errorMessage = null;
+    try {
+      const feedRef = await this.feedService.explainFeed(feedUrl);
+      this.feeds.push(feedRef);
+    } catch (e) {
+      this.errorMessage = 'This feed caused a problem';
+    }
     this.newFeedUrl = '';
     this.changeRef.detectChanges();
   }
 
   createMergedFeed() {
-    this.refine = true;
+    this.hasChosen = true;
     // todo create bucket
     // add feeds
+  }
+
+  async showFeedSuggestions(query: string) {
+    if (!this.isStateless) {
+      const realted = await this.feedService.findRelated(query);
+    }
+  }
+
+  removeIndex(index: number) {
+    this.feeds = this.feeds.filter((_, otherIndex) => index != otherIndex);
+  }
+
+  private use(fn: () => void) {
+    this.createMergedFeed();
+    this.reset();
+    fn();
+    this.hasChosen = true;
+  }
+
+  private reset() {
+    this.export = null;
+    this.refine = null;
+  }
+
+  useExport() {
+    this.use(() => {
+      this.export = true;
+    });
+  }
+
+  useRefine() {
+    this.use(() => {
+      this.refine = true;
+    });
   }
 }

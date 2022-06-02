@@ -1,0 +1,28 @@
+<form (ngSubmit)="callTrigger()">
+  <div class="field has-addons is-expanded">
+    <div
+      class="control is-expanded"
+    >
+      <input
+        class="input is-expanded"
+        type="url"
+        [placeholder]="placeholder"
+        [(ngModel)]="url"
+        (ngModelChange)="callChange($event)"
+        autocomplete="off"
+        autofocus
+        name="url"
+        required
+      />
+    </div>
+    <div class="control" *ngIf="showSubmit">
+      <button
+        class="button"
+        (click)="callTrigger()"
+        [ngClass]="{ 'is-disabled': isLoading }"
+      >
+        {{buttonText}}
+      </button>
+    </div>
+  </div>
+</form>

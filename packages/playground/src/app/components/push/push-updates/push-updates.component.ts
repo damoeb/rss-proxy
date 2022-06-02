@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import {
   GenericFeedWithParams,
   NativeFeedWithParams,
-} from '../../services/feed.service';
+} from '../../../services/feed.service';
 
 @Component({
   selector: 'app-push-updates',
@@ -15,7 +15,7 @@ export class PushUpdatesComponent implements OnInit {
   @Input()
   nativeFeed: NativeFeedWithParams;
   @Input()
-  genericFeed: GenericFeedWithParams;
+  genericFeedRule: GenericFeedWithParams;
 
   webhook: boolean;
   pushNotification: boolean;

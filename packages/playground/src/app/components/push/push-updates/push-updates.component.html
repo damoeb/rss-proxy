@@ -24,7 +24,7 @@
     </ul>
   </app-section>
 
-  <app-push-as-notification *ngIf="pushNotification"></app-push-as-notification>
-  <app-push-as-webhook *ngIf="webhook"></app-push-as-webhook>
-  <app-push-as-email *ngIf="email"></app-push-as-email>
+  <app-push-as-notification *ngIf="pushNotification" [nativeFeed]="nativeFeed" [genericFeedRule]="genericFeedRule"></app-push-as-notification>
+  <app-push-as-webhook *ngIf="webhook" [nativeFeed]="nativeFeed" [genericFeedRule]="genericFeedRule"></app-push-as-webhook>
+  <app-push-as-email *ngIf="email" [nativeFeed]="nativeFeed" [genericFeedRule]="genericFeedRule"></app-push-as-email>
 </div>

@@ -1,0 +1,37 @@
+<div class="flex">
+  <app-section title="Consume" [active]="!hasChosen">
+    <ul class="menu-list">
+      <li>
+        <a
+          [ngClass]="{
+            'is-active': convert
+          }"
+          (click)="useConvert()"
+          >Feeds</a
+        >
+      </li>
+      <li>
+        <a
+          [ngClass]="{
+            'is-active': push
+          }"
+          (click)="usePush()"
+          >Push</a
+        >
+      </li>
+    </ul>
+  </app-section>
+
+  <app-convert-format
+    *ngIf="convert"
+    class="flex"
+    [nativeFeed]="nativeFeed"
+    [genericFeedRule]="genericFeedRule"
+  ></app-convert-format>
+  <app-push-updates
+    *ngIf="push"
+    class="flex"
+    [nativeFeed]="nativeFeed"
+    [genericFeedRule]="genericFeedRule"
+  ></app-push-updates>
+</div>

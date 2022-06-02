@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NativeFeedRef } from '../../services/feed.service';
+import {
+  NativeFeedRef,
+  NativeFeedWithParams,
+} from '../../services/feed.service';
 
 @Component({
   selector: 'app-native-feeds',
@@ -19,5 +22,11 @@ export class NativeFeedsComponent implements OnInit {
   useFeed(feed: NativeFeedRef) {
     this.currentNativeFeed = feed;
     this.hasChosen = true;
+  }
+
+  withParams(): NativeFeedWithParams {
+    return {
+      feedUrl: this.currentNativeFeed.url,
+    };
   }
 }

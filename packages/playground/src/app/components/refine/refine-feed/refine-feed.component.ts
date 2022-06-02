@@ -5,16 +5,14 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { ArticleRecovery } from '../playground/playground.component';
+import { ArticleRecovery } from '../../playground/playground.component';
 import {
-  FeedFormat,
   FeedService,
   GenericFeedWithParams,
-  NativeFeedRef,
   NativeFeedWithParams,
-} from '../../services/feed.service';
+} from '../../../services/feed.service';
 import { firstValueFrom } from 'rxjs';
-import { JsonFeed } from '../feed/feed.component';
+import { JsonFeed } from '../../feed/feed.component';
 
 interface FilterExample {
   name: string;
@@ -29,18 +27,24 @@ interface FilterExample {
 })
 export class RefineFeedComponent implements OnInit {
   @Input()
-  nativeFeed: NativeFeedRef;
-
+  nativeFeed: NativeFeedWithParams;
   @Input()
   genericFeedRule: GenericFeedWithParams;
+  @Input()
+  showArticleRecovery: boolean;
+  @Input()
+  showDigest: boolean;
+  @Input()
+  showThrottle: boolean;
+  @Input()
+  showFilter: boolean;
 
   articleRecovery: ArticleRecovery = 'none';
   filter = '';
 
   jsonFeed: JsonFeed;
   hasChosen: boolean;
-  feedUrls: boolean;
-  pushUpdates: boolean;
+  export: boolean;
   feedUrl: string;
   filterSamples: FilterExample[] = [
     {
@@ -62,6 +66,14 @@ export class RefineFeedComponent implements OnInit {
   ];
   currentSample = '';
 
+  digestWindow = '';
+  digestStartingAt: Date;
+
+  useThrottling = false;
+  throttleMaxArticles = 5;
+  throttleSortBy = 'score';
+  useDigest = false;
+
   constructor(
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly feedService: FeedService,
@@ -72,38 +84,33 @@ export class RefineFeedComponent implements OnInit {
   }
 
   private use(fn: () => void) {
-    this.reset();
-    fn();
-    this.hasChosen = true;
+    if (this.valid()) {
+      this.reset();
+      fn();
+      this.hasChosen = true;
+    }
   }
 
   private reset() {
-    this.feedUrls = null;
-    this.pushUpdates = null;
+    this.export = null;
   }
 
-  useFeedUrls() {
+  useExport() {
     this.use(() => {
-      this.feedUrls = true;
-    });
-  }
-
-  usePushUpdate() {
-    this.use(() => {
-      this.pushUpdates = true;
+      this.export = true;
     });
   }
 
   apply() {
     if (this.nativeFeed) {
-      const params = this.createFeedParamsForNative();
+      const params = this.nativeFeed;
       this.feedUrl = this.feedService.createFeedUrlForNative(params);
       firstValueFrom(this.feedService.transformNativeFeed(params)).then(
         (response) => this.handleResponse(response),
       );
     }
     if (this.genericFeedRule) {
-      const params = this.createFeedParamsForGeneric();
+      const params = this.genericFeedRule;
       this.feedUrl = this.feedService.createFeedUrlForGeneric(params);
       // todo mag feedUrl must be constructed from params
       firstValueFrom(this.feedService.fetchGenericFeed(params)).then(
@@ -117,23 +124,12 @@ export class RefineFeedComponent implements OnInit {
     this.changeDetectorRef.detectChanges();
   }
 
-  createFeedParamsForNative(): NativeFeedWithParams {
-    if (this.nativeFeed) {
-      return {
-        feedUrl: this.nativeFeed.url,
-        filter: this.filter,
-        articleRecovery: this.articleRecovery,
-      };
-    }
+  edit() {
+    this.reset();
+    this.hasChosen = false;
   }
 
-  createFeedParamsForGeneric(): GenericFeedWithParams {
-    if (this.genericFeedRule) {
-      return {
-        ...this.genericFeedRule,
-        filter: this.filter,
-        articleRecovery: this.articleRecovery,
-      };
-    }
+  private valid() {
+    return false;
   }
 }

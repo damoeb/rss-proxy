@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PushToMobileComponent } from './push-to-mobile.component';
-import { SectionModule } from '../section/section.module';
+import { SectionModule } from '../../section/section.module';
 
 @NgModule({
   declarations: [PushToMobileComponent],

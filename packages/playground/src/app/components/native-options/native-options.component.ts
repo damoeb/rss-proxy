@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NativeFeedWithParams } from '../../services/feed.service';
+import {
+  NativeFeedRef,
+  NativeFeedWithParams,
+} from '../../services/feed.service';
 
 @Component({
   selector: 'app-native-options',
@@ -8,10 +11,9 @@ import { NativeFeedWithParams } from '../../services/feed.service';
 })
 export class NativeOptionsComponent implements OnInit {
   hasChosen: boolean;
-  convertFormat: boolean;
+  export: boolean;
   merge: boolean;
   refine: boolean;
-  pushUpdates: boolean;
 
   @Input()
   nativeFeed: NativeFeedWithParams;
@@ -27,15 +29,14 @@ export class NativeOptionsComponent implements OnInit {
   }
 
   private reset() {
-    this.convertFormat = null;
+    this.export = null;
     this.merge = null;
     this.refine = null;
-    this.pushUpdates = null;
   }
 
-  useConvertFormat() {
+  useExport() {
     this.use(() => {
-      this.convertFormat = true;
+      this.export = true;
     });
   }
 
@@ -48,12 +49,6 @@ export class NativeOptionsComponent implements OnInit {
   useRefine() {
     this.use(() => {
       this.refine = true;
-    });
-  }
-
-  usePushUpdate() {
-    this.use(() => {
-      this.pushUpdates = true;
     });
   }
 }

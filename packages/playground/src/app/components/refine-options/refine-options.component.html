@@ -1,0 +1,49 @@
+<div class="flex">
+  <app-section title="Refine" [active]="!hasChosen">
+    <ul class="menu-list">
+      <li>
+        <a
+          [ngClass]="{
+            'is-active': throttle
+          }"
+          (click)="useThrottle()"
+          >Throttle</a
+        >
+      </li>
+      <li>
+        <a
+          [ngClass]="{
+            'is-active': filter
+          }"
+          (click)="useFilter()"
+          >Filter</a
+        >
+      </li>
+      <li>
+        <a
+          [ngClass]="{
+            'is-active': digest
+          }"
+          (click)="useDigest()"
+          >Digest</a
+        >
+      </li>
+      <li>
+        <a
+          [ngClass]="{
+            'is-active': content
+          }"
+          (click)="useContent()"
+          >Content Recovery</a
+        >
+      </li>
+    </ul>
+  </app-section>
+
+  <app-refine-feed *ngIf="content || digest || throttle || filter"
+                   [showArticleRecovery]="content"
+                   [showDigest]="content"
+                   [showThrottle]="throttle"
+                   [showFilter]="filter"
+                   [nativeFeed]="nativeFeed"></app-refine-feed>
+</div>

@@ -72,7 +72,8 @@ export class PlaygroundComponent implements OnInit {
     this.changeDetectorRef.detectChanges();
   }
 
-  async parseFromUrl() {
+  async parseFromUrl(url: string) {
+    this.url = url;
     if (this.isLoading) {
       return;
     }
@@ -113,8 +114,7 @@ export class PlaygroundComponent implements OnInit {
   }
 
   parseFromHistoryUrl(url: string) {
-    this.url = url;
-    return this.parseFromUrl();
+    return this.parseFromUrl(url);
   }
 
   private parseFromUrlInternal(): void {

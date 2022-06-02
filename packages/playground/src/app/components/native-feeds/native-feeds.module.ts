@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NativeFeedsComponent } from './native-feeds.component';
 import { SectionModule } from '../section/section.module';
-import { RefineFeedModule } from '../refine-feed/refine-feed.module';
+import { NativeOptionsModule } from '../native-options/native-options.module';
 
 @NgModule({
   declarations: [NativeFeedsComponent],
   exports: [NativeFeedsComponent],
-  imports: [CommonModule, SectionModule, RefineFeedModule],
+  imports: [CommonModule, SectionModule, NativeOptionsModule],
 })
 export class NativeFeedsModule {}

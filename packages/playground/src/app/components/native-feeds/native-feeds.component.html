@@ -14,9 +14,9 @@
     </ul>
   </app-section>
 
-  <app-refine-feed
+  <app-native-options
     *ngIf="currentNativeFeed"
     class="flex"
-    [nativeFeed]="currentNativeFeed"
-  ></app-refine-feed>
+    [nativeFeed]="withParams()"
+  ></app-native-options>
 </div>

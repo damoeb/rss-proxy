@@ -1,0 +1,197 @@
+<div class="flex">
+  <app-section title="Refine Feed" [active]="!hasChosen">
+    <aside class="aside">
+      <div>
+
+        <!-- !hasChosen -->
+        <div *ngIf="!hasChosen" class="mb-6">
+
+          <!-- feed -->
+          <div>
+            <div
+              class="field"
+              *ngIf="nativeFeed"
+            >
+              <label class="label">Feed URL</label>
+              <a [href]="feedUrl" referrerpolicy="no-referrer" target="_blank">Feed</a>
+            </div>
+
+            <div
+              class="field mb-6"
+              *ngIf="genericFeedRule"
+            >
+              <label class="label">URL</label>
+              <div>
+                <a
+                  [href]="genericFeedRule.harvestUrl"
+                  referrerpolicy="no-referrer"
+                  target="_blank"
+                >Website</a
+                >
+              </div>
+              <div>
+                <a [href]="feedUrl" referrerpolicy="no-referrer" target="_blank"
+                >Generic Feed</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- recovery -->
+          <div class="field">
+            <label class="label">Content Recovery</label>
+            <div class="control">
+              <div class="select is-expanded">
+                <select
+                  [(ngModel)]="articleRecovery"
+                  class="is-expanded"
+                  [ngClass]="{ 'is-primary': articleRecovery !== 'none' }"
+                  (ngModelChange)="apply()"
+                >
+                  <option value="none">none</option>
+                  <option value="metadata">metadata</option>
+                  <option value="full">full</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- filter -->
+          <div class="field">
+            <label class="label">Filter</label>
+            <div class="select is-expanded">
+              <select
+                class="is-expanded"
+                [(ngModel)]="currentSample"
+                (ngModelChange)="filter = $event"
+              >
+                <option
+                  *ngFor="let filterSample of filterSamples"
+                  [value]="filterSample.value"
+                >
+                  {{ filterSample.name }}
+                </option>
+              </select>
+            </div>
+            <div class="control">
+              <textarea
+                class="textarea"
+                [ngClass]="{ 'is-primary': filter.length > 0 }"
+                [(ngModel)]="filter"
+              ></textarea>
+            </div>
+            <button class="button is-expanded" (click)="apply()">Apply</button>
+          </div>
+
+          <!-- digest -->
+          <div class="field">
+            <label class="label">Throughput Control</label>
+            <div class="control">
+              <div class="select is-expanded">
+                <select [(ngModel)]="digestWindow" class="is-expanded">
+                  <option value="">none</option>
+                  <option value="day">daily</option>
+                  <option value="week">weekly</option>
+                  <option value="month">monthly</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="digestWindow">
+            <!-- throttle -->
+            <ul class="menu-list">
+              <li>
+                <a [ngClass]="{ 'is-active': useThrottling }" (click)="useThrottling = !useThrottling"
+                >Limit Article per {{digestWindow}}</a
+                >
+              </li>
+            </ul>
+            <div class="field" *ngIf="useThrottling">
+              <div class="control">
+                <input type="range" min="1" max="20" [(ngModel)]="throttleMaxArticles" class="is-expanded" />
+                max. {{throttleMaxArticles}} Artiles
+              </div>
+            </div>
+            <div class="field" *ngIf="useThrottling">
+              <label class="label">Pick By</label>
+              <div class="control">
+                <div class="select is-expanded">
+                  <select [(ngModel)]="throttleSortBy" class="is-expanded">
+                    <option value="score">score</option>
+                    <option value="length">length</option>
+                    <option value="links">link Count</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- digest -->
+            <ul class="menu-list">
+              <li>
+                <a [ngClass]="{ 'is-active': useDigest }" (click)="useDigest = !useDigest"
+                >Digest</a
+                >
+              </li>
+            </ul>
+            <div class="field" *ngIf="useDigest">
+              <label class="label">Digest Starting at</label>
+              <div class="control">
+                <input class="input" type="datetime-local" [(ngModel)]="digestStartingAt" name="startingAt" />
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- chosen  -->
+        <div *ngIf="hasChosen" class="mb-6">
+          <div class="field" *ngIf="hasChosen">
+            <label class="label">Content Recovery</label>
+            <div class="control">
+              <em>{{ articleRecovery }}</em>
+            </div>
+          </div>
+
+          <div class="field" *ngIf="hasChosen">
+            <label class="label">Filter</label>
+            <div class="control">
+              <em *ngIf="filter">{{ filter }}</em>
+              <em *ngIf="!filter">no filter</em>
+            </div>
+          </div>
+        </div>
+
+        <label
+          class="label is-primary"
+          [ngClass]="{ 'is-hidden': hasChosen }"
+        >Continue</label
+        >
+        <ul class="menu-list">
+          <li>
+            <a [ngClass]="{ 'is-active': export }" (click)="useExport()"
+            >Export</a
+            >
+          </li>
+          <li>
+            <a [ngClass]="{ 'is-hidden': !hasChosen }" class="edit" (click)="edit()"
+            ><em>Edit</em></a
+            >
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="feed source" [ngClass]="{ 'is-hidden': hasChosen }">
+      <app-spinner *ngIf="!jsonFeed"></app-spinner>
+      <app-feed [jsonFeed]="jsonFeed" *ngIf="jsonFeed"></app-feed>
+    </div>
+  </app-section>
+
+  <app-export-options
+    *ngIf="export"
+    class="flex"
+    [nativeFeed]="nativeFeed"
+    [genericFeedRule]="genericFeedRule"
+  ></app-export-options>
+</div>
