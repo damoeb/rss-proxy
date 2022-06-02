@@ -5,7 +5,10 @@ import {
   OnInit,
 } from '@angular/core';
 import { build } from '../../../environments/build';
-import { AppSettings, SettingsService } from '../../services/settings.service';
+import {
+  AppSettings,
+  AppSettingsService,
+} from '../../services/app-settings.service';
 
 @Component({
   selector: 'app-footer',
@@ -18,7 +21,7 @@ export class FooterComponent implements OnInit {
   appSettings: AppSettings;
 
   constructor(
-    private readonly settings: SettingsService,
+    private readonly settings: AppSettingsService,
     private readonly changeDetectorRef: ChangeDetectorRef,
   ) {}
 

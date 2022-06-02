@@ -4,10 +4,11 @@
       <div>
 
         <!-- !hasChosen -->
-        <div *ngIf="!hasChosen" class="mb-6">
+        <div *ngIf="!hasChosen" class="mb-4">
 
           <!-- feed -->
-          <div>
+          <div class="mb-4">
+            <!-- native -->
             <div
               class="field"
               *ngIf="nativeFeed"
@@ -16,8 +17,9 @@
               <a [href]="feedUrl" referrerpolicy="no-referrer" target="_blank">Feed</a>
             </div>
 
+            <!-- generic -->
             <div
-              class="field mb-6"
+              class="field"
               *ngIf="genericFeedRule"
             >
               <label class="label">URL</label>
@@ -45,12 +47,12 @@
                 <select
                   [(ngModel)]="articleRecovery"
                   class="is-expanded"
-                  [ngClass]="{ 'is-primary': articleRecovery !== 'none' }"
+                  [ngClass]="{ 'is-primary': articleRecovery !== 'none', 'is-disabled': loading }"
                   (ngModelChange)="apply()"
                 >
                   <option value="none">none</option>
                   <option value="metadata">metadata</option>
-                  <option value="full">full</option>
+                  <option value="full" *ngIf="settings.willExtractFulltext">full</option>
                 </select>
               </div>
             </div>
@@ -80,11 +82,11 @@
                 [(ngModel)]="filter"
               ></textarea>
             </div>
-            <button class="button is-expanded" (click)="apply()">Apply</button>
+            <button class="button is-expanded" (click)="apply()" [ngClass]="{'is-disabled': loading}">Apply</button>
           </div>
 
           <!-- digest -->
-          <div class="field">
+          <div class="field" *ngIf="!settings.stateless">
             <label class="label">Throughput Control</label>
             <div class="control">
               <div class="select is-expanded">
@@ -145,7 +147,7 @@
         </div>
 
         <!-- chosen  -->
-        <div *ngIf="hasChosen" class="mb-6">
+        <div *ngIf="hasChosen" class="mb-4">
           <div class="field" *ngIf="hasChosen">
             <label class="label">Content Recovery</label>
             <div class="control">
@@ -169,7 +171,7 @@
         >
         <ul class="menu-list">
           <li>
-            <a [ngClass]="{ 'is-active': export }" (click)="useExport()"
+            <a [ngClass]="{ 'is-active': export, 'is-disabled': loading }" (click)="useExport()"
             >Export</a
             >
           </li>

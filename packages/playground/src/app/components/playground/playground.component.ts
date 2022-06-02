@@ -15,7 +15,7 @@ import {
   NativeFeedRef,
 } from '../../services/feed.service';
 import { build } from '../../../environments/build';
-import { SettingsService } from '../../services/settings.service';
+import { AppSettingsService } from '../../services/app-settings.service';
 import { environment } from '../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 
@@ -34,7 +34,7 @@ export class PlaygroundComponent implements OnInit {
   constructor(
     private readonly httpClient: HttpClient,
     private readonly router: Router,
-    private readonly settings: SettingsService,
+    private readonly settings: AppSettingsService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly feedService: FeedService,

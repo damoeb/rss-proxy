@@ -1,6 +1,6 @@
 <div class="flex">
   <app-section title="Generated Feeds" [active]="!currentRule">
-    <ul class="menu-list mt-4" *ngIf="hasChosen">
+    <ul class="menu-list mb-4" *ngIf="hasChosen">
       <li>
         <label class="label">Context</label>
         <p>
@@ -22,7 +22,9 @@
         <a class="is-active">Refine Feed</a>
       </li>
       <li>
-        <a>Change</a>
+        <a class="edit" (click)="edit()"
+        ><em>Edit</em></a
+        >
       </li>
     </ul>
 
@@ -145,9 +147,9 @@
     </div>
   </app-section>
 
-  <app-refine-options
+  <app-refine-feed
     *ngIf="refine"
     class="flex"
     [genericFeedRule]="currentRule"
-  ></app-refine-options>
+  ></app-refine-feed>
 </div>

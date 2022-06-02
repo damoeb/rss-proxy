@@ -5,14 +5,19 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { ArticleRecovery } from '../../playground/playground.component';
+import { ArticleRecovery } from '../playground/playground.component';
 import {
   FeedService,
+  FeedWizardParams,
   GenericFeedWithParams,
   NativeFeedWithParams,
-} from '../../../services/feed.service';
+} from '../../services/feed.service';
 import { firstValueFrom } from 'rxjs';
-import { JsonFeed } from '../../feed/feed.component';
+import { JsonFeed } from '../feed/feed.component';
+import {
+  AppSettings,
+  AppSettingsService,
+} from '../../services/app-settings.service';
 
 interface FilterExample {
   name: string;
@@ -41,6 +46,7 @@ export class RefineFeedComponent implements OnInit {
 
   articleRecovery: ArticleRecovery = 'none';
   filter = '';
+  loading = false;
 
   jsonFeed: JsonFeed;
   hasChosen: boolean;
@@ -73,13 +79,16 @@ export class RefineFeedComponent implements OnInit {
   throttleMaxArticles = 5;
   throttleSortBy = 'score';
   useDigest = false;
+  settings: AppSettings;
 
   constructor(
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly feedService: FeedService,
+    private readonly appSettings: AppSettingsService,
   ) {}
 
   ngOnInit(): void {
+    this.settings = this.appSettings.get();
     this.apply();
   }
 
@@ -102,15 +111,19 @@ export class RefineFeedComponent implements OnInit {
   }
 
   apply() {
+    this.loading = true;
+    this.jsonFeed = null;
     if (this.nativeFeed) {
-      const params = this.nativeFeed;
+      const params = this.updateParams<NativeFeedWithParams>(this.nativeFeed);
       this.feedUrl = this.feedService.createFeedUrlForNative(params);
       firstValueFrom(this.feedService.transformNativeFeed(params)).then(
         (response) => this.handleResponse(response),
       );
     }
     if (this.genericFeedRule) {
-      const params = this.genericFeedRule;
+      const params = this.updateParams<GenericFeedWithParams>(
+        this.genericFeedRule,
+      );
       this.feedUrl = this.feedService.createFeedUrlForGeneric(params);
       // todo mag feedUrl must be constructed from params
       firstValueFrom(this.feedService.fetchGenericFeed(params)).then(
@@ -121,6 +134,7 @@ export class RefineFeedComponent implements OnInit {
 
   private handleResponse(response: any) {
     this.jsonFeed = response;
+    this.loading = false;
     this.changeDetectorRef.detectChanges();
   }
 
@@ -130,6 +144,12 @@ export class RefineFeedComponent implements OnInit {
   }
 
   private valid() {
-    return false;
+    return true;
+  }
+
+  private updateParams<T extends FeedWizardParams>(feed: T): T {
+    feed.filter = this.filter;
+    feed.articleRecovery = this.articleRecovery;
+    return feed;
   }
 }

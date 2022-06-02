@@ -3,6 +3,10 @@ import {
   GenericFeedWithParams,
   NativeFeedWithParams,
 } from '../../services/feed.service';
+import {
+  AppSettings,
+  AppSettingsService,
+} from '../../services/app-settings.service';
 
 @Component({
   selector: 'app-export-options',
@@ -21,10 +25,13 @@ export class ExportOptionsComponent implements OnInit {
   genericFeedRule: GenericFeedWithParams;
 
   digest: boolean;
+  settings: AppSettings;
 
-  constructor() {}
+  constructor(private appSettings: AppSettingsService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.settings = this.appSettings.get();
+  }
 
   private use(fn: () => void) {
     this.reset();

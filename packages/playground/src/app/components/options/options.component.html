@@ -22,7 +22,7 @@
           Generic Feeds</a
         >
       </li>
-      <li>
+      <li *ngIf="!stateless">
         <a
           [ngClass]="{
             'is-disabled': isNativeFeed,
@@ -35,11 +35,12 @@
       <li>
         <a
           [ngClass]="{
-            'is-disabled': !(jsSupport && !stateless && !isNativeFeed),
+            'is-disabled': !canPrerender,
             'is-active': prerender
           }"
           (click)="useDynamicRendering()"
-          >Dynamic Rendering</a
+        >Dynamic Rendering
+        </a
         >
       </li>
     </ul>
@@ -57,12 +58,12 @@
     class="flex"
     [nativeFeeds]="nativeFeeds"
   ></app-native-feeds>
-  <app-watch-page-change
-    *ngIf="watchPageChanges"
-    class="flex"
-    [siteUrl]="response.options.harvestUrl"
-    [body]="response.results.body"
-  ></app-watch-page-change>
+<!--  <app-watch-page-change-->
+<!--    *ngIf="watchPageChanges"-->
+<!--    class="flex"-->
+<!--    [siteUrl]="response.options.harvestUrl"-->
+<!--    [body]="response.results.body"-->
+<!--  ></app-watch-page-change>-->
   <app-prerender
     *ngIf="prerender"
     class="flex"

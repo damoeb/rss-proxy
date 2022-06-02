@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { SettingsService } from './settings.service';
+import { AppSettingsService } from './app-settings.service';
 
 interface AuthResponse {
   token: string;
@@ -21,7 +21,7 @@ export class AuthService implements CanActivate {
   private waitForToken: Promise<void>;
   constructor(
     private readonly httpClient: HttpClient,
-    private readonly settings: SettingsService,
+    private readonly settings: AppSettingsService,
   ) {
     this.waitForToken = this.requestAuthTokenForAnonymous();
   }

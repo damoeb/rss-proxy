@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 
 export interface AppSettings {
   canPrerender: boolean;
-  canExtractFulltext: boolean;
+  willExtractFulltext: boolean;
   canMail: boolean;
   canPush: boolean;
   stateless: boolean;
@@ -14,7 +14,7 @@ export interface AppSettings {
 @Injectable({
   providedIn: 'root',
 })
-export class SettingsService {
+export class AppSettingsService {
   private appSettings: AppSettings;
   public readonly waitForInit: Promise<void>;
 

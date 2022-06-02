@@ -188,8 +188,6 @@ export class FeedService {
     const search = Object.keys(param)
       .map((k) => `${k}=${encodeURIComponent(param[k] ?? '')}`)
       .join('&');
-    console.log(param);
-    console.log(search);
     return '?' + search;
   }
 }

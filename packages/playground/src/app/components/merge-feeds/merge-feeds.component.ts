@@ -11,7 +11,7 @@ import {
   NativeFeedWithParams,
 } from '../../services/feed.service';
 import { JsonFeed } from '../feed/feed.component';
-import { SettingsService } from '../../services/settings.service';
+import { AppSettingsService } from '../../services/app-settings.service';
 
 @Component({
   selector: 'app-merge-feeds',
@@ -35,7 +35,7 @@ export class MergeFeedsComponent implements OnInit {
 
   constructor(
     private readonly feedService: FeedService,
-    private readonly settings: SettingsService,
+    private readonly settings: AppSettingsService,
     private readonly changeRef: ChangeDetectorRef,
   ) {}
 

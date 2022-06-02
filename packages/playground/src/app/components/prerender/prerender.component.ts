@@ -6,7 +6,10 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { SettingsService } from '../../services/settings.service';
+import {
+  AppSettings,
+  AppSettingsService,
+} from '../../services/app-settings.service';
 import {
   FeedDetectionResponse,
   FeedService,
@@ -40,9 +43,10 @@ clickXPath; //a[text()="No, Thank You"]
 select; #download-os; macOS 10.14 (Mojave)
 waitForXPath; //h2[text()="Individual Drivers"]`;
   isLoading: boolean;
+  settings: AppSettings;
 
   constructor(
-    private readonly settings: SettingsService,
+    private readonly appSettings: AppSettingsService,
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly sanitizer: DomSanitizer,
     private readonly feed: FeedService,
@@ -53,6 +57,7 @@ waitForXPath; //h2[text()="Individual Drivers"]`;
   }
 
   ngOnInit(): void {
+    this.settings = this.appSettings.get();
     this.refresh();
   }
 
@@ -118,6 +123,11 @@ waitForXPath; //h2[text()="Individual Drivers"]`;
       this.imageUrl,
     );
     this.changeDetectorRef.detectChanges();
+  }
+
+  edit() {
+    this.hasChosen = false;
+    this.reset();
   }
 }
 

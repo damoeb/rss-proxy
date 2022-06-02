@@ -4,8 +4,8 @@ import { MergeFeedsComponent } from './merge-feeds.component';
 import { SectionModule } from '../section/section.module';
 import { FormsModule } from '@angular/forms';
 import { SearchModule } from '../search/search.module';
-import { RefineOptionsModule } from '../refine-options/refine-options.module';
 import { ExportOptionsModule } from '../export-options/export-options.module';
+import { RefineFeedModule } from '../refine-feed/refine-feed.module';
 
 @NgModule({
   declarations: [MergeFeedsComponent],
@@ -15,8 +15,8 @@ import { ExportOptionsModule } from '../export-options/export-options.module';
     SectionModule,
     FormsModule,
     SearchModule,
-    RefineOptionsModule,
     ExportOptionsModule,
+    RefineFeedModule,
   ],
 })
 export class MergeFeedsModule {}

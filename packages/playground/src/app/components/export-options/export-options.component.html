@@ -1,5 +1,5 @@
 <div class="flex">
-  <app-section title="Consume" [active]="!hasChosen">
+  <app-section title="Export" [active]="!hasChosen">
     <ul class="menu-list">
       <li>
         <a
@@ -10,7 +10,7 @@
           >Feeds</a
         >
       </li>
-      <li>
+      <li *ngIf="settings.canPush">
         <a
           [ngClass]="{
             'is-active': push

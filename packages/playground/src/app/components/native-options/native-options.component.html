@@ -10,7 +10,7 @@
           >Export</a
         >
       </li>
-      <li>
+      <li *ngIf="!stateless">
         <a
           [ngClass]="{
             'is-active': merge
@@ -41,6 +41,6 @@
     class="flex"
     [nativeFeed]="nativeFeed"
   ></app-merge-feeds>
-  <app-refine-options *ngIf="refine"
-                      [nativeFeed]="nativeFeed"></app-refine-options>
+  <app-refine-feed *ngIf="refine"
+                   [nativeFeed]="nativeFeed"></app-refine-feed>
 </div>

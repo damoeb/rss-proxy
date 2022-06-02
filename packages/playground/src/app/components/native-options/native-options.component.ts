@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  NativeFeedRef,
-  NativeFeedWithParams,
-} from '../../services/feed.service';
+import { NativeFeedWithParams } from '../../services/feed.service';
+import { AppSettingsService } from '../../services/app-settings.service';
 
 @Component({
   selector: 'app-native-options',
@@ -17,10 +15,13 @@ export class NativeOptionsComponent implements OnInit {
 
   @Input()
   nativeFeed: NativeFeedWithParams;
+  stateless: boolean;
 
-  constructor() {}
+  constructor(private settings: AppSettingsService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.stateless = this.settings.get().stateless;
+  }
 
   private use(fn: () => void) {
     this.reset();

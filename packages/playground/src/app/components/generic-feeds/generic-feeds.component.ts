@@ -252,4 +252,9 @@ export class GenericFeedsComponent implements OnInit {
       this.refine = true;
     });
   }
+
+  edit() {
+    this.reset();
+    this.hasChosen = false;
+  }
 }
