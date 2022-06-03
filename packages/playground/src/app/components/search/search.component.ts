@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Output,
-  EventEmitter,
-  Input,
-  OnChanges,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { debounce } from 'lodash';
 
 @Component({
@@ -21,6 +14,8 @@ export class SearchComponent {
   // tslint:disable-next-line:no-output-native
   @Output()
   submitUrl = new EventEmitter<string>();
+  @Output()
+  clearResults = new EventEmitter<void>();
   // tslint:disable-next-line:no-output-native
   @Output()
   change = new EventEmitter<string>();
@@ -42,5 +37,10 @@ export class SearchComponent {
 
   callChange(url: string) {
     this.change.emit(url);
+  }
+
+  clear() {
+    this.url = '';
+    this.clearResults.emit();
   }
 }

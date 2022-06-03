@@ -2,38 +2,32 @@
   <app-section title="Refine Feed" [active]="!hasChosen">
     <aside class="aside">
       <div>
-
         <!-- !hasChosen -->
         <div *ngIf="!hasChosen" class="mb-4">
-
           <!-- feed -->
           <div class="mb-4">
             <!-- native -->
-            <div
-              class="field"
-              *ngIf="nativeFeed"
-            >
+            <div class="field" *ngIf="nativeFeed">
               <label class="label">Feed URL</label>
-              <a [href]="feedUrl" referrerpolicy="no-referrer" target="_blank">Feed</a>
+              <a [href]="feedUrl" referrerpolicy="no-referrer" target="_blank"
+                >Feed</a
+              >
             </div>
 
             <!-- generic -->
-            <div
-              class="field"
-              *ngIf="genericFeedRule"
-            >
+            <div class="field" *ngIf="genericFeed">
               <label class="label">URL</label>
               <div>
                 <a
-                  [href]="genericFeedRule.harvestUrl"
+                  [href]="genericFeed.harvestUrl"
                   referrerpolicy="no-referrer"
                   target="_blank"
-                >Website</a
+                  >Website</a
                 >
               </div>
               <div>
                 <a [href]="feedUrl" referrerpolicy="no-referrer" target="_blank"
-                >Generic Feed</a
+                  >Generic Feed</a
                 >
               </div>
             </div>
@@ -47,12 +41,17 @@
                 <select
                   [(ngModel)]="articleRecovery"
                   class="is-expanded"
-                  [ngClass]="{ 'is-primary': articleRecovery !== 'none', 'is-disabled': loading }"
+                  [ngClass]="{
+                    'is-primary': articleRecovery !== 'none',
+                    'is-disabled': loading
+                  }"
                   (ngModelChange)="apply()"
                 >
                   <option value="none">none</option>
                   <option value="metadata">metadata</option>
-                  <option value="full" *ngIf="settings.willExtractFulltext">full</option>
+                  <option value="full" *ngIf="flags.willExtractFulltext">
+                    full
+                  </option>
                 </select>
               </div>
             </div>
@@ -82,11 +81,17 @@
                 [(ngModel)]="filter"
               ></textarea>
             </div>
-            <button class="button is-expanded" (click)="apply()" [ngClass]="{'is-disabled': loading}">Apply</button>
+            <button
+              class="button is-expanded"
+              (click)="apply()"
+              [ngClass]="{ 'is-disabled': loading }"
+            >
+              Apply
+            </button>
           </div>
 
           <!-- digest -->
-          <div class="field" *ngIf="!settings.stateless">
+          <div class="field" *ngIf="!flags.stateless">
             <label class="label">Throughput Control</label>
             <div class="control">
               <div class="select is-expanded">
@@ -104,15 +109,23 @@
             <!-- throttle -->
             <ul class="menu-list">
               <li>
-                <a [ngClass]="{ 'is-active': useThrottling }" (click)="useThrottling = !useThrottling"
-                >Limit Article per {{digestWindow}}</a
+                <a
+                  [ngClass]="{ 'is-active': useThrottling }"
+                  (click)="useThrottling = !useThrottling"
+                  >Limit Article per {{ digestWindow }}</a
                 >
               </li>
             </ul>
             <div class="field" *ngIf="useThrottling">
               <div class="control">
-                <input type="range" min="1" max="20" [(ngModel)]="throttleMaxArticles" class="is-expanded" />
-                max. {{throttleMaxArticles}} Artiles
+                <input
+                  type="range"
+                  min="1"
+                  max="20"
+                  [(ngModel)]="throttleMaxArticles"
+                  class="is-expanded"
+                />
+                max. {{ throttleMaxArticles }} Artiles
               </div>
             </div>
             <div class="field" *ngIf="useThrottling">
@@ -131,19 +144,25 @@
             <!-- digest -->
             <ul class="menu-list">
               <li>
-                <a [ngClass]="{ 'is-active': useDigest }" (click)="useDigest = !useDigest"
-                >Digest</a
+                <a
+                  [ngClass]="{ 'is-active': useDigest }"
+                  (click)="useDigest = !useDigest"
+                  >Digest</a
                 >
               </li>
             </ul>
             <div class="field" *ngIf="useDigest">
               <label class="label">Digest Starting at</label>
               <div class="control">
-                <input class="input" type="datetime-local" [(ngModel)]="digestStartingAt" name="startingAt" />
+                <input
+                  class="input"
+                  type="datetime-local"
+                  [(ngModel)]="digestStartingAt"
+                  name="startingAt"
+                />
               </div>
             </div>
           </div>
-
         </div>
 
         <!-- chosen  -->
@@ -164,20 +183,23 @@
           </div>
         </div>
 
-        <label
-          class="label is-primary"
-          [ngClass]="{ 'is-hidden': hasChosen }"
-        >Continue</label
+        <label class="label is-primary" [ngClass]="{ 'is-hidden': hasChosen }"
+          >Continue</label
         >
         <ul class="menu-list">
           <li>
-            <a [ngClass]="{ 'is-active': export, 'is-disabled': loading }" (click)="useExport()"
-            >Export</a
+            <a
+              [ngClass]="{ 'is-active': export, 'is-disabled': loading }"
+              (click)="useExport()"
+              >Export</a
             >
           </li>
           <li>
-            <a [ngClass]="{ 'is-hidden': !hasChosen }" class="edit" (click)="edit()"
-            ><em>Edit</em></a
+            <a
+              [ngClass]="{ 'is-hidden': !hasChosen }"
+              class="edit"
+              (click)="edit()"
+              ><em>Edit</em></a
             >
           </li>
         </ul>
@@ -194,6 +216,6 @@
     *ngIf="export"
     class="flex"
     [nativeFeed]="nativeFeed"
-    [genericFeedRule]="genericFeedRule"
+    [genericFeedRule]="genericFeed"
   ></app-export-options>
 </div>

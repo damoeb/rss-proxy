@@ -1,13 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NativeFeedWithParams } from '../../services/feed.service';
 import { AppSettingsService } from '../../services/app-settings.service';
+import { WizardComponent } from '../../wizard.component';
 
 @Component({
   selector: 'app-native-options',
   templateUrl: './native-options.component.html',
   styleUrls: ['./native-options.component.scss'],
 })
-export class NativeOptionsComponent implements OnInit {
+export class NativeOptionsComponent extends WizardComponent implements OnInit {
   hasChosen: boolean;
   export: boolean;
   merge: boolean;
@@ -17,10 +18,12 @@ export class NativeOptionsComponent implements OnInit {
   nativeFeed: NativeFeedWithParams;
   stateless: boolean;
 
-  constructor(private settings: AppSettingsService) {}
+  constructor(private settings: AppSettingsService) {
+    super();
+  }
 
   ngOnInit(): void {
-    this.stateless = this.settings.get().stateless;
+    this.stateless = this.settings.get().flags.stateless;
   }
 
   private use(fn: () => void) {

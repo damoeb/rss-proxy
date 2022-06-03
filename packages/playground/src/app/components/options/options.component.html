@@ -4,7 +4,7 @@
   <app-section title="Static Content" [active]="!hasChosen">
     <ul class="menu-list">
       <li>
-        <a [ngClass]="{ 'is-active': nativeFeeds }" (click)="useNativeFeeds()"
+        <a [ngClass]="{ 'is-active': nativeFeeds, 'is-disabled': response.results.nativeFeeds.length === 0 }" (click)="useNativeFeeds()"
           ><strong>{{ response.results.nativeFeeds.length }}</strong> Native
           Feeds</a
         >
@@ -12,7 +12,7 @@
       <li>
         <a
           [ngClass]="{
-            'is-disabled': isNativeFeed,
+            'is-disabled': response.results.genericFeedRules.length === 0,
             'is-active': genericFeedRules
           }"
           (click)="useGenericFeeds()"
@@ -22,10 +22,9 @@
           Generic Feeds</a
         >
       </li>
-      <li *ngIf="!stateless">
+      <li *ngIf="!flags.stateless">
         <a
           [ngClass]="{
-            'is-disabled': isNativeFeed,
             'is-active': watchPageChanges
           }"
           (click)="useWatchPageChanges()"
@@ -35,13 +34,12 @@
       <li>
         <a
           [ngClass]="{
-            'is-disabled': !canPrerender,
+            'is-disabled': !flags.canPrerender,
             'is-active': prerender
           }"
           (click)="useDynamicRendering()"
-        >Dynamic Rendering
-        </a
-        >
+          >Dynamic Rendering
+        </a>
       </li>
     </ul>
   </app-section>
@@ -58,12 +56,12 @@
     class="flex"
     [nativeFeeds]="nativeFeeds"
   ></app-native-feeds>
-<!--  <app-watch-page-change-->
-<!--    *ngIf="watchPageChanges"-->
-<!--    class="flex"-->
-<!--    [siteUrl]="response.options.harvestUrl"-->
-<!--    [body]="response.results.body"-->
-<!--  ></app-watch-page-change>-->
+  <!--  <app-watch-page-change-->
+  <!--    *ngIf="watchPageChanges"-->
+  <!--    class="flex"-->
+  <!--    [siteUrl]="response.options.harvestUrl"-->
+  <!--    [body]="response.results.body"-->
+  <!--  ></app-watch-page-change>-->
   <app-prerender
     *ngIf="prerender"
     class="flex"

@@ -7,8 +7,8 @@ import {
   OnInit,
 } from '@angular/core';
 import {
-  AppSettings,
   AppSettingsService,
+  FeatureFlags,
 } from '../../services/app-settings.service';
 import {
   FeedDetectionResponse,
@@ -43,7 +43,7 @@ clickXPath; //a[text()="No, Thank You"]
 select; #download-os; macOS 10.14 (Mojave)
 waitForXPath; //h2[text()="Individual Drivers"]`;
   isLoading: boolean;
-  settings: AppSettings;
+  flags: FeatureFlags;
 
   constructor(
     private readonly appSettings: AppSettingsService,
@@ -57,7 +57,7 @@ waitForXPath; //h2[text()="Individual Drivers"]`;
   }
 
   ngOnInit(): void {
-    this.settings = this.appSettings.get();
+    this.flags = this.appSettings.get().flags;
     this.refresh();
   }
 

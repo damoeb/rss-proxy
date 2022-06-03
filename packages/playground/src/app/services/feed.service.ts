@@ -4,6 +4,7 @@ import { firstValueFrom, Observable } from 'rxjs';
 import { ArticleRecovery } from '../components/playground/playground.component';
 import { AuthService } from './auth.service';
 import { JsonFeed } from '../components/feed/feed.component';
+import { AppSettingsService } from './app-settings.service';
 
 export interface Article {
   id: string;
@@ -91,10 +92,14 @@ export type FeedFormat = 'atom' | 'rss' | 'json';
   providedIn: 'root',
 })
 export class FeedService {
+  private publicUrl: string;
   constructor(
     private readonly httpClient: HttpClient,
     private readonly auth: AuthService,
-  ) {}
+    settings: AppSettingsService,
+  ) {
+    this.publicUrl = settings.get().publicUrl;
+  }
 
   discover(
     url: string,
@@ -124,7 +129,7 @@ export class FeedService {
 
   createFeedUrlForGeneric(genericRule: GenericFeedWithParams): string {
     return (
-      '/api/web-to-feed' +
+      `${this.publicUrl}/api/web-to-feed` +
       this.params({
         version: 0.1,
         url: genericRule.harvestUrl,
@@ -140,7 +145,7 @@ export class FeedService {
 
   createFeedUrlForNative(nativeFeed: NativeFeedWithParams): string {
     return (
-      '/api/feeds/transform' +
+      `${this.publicUrl}/api/feeds/transform` +
       this.params({
         feedUrl: nativeFeed.feedUrl,
         targetFormat: nativeFeed.targetFormat || 'json',
@@ -163,7 +168,9 @@ export class FeedService {
   }
 
   explainFeed(feedUrl: string): Promise<JsonFeed> {
-    const explainUrl = `/api/feeds/explain?feedUrl=${encodeURIComponent(
+    const explainUrl = `${
+      this.publicUrl
+    }/api/feeds/explain?feedUrl=${encodeURIComponent(
       feedUrl,
     )}&token=${encodeURIComponent(this.auth.getToken())}`;
     return firstValueFrom(
@@ -174,9 +181,11 @@ export class FeedService {
   }
 
   findRelated(query: string) {
-    const relatedUrl = `/api/feeds/query?q=${encodeURIComponent(
-      query,
-    )}&token=${encodeURIComponent(this.auth.getToken())}`;
+    const relatedUrl = `${
+      this.publicUrl
+    }/api/feeds/query?q=${encodeURIComponent(query)}&token=${encodeURIComponent(
+      this.auth.getToken(),
+    )}`;
     return firstValueFrom(
       this.httpClient.get<JsonFeed[]>(relatedUrl, {
         withCredentials: true,

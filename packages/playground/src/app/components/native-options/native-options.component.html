@@ -31,9 +31,10 @@
     </ul>
   </app-section>
 
-  <app-export-options     *ngIf="export"
-                          class="flex"
-                          [nativeFeed]="nativeFeed"
+  <app-export-options
+    *ngIf="export"
+    class="flex"
+    [nativeFeed]="nativeFeed"
   ></app-export-options>
 
   <app-merge-feeds
@@ -41,6 +42,8 @@
     class="flex"
     [nativeFeed]="nativeFeed"
   ></app-merge-feeds>
-  <app-refine-feed *ngIf="refine"
-                   [nativeFeed]="nativeFeed"></app-refine-feed>
+  <app-refine-feed
+    *ngIf="refine"
+    [nativeFeedValue]="nativeFeed"
+  ></app-refine-feed>
 </div>

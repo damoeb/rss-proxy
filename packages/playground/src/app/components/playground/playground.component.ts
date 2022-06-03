@@ -11,8 +11,6 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import {
   FeedDetectionResponse,
   FeedService,
-  GenericFeedRule,
-  NativeFeedRef,
 } from '../../services/feed.service';
 import { build } from '../../../environments/build';
 import { AppSettingsService } from '../../services/app-settings.service';
@@ -42,11 +40,9 @@ export class PlaygroundComponent implements OnInit {
     this.history = PlaygroundComponent.getHistory();
   }
 
-  currentRule: GenericFeedRule = null;
   url: string;
   actualUrl: string;
   hasResults = false;
-  iframeLoaded = false;
   isLoading = false;
   history: string[];
 
@@ -67,8 +63,7 @@ export class PlaygroundComponent implements OnInit {
       }
     });
 
-    const settings = this.settings.get();
-    this.canPrerender = settings.canPrerender;
+    this.canPrerender = this.settings.get().flags.canPrerender;
     this.changeDetectorRef.detectChanges();
   }
 
@@ -98,8 +93,6 @@ export class PlaygroundComponent implements OnInit {
     this.response = null;
     this.hasResults = false;
     this.actualUrl = null;
-    this.iframeLoaded = false;
-    this.currentRule = null;
     this.resetErrors();
     this.changeDetectorRef.detectChanges();
   }
@@ -197,5 +190,10 @@ export class PlaygroundComponent implements OnInit {
     this.history = history;
 
     localStorage.setItem('history', JSON.stringify(history));
+  }
+
+  clearResults() {
+    this.url = null;
+    this.resetAll();
   }
 }

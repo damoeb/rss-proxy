@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {
+  FeedFormat,
   GenericFeedWithParams,
   NativeFeedWithParams,
 } from '../../services/feed.service';
+import { clone } from 'lodash';
 
 @Component({
   selector: 'app-convert-format',
@@ -11,12 +13,38 @@ import {
 })
 export class ConvertFormatComponent implements OnInit {
   @Input()
-  nativeFeed: NativeFeedWithParams;
-
+  private nativeFeedValue: NativeFeedWithParams;
   @Input()
-  genericFeedRule: GenericFeedWithParams;
+  private genericFeedValue: GenericFeedWithParams;
+  nativeFeed: NativeFeedWithParams;
+  genericFeed: GenericFeedWithParams;
+
+  format: FeedFormat;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.nativeFeed = clone(this.nativeFeedValue);
+    this.genericFeed = clone(this.genericFeedValue);
+  }
+
+  applyFormat(format: FeedFormat) {
+    this.format = format;
+
+    if (this.nativeFeed) {
+      this.nativeFeed.targetFormat = format;
+    } else {
+      this.genericFeed.targetFormat = format;
+    }
+  }
+
+  getNativeFeed() {
+    // to change the ref and force update
+    return clone(this.nativeFeed);
+  }
+
+  getGenericFeed() {
+    // to change the ref and force update
+    return clone(this.genericFeed);
+  }
 }

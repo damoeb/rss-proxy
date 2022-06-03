@@ -8,6 +8,7 @@
 
   <div class="content" *ngFor="let item of jsonFeed.items">
     <h3>{{ item.title }}</h3>
+    <p>{{ item.date_published }}</p>
     <p>{{ item.content_text }}</p>
   </div>
 </div>

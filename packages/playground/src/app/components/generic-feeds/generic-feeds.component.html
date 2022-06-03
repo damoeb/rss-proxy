@@ -22,9 +22,7 @@
         <a class="is-active">Refine Feed</a>
       </li>
       <li>
-        <a class="edit" (click)="edit()"
-        ><em>Edit</em></a
-        >
+        <a class="edit" (click)="edit()"><em>Edit</em></a>
       </li>
     </ul>
 
@@ -150,6 +148,6 @@
   <app-refine-feed
     *ngIf="refine"
     class="flex"
-    [genericFeedRule]="currentRule"
+    [genericFeedValue]="currentRule"
   ></app-refine-feed>
 </div>

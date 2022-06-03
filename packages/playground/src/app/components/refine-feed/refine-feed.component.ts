@@ -15,9 +15,10 @@ import {
 import { firstValueFrom } from 'rxjs';
 import { JsonFeed } from '../feed/feed.component';
 import {
-  AppSettings,
   AppSettingsService,
+  FeatureFlags,
 } from '../../services/app-settings.service';
+import { clone } from 'lodash';
 
 interface FilterExample {
   name: string;
@@ -32,9 +33,11 @@ interface FilterExample {
 })
 export class RefineFeedComponent implements OnInit {
   @Input()
-  nativeFeed: NativeFeedWithParams;
+  private nativeFeedValue: NativeFeedWithParams;
   @Input()
-  genericFeedRule: GenericFeedWithParams;
+  private genericFeedValue: GenericFeedWithParams;
+  nativeFeed: NativeFeedWithParams;
+  genericFeed: GenericFeedWithParams;
   @Input()
   showArticleRecovery: boolean;
   @Input()
@@ -79,7 +82,7 @@ export class RefineFeedComponent implements OnInit {
   throttleMaxArticles = 5;
   throttleSortBy = 'score';
   useDigest = false;
-  settings: AppSettings;
+  flags: FeatureFlags;
 
   constructor(
     private readonly changeDetectorRef: ChangeDetectorRef,
@@ -88,7 +91,10 @@ export class RefineFeedComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.settings = this.appSettings.get();
+    this.nativeFeed = clone(this.nativeFeedValue);
+    this.genericFeed = clone(this.genericFeedValue);
+
+    this.flags = this.appSettings.get().flags;
     this.apply();
   }
 
@@ -120,10 +126,8 @@ export class RefineFeedComponent implements OnInit {
         (response) => this.handleResponse(response),
       );
     }
-    if (this.genericFeedRule) {
-      const params = this.updateParams<GenericFeedWithParams>(
-        this.genericFeedRule,
-      );
+    if (this.genericFeed) {
+      const params = this.updateParams<GenericFeedWithParams>(this.genericFeed);
       this.feedUrl = this.feedService.createFeedUrlForGeneric(params);
       // todo mag feedUrl must be constructed from params
       firstValueFrom(this.feedService.fetchGenericFeed(params)).then(

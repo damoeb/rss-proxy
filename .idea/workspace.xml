@@ -5,27 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f354cf1d-853a-464e-8e85-6575024551e6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.component.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.component.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.component.spec.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.component.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.module.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.spec.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/footer/footer.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/footer/footer.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/footer/footer.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/footer/footer.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/changelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/changelog.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/convert-format/convert-format.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/convert-format/convert-format.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed-url/feed-url.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/feed-url/feed-url.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed/feed.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/feed/feed.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/services/settings.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/services/settings.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/prerender/prerender.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/prerender/prerender.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" afterDir="false" />
     </list>
     <list id="f638d3ef-7a6d-4052-aad1-f24fc9f0e590" name="ignore" comment="" />
@@ -113,7 +108,7 @@
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/packages/playground/src/app/services" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/packages/playground/src/app" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs.mocha.mocha_node_package_dir" value="$PROJECT_DIR$/packages/core/node_modules/mocha" />
@@ -134,18 +129,18 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/packages/playground/src/app" />
       <recent name="$PROJECT_DIR$/packages/playground/src/app/services" />
+      <recent name="$PROJECT_DIR$/packages/playground/src/app/components" />
+      <recent name="$PROJECT_DIR$/packages/playground/src/app/components/refine" />
       <recent name="$PROJECT_DIR$/packages/proxy/src/endpoints" />
-      <recent name="$PROJECT_DIR$/packages/core/src/raw-websites" />
-      <recent name="$PROJECT_DIR$/docs" />
-      <recent name="$PROJECT_DIR$/packages/proxy/src/services" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/packages/playground/src/app/components" />
+      <recent name="$PROJECT_DIR$/packages/playground/src/app/components/refine" />
+      <recent name="$PROJECT_DIR$/packages/playground/src/app/components/push" />
       <recent name="$PROJECT_DIR$/packages/proxy" />
       <recent name="$PROJECT_DIR$/packages/playground/src/app" />
-      <recent name="$PROJECT_DIR$/packages/proxy/docker/prod/puppeteer" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/modules/rss-it-app" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start">
@@ -306,7 +301,8 @@
       <workItem from="1653986384993" duration="61000" />
       <workItem from="1653991946163" duration="692000" />
       <workItem from="1654030815939" duration="1075000" />
-      <workItem from="1654031907891" duration="16195000" />
+      <workItem from="1654031907891" duration="26522000" />
+      <workItem from="1654176527908" duration="36670000" />
     </task>
     <task id="LOCAL-00017" summary="better logging">
       <created>1585428585627</created>
@@ -670,7 +666,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="readme" />
     <MESSAGE value="screenshots" />
     <MESSAGE value="build info, bug fixes" />
     <MESSAGE value="fix broken build" />
@@ -695,7 +690,8 @@
     <MESSAGE value="js support" />
     <MESSAGE value="updated dependencies" />
     <MESSAGE value="basic support" />
-    <option name="LAST_COMMIT_MESSAGE" value="basic support" />
+    <MESSAGE value="merge-feeds.component.html" />
+    <option name="LAST_COMMIT_MESSAGE" value="merge-feeds.component.html" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

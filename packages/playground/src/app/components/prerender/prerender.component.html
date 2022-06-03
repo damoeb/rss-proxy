@@ -25,8 +25,10 @@
         <em *ngIf="!puppeteerScript">none</em>
       </div>
 
-      <label class="label mt-6 is-primary" [ngClass]="{ 'is-hidden': hasChosen }"
-      >Continue</label
+      <label
+        class="label mt-6 is-primary"
+        [ngClass]="{ 'is-hidden': hasChosen }"
+        >Continue</label
       >
       <ul class="menu-list">
         <li>
@@ -42,7 +44,7 @@
             Feeds in Markup
           </a>
         </li>
-        <li *ngIf="!settings.stateless">
+        <li *ngIf="!flags.stateless">
           <a
             [ngClass]="{
               'is-active': watchPageChanges,
@@ -53,8 +55,11 @@
           >
         </li>
         <li>
-          <a [ngClass]="{ 'is-hidden': !hasChosen }" class="edit" (click)="edit()"
-          ><em>Edit</em></a
+          <a
+            [ngClass]="{ 'is-hidden': !hasChosen }"
+            class="edit"
+            (click)="edit()"
+            ><em>Edit</em></a
           >
         </li>
       </ul>

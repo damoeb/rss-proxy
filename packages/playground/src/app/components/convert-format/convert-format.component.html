@@ -1,7 +1,40 @@
-<app-section title="Feeds" [active]="true">
-  <ul class="menu-list">
-    <li><a>Copy Atom URL</a></li>
-    <li><a>Copy Rss URL</a></li>
-    <li><a>Copy Json URL</a></li>
-  </ul>
-</app-section>
+<div class="flex">
+  <app-section title="Feeds" [active]="!format">
+    <ul class="menu-list">
+      <li>
+        <a
+          (click)="applyFormat('atom')"
+          [ngClass]="{
+            'is-active': format == 'atom'
+          }"
+          >Atom URL</a
+        >
+      </li>
+      <li>
+        <a
+          (click)="applyFormat('rss')"
+          [ngClass]="{
+            'is-active': format == 'rss'
+          }"
+          >Rss URL</a
+        >
+      </li>
+      <li>
+        <a
+          (click)="applyFormat('json')"
+          [ngClass]="{
+            'is-active': format == 'json'
+          }"
+          >Json URL</a
+        >
+      </li>
+    </ul>
+  </app-section>
+
+  <app-feed-url
+    *ngIf="format"
+    [genericFeedValue]="getGenericFeed()"
+    [nativeFeedValue]="getNativeFeed()"
+  >
+  </app-feed-url>
+</div>

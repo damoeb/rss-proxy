@@ -1,0 +1,24 @@
+<app-section [title]="format()?.toUpperCase() + ' Feed'" [active]="true">
+  <div>
+    <app-spinner *ngIf="loading"></app-spinner>
+    <div class="card is-primary" *ngIf="!loading">
+      <div class="card-content">
+        <p class="title">
+          {{ feed?.title }}
+        </p>
+        <p class="subtitle">
+          {{ feed?.description }}
+        </p>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="control">
+        <textarea class="textarea is-primary" [ngModel]="feedUrl"></textarea>
+      </div>
+      <button class="button is-expanded copy" (click)="copyUrl()">
+        Copy URL
+      </button>
+    </div>
+  </div>
+</app-section>

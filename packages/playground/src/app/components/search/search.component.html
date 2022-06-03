@@ -1,8 +1,6 @@
 <form (ngSubmit)="callTrigger()">
   <div class="field has-addons is-expanded">
-    <div
-      class="control is-expanded"
-    >
+    <div class="control is-expanded">
       <input
         class="input is-expanded"
         type="url"
@@ -15,13 +13,16 @@
         required
       />
     </div>
+    <div class="control" *ngIf="url">
+      <button class="button is-white" (click)="clear()">Clear</button>
+    </div>
     <div class="control" *ngIf="showSubmit">
       <button
         class="button"
         (click)="callTrigger()"
         [ngClass]="{ 'is-disabled': isLoading }"
       >
-        {{buttonText}}
+        {{ buttonText }}
       </button>
     </div>
   </div>

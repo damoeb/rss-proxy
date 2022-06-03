@@ -11,7 +11,10 @@ import {
   NativeFeedRef,
   NativeFeedWithParams,
 } from '../../services/feed.service';
-import { AppSettingsService } from '../../services/app-settings.service';
+import {
+  AppSettingsService,
+  FeatureFlags,
+} from '../../services/app-settings.service';
 
 @Component({
   selector: 'app-options',
@@ -28,10 +31,9 @@ export class OptionsComponent implements OnInit {
   genericFeedRules: GenericFeedRule[];
   hasChosen: boolean;
   watchPageChanges: boolean;
-  canPrerender: boolean;
-  stateless: boolean;
   isNativeFeed: boolean;
   prerender: boolean;
+  flags: FeatureFlags;
 
   constructor(
     private readonly settings: AppSettingsService,
@@ -43,8 +45,7 @@ export class OptionsComponent implements OnInit {
       this.response.results.mimeType.toLowerCase().indexOf('xml') > -1;
 
     const s = this.settings.get();
-    this.canPrerender = s.canPrerender;
-    this.stateless = s.stateless;
+    this.flags = this.settings.get().flags;
     this.changeDetectorRef.detectChanges();
   }
 

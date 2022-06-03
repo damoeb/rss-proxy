@@ -10,7 +10,7 @@
           >Feeds</a
         >
       </li>
-      <li *ngIf="settings.canPush">
+      <li *ngIf="flags.canPush">
         <a
           [ngClass]="{
             'is-active': push
@@ -25,13 +25,13 @@
   <app-convert-format
     *ngIf="convert"
     class="flex"
-    [nativeFeed]="nativeFeed"
-    [genericFeedRule]="genericFeedRule"
+    [nativeFeedValue]="nativeFeed"
+    [genericFeedValue]="genericFeedRule"
   ></app-convert-format>
   <app-push-updates
     *ngIf="push"
     class="flex"
-    [nativeFeed]="nativeFeed"
-    [genericFeedRule]="genericFeedRule"
+    [nativeFeedValue]="nativeFeed"
+    [genericFeedValue]="genericFeedRule"
   ></app-push-updates>
 </div>

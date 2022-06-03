@@ -1,60 +1,60 @@
 # RSS-proxy
 
-RSS-proxy is a tool that allows you to do create an RSS/ATOM or JSON feed of almost any website, 
-purely by analyzing just the static HTML structure. Try the [live demo](https://rssproxy-v1.migor.org/). 
+RSS-proxy allows you to do create an RSS/ATOM or JSON feed of almost any website or feed, 
+purely by analyzing just the HTML structure. Try the [live demo](https://rssproxy.migor.org/).
+The server is completely stateless, everything is part of the url.
+
+It is a UI for [richRSS](https://github.com/damoeb/rich-rss) middleware and is shipped in a multiplatform docker image.
 
 ![Playground](https://github.com/damoeb/rss-proxy/raw/master/docs/rssproxy-candidates.png "Playground")
 
-## Quickstart using docker
+## Quickstart using docker-compose
 
 The simplest way to use RSS-proxy is using [docker](https://docs.docker.com/install/)
 
 ```
-docker pull damoeb/rss-proxy
-docker run -p 3000:3000 -it damoeb/rss-proxy
+wget https://raw.githubusercontent.com/damoeb/rss-proxy/master/docker-compose.yml
+docker-compose up
 ```
 
-Then open [localhost:3000](http://localhost:3000) in the browser.
+This will start `rss-proxy` and a headless chrome. Open [localhost:8080](http://localhost:8080) in the browser.
 
-## JavaScript Support
-`rss-proxy` supports dynamic webapps in a separate docker image `damoeb/rss-proxy:js` cause it is with 1GB quite large. Running this image will [render a checkbox](https://github.com/damoeb/rss-proxy/blob/master/docs/js-support.png) in the User Interface to pre-render a website in a headless browser, rather than using the static response.
+## Features
+- Web to Feed
+- Dynamic rendering
+- Feed healing
+- Feed Format Conversion
+- Content Refinement
+- Filters
+- Security
+- Maintenance
+- Stateless
 
-```
-docker pull damoeb/rss-proxy:js
-docker run -p 3000:3000 -it damoeb/rss-proxy:js
-```
 
-## Developing RSS-proxy
-
-The project is separated into three modules
-- [core](packages/core/README.md): the feed parser logic, plain JavaScript
-- [playground](packages/playground/README.md): the web app to visualize and explore feed generation
-- [proxy](packages/proxy/README.md): the expressjs server
-
-For local development you need [node 12+](https://nodejs.org/en/). Then follow these steps:
-
-- Install all npm dependencies
-```
-npm run install
+## Minimal Runtime
+If you consider using `rss-proxy` just for static websites, do this:
 
 ```
-
-- Start server
-```
-cd packages/proxy && npm run start
-
+docker pull damoeb/rss-proxy:2
+docker run -e APP_PUBLIC_URL=http://localhost:8080 -e TOKEN_SECRET=1234_top_secret -p 8080:8080 -it damoeb/rss-proxy:2
 ```
 
-- Start client
-```
-cd packages/playground && npm run start
-
-```
+## Security
 
 
-## Troubleshooting
+## Flags
 
-See [troubleshooting](troubleshooting.md).
+
+| Name            | Description      |       |
+|-----------------|------------------|-------|
+| PUPPETEER_HOST  |                  | -     |
+| LOG_LEVEL       |                  | error |
+| ENABLE_FULLTEXT |                  | true  |
+| TOKEN_SECRET    | To sign the JWTs | -     |
+
+
+## Security
+
 
 ## Changelog
 

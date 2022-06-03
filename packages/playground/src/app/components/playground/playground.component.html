@@ -1,8 +1,11 @@
 <div class="playground is-size-6">
   <div style="padding-bottom: 5px">
-    <app-search [url]="url"
-                placeholder="Enter a URL of website or feed"
-                (submitUrl)="parseFromUrl($event)"></app-search>
+    <app-search
+      [url]="url"
+      placeholder="Enter a URL of website or feed"
+      (submitUrl)="parseFromUrl($event)"
+      (clearResults)="clearResults()"
+    ></app-search>
 
     <div *ngIf="!isLoading && !actualUrl && history.length > 0">
       <p>

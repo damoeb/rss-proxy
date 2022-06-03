@@ -4,8 +4,8 @@ import {
   NativeFeedWithParams,
 } from '../../services/feed.service';
 import {
-  AppSettings,
   AppSettingsService,
+  FeatureFlags,
 } from '../../services/app-settings.service';
 
 @Component({
@@ -25,12 +25,12 @@ export class ExportOptionsComponent implements OnInit {
   genericFeedRule: GenericFeedWithParams;
 
   digest: boolean;
-  settings: AppSettings;
+  flags: FeatureFlags;
 
   constructor(private appSettings: AppSettingsService) {}
 
   ngOnInit(): void {
-    this.settings = this.appSettings.get();
+    this.flags = this.appSettings.get().flags;
   }
 
   private use(fn: () => void) {

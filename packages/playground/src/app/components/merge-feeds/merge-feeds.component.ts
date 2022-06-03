@@ -41,8 +41,6 @@ export class MergeFeedsComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.feeds = [];
-    this.isStateless = this.settings.get().stateless;
-
     await this.append(this.nativeFeed.feedUrl);
   }
 
