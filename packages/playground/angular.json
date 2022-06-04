@@ -100,7 +100,6 @@
             "ci": {
               "progress": false,
               "watch": false,
-              "codeCoverage": true,
               "browsers": "ChromeHeadlessDocker",
               "fileReplacements": [
                 {

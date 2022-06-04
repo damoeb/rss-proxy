@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConvertFormatComponent } from './convert-format.component';
+import { ConvertFormatModule } from './convert-format.module';
 
 describe('ConvertFormatComponent', () => {
   let component: ConvertFormatComponent;
@@ -8,7 +9,7 @@ describe('ConvertFormatComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ConvertFormatComponent],
+      imports: [ConvertFormatModule],
     }).compileComponents();
   });
 

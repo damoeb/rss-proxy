@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PublishFeedComponent } from './publish-feed.component';
+import { PublishFeedModule } from './publish-feed.module';
 
 describe('PublishFeedComponent', () => {
   let component: PublishFeedComponent;
@@ -8,7 +9,7 @@ describe('PublishFeedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PublishFeedComponent],
+      imports: [PublishFeedModule],
     }).compileComponents();
   });
 

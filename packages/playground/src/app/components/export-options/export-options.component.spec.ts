@@ -1,20 +1,27 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ExportOptionsComponent } from './export-options.component';
+import { ExportOptionsModule } from './export-options.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AppSettingsService } from '../../services/app-settings.service';
 
-import { RefineOptionsComponent } from './native-options.component';
-import { RefineOptionsModule } from './native-options.module';
-
-describe('NativeOptionsComponent', () => {
-  let component: RefineOptionsComponent;
-  let fixture: ComponentFixture<RefineOptionsComponent>;
+describe('ExportOptionsComponent', () => {
+  let component: ExportOptionsComponent;
+  let fixture: ComponentFixture<ExportOptionsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RefineOptionsModule],
+      imports: [ExportOptionsModule, HttpClientTestingModule],
+      providers: [
+        {
+          provide: AppSettingsService,
+          useValue: { get: () => ({ flags: {} }) },
+        },
+      ],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RefineOptionsComponent);
+    fixture = TestBed.createComponent(ExportOptionsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

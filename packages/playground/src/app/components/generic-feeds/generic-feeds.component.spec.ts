@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GenericFeedsComponent } from './generic-feeds.component';
+import { GenericFeedsModule } from './generic-feeds.module';
 
 describe('GenericFeedsComponent', () => {
   let component: GenericFeedsComponent;
@@ -8,7 +9,7 @@ describe('GenericFeedsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GenericFeedsComponent],
+      imports: [GenericFeedsModule],
     }).compileComponents();
   });
 

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WatchPageChangeComponent } from './watch-page-change.component';
+import { WatchPageChangeModule } from './watch-page-change.module';
 
 describe('WatchPageChangeComponent', () => {
   let component: WatchPageChangeComponent;
@@ -8,7 +9,7 @@ describe('WatchPageChangeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [WatchPageChangeComponent],
+      imports: [WatchPageChangeModule],
     }).compileComponents();
   });
 

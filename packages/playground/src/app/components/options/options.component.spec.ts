@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { OptionsComponent } from './options.component';
 import { OptionsModule } from './options.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AppSettingsService } from '../../services/app-settings.service';
 
 describe('OptionsComponent', () => {
   let component: OptionsComponent;
@@ -11,6 +12,12 @@ describe('OptionsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [OptionsModule, HttpClientTestingModule],
+      providers: [
+        {
+          provide: AppSettingsService,
+          useValue: { get: () => ({ flags: {} }) },
+        },
+      ],
     }).compileComponents();
   });
 

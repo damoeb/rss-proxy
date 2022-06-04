@@ -3,11 +3,18 @@ import { PlaygroundComponent } from './playground.component';
 import { PlaygroundModule } from './playground.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { AppSettingsService } from '../../services/app-settings.service';
 
-describe('AppComponent', () => {
+describe('PlaygroundComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [PlaygroundModule, HttpClientTestingModule, RouterTestingModule],
+      providers: [
+        {
+          provide: AppSettingsService,
+          useValue: { get: () => ({ flags: {}, publicUrl: '' }) },
+        },
+      ],
     }).compileComponents();
   }));
 

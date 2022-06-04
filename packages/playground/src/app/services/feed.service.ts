@@ -92,7 +92,7 @@ export type FeedFormat = 'atom' | 'rss' | 'json';
   providedIn: 'root',
 })
 export class FeedService {
-  private publicUrl: string;
+  private readonly publicUrl: string;
   constructor(
     private readonly httpClient: HttpClient,
     private readonly auth: AuthService,

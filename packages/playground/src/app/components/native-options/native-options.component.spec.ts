@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NativeOptionsComponent } from './native-options.component';
 import { NativeOptionsModule } from './native-options.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AppSettingsService } from '../../services/app-settings.service';
 
 describe('NativeOptionsComponent', () => {
   let component: NativeOptionsComponent;
@@ -9,7 +11,13 @@ describe('NativeOptionsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NativeOptionsModule],
+      imports: [NativeOptionsModule, HttpClientTestingModule],
+      providers: [
+        {
+          provide: AppSettingsService,
+          useValue: { get: () => ({ flags: {} }) },
+        },
+      ],
     }).compileComponents();
   });
 

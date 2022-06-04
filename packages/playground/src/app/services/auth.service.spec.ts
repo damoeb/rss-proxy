@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FeedService } from './feed.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AuthService } from './auth.service';
 

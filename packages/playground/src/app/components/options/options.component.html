@@ -4,7 +4,12 @@
   <app-section title="Static Content" [active]="!hasChosen">
     <ul class="menu-list">
       <li>
-        <a [ngClass]="{ 'is-active': nativeFeeds, 'is-disabled': response.results.nativeFeeds.length === 0 }" (click)="useNativeFeeds()"
+        <a
+          [ngClass]="{
+            'is-active': nativeFeeds,
+            'is-disabled': response.results.nativeFeeds.length === 0
+          }"
+          (click)="useNativeFeeds()"
           ><strong>{{ response.results.nativeFeeds.length }}</strong> Native
           Feeds</a
         >

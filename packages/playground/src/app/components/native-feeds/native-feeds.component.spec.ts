@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NativeFeedsComponent } from './native-feeds.component';
+import { NativeFeedsModule } from './native-feeds.module';
 
 describe('NativeFeedsComponent', () => {
   let component: NativeFeedsComponent;
@@ -8,7 +9,7 @@ describe('NativeFeedsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NativeFeedsComponent],
+      imports: [NativeFeedsModule],
     }).compileComponents();
   });
 
