@@ -46,6 +46,8 @@ export interface FeedWizardParams {
   targetFormat?: FeedFormat;
   reduce?: FeedReduce;
   digest?: boolean;
+  prerendered?: boolean;
+  puppeteerScript?: string;
 }
 
 export interface NativeFeedWithParams extends FeedWizardParams {
@@ -129,15 +131,19 @@ export class FeedService {
 
   createFeedUrlForGeneric(genericRule: GenericFeedWithParams): string {
     return (
-      `${this.publicUrl}/api/web-to-feed` +
+      `${this.publicUrl}/api/w2f` +
       this.params({
-        version: 0.1,
+        v: 0.1, // version
         url: genericRule.harvestUrl,
-        linkXPath: genericRule.linkXPath,
-        extendContext: genericRule.extendContext,
-        contextXPath: genericRule.contextXPath,
-        recovery: genericRule.articleRecovery?.toUpperCase(),
-        filter: genericRule.filter,
+        link: genericRule.linkXPath,
+        context: genericRule.contextXPath,
+        date: genericRule.dateXPath,
+        x: genericRule.extendContext,
+        re: genericRule.articleRecovery,
+        q: genericRule.filter,
+        out: genericRule.targetFormat,
+        pp: genericRule.prerendered,
+        ppS: genericRule.puppeteerScript,
         token: this.auth.getToken(),
       })
     );
@@ -145,12 +151,12 @@ export class FeedService {
 
   createFeedUrlForNative(nativeFeed: NativeFeedWithParams): string {
     return (
-      `${this.publicUrl}/api/feeds/transform` +
+      `${this.publicUrl}/api/tf` +
       this.params({
-        feedUrl: nativeFeed.feedUrl,
-        targetFormat: nativeFeed.targetFormat || 'json',
-        recovery: nativeFeed.articleRecovery?.toUpperCase(),
-        filter: nativeFeed.filter,
+        url: nativeFeed.feedUrl,
+        re: nativeFeed.articleRecovery,
+        q: nativeFeed.filter,
+        out: nativeFeed.targetFormat || 'json',
         token: this.auth.getToken(),
       })
     );
@@ -195,6 +201,7 @@ export class FeedService {
 
   private params(param: { [key: string]: string | number | boolean }) {
     const search = Object.keys(param)
+      .filter((k) => !!param[k])
       .map((k) => `${k}=${encodeURIComponent(param[k] ?? '')}`)
       .join('&');
     return '?' + search;

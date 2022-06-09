@@ -2,7 +2,7 @@
   <app-section title="Dynamic Content" [active]="!hasChosen">
     <aside class="aside">
       <div class="field" [hidden]="hasChosen">
-        <label class="label">Puppeteer Script</label>
+        <label class="label">Puppeteer Script (Experimental)</label>
         <div class="control">
           <textarea
             class="textarea puppeteer-script"
@@ -67,7 +67,7 @@
 
     <div class="source" *ngIf="response" [hidden]="hasChosen">
       <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
-      <img [src]="imageUrlSanitizes" alt="wefwef" />
+      <img [src]="imageUrlSanitizes" alt="Screenshot" />
     </div>
     <div class="source" *ngIf="!response">
       <app-spinner></app-spinner>
@@ -77,6 +77,8 @@
   <app-generic-feeds
     *ngIf="genericFeedRules"
     class="flex"
+    [prerendered]="true"
+    [puppeteerScript]="puppeteerScript"
     [genericFeedRules]="response.results.genericFeedRules"
     [url]="response.options.harvestUrl"
     [body]="response.results.body"

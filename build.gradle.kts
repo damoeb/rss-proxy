@@ -12,7 +12,7 @@ plugins {
 }
 
 tasks.register("buildDockerImage", Exec::class) {
-//  dependsOn(tasks.findByPath("packages:playground:build"))
+  dependsOn(tasks.findByPath("packages:playground:build"))
   val majorMinorPatch = findProperty("proxyVersion") as String
   val parts = majorMinorPatch.split(".")
   val major = parts[0]

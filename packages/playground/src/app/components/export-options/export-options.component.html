@@ -1,4 +1,11 @@
-<div class="flex">
+<app-convert-format
+  class="flex"
+  *ngIf="flags.stateless"
+  [nativeFeedValue]="nativeFeed"
+  [genericFeedValue]="genericFeedRule"
+></app-convert-format>
+
+<div class="flex" *ngIf="!flags.stateless">
   <app-section title="Export" [active]="!hasChosen">
     <ul class="menu-list">
       <li>

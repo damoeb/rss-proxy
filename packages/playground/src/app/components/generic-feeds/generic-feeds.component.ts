@@ -62,6 +62,10 @@ function getTagName(node: HTMLElement, withClassNames: boolean): string {
 })
 export class GenericFeedsComponent implements OnInit {
   @Input()
+  prerendered: boolean;
+  @Input()
+  puppeteerScript: string;
+  @Input()
   body: string;
   @Input()
   url: string;
@@ -97,7 +101,12 @@ export class GenericFeedsComponent implements OnInit {
   }
 
   applyRule(rule: GenericFeedRule) {
-    this.currentRule = { ...rule, harvestUrl: this.url } as any;
+    this.currentRule = {
+      ...rule,
+      harvestUrl: this.url,
+      prerendered: this.prerendered,
+      puppeteerScript: this.puppeteerScript,
+    } as GenericFeedWithParams;
     this.customContextXPath = this.currentRule.contextXPath;
     this.customDateXPath = this.currentRule.dateXPath;
     this.customLinkXPath = this.currentRule.linkXPath;
