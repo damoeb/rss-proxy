@@ -6,6 +6,7 @@ import { GenericFeedsModule } from '../generic-feeds/generic-feeds.module';
 import { WatchPageChangeModule } from '../watch-page-change/watch-page-change.module';
 import { FormsModule } from '@angular/forms';
 import { SpinnerModule } from '../spinner/spinner.module';
+import { HelpMessageModule } from '../help-message/help-message.module';
 
 @NgModule({
   declarations: [PrerenderComponent],
@@ -17,6 +18,7 @@ import { SpinnerModule } from '../spinner/spinner.module';
     FormsModule,
     WatchPageChangeModule,
     SpinnerModule,
+    HelpMessageModule,
   ],
 })
 export class PrerenderModule {}

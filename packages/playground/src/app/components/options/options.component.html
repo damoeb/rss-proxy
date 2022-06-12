@@ -4,6 +4,12 @@
   <app-section title="Static Content" [active]="!hasChosen">
     <ul class="menu-list">
       <li>
+        <app-help-message *ngIf="!hasChosen">
+          You operate on a <strong>static source</strong>. If your target website is a SPA, consider
+          the option "Dynamic Rendering" to extract a feed.
+        </app-help-message>
+      </li>
+      <li>
         <a
           [ngClass]="{
             'is-active': nativeFeeds,

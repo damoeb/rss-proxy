@@ -13,7 +13,10 @@ import {
   FeedService,
 } from '../../services/feed.service';
 import { build } from '../../../environments/build';
-import { AppSettingsService } from '../../services/app-settings.service';
+import {
+  AppSettingsService,
+  FeatureFlags,
+} from '../../services/app-settings.service';
 import { environment } from '../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 
@@ -28,6 +31,7 @@ export type ArticleRecovery = 'none' | 'metadata' | 'full';
 export class PlaygroundComponent implements OnInit {
   response: FeedDetectionResponse;
   errorMessage: string;
+  flags: FeatureFlags;
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -46,8 +50,8 @@ export class PlaygroundComponent implements OnInit {
   isLoading = false;
   history: string[];
 
-  canPrerender = false;
   showHistory: boolean;
+  showModal = true;
 
   private static getHistory(): string[] {
     const localHistory = localStorage.getItem('history') || JSON.stringify([]);
@@ -63,7 +67,7 @@ export class PlaygroundComponent implements OnInit {
       }
     });
 
-    this.canPrerender = this.settings.get().flags.canPrerender;
+    this.flags = this.settings.get().flags;
     this.changeDetectorRef.detectChanges();
   }
 
@@ -195,5 +199,11 @@ export class PlaygroundComponent implements OnInit {
   clearResults() {
     this.url = null;
     this.resetAll();
+  }
+
+  hideModalWithHelp() {
+    this.showModal = false;
+    this.settings.setShowHelp(true);
+    this.changeDetectorRef.detectChanges();
   }
 }

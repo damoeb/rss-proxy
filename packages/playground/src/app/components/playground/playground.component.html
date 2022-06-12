@@ -1,3 +1,25 @@
+<div class="modal" [ngClass]="{'is-active': showModal}">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <div class="content box">
+      <div>
+        <h4>Welcome,</h4>
+        <p>
+          <a href="https://github.com/damoeb/rss-proxy">rss-proxy</a> helps you to
+        </p>
+        <ul>
+          <li>turn webpages into feeds</li>
+          <li>filter feeds</li>
+          <li>improve feeds (metadata, fulltext)</li>
+        </ul>
+
+        <button class="button is-primary is-outlined" (click)="hideModalWithHelp()">Show Guidance</button>
+        <button class="button" (click)="showModal = false">Skip</button>
+      </div>
+    </div>
+  </div>
+  <button class="modal-close is-large" aria-label="close"></button>
+</div>
 <div class="playground is-size-6">
   <div style="padding-bottom: 5px">
     <app-search
@@ -7,15 +29,17 @@
       (clearResults)="clearResults()"
     ></app-search>
 
-    <div *ngIf="!isLoading && !actualUrl && history.length > 0">
-      <p>
-        <strong>Previous URLs</strong>
-      </p>
-      <p *ngFor="let url of history">
-        <a (click)="parseFromHistoryUrl(url)" href="javascript:void(0)">{{
-          url
-        }}</a>
-      </p>
+    <div *ngIf="!actualUrl">
+      <div *ngIf="!isLoading && history.length > 0">
+        <p>
+          <strong>Previous URLs</strong>
+        </p>
+        <p *ngFor="let url of history">
+          <a (click)="parseFromHistoryUrl(url)" href="javascript:void(0)">{{
+            url
+          }}</a>
+        </p>
+      </div>
     </div>
   </div>
 

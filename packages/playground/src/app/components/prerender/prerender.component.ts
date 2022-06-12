@@ -104,7 +104,6 @@ waitForXPath; //h2[text()="Individual Drivers"]`;
   }
 
   private handleResponse(response: FeedDetectionResponse) {
-    console.log('response', response);
     const results = response.results;
 
     results.genericFeedRules = results.genericFeedRules.map((gr, index) => {

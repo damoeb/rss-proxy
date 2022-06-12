@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable, ReplaySubject } from 'rxjs';
 
 export interface Field {
   name: string;
@@ -34,6 +34,8 @@ export interface AppSettings {
 export class AppSettingsService {
   private appSettings: AppSettings;
   public readonly waitForInit: Promise<void>;
+  private showHelp: boolean;
+  private helpSubject = new ReplaySubject<boolean>();
 
   constructor(private readonly httpClient: HttpClient) {
     this.waitForInit = this.init();
@@ -46,5 +48,14 @@ export class AppSettingsService {
 
   get(): AppSettings {
     return this.appSettings;
+  }
+
+  watchShowHelp(): Observable<boolean> {
+    return this.helpSubject.asObservable();
+  }
+
+  setShowHelp(change: boolean): void {
+    this.showHelp = change;
+    this.helpSubject.next(change);
   }
 }

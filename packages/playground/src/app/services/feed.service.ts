@@ -5,6 +5,7 @@ import { ArticleRecovery } from '../components/playground/playground.component';
 import { AuthService } from './auth.service';
 import { JsonFeed } from '../components/feed/feed.component';
 import { AppSettingsService } from './app-settings.service';
+import { ActivatedRoute } from '@angular/router';
 
 export interface Article {
   id: string;
@@ -90,6 +91,11 @@ export interface FeedDetectionResponse {
 
 export type FeedFormat = 'atom' | 'rss' | 'json';
 
+export interface PermanentFeed {
+  feedUrl: string;
+  message: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -114,7 +120,6 @@ export class FeedService {
         homepageUrl: url,
         script: puppeteerScript,
         prerender,
-        token: this.auth.getToken(),
       });
     return this.httpClient.get(parserUrl) as Observable<FeedDetectionResponse>;
   }
@@ -130,36 +135,31 @@ export class FeedService {
   }
 
   createFeedUrlForGeneric(genericRule: GenericFeedWithParams): string {
-    return (
-      `${this.publicUrl}/api/w2f` +
-      this.params({
-        v: 0.1, // version
-        url: genericRule.harvestUrl,
-        link: genericRule.linkXPath,
-        context: genericRule.contextXPath,
-        date: genericRule.dateXPath,
-        x: genericRule.extendContext,
-        re: genericRule.articleRecovery,
-        q: genericRule.filter,
-        out: genericRule.targetFormat,
-        pp: genericRule.prerendered,
-        ppS: genericRule.puppeteerScript,
-        token: this.auth.getToken(),
-      })
-    );
+    const search = this.params({
+      v: 0.1, // version from env
+      url: genericRule.harvestUrl,
+      link: genericRule.linkXPath,
+      context: genericRule.contextXPath,
+      date: genericRule.dateXPath,
+      x: genericRule.extendContext,
+      re: genericRule.articleRecovery,
+      q: genericRule.filter,
+      out: genericRule.targetFormat,
+      pp: genericRule.prerendered,
+      ppS: genericRule.puppeteerScript,
+    });
+    return `${this.publicUrl}/api/w2f${search}`;
   }
 
   createFeedUrlForNative(nativeFeed: NativeFeedWithParams): string {
-    return (
-      `${this.publicUrl}/api/tf` +
-      this.params({
-        url: nativeFeed.feedUrl,
-        re: nativeFeed.articleRecovery,
-        q: nativeFeed.filter,
-        out: nativeFeed.targetFormat || 'json',
-        token: this.auth.getToken(),
-      })
-    );
+    const search = this.params({
+      url: nativeFeed.feedUrl,
+      re: nativeFeed.articleRecovery,
+      q: nativeFeed.filter,
+      out: nativeFeed.targetFormat || 'json',
+    });
+
+    return `${this.publicUrl}/api/tf${search}`;
   }
 
   fetchGenericFeed(genericRule: GenericFeedWithParams): Observable<any> {
@@ -174,11 +174,10 @@ export class FeedService {
   }
 
   explainFeed(feedUrl: string): Promise<JsonFeed> {
+    console.log('explain', feedUrl);
     const explainUrl = `${
       this.publicUrl
-    }/api/feeds/explain?feedUrl=${encodeURIComponent(
-      feedUrl,
-    )}&token=${encodeURIComponent(this.auth.getToken())}`;
+    }/api/feeds/explain?feedUrl=${encodeURIComponent(feedUrl)}`;
     return firstValueFrom(
       this.httpClient.get<JsonFeed>(explainUrl, {
         withCredentials: true,
@@ -189,9 +188,7 @@ export class FeedService {
   findRelated(query: string) {
     const relatedUrl = `${
       this.publicUrl
-    }/api/feeds/query?q=${encodeURIComponent(query)}&token=${encodeURIComponent(
-      this.auth.getToken(),
-    )}`;
+    }/api/feeds/query?q=${encodeURIComponent(query)}`;
     return firstValueFrom(
       this.httpClient.get<JsonFeed[]>(relatedUrl, {
         withCredentials: true,
@@ -205,5 +202,16 @@ export class FeedService {
       .map((k) => `${k}=${encodeURIComponent(param[k] ?? '')}`)
       .join('&');
     return '?' + search;
+  }
+
+  requestPermanentFeedUrl(feedUrl: string) {
+    return firstValueFrom(
+      this.httpClient.get<PermanentFeed>(
+        `/api/feeds/to-permanent?url=${encodeURIComponent(feedUrl)}`,
+        {
+          withCredentials: true,
+        },
+      ),
+    );
   }
 }

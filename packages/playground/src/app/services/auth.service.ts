@@ -9,7 +9,6 @@ import { firstValueFrom } from 'rxjs';
 import { AppSettingsService } from './app-settings.service';
 
 interface AuthResponse {
-  token: string;
   user: string;
 }
 
@@ -17,8 +16,8 @@ interface AuthResponse {
   providedIn: 'root',
 })
 export class AuthService implements CanActivate {
-  private token: string;
   private waitForToken: Promise<void>;
+  private user: string;
   constructor(
     private readonly httpClient: HttpClient,
     private readonly settings: AppSettingsService,
@@ -38,12 +37,8 @@ export class AuthService implements CanActivate {
   private async requestAuthTokenForAnonymous() {
     return firstValueFrom(this.httpClient.get<AuthResponse>('/api/auth')).then(
       (r) => {
-        this.token = r.token;
+        this.user = r.user;
       },
     );
-  }
-
-  getToken() {
-    return this.token;
   }
 }

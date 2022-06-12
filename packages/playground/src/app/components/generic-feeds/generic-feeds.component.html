@@ -36,6 +36,11 @@
           overflow-x: hidden;
         "
       >
+        <li>
+          <app-help-message>
+            List of feeds derived from markup. Clicking on it will highlight.
+          </app-help-message>
+        </li>
         <li *ngFor="let rule of genericFeedRules; let i = index">
           <a
             href="javascript:void(0)"

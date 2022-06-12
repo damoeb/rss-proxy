@@ -6,8 +6,8 @@ import {
 } from '@angular/core';
 import { build } from '../../../environments/build';
 import {
-  AppSettings,
   AppSettingsService,
+  FeatureFlags,
 } from '../../services/app-settings.service';
 
 @Component({
@@ -18,7 +18,8 @@ import {
 })
 export class FooterComponent implements OnInit {
   buildInfo: { date: string; version: string; revision: string };
-  appSettings: AppSettings;
+  flags: FeatureFlags;
+  showHelp: boolean;
 
   constructor(
     private readonly settings: AppSettingsService,
@@ -27,11 +28,20 @@ export class FooterComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.buildInfo = build;
-    this.appSettings = this.settings.get();
+    this.flags = this.settings.get().flags;
     this.changeDetectorRef.detectChanges();
+
+    this.settings.watchShowHelp().subscribe((showHelp) => {
+      this.showHelp = showHelp;
+      this.changeDetectorRef.detectChanges();
+    });
   }
 
   formatDate(date: string) {
     return date;
+  }
+
+  help() {
+    this.settings.setShowHelp(true);
   }
 }

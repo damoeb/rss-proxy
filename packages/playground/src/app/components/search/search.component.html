@@ -4,6 +4,7 @@
       <input
         class="input is-expanded"
         type="url"
+        [ngClass]="{'is-active': !url}"
         [placeholder]="placeholder"
         [(ngModel)]="url"
         (ngModelChange)="callChange($event)"
@@ -14,11 +15,11 @@
       />
     </div>
     <div class="control" *ngIf="url">
-      <button class="button is-white" (click)="clear()">Clear</button>
+      <button class="button is-dark" (click)="clear()">Clear</button>
     </div>
     <div class="control" *ngIf="showSubmit">
       <button
-        class="button"
+        class="button is-primary is-outlined"
         (click)="callTrigger()"
         [ngClass]="{ 'is-disabled': isLoading }"
       >

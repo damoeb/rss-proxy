@@ -6,6 +6,7 @@ import { SectionModule } from '../section/section.module';
 import { FeedModule } from '../feed/feed.module';
 import { SpinnerModule } from '../spinner/spinner.module';
 import { ExportOptionsModule } from '../export-options/export-options.module';
+import { HelpMessageModule } from '../help-message/help-message.module';
 
 @NgModule({
   declarations: [RefineFeedComponent],
@@ -17,6 +18,7 @@ import { ExportOptionsModule } from '../export-options/export-options.module';
     FeedModule,
     SpinnerModule,
     ExportOptionsModule,
+    HelpMessageModule,
   ],
 })
 export class RefineFeedModule {}

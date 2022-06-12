@@ -5,6 +5,7 @@ import { SectionModule } from '../section/section.module';
 import { MergeFeedsModule } from '../merge-feeds/merge-feeds.module';
 import { ExportOptionsModule } from '../export-options/export-options.module';
 import { RefineFeedModule } from '../refine-feed/refine-feed.module';
+import { HelpMessageModule } from '../help-message/help-message.module';
 
 @NgModule({
   declarations: [NativeOptionsComponent],
@@ -15,6 +16,7 @@ import { RefineFeedModule } from '../refine-feed/refine-feed.module';
     MergeFeedsModule,
     ExportOptionsModule,
     RefineFeedModule,
+    HelpMessageModule,
   ],
 })
 export class NativeOptionsModule {}
