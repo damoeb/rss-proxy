@@ -9,7 +9,8 @@ import { firstValueFrom } from 'rxjs';
 import { AppSettingsService } from './app-settings.service';
 
 interface AuthResponse {
-  user: string;
+  type: string;
+  maxAge: number;
 }
 
 @Injectable({
@@ -17,12 +18,11 @@ interface AuthResponse {
 })
 export class AuthService implements CanActivate {
   private waitForToken: Promise<void>;
-  private user: string;
   constructor(
     private readonly httpClient: HttpClient,
     private readonly settings: AppSettingsService,
   ) {
-    this.waitForToken = this.requestAuthTokenForAnonymous();
+    this.waitForToken = this.requestAuthTokenForWeb();
   }
 
   async canActivate(
@@ -34,10 +34,10 @@ export class AuthService implements CanActivate {
     );
   }
 
-  private async requestAuthTokenForAnonymous() {
+  private async requestAuthTokenForWeb() {
     return firstValueFrom(this.httpClient.get<AuthResponse>('/api/auth')).then(
       (r) => {
-        this.user = r.user;
+        setTimeout(() => this.requestAuthTokenForWeb(), (r.maxAge - 10) * 1000);
       },
     );
   }

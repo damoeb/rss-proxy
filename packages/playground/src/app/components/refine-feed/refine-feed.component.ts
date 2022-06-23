@@ -62,16 +62,16 @@ export class RefineFeedComponent implements OnInit {
     },
     {
       name: 'Must include',
-      value: 'keyword',
+      value: 'justToWord',
     },
     {
       name: 'Must not include',
-      value: '-Advertisment',
+      value: '-prefixBadWordWithMinus',
     },
-    {
-      name: 'With link count',
-      value: 'links > 0',
-    },
+    // {
+    //   name: 'With link count',
+    //   value: 'links > 0',
+    // },
   ];
   currentSample = '';
 

@@ -5,12 +5,12 @@ version: '3.4'
 services:
 
   rich-puppeteer:
-    image: damoeb/rich-rss:puppeteer
+    image: damoeb/rich-rss:puppeteer-0.1
     restart: always
     security_opt:
       - seccomp=./chrome.json
     networks:
-      - puppeteer_net
+      - puppeteer
 
   rss-proxy:
     image: damoeb/rss-proxy:2
@@ -31,10 +31,44 @@ services:
       - TOKEN_SECRET=1234_top_secret
       - APP_PUBLIC_URL=http://localhost:8080
       - PUPPETEER_HOST=http://rich-puppeteer:3000
+      - spring_profiles_active=monitoring
     secrets:
       - TOKEN_SECRET
     networks:
-      - puppeteer_net
+      - puppeteer
+      - loki
+
+
+  # ----------------------------------------------------------------------------------------------------------------------
+  # -- MONITORING
+  # ----------------------------------------------------------------------------------------------------------------------
+
+  loki:
+    image: grafana/loki:2.5.0
+    volumes:
+      - ./docker/loki:/etc/loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/loki.yml
+    networks:
+      - loki
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./docker/prometheus:/etc/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - loki
+
+  grafana:
+    image: grafana/grafana:latest
+    #    container_name: grafana-service
+    ports:
+      - "3000:3000"
+    networks:
+      - loki
 
 # https://www.baeldung.com/ops/docker-secrets
 secrets:
@@ -42,5 +76,7 @@ secrets:
     file: ./tokenSecret.txt
 
 networks:
-  puppeteer_net:
+  puppeteer:
+    driver: bridge
+  loki:
     driver: bridge

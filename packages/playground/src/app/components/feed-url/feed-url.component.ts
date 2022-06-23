@@ -71,11 +71,11 @@ export class FeedUrlComponent implements OnInit, OnChanges {
   private requestPermanentFeedUrl(): Promise<PermanentFeed> {
     if (this.genericFeed) {
       const url = this.feedService.createFeedUrlForGeneric(this.genericFeed);
-      return this.feedService.requestPermanentFeedUrl(url);
+      return this.feedService.requestStandaloneFeedUrl(url);
     }
     if (this.nativeFeed) {
       const url = this.feedService.createFeedUrlForNative(this.nativeFeed);
-      return this.feedService.requestPermanentFeedUrl(url);
+      return this.feedService.requestStandaloneFeedUrl(url);
     }
   }
 

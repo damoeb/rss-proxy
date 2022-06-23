@@ -10,7 +10,8 @@ It is a UI for [richRSS](https://github.com/damoeb/rich-rss) middleware and is s
 
 ## Quickstart using docker-compose
 
-The simplest way to use RSS-proxy is using [docker](https://docs.docker.com/install/)
+The simplest way to use RSS-proxy is using [docker](https://docs.docker.com/install/) or [podman](https://podman.io/getting-started/installation).
+This will start rss-proxy and puppeteer
 
 ```
 wget https://raw.githubusercontent.com/damoeb/rss-proxy/master/docker-compose.yml
@@ -21,14 +22,13 @@ This will start `rss-proxy` and a headless chrome. Open [localhost:8080](http://
 
 ## Features
 - Web to Feed
-- Dynamic rendering
-- Feed healing
+- Dynamic rendering using headless chromium
 - Feed Format Conversion
-- Content Refinement
+- Content Recovery using [JSON-LD](http://json-ld.org/), [OpenGraph](https://ogp.me/) and fulltext extraction
 - Filters
 - Security
-- Maintenance
-- Stateless
+- Alerts if the feed transformation encounters problems
+- Privacy
 
 
 ## Minimal Runtime
@@ -40,6 +40,7 @@ docker run -e APP_PUBLIC_URL=http://localhost:8080 -e TOKEN_SECRET=1234_top_secr
 ```
 
 ## Security
+Every API access requires a signed token. Requests are throttled on IP level and token level.
 
 
 ## Flags

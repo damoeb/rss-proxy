@@ -24,7 +24,8 @@ tasks.register("buildDockerImage", Exec::class) {
   // see https://github.com/docker-library/official-images#multiple-architectures
   // install plarforms https://stackoverflow.com/a/60667468/807017
   // docker buildx ls
-  commandLine("docker", "buildx", "build",
+//  commandLine("docker", "buildx", "build",
+  commandLine("docker", "build",
     "--build-arg", "PROXY_VERSION=${majorMinorPatch}-${gitHash}",
 //    "--platform=linux/amd64",
 //    "--platform=arm64v8",

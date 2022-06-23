@@ -4,6 +4,7 @@ import { PrerenderComponent } from './prerender.component';
 import { PrerenderModule } from './prerender.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AppSettingsService } from '../../services/app-settings.service';
+import { ReplaySubject } from 'rxjs';
 
 describe('PrerenderComponent', () => {
   let component: PrerenderComponent;
@@ -15,7 +16,10 @@ describe('PrerenderComponent', () => {
       providers: [
         {
           provide: AppSettingsService,
-          useValue: { get: () => ({ flags: {} }) },
+          useValue: {
+            get: () => ({ flags: {}, urls: {} }),
+            watchShowHelp: () => new ReplaySubject().asObservable(),
+          },
         },
       ],
     }).compileComponents();

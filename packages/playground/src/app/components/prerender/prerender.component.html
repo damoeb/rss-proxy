@@ -2,16 +2,12 @@
   <app-section title="Dynamic Content" [active]="!hasChosen">
     <aside class="aside">
       <app-help-message *ngIf="!hasChosen">
-        Dynamic rendering will prerender a website in a headless chrome using puppeteer. You may encounter timeout issues limited by <code>PUPPETEER_TIMEOUT_MS</code>.
+        Dynamic rendering will prerender a website in a headless chrome using
+        puppeteer. You may encounter timeout issues limited by
+        <code>PUPPETEER_TIMEOUT_MS</code>.
       </app-help-message>
       <div class="field" [hidden]="hasChosen">
-        <label class="label">Puppeteer Script</label>
-        <article class="message is-warning">
-          <div class="message-body">
-            <strong>Experimental Feature.</strong>&nbsp;
-            <a href="https://github.com/damoeb/rss-proxy/issues/41" referrerpolicy="no-referrer" target="_blank">Follow this issue</a> for details.
-          </div>
-        </article>
+        <label class="label">Puppeteer Evaluate Script</label>
         <div class="control">
           <textarea
             class="textarea puppeteer-script"

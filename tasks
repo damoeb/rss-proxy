@@ -1,4 +1,6 @@
 test urls:
+https://www.arte.tv/de/videos/RC-019568/the-killing/
+
 https://developers.googleblog.com/
 http://blog.spencermounta.in/
 https://bookmarks.kovah.de/guest/links
@@ -22,3 +24,11 @@ https://hystoria.100millionbooks.org/
 Ideas:
 - publish feed to rich-rss instance
 - version check to rp.migor.org
+
+support old proxy http://localhost:4200/api/feed?url=http%3A%2F%2Fheise.de&pContext=%2F%2Fbody%2Fdiv%5B5%5D%2Fdiv%5B1%5D%2Fdiv%2Fsection%5B1%5D%2Fsection%5B1%5D%2Farticle&pLink=.%2Fa%5B1%5D&x=s
+
+filter:
+- linkCount
+- wordCount
+
+https://zeigren.com/posts/monitoring_prometheus_loki/

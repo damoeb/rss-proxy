@@ -4,6 +4,7 @@ import { RefineFeedComponent } from './refine-feed.component';
 import { RefineFeedModule } from './refine-feed.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AppSettingsService } from '../../services/app-settings.service';
+import { ReplaySubject } from 'rxjs';
 
 describe('RefineFeedComponent', () => {
   let component: RefineFeedComponent;
@@ -15,7 +16,10 @@ describe('RefineFeedComponent', () => {
       providers: [
         {
           provide: AppSettingsService,
-          useValue: { get: () => ({ flags: {} }) },
+          useValue: {
+            get: () => ({ flags: {} }),
+            watchShowHelp: () => new ReplaySubject().asObservable(),
+          },
         },
       ],
     }).compileComponents();

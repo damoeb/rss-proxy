@@ -4,6 +4,7 @@ import { FeedUrlComponent } from './feed-url.component';
 import { FeedUrlModule } from './feed-url.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AppSettingsService } from '../../services/app-settings.service';
+import { ReplaySubject } from 'rxjs';
 
 describe('FeedUrlComponent', () => {
   let component: FeedUrlComponent;
@@ -15,7 +16,10 @@ describe('FeedUrlComponent', () => {
       providers: [
         {
           provide: AppSettingsService,
-          useValue: { get: () => ({ flags: {} }) },
+          useValue: {
+            get: () => ({ flags: {} }),
+            watchShowHelp: () => new ReplaySubject().asObservable(),
+          },
         },
       ],
     }).compileComponents();

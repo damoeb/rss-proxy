@@ -3,6 +3,7 @@ import { ExportOptionsComponent } from './export-options.component';
 import { ExportOptionsModule } from './export-options.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AppSettingsService } from '../../services/app-settings.service';
+import { ReplaySubject } from 'rxjs';
 
 describe('ExportOptionsComponent', () => {
   let component: ExportOptionsComponent;
@@ -14,7 +15,10 @@ describe('ExportOptionsComponent', () => {
       providers: [
         {
           provide: AppSettingsService,
-          useValue: { get: () => ({ flags: {} }) },
+          useValue: {
+            get: () => ({ flags: {} }),
+            watchShowHelp: () => new ReplaySubject().asObservable(),
+          },
         },
       ],
     }).compileComponents();

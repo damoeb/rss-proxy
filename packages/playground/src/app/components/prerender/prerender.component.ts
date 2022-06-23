@@ -38,10 +38,7 @@ export class PrerenderComponent implements OnInit, OnDestroy {
 
   imageUrlSanitizes: SafeResourceUrl;
   response: FeedDetectionResponse;
-  placeHolderScript = `clickXPath; //button[text()="I Accept"]
-clickXPath; //a[text()="No, Thank You"]
-select; #download-os; macOS 10.14 (Mojave)
-waitForXPath; //h2[text()="Individual Drivers"]`;
+  placeHolderScript = `Do anyting you can do in a dev console. Will be passed as page.evaluate()`;
   isLoading: boolean;
   flags: FeatureFlags;
 

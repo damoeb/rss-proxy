@@ -4,6 +4,7 @@ import { OptionsComponent } from './options.component';
 import { OptionsModule } from './options.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AppSettingsService } from '../../services/app-settings.service';
+import { ReplaySubject } from 'rxjs';
 
 describe('OptionsComponent', () => {
   let component: OptionsComponent;
@@ -15,7 +16,10 @@ describe('OptionsComponent', () => {
       providers: [
         {
           provide: AppSettingsService,
-          useValue: { get: () => ({ flags: {} }) },
+          useValue: {
+            get: () => ({ flags: {} }),
+            watchShowHelp: () => new ReplaySubject().asObservable(),
+          },
         },
       ],
     }).compileComponents();

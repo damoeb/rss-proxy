@@ -1,11 +1,12 @@
-<div class="modal" [ngClass]="{'is-active': showModal}">
-  <div class="modal-background"></div>
+<div class="modal" [ngClass]="{ 'is-active': showModal }">
+  <div class="modal-background" (click)="showModal = false"></div>
   <div class="modal-content">
     <div class="content box">
       <div>
         <h4>Welcome,</h4>
         <p>
-          <a href="https://github.com/damoeb/rss-proxy">rss-proxy</a> helps you to
+          <a href="https://github.com/damoeb/rss-proxy">rss-proxy</a> helps you
+          to
         </p>
         <ul>
           <li>turn webpages into feeds</li>
@@ -13,7 +14,12 @@
           <li>improve feeds (metadata, fulltext)</li>
         </ul>
 
-        <button class="button is-primary is-outlined" (click)="hideModalWithHelp()">Show Guidance</button>
+        <button
+          class="button is-primary is-outlined"
+          (click)="hideModalWithHelp()"
+        >
+          Show Guidance
+        </button>
         <button class="button" (click)="showModal = false">Skip</button>
       </div>
     </div>

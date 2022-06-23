@@ -10,12 +10,12 @@
           <!-- feed -->
           <div class="mb-4">
             <!-- native -->
-<!--            <div class="field" *ngIf="nativeFeed">-->
-<!--              <label class="label">Feed URL</label>-->
-<!--              <a [href]="feedUrl" referrerpolicy="no-referrer" target="_blank"-->
-<!--                >Feed</a-->
-<!--              >-->
-<!--            </div>-->
+            <!--            <div class="field" *ngIf="nativeFeed">-->
+            <!--              <label class="label">Feed URL</label>-->
+            <!--              <a [href]="feedUrl" referrerpolicy="no-referrer" target="_blank"-->
+            <!--                >Feed</a-->
+            <!--              >-->
+            <!--            </div>-->
 
             <!-- generic -->
             <div class="field" *ngIf="genericFeed">
@@ -28,11 +28,11 @@
                   >Website</a
                 >
               </div>
-<!--              <div>-->
-<!--                <a [href]="feedUrl" referrerpolicy="no-referrer" target="_blank"-->
-<!--                  >Generic Feed</a-->
-<!--                >-->
-<!--              </div>-->
+              <!--              <div>-->
+              <!--                <a [href]="feedUrl" referrerpolicy="no-referrer" target="_blank"-->
+              <!--                  >Generic Feed</a-->
+              <!--                >-->
+              <!--              </div>-->
             </div>
           </div>
 
@@ -62,13 +62,15 @@
 
           <div *ngIf="!hasChosen">
             <app-help-message *ngIf="articleRecovery === 'metadata'">
-              Recover data from referenced page using json-ld, OpenGraph and microtags. This can be helpful to recover the correct <em>published</em> date. Feed size will be limited by <code>MAX_RECOVERY_PER_FEED</code>
+              Recover data from referenced page using json-ld, OpenGraph and
+              microtags. This can be helpful to recover the correct
+              <em>published</em> date. Feed size will be limited by
+              <code>MAX_RECOVERY_PER_FEED</code>
             </app-help-message>
             <app-help-message *ngIf="articleRecovery === 'full'">
               Like 'Page Metadata' with fulltext extraction.
             </app-help-message>
           </div>
-
 
           <!-- filter -->
           <div class="field">

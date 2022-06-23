@@ -4,6 +4,7 @@ import { NativeOptionsComponent } from './native-options.component';
 import { NativeOptionsModule } from './native-options.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AppSettingsService } from '../../services/app-settings.service';
+import { ReplaySubject } from 'rxjs';
 
 describe('NativeOptionsComponent', () => {
   let component: NativeOptionsComponent;
@@ -15,7 +16,10 @@ describe('NativeOptionsComponent', () => {
       providers: [
         {
           provide: AppSettingsService,
-          useValue: { get: () => ({ flags: {} }) },
+          useValue: {
+            get: () => ({ flags: {} }),
+            watchShowHelp: () => new ReplaySubject().asObservable(),
+          },
         },
       ],
     }).compileComponents();

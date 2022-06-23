@@ -1,7 +1,8 @@
 <app-section [title]="format()?.toUpperCase() + ' Feed'" [active]="true">
   <div style="flex: 1">
     <app-help-message *ngIf="!loading">
-      <strong>Your feed is ready</strong>. You will receive maintenance messages into your feed if there are problems
+      <strong>Your feed is ready</strong>. You will receive maintenance messages
+      into your feed if there are problems
     </app-help-message>
     <app-spinner *ngIf="loading"></app-spinner>
     <div class="card is-primary" *ngIf="!loading">
@@ -17,7 +18,10 @@
 
     <div class="field">
       <div class="control">
-        <textarea class="textarea is-primary" [ngModel]="actualFeedUrl"></textarea>
+        <textarea
+          class="textarea is-primary"
+          [ngModel]="actualFeedUrl"
+        ></textarea>
       </div>
       <button class="button is-expanded copy" (click)="copyUrl()">
         Copy URL

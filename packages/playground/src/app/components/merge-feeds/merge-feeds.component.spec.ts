@@ -4,6 +4,7 @@ import { MergeFeedsComponent } from './merge-feeds.component';
 import { MergeFeedsModule } from './merge-feeds.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AppSettingsService } from '../../services/app-settings.service';
+import { ReplaySubject } from 'rxjs';
 
 describe('MergeFeedsComponent', () => {
   let component: MergeFeedsComponent;
@@ -15,7 +16,10 @@ describe('MergeFeedsComponent', () => {
       providers: [
         {
           provide: AppSettingsService,
-          useValue: { get: () => ({ flags: {} }) },
+          useValue: {
+            get: () => ({ flags: {} }),
+            watchShowHelp: () => new ReplaySubject().asObservable(),
+          },
         },
       ],
     }).compileComponents();

@@ -1,15 +1,31 @@
 <div class="rp-footer">
   <div>
-    <a href="https://github.com/damoeb/rss-proxy/issues" referrerpolicy="no-referrer" target="_blank">Submit an Bug</a>
+    <a
+      href="https://github.com/damoeb/rss-proxy/issues"
+      referrerpolicy="no-referrer"
+      target="_blank"
+      >Submit an Bug</a
+    >
     <span> - </span>
-    <a href="https://twitter.com/damoeb" referrerpolicy="no-referrer" target="_blank">Contact Developer</a>
+    <a
+      href="https://twitter.com/damoeb"
+      referrerpolicy="no-referrer"
+      target="_blank"
+      >Contact Developer</a
+    >
 
-    <span *ngIf="!showHelp"> - <button class="is-success button is-small" (click)="help()">Show Guidance</button></span>
+    <span *ngIf="!showHelp">
+      -
+      <button class="is-success button is-small" (click)="help()">
+        Show Guidance
+      </button></span
+    >
   </div>
   <div>
-    {{ flags?.stateless ? 'stateless' : 'stateful'}} <a href="https://github.com/damoeb/rss-proxy" target="_blank">rss-proxy</a>
+    {{ flags?.stateless ? 'stateless' : 'stateful' }}
+    <a href="https://github.com/damoeb/rss-proxy" target="_blank">rss-proxy</a>
     {{ buildInfo.version }}
     {{ buildInfo.revision }}
-    canPrerender: {{ flags?.canPrerender ? 'yes' : 'no' }}
+    prerender: {{ flags?.canPrerender ? 'yes' : 'no' }}
   </div>
 </div>

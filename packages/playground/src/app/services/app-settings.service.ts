@@ -21,11 +21,20 @@ export interface FeatureFlags {
   canPush: boolean;
   stateless: boolean;
 }
+
+export interface ApiUrls {
+  webToFeed: string;
+  standaloneFeed: string;
+  transformFeed: string;
+  explainFeed: string;
+  discoverFeeds: string;
+}
+
 export interface AppSettings {
   flags: FeatureFlags;
+  urls: ApiUrls;
   announcements: AppAnnouncement[];
   webToFeedVersion: boolean;
-  publicUrl: string;
 }
 
 @Injectable({

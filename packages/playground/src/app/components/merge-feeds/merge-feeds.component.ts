@@ -64,7 +64,7 @@ export class MergeFeedsComponent implements OnInit {
 
   async showFeedSuggestions(query: string) {
     if (!this.isStateless) {
-      const realted = await this.feedService.findRelated(query);
+      // const realted = await this.feedService.findRelated(query);
     }
   }
 

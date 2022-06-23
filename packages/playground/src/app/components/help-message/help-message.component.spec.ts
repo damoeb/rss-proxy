@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HelpMessageComponent } from './help-message.component';
+import { HelpMessageModule } from './help-message.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('HelpMessageComponent', () => {
   let component: HelpMessageComponent;
@@ -8,9 +10,8 @@ describe('HelpMessageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HelpMessageComponent ]
-    })
-    .compileComponents();
+      imports: [HelpMessageModule, HttpClientTestingModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {
