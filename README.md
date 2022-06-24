@@ -1,8 +1,8 @@
 # RSS-proxy
 
-RSS-proxy allows you to do create an RSS/ATOM or JSON feed of almost any website or feed, 
+RSS-proxy version 2+ allows you to do create an ATOM or JSON feed of almost static/dynamic websites or feeds, 
 purely by analyzing just the HTML structure. Try the [live demo](https://rssproxy.migor.org/).
-The server is completely stateless, everything is part of the url.
+The server is completely stateless - it does not store anything - everything is part of the url.
 
 It is a UI for [richRSS](https://github.com/damoeb/rich-rss) middleware and is shipped in a multiplatform docker image.
 
@@ -10,51 +10,35 @@ It is a UI for [richRSS](https://github.com/damoeb/rich-rss) middleware and is s
 
 ## Quickstart using docker-compose
 
-The simplest way to use RSS-proxy is using [docker](https://docs.docker.com/install/) or [podman](https://podman.io/getting-started/installation).
-This will start rss-proxy and puppeteer
+Requirements: [docker](https://docs.docker.com/install/) or [podman](https://podman.io/getting-started/installation).
+Start rss-proxy and with the optional puppeteer for dynamic rendering
 
 ```
 wget https://raw.githubusercontent.com/damoeb/rss-proxy/master/docker-compose.yml
 docker-compose up
 ```
 
-This will start `rss-proxy` and a headless chrome. Open [localhost:8080](http://localhost:8080) in the browser.
+Then open [localhost:8080](http://localhost:8080) in the browser.
 
-## Features
-- Web to Feed
-- Dynamic rendering using headless chromium
-- Feed Format Conversion
-- Content Recovery using [JSON-LD](http://json-ld.org/), [OpenGraph](https://ogp.me/) and fulltext extraction
-- Filters
-- Security
-- Alerts if the feed transformation encounters problems
-- Privacy
-
-
-## Minimal Runtime
-If you consider using `rss-proxy` just for static websites, do this:
-
+The minimal - not recommended - runtime without docker-compose would be:
 ```
 docker pull damoeb/rss-proxy:2
 docker run -e APP_PUBLIC_URL=http://localhost:8080 -e TOKEN_SECRET=1234_top_secret -p 8080:8080 -it damoeb/rss-proxy:2
 ```
 
-## Security
-Every API access requires a signed token. Requests are throttled on IP level and token level.
+## Features
+- Automated Web to Feed
+- Dynamic rendering using headless chromium
+- Feed Format Conversion
+- Content Recovery using [JSON-LD](http://json-ld.org/), [OpenGraph](https://ogp.me/) and fulltext extraction
+- Filters
+- Security
+- Caching
+- Alerts into your feed if the feed transformation encounters problems
+- Privacy: Nothing is persisted by the server
+- Monitoring
 
-
-## Flags
-
-
-| Name            | Description      |       |
-|-----------------|------------------|-------|
-| PUPPETEER_HOST  |                  | -     |
-| LOG_LEVEL       |                  | error |
-| ENABLE_FULLTEXT |                  | true  |
-| TOKEN_SECRET    | To sign the JWTs | -     |
-
-
-## Security
+## Legacy Support
 
 
 ## Changelog
