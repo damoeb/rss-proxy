@@ -1,0 +1,206 @@
+<div class="loading" *ngIf="loaderMessage">
+<!--  <div>{{loaderMessage}}</div>-->
+  <app-spinner></app-spinner>
+</div>
+
+<div style="display: flex; height: 100vh; width: 100vw; flex-direction: column"
+     [ngClass]="{'hidden': loaderMessage}">
+
+  <div style="flex: 1; display: flex; align-items: center; justify-content: center; flex-direction: column"
+       *ngIf="phase == 1">
+    <div style="width: 50%; margin: auto">
+      <pre style="background: white; font-size: 10px; color: gray">
+       __   ______ _______ _______
+     _|  |_|   __ \     __|     __|
+    |_    _|      <__ |__ |
+      |__| |___|__|_______|_______|
+      </pre>
+      <form (ngSubmit)="parseUrl();">
+        <div class="field has-addons is-expanded">
+          <div class="control is-expanded">
+            <input
+              class="input is-expanded is-primary"
+              type="url"
+              placeholder="Enter URL of website or feed"
+              [(ngModel)]="url"
+              autocomplete="off"
+              autofocus
+              name="url"
+              required
+            />
+          </div>
+          <div class="control">
+            <button
+              class="button"
+              (click)="parseUrl()"
+            >
+              Show Feeds
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <app-footer></app-footer>
+  </div>
+
+  <div style="flex: 1; display: flex; flex-direction: row; align-items: center; justify-content: center;"
+       *ngIf="phase == 2">
+    <div *ngIf="response.results.nativeFeeds.length + response.results.genericFeedRules.length == 0">
+      <p><strong>That's unfortunate :(</strong></p>
+      <p>{{response.results.errorMessage}}</p>
+      <p class="mt-4">If you think this is a bug you can <a
+        href="https://github.com/damoeb/rss-proxy/issues"
+        referrerpolicy="no-referrer"
+        target="_blank"
+      >file a ticket</a>.</p>
+    </div>
+    <div *ngIf="response.results.nativeFeeds.length + response.results.genericFeedRules.length > 0">
+      <p>Done :)</p>
+    </div>
+  </div>
+
+  <div style="flex: 1; display: flex; flex-direction: row;"
+       [ngClass]="{'hidden': phase != 3}">
+    <div style="flex: 1; display: flex; flex-direction: column;">
+      <ul *ngIf="response?.results?.nativeFeeds?.length > 0">
+        <li>
+          <div class="notification is-warning">Page contains Native Feeds</div>
+        </li>
+      </ul>
+      <iframe
+        #iframeElement
+        style="flex: 1"
+      ></iframe>
+    </div>
+    <div style="width: 350px; padding: 10px; display: flex; flex-direction: column">
+      <!-- URL -->
+      <div class="field has-addons is-expanded">
+        <div class="control is-expanded">
+          <input
+            class="input is-expanded"
+            type="url"
+            placeholder="Enter URL of website or feed"
+            [(ngModel)]="url"
+            readonly
+            autofocus
+            name="url"
+            required
+          />
+        </div>
+        <div class="control">
+          <button
+            class="button"
+            (click)="clear()"
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+
+      <button class="button is-primary" *ngIf="!prerendered" (click)="togglePrerendering()">With prerendering</button>
+      <button class="button is-primary" *ngIf="prerendered" (click)="togglePrerendering()">Without prerendering</button>
+
+      <!-- feeds -->
+      <div class="field">
+        <label class="label" [ngClass]="{'is-primary': !currentFeedId}">All Feeds</label>
+        <div class="control">
+          <div class="select is-expanded" [ngClass]="{'is-primary': !currentFeedId}">
+            <select
+              [(ngModel)]="currentFeedId"
+              class="is-expanded"
+              (ngModelChange)="applyDebounced()"
+            >
+              <option value="none"></option>
+              <option *ngFor="let feed of allFeeds" [value]="feed.id">{{feed.name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        <strong>Feed Preview</strong>
+      </p>
+      <div style="flex: 5; min-height: 300px; overflow-y: auto; display: flex; background: #efefef; max-height: 40vh; flex-direction: column; overflow-x: hidden; padding: 10px"
+           [ngClass]="{'is-primary': !currentFeedId}">
+        <div style="flex: 1; display: flex; justify-content: center; align-items: center; text-align: center"
+             *ngIf="!currentFeedId">
+          Click in the website to choose a feed
+          or use the drop-down "All Feeds"
+        </div>
+
+        <app-spinner *ngIf="currentFeedId && !jsonFeed"></app-spinner>
+        <app-feed style="transform: scale(0.8); transform-origin: 0 0; width: 120%;"
+                  [jsonFeed]="jsonFeed"
+                  [header]="false"
+                  *ngIf="jsonFeed"></app-feed>
+
+      </div>
+
+      <div style="flex: 1; ">
+
+      </div>
+
+      <!-- recovery -->
+      <div class="field">
+        <label class="label"
+               [ngClass]="{'is-primary': jsonFeed}">Improve Article</label>
+        <div class="control">
+          <div class="select is-expanded">
+            <select
+              [(ngModel)]="articleRecovery"
+              class="is-expanded"
+              [ngClass]="{ 'is-primary': !jsonFeed }"
+              (ngModelChange)="applyDebounced()"
+            >
+              <option value="none"></option>
+              <option value="metadata">Use Page Metadata</option>
+              <option value="full" *ngIf="flags.willExtractFulltext">
+                Use Page Fulltext
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Must include filter -->
+      <div class="field">
+        <label class="label"
+               [ngClass]="{'is-primary': jsonFeed}">Articles Must Contain</label>
+        <div class="control">
+          <input
+            class="input"
+            placeholder="Space separated keywords"
+            [ngClass]="{ 'is-primary': !jsonFeed }"
+            [(ngModel)]="includeFilter"
+            (ngModelChange)="applyDebounced()"
+          />
+        </div>
+      </div>
+
+      <!-- Must not include filter -->
+      <div class="field">
+        <label class="label"
+               [ngClass]="{'is-primary': jsonFeed}">Articles Must Not Contain</label>
+        <div class="control">
+          <input
+            class="input"
+            placeholder="Space separated keywords"
+            [ngClass]="{ 'is-primary': !jsonFeed }"
+            [(ngModel)]="excludeFilter"
+            (ngModelChange)="applyDebounced()"
+          />
+        </div>
+      </div>
+
+      <div>
+        <button class="button is-expanded is-large"
+                [ngClass]="{'is-disabled': !jsonFeed, 'is-primary': jsonFeed}">
+          Show Feed URL
+        </button>
+      </div>
+
+      <app-footer></app-footer>
+    </div>
+  </div>
+</div>

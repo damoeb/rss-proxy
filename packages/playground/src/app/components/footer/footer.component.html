@@ -11,21 +11,25 @@
       href="https://twitter.com/damoeb"
       referrerpolicy="no-referrer"
       target="_blank"
-      >Contact Developer</a
+      >Contact</a
     >
 
-    <span *ngIf="!showHelp">
+<!--    <span *ngIf="!showHelp">-->
+<!--      - -->
+<!--      <button class="is-success button is-small" (click)="help()">-->
+<!--        Show Guidance-->
+<!--      </button></span-->
+<!--    >-->
+    <span>
       -
-      <button class="is-success button is-small" (click)="help()">
-        Show Guidance
-      </button></span
+      <a href="javascript:void(0)" (click)="experimental()">
+        Experimental
+      </a></span
     >
   </div>
   <div>
-    {{ flags?.stateless ? 'stateless' : 'stateful' }}
     <a href="https://github.com/damoeb/rss-proxy" target="_blank">rss-proxy</a>
-    {{ buildInfo.version }}
-    {{ buildInfo.revision }}
-    prerender: {{ flags?.canPrerender ? 'yes' : 'no' }}
+    v{{ buildInfo.version }}
+    @{{ buildInfo.revision }}
   </div>
 </div>

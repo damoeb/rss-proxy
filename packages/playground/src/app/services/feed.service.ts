@@ -161,7 +161,7 @@ export class FeedService {
       out: nativeFeed.targetFormat || 'json',
     });
 
-    return `${this.urls}/api/tf${search}`;
+    return `${this.urls.transformFeed}${search}`;
   }
 
   fetchGenericFeed(genericRule: GenericFeedWithParams): Observable<any> {

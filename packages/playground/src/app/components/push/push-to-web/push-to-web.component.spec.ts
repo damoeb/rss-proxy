@@ -6,7 +6,7 @@ describe('PushToWebComponent', () => {
   let component: PushToWebComponent;
   let fixture: ComponentFixture<PushToWebComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       declarations: [PushToWebComponent],
     }).compileComponents();

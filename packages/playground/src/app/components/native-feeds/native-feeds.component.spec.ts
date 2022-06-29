@@ -7,7 +7,7 @@ describe('NativeFeedsComponent', () => {
   let component: NativeFeedsComponent;
   let fixture: ComponentFixture<NativeFeedsComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       imports: [NativeFeedsModule],
     }).compileComponents();

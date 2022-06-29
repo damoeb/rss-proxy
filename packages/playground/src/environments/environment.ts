@@ -6,28 +6,6 @@ import { RssProxyEnvironment } from './rss-proxy-environment';
 
 export const environment: RssProxyEnvironment = {
   production: false,
-  history: [
-    'https://developers.googleblog.com/',
-    'http://blog.spencermounta.in/',
-    'https://bookmarks.kovah.de/guest/links',
-    'https://www.brandonsmith.ninja/',
-    'https://jon.bo/posts/',
-    'https://arzg.github.io/lang/',
-    'https://bulletin.nu/',
-    'https://demo.linkace.org/guest/links',
-    'https://lukesmith.xyz/',
-    'https://blog.substack.com/',
-    'https://100millionbooks.org/',
-    'https://www.slowernews.com/',
-    'https://arxiv.org/search/?query=math&searchtype=all&source=header',
-    'https://duckduckgo.com/html/?q=feynman',
-    'http://paulgraham.com/articles.html',
-    'https://hystoria.100millionbooks.org/',
-    'https://github.blog/changelog/',
-    'https://news.ycombinator.com/',
-    'https://cloud.google.com/blog/', // does not render and does not extract
-    'https://www.fool.com/author/20415',
-  ],
 };
 
 /*

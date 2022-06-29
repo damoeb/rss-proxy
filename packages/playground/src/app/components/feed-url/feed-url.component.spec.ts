@@ -10,7 +10,7 @@ describe('FeedUrlComponent', () => {
   let component: FeedUrlComponent;
   let fixture: ComponentFixture<FeedUrlComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       imports: [FeedUrlModule, HttpClientTestingModule],
       providers: [

@@ -10,7 +10,7 @@ describe('NativeOptionsComponent', () => {
   let component: NativeOptionsComponent;
   let fixture: ComponentFixture<NativeOptionsComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       imports: [NativeOptionsModule, HttpClientTestingModule],
       providers: [

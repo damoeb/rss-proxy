@@ -6,7 +6,7 @@ describe('PushAsWebhookComponent', () => {
   let component: PushAsWebhookComponent;
   let fixture: ComponentFixture<PushAsWebhookComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       declarations: [PushAsWebhookComponent],
     }).compileComponents();

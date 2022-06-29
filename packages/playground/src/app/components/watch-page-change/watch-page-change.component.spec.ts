@@ -7,7 +7,7 @@ describe('WatchPageChangeComponent', () => {
   let component: WatchPageChangeComponent;
   let fixture: ComponentFixture<WatchPageChangeComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       imports: [WatchPageChangeModule],
     }).compileComponents();

@@ -44,4 +44,6 @@ export class FooterComponent implements OnInit {
   help() {
     this.settings.setShowHelp(true);
   }
+
+  experimental() {}
 }

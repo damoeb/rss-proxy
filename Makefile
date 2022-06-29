@@ -3,3 +3,6 @@ test: install
 
 install:
 	cd packages/playground && yarn --frozen-lockfile -s
+
+buildDockerImage:
+	./gradlew buildDockerImage

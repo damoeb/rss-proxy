@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { PlaygroundModule } from './components/playground/playground.module';
 import { AppRoutingModule } from './app-routing.module';
+import { PlaygroundStatelessModule } from './components/playground-stateless/playground-stateless.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -15,6 +16,7 @@ import { AppRoutingModule } from './app-routing.module';
     FormsModule,
     HttpClientModule,
     PlaygroundModule,
+    PlaygroundStatelessModule,
     AppRoutingModule,
     RouterModule,
   ],

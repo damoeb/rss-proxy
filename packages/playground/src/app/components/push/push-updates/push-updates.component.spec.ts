@@ -6,7 +6,7 @@ describe('PushUpdatesComponent', () => {
   let component: PushUpdatesComponent;
   let fixture: ComponentFixture<PushUpdatesComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       declarations: [PushUpdatesComponent],
     }).compileComponents();

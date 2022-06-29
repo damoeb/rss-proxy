@@ -43,6 +43,9 @@ export class FeedComponent implements OnInit {
   @Input()
   jsonFeed: JsonFeed;
 
+  @Input()
+  header = true;
+
   constructor() {}
 
   ngOnInit(): void {}

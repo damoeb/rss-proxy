@@ -8,7 +8,7 @@ describe('GenericFeedsComponent', () => {
   let component: GenericFeedsComponent;
   let fixture: ComponentFixture<GenericFeedsComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       imports: [GenericFeedsModule, HttpClientTestingModule],
     }).compileComponents();

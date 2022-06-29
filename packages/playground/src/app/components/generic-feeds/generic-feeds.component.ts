@@ -41,6 +41,25 @@ function getRelativeCssPath(
   return path;
 }
 
+export function patchHtml(html: string, url: string): Document {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+
+  const base = doc.createElement('base');
+  base.setAttribute('href', url);
+  doc.getElementsByTagName('head').item(0).appendChild(base);
+
+  Array.from(doc.querySelectorAll('[href]')).forEach((el) => {
+    try {
+      const absoluteUrl = new URI(el.getAttribute('href')).absoluteTo(url);
+      el.setAttribute('href', absoluteUrl.toString());
+    } catch (e) {
+      // console.error(e);
+    }
+  });
+
+  return doc;
+}
+
 function getTagName(node: HTMLElement, withClassNames: boolean): string {
   if (!withClassNames) {
     return node.tagName;
@@ -88,7 +107,9 @@ export class GenericFeedsComponent implements OnInit {
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.prepareIframe(this.patchHtml(this.body, this.url));
+    this.prepareIframe(
+      patchHtml(this.body, this.url).documentElement.innerHTML,
+    );
   }
 
   applyCustomRule(currentRule: GenericFeedRule) {
@@ -153,25 +174,6 @@ export class GenericFeedsComponent implements OnInit {
       }
     });
     this.changeDetectorRef.detectChanges();
-  }
-
-  private patchHtml(html: string, url: string): string {
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-
-    const base = doc.createElement('base');
-    base.setAttribute('href', url);
-    doc.getElementsByTagName('head').item(0).appendChild(base);
-
-    Array.from(doc.querySelectorAll('[href]')).forEach((el) => {
-      try {
-        const absoluteUrl = new URI(el.getAttribute('href')).absoluteTo(url);
-        el.setAttribute('href', absoluteUrl.toString());
-      } catch (e) {
-        // console.error(e);
-      }
-    });
-
-    return doc.documentElement.innerHTML;
   }
 
   private highlightRule(rule: GenericFeedRule): void {

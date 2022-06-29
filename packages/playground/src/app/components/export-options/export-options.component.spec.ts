@@ -9,7 +9,7 @@ describe('ExportOptionsComponent', () => {
   let component: ExportOptionsComponent;
   let fixture: ComponentFixture<ExportOptionsComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       imports: [ExportOptionsModule, HttpClientTestingModule],
       providers: [

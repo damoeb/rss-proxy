@@ -10,7 +10,7 @@ describe('MergeFeedsComponent', () => {
   let component: MergeFeedsComponent;
   let fixture: ComponentFixture<MergeFeedsComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       imports: [MergeFeedsModule, HttpClientTestingModule],
       providers: [

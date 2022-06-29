@@ -32,3 +32,5 @@ filter:
 - wordCount
 
 https://zeigren.com/posts/monitoring_prometheus_loki/
+
+fetch error should still give you the dynamic option (bypass bot protection)

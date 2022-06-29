@@ -6,7 +6,7 @@ describe('PushToMobileComponent', () => {
   let component: PushToMobileComponent;
   let fixture: ComponentFixture<PushToMobileComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       declarations: [PushToMobileComponent],
     }).compileComponents();

@@ -6,7 +6,7 @@ describe('PushAsEmailComponent', () => {
   let component: PushAsEmailComponent;
   let fixture: ComponentFixture<PushAsEmailComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       declarations: [PushAsEmailComponent],
     }).compileComponents();

@@ -17,7 +17,6 @@ import {
   AppSettingsService,
   FeatureFlags,
 } from '../../services/app-settings.service';
-import { environment } from '../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 
 export type ArticleRecovery = 'none' | 'metadata' | 'full';
@@ -55,7 +54,7 @@ export class PlaygroundComponent implements OnInit {
 
   private static getHistory(): string[] {
     const localHistory = localStorage.getItem('history') || JSON.stringify([]);
-    return environment.history || localHistory ? JSON.parse(localHistory) : [];
+    return localHistory ? JSON.parse(localHistory) : [];
   }
 
   ngOnInit() {

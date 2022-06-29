@@ -10,7 +10,7 @@ describe('RefineFeedComponent', () => {
   let component: RefineFeedComponent;
   let fixture: ComponentFixture<RefineFeedComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       imports: [RefineFeedModule, HttpClientTestingModule],
       providers: [

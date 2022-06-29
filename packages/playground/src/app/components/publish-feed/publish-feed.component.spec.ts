@@ -7,7 +7,7 @@ describe('PublishFeedComponent', () => {
   let component: PublishFeedComponent;
   let fixture: ComponentFixture<PublishFeedComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       imports: [PublishFeedModule],
     }).compileComponents();

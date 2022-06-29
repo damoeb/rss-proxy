@@ -8,7 +8,7 @@ describe('HelpMessageComponent', () => {
   let component: HelpMessageComponent;
   let fixture: ComponentFixture<HelpMessageComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       imports: [HelpMessageModule, HttpClientTestingModule],
     }).compileComponents();

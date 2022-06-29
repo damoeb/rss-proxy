@@ -7,7 +7,7 @@ describe('PushOptionsComponent', () => {
   let component: PushOptionsComponent;
   let fixture: ComponentFixture<PushOptionsComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       imports: [PushOptionsModule],
     }).compileComponents();

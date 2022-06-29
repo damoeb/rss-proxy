@@ -10,7 +10,7 @@ describe('PrerenderComponent', () => {
   let component: PrerenderComponent;
   let fixture: ComponentFixture<PrerenderComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       imports: [PrerenderModule, HttpClientTestingModule],
       providers: [

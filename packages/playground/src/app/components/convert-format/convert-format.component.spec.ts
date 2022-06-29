@@ -7,7 +7,7 @@ describe('ConvertFormatComponent', () => {
   let component: ConvertFormatComponent;
   let fixture: ComponentFixture<ConvertFormatComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync () => {
     await TestBed.configureTestingModule({
       imports: [ConvertFormatModule],
     }).compileComponents();
