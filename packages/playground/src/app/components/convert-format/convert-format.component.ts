@@ -20,6 +20,7 @@ export class ConvertFormatComponent implements OnInit {
   genericFeed: GenericFeedWithParams;
 
   format: FeedFormat;
+  intoBucket: boolean;
 
   constructor() {}
 
@@ -36,6 +37,10 @@ export class ConvertFormatComponent implements OnInit {
     } else {
       this.genericFeed.targetFormat = format;
     }
+  }
+
+  addToBucket() {
+    this.intoBucket = true;
   }
 
   getNativeFeed() {

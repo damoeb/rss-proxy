@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import {
   FeedDetectionResponse,
@@ -18,15 +18,17 @@ import {
   GenericFeedWithParams,
   NativeFeedRef,
   NativeFeedWithParams,
+  PermanentFeed,
 } from '../../services/feed.service';
 import { patchHtml } from '../generic-feeds/generic-feeds.component';
 import { ArticleRecovery } from '../playground/playground.component';
-import { compact, debounce, find } from 'lodash';
+import { compact, debounce, find, isUndefined } from 'lodash';
 import { JsonFeed } from '../feed/feed.component';
 import {
   AppSettingsService,
   FeatureFlags,
 } from '../../services/app-settings.service';
+import { error } from 'toastr';
 
 // credit https://stackoverflow.com/a/1349426
 function makeid(length: number) {
@@ -46,36 +48,27 @@ function injectHostScript(document: Document, randomId: string) {
     new DOMParser().parseFromString(
       `<script>
 window.addEventListener('message', (message) => {
+    // reset
     Array.from(document.querySelectorAll('.w2f-link'))
         .filter(el => el.getAttribute('class'))
         .forEach(el => el.setAttribute('class', el.getAttribute('class').replace(' w2f-link', '')));
 
-    if (message.data && message.data && message.data.isGeneric) {
-        const genericFeed = message.data.genericFeed;
+    // highlight
+    if (message.data && message.data && message.data.urls) {
+        const {urls} = message.data;
 
-        const path = (message.data.genericFeed.contextXPath + genericFeed.linkXPath.replace('./', '/')).split('/')
-          .filter(step => step)
-          .map((step) => step.indexOf('[') > -1 ? step.substring(0, step.indexOf('[')) : step)
-          .join('/');
-
-        const result = document.evaluate(path, document.body, null, XPathResult.ANY_TYPE, null);
-        const links = [];
-        let next = result.iterateNext()
-        while(next) {
-            links.push(next);
-            next = result.iterateNext();
-        }
-        links
-          .forEach((element, index) => {
-            element.setAttribute('class', element.getAttribute('class') + ' w2f-link');
-            if (index === 0) {
-              element.scrollIntoView({ behavior: 'smooth' });
-            }
-           })
+        Array.from(document.querySelectorAll('a[href]'))
+            .filter(aElement => urls.includes(aElement.getAttribute('href')))
+            .forEach((element, index) => {
+              element.setAttribute('class', element.getAttribute('class') + ' w2f-link');
+              if (index === 0) {
+                element.scrollIntoView({ behavior: 'smooth' });
+              }
+             });
     }
 });
 document.body.addEventListener('click', (event) => {
-    const nodes = event.path;
+    const nodes = event.composedPath(); // TODO does not work in FF
     const bodyAt = nodes.indexOf(document.body);
     const pathFromBody = nodes.filter((_, index) => index < bodyAt).reverse().map(el => el.tagName).join('/');
 
@@ -130,6 +123,8 @@ interface AnyFeed {
   id: string;
 }
 
+type PlaygroundPhase = 'playground' | 'status' | 'welcome';
+
 @Component({
   selector: 'app-welcome',
   templateUrl: './playground-stateless.component.html',
@@ -143,8 +138,8 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
   iframeRef: ElementRef;
   response: FeedDetectionResponse;
   private unbindMessageListener: () => void;
-  loaderMessage: string;
-  phase = 1;
+  isLoadingDiscovery: boolean;
+  phase: PlaygroundPhase;
   private busy = false;
   articleRecovery: ArticleRecovery = 'none';
   includeFilter = '';
@@ -157,6 +152,12 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
   prerendered = false;
   flags: FeatureFlags;
   applyDebounced: () => void;
+  strictMode = true;
+  showAdvancedOptions = false;
+  showFeedUrlModal: boolean;
+  effectiveFeedUrl: PermanentFeed;
+  copyFeedUrlButtonText = 'Copy Feed URL';
+  isFeedUrlCopied = false;
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -164,88 +165,131 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly feedService: FeedService,
     private readonly appSettings: AppSettingsService,
+    private readonly router: Router,
   ) {}
 
   ngOnInit() {
+    this.flags = this.appSettings.get().flags;
+    this.applyDebounced = debounce(this.apply.bind(this), 500);
+
+    this.clear();
+
     this.activatedRoute.queryParams.subscribe((params) => {
-      if (params.url) {
+      let changed = false;
+      if (!isUndefined(params.url)) {
         this.url = params.url;
+        changed = true;
+      }
+      if (!isUndefined(params.strictMode)) {
+        this.strictMode = params.strictMode === 'true';
+        changed = true;
+      }
+      if (!isUndefined(params.prerendered)) {
+        this.prerendered = params.prerendered === 'true';
+        changed = true;
+      }
+      if (!isUndefined(params.articleRecovery)) {
+        this.articleRecovery = params.articleRecovery;
+        changed = true;
+      }
+      if (changed) {
+        this.parseUrl();
         this.changeDetectorRef.detectChanges();
       }
     });
-    this.flags = this.appSettings.get().flags;
-    this.applyDebounced = debounce(this.apply.bind(this), 300);
   }
 
   async parseUrl() {
     if (this.busy) {
       return;
     }
-    this.setUrlParam('url', this.url);
+    this.phase = 'status';
+    await this.setUrlParams();
     this.busy = true;
-    this.setLoaderMessage('Parsing ...');
-    console.log('try static');
-    this.prerendered = false;
-    this.response = await firstValueFrom(this.feedService.discover(this.url))
-      .then((response) => {
-        if (
-          response.results.failed ||
-          (response.results.genericFeedRules.length === 0 &&
-            response.results.mimeType.startsWith('text/html'))
-        ) {
-          console.log('try dynamic');
-          this.prerendered = true;
-          return firstValueFrom(this.feedService.discover(this.url, '', true));
-        } else {
+    this.isLoadingDiscovery = true;
+
+    try {
+      console.log('try static');
+      this.prerendered = false;
+      this.response = await firstValueFrom(
+        this.feedService.discover(
+          this.url,
+          '',
+          this.prerendered,
+          this.strictMode,
+        ),
+      )
+        .then((response) => {
+          if (
+            response.results.failed ||
+            (response.results.genericFeedRules.length === 0 &&
+              response.results.mimeType.startsWith('text/html'))
+          ) {
+            console.log('try dynamic');
+            this.prerendered = true;
+            return firstValueFrom(
+              this.feedService.discover(
+                this.url,
+                '',
+                this.prerendered,
+                this.strictMode,
+              ),
+            );
+          } else {
+            return response;
+          }
+        })
+        .then((response) => {
+          response.results.failed =
+            response.results.genericFeedRules.length +
+              response.results.nativeFeeds.length ===
+            0;
+          response.results.errorMessage =
+            'No feeds found. ' + response.results.errorMessage;
           return response;
-        }
-      })
-      .then((response) => {
-        response.results.failed =
-          response.results.genericFeedRules.length +
-            response.results.nativeFeeds.length ===
-          0;
-        response.results.errorMessage =
-          'No feeds found. ' + response.results.errorMessage;
-        return response;
-      });
+        });
 
-    const generic = this.response.results.genericFeedRules.map(
-      (genericFeed) => {
+      const generic = this.response.results.genericFeedRules.map(
+        (genericFeed) => {
+          return {
+            id: createId(genericFeed),
+            isGeneric: true,
+            name: `in DOM with ${genericFeed.count} articles`,
+            genericFeed,
+          };
+        },
+      );
+
+      const native = this.response.results.nativeFeeds.map((nativeFeed) => {
         return {
-          id: createId(genericFeed),
-          isGeneric: true,
-          name: `in DOM with ${genericFeed.count} articles`,
-          genericFeed,
+          id: nativeFeed.url,
+          isGeneric: false,
+          name: `Native ${nativeFeed.title}`,
+          nativeFeed,
         };
-      },
-    );
+      });
+      this.allFeeds = [...native, ...generic];
 
-    const native = this.response.results.nativeFeeds.map((nativeFeed) => {
-      return {
-        id: nativeFeed.url,
-        isGeneric: false,
-        name: `Native ${nativeFeed.title}`,
-        nativeFeed,
-      };
-    });
-    this.allFeeds = [...native, ...generic];
+      if (!this.response.results.failed) {
+        setTimeout(() => {
+          this.phase = 'playground';
+          this.changeDetectorRef.detectChanges();
+        }, 2000);
+      }
 
-    this.setLoaderMessage(null);
-    this.nextPhase();
-
-    if (!this.response.results.failed) {
-      setTimeout(() => this.nextPhase(), 2000);
+      this.assignToIframe(this.response.results.body);
+    } finally {
+      console.log('done');
+      this.isLoadingDiscovery = false;
+      this.busy = false;
+      this.changeDetectorRef.detectChanges();
     }
-
-    this.assignToIframe(this.response.results.body);
-    this.busy = false;
   }
 
   private assignToIframe(html: string) {
     const randomId = makeid(10);
     const document = patchHtml(html, this.url);
-
+    document.querySelectorAll('script').forEach((el) => el.remove());
     disableClick(document);
     injectHostScript(document, randomId);
     this.registerMessageListener(randomId);
@@ -286,86 +330,162 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
       this.currentFeedId = currentFeed.id;
       this.apply();
     } else {
+      this.currentFeedId = null;
+      error(
+        `No Feed matches the element you clicked. Maybe try the 'All Feeds' menu.`,
+        null,
+        {
+          positionClass: 'toast-bottom-center',
+          hideDuration: 3000,
+          iconClass: undefined,
+          progressBar: true,
+        },
+      );
+      this.jsonFeed = null;
+      this.iframeRef.nativeElement.contentWindow.postMessage({
+        urls: [],
+      });
+      this.changeDetectorRef.detectChanges();
       console.log('No match');
     }
   }
 
-  private setLoaderMessage(message: string) {
-    this.loaderMessage = message;
-    this.changeDetectorRef.detectChanges();
-  }
-
-  private nextPhase() {
-    this.phase++;
-    this.changeDetectorRef.detectChanges();
-  }
-
   private apply() {
     console.log('apply');
-    const currentFeed = find(this.allFeeds, { id: this.currentFeedId });
-    this.iframeRef.nativeElement.contentWindow.postMessage(currentFeed);
     this.isLoadingFeed = true;
     this.jsonFeed = null;
     this.changeDetectorRef.detectChanges();
+    const currentFeed = this.getCurrentFeed();
 
-    const filter =
-      this.includeFilter.trim() +
-      ' ' +
-      compact(this.excludeFilter.trim().split(' '))
-        .map((s) => '-' + s)
-        .join(' ');
-    const wizardParams: FeedWizardParams = {
-      filter,
-      articleRecovery: this.articleRecovery,
-      prerendered: this.prerendered,
-    };
     if (currentFeed) {
       if (currentFeed.isGeneric) {
         console.log('generic');
-        const params: GenericFeedWithParams = {
-          ...currentFeed.genericFeed,
-          ...wizardParams,
-          harvestUrl: this.url,
-        };
+        const params = this.getGenericParams();
         this.feedUrl = this.feedService.createFeedUrlForGeneric(params);
-        firstValueFrom(this.feedService.fetchGenericFeed(params)).then(
-          (response) => this.handleResponse(response),
-        );
+        firstValueFrom(this.feedService.fetchGenericFeed(params))
+          .then((response) => this.handleResponse(response))
+          .catch(console.error);
       } else {
         console.log('native');
-        const params: NativeFeedWithParams = {
-          ...currentFeed.nativeFeed,
-          ...wizardParams,
-          feedUrl: this.url,
-        };
+        const params = this.getNativeParams();
         this.feedUrl = this.feedService.createFeedUrlForNative(params);
-        firstValueFrom(this.feedService.transformNativeFeed(params)).then(
-          (response) => this.handleResponse(response),
-        );
+        firstValueFrom(this.feedService.transformNativeFeed(params))
+          .then((response) => this.handleResponse(response))
+          .catch(console.error);
       }
     }
   }
 
+  private getFeedWizardParams(): FeedWizardParams {
+    function parse(filterValue: string): string[] {
+      return compact(
+        filterValue
+          .trim()
+          .split(' ')
+          .map((token) => token.trim()),
+      );
+    }
+
+    const filter = [
+      ...parse(this.includeFilter).map((t) => `contains('${t}')`),
+      ...parse(this.excludeFilter).map((t) => `!(contains('${t}'))`),
+    ].reduce((expr, query) => {
+      if (expr) {
+        return `and(${query}, ${expr})`;
+      } else {
+        return query;
+      }
+    }, '');
+    return {
+      filter,
+      articleRecovery: this.articleRecovery,
+      prerendered: this.prerendered,
+    };
+  }
+  private getCurrentFeed(): AnyFeed {
+    return find(this.allFeeds, { id: this.currentFeedId });
+  }
+  private getGenericParams(): GenericFeedWithParams {
+    const currentFeed = this.getCurrentFeed();
+    return {
+      ...currentFeed.genericFeed,
+      ...this.getFeedWizardParams(),
+      harvestUrl: this.url,
+    };
+  }
+  private getNativeParams(): NativeFeedWithParams {
+    const currentFeed = this.getCurrentFeed();
+    return {
+      ...this.getFeedWizardParams(),
+      feedUrl: currentFeed.nativeFeed.url,
+    };
+  }
   private handleResponse(response: any) {
+    console.log('handleResponse', response);
     this.jsonFeed = response;
+    this.iframeRef.nativeElement.contentWindow.postMessage({
+      urls: this.jsonFeed.items.map((i) => i.url),
+    });
     this.isLoadingFeed = false;
     this.changeDetectorRef.detectChanges();
   }
 
   clear() {
     this.url = '';
-    this.phase = 1;
+    this.phase = 'welcome';
     this.jsonFeed = null;
+    this.strictMode = false;
+    this.prerendered = false;
     this.currentFeedId = null;
     this.changeDetectorRef.detectChanges();
   }
 
-  private setUrlParam(param: string, value: string) {
-    // todo
+  private setUrlParams() {
+    const queryParams: Params = {
+      url: this.url,
+      ...this.getFeedWizardParams(),
+      strictMode: this.strictMode,
+    };
+
+    return this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams,
+      queryParamsHandling: 'merge',
+    });
   }
 
-  togglePrerendering() {
-    this.prerendered = !this.prerendered;
-    this.apply();
+  async showFeedUrl() {
+    this.showFeedUrlModal = true;
+    const currentFeed = this.getCurrentFeed();
+    if (currentFeed.genericFeed) {
+      const genericParams = this.getGenericParams();
+      genericParams.targetFormat = 'atom';
+      const url = this.feedService.createFeedUrlForGeneric(genericParams);
+      this.effectiveFeedUrl = await this.feedService.requestStandaloneFeedUrl(
+        url,
+      );
+    }
+    if (currentFeed.nativeFeed) {
+      const nativeParams = this.getNativeParams();
+      nativeParams.targetFormat = 'atom';
+      const url = this.feedService.createFeedUrlForNative(nativeParams);
+      this.effectiveFeedUrl = await this.feedService.requestStandaloneFeedUrl(
+        url,
+      );
+    }
+    this.changeDetectorRef.detectChanges();
+  }
+
+  copyFeedUrl() {
+    const originalText = this.copyFeedUrlButtonText;
+    this.copyFeedUrlButtonText = 'Copied';
+    this.isFeedUrlCopied = true;
+    setTimeout(() => {
+      this.copyFeedUrlButtonText = originalText;
+      this.isFeedUrlCopied = false;
+      this.changeDetectorRef.detectChanges();
+    }, 3000);
+    this.changeDetectorRef.detectChanges();
+    return navigator.clipboard.writeText(this.effectiveFeedUrl.feedUrl);
   }
 }

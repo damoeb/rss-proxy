@@ -10,15 +10,6 @@
           >Atom URL</a
         >
       </li>
-      <!--      <li>-->
-      <!--        <a-->
-      <!--          (click)="applyFormat('rss')"-->
-      <!--          [ngClass]="{-->
-      <!--            'is-active': format == 'rss'-->
-      <!--          }"-->
-      <!--          >Rss URL</a-->
-      <!--        >-->
-      <!--      </li>-->
       <li>
         <a
           (click)="applyFormat('json')"
@@ -26,6 +17,15 @@
             'is-active': format == 'json'
           }"
           >Json URL</a
+        >
+      </li>
+      <li>
+        <a
+          (click)="addToBucket()"
+          [ngClass]="{
+            'is-active': intoBucket
+          }"
+          >Add to Bucket</a
         >
       </li>
     </ul>

@@ -50,7 +50,6 @@ export class PlaygroundComponent implements OnInit {
   history: string[];
 
   showHistory: boolean;
-  showModal = true;
 
   private static getHistory(): string[] {
     const localHistory = localStorage.getItem('history') || JSON.stringify([]);
@@ -198,11 +197,5 @@ export class PlaygroundComponent implements OnInit {
   clearResults() {
     this.url = null;
     this.resetAll();
-  }
-
-  hideModalWithHelp() {
-    this.showModal = false;
-    this.settings.setShowHelp(true);
-    this.changeDetectorRef.detectChanges();
   }
 }

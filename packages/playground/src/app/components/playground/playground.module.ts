@@ -10,6 +10,7 @@ import { OptionsModule } from '../options/options.module';
 import { FooterModule } from '../footer/footer.module';
 import { SpinnerModule } from '../spinner/spinner.module';
 import { SearchModule } from '../search/search.module';
+import { HeaderModule } from '../header/header.module';
 
 @NgModule({
   declarations: [PlaygroundComponent],
@@ -25,6 +26,7 @@ import { SearchModule } from '../search/search.module';
     FooterModule,
     SpinnerModule,
     SearchModule,
+    HeaderModule,
   ],
 })
 export class PlaygroundModule {}

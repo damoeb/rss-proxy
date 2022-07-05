@@ -112,13 +112,16 @@ export class FeedService {
     url: string,
     puppeteerScript = '',
     prerender = false,
+    strictMode = false,
   ): Observable<FeedDetectionResponse> {
+    console.log('strictMode', strictMode);
     const parserUrl =
       this.urls.discoverFeeds +
       this.params({
         homepageUrl: url,
         script: puppeteerScript,
         prerender,
+        strictMode,
       });
     return this.httpClient.get(parserUrl, {
       withCredentials: true,
@@ -206,7 +209,7 @@ export class FeedService {
     return '?' + search;
   }
 
-  requestStandaloneFeedUrl(feedUrl: string) {
+  requestStandaloneFeedUrl(feedUrl: string): Promise<PermanentFeed> {
     return firstValueFrom(
       this.httpClient.get<PermanentFeed>(
         `${this.urls.standaloneFeed}?url=${encodeURIComponent(feedUrl)}`,

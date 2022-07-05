@@ -1,15 +1,39 @@
-<div class="loading" *ngIf="loaderMessage">
-<!--  <div>{{loaderMessage}}</div>-->
+<div class="modal"
+     [ngClass]="{'is-active': showFeedUrlModal}">
+  <div class="modal-background"
+       (click)="showFeedUrlModal = false"></div>
+  <div class="modal-content p-4"
+       style="background: white">
+    <h2 class="is-primary mb-2">
+      Your Feed is ready. Copy it and add it to the feed reader of your choice.
+    </h2>
+    <textarea class="textarea is-primary"
+              style="height: 240px;"
+              readonly
+              [innerText]="effectiveFeedUrl?.feedUrl">
+    </textarea>
+    <button class="button mt-2 is-expanded is-large"
+            [ngClass]="{'is-primary': !isFeedUrlCopied, 'is-success': isFeedUrlCopied}"
+            (click)="copyFeedUrl()">
+      {{ copyFeedUrlButtonText }}
+    </button>
+  </div>
+  <button class="modal-close is-large"
+          aria-label="close"></button>
+</div>
+
+<div class="loading"
+     *ngIf="isLoadingDiscovery">
   <app-spinner></app-spinner>
 </div>
 
 <div style="display: flex; height: 100vh; width: 100vw; flex-direction: column"
-     [ngClass]="{'hidden': loaderMessage}">
+     [ngClass]="{'hidden': isLoadingDiscovery}">
 
   <div style="flex: 1; display: flex; align-items: center; justify-content: center; flex-direction: column"
-       *ngIf="phase == 1">
+       *ngIf="phase == 'welcome'">
     <div style="width: 50%; margin: auto">
-      <pre style="background: white; font-size: 10px; color: gray">
+      <pre style="background: white; font-size: 10px; color: black">
        __   ______ _______ _______
      _|  |_|   __ \     __|     __|
     |_    _|      <__ |__ |
@@ -45,15 +69,19 @@
   </div>
 
   <div style="flex: 1; display: flex; flex-direction: row; align-items: center; justify-content: center;"
-       *ngIf="phase == 2">
+       *ngIf="phase == 'status'">
     <div *ngIf="response.results.nativeFeeds.length + response.results.genericFeedRules.length == 0">
-      <p><strong>That's unfortunate :(</strong></p>
+      <p>
+        <strong>That's unfortunate :(</strong>
+      </p>
       <p>{{response.results.errorMessage}}</p>
-      <p class="mt-4">If you think this is a bug you can <a
-        href="https://github.com/damoeb/rss-proxy/issues"
-        referrerpolicy="no-referrer"
-        target="_blank"
-      >file a ticket</a>.</p>
+      <p class="mt-4">
+        If you think this is a bug you can
+        <a href="https://github.com/damoeb/rss-proxy/issues"
+           referrerpolicy="no-referrer"
+           target="_blank">
+          file a ticket
+        </a>.</p>
     </div>
     <div *ngIf="response.results.nativeFeeds.length + response.results.genericFeedRules.length > 0">
       <p>Done :)</p>
@@ -61,19 +89,9 @@
   </div>
 
   <div style="flex: 1; display: flex; flex-direction: row;"
-       [ngClass]="{'hidden': phase != 3}">
-    <div style="flex: 1; display: flex; flex-direction: column;">
-      <ul *ngIf="response?.results?.nativeFeeds?.length > 0">
-        <li>
-          <div class="notification is-warning">Page contains Native Feeds</div>
-        </li>
-      </ul>
-      <iframe
-        #iframeElement
-        style="flex: 1"
-      ></iframe>
-    </div>
-    <div style="width: 350px; padding: 10px; display: flex; flex-direction: column">
+       [ngClass]="{'hidden': phase != 'playground'}">
+    <div style="width: 350px; padding: 10px; display: flex; flex-direction: column"
+         class="mt-4">
       <!-- URL -->
       <div class="field has-addons is-expanded">
         <div class="control is-expanded">
@@ -98,21 +116,52 @@
         </div>
       </div>
 
-      <button class="button is-primary" *ngIf="!prerendered" (click)="togglePrerendering()">With prerendering</button>
-      <button class="button is-primary" *ngIf="prerendered" (click)="togglePrerendering()">Without prerendering</button>
+      <div>
+        <button class="button is-expanded is-small"
+                (click)="showAdvancedOptions = !showAdvancedOptions">
+          <span *ngIf="!showAdvancedOptions">Show &nbsp;</span>
+          <span *ngIf="showAdvancedOptions">Hide &nbsp;</span>
+          Nerd Options
+        </button>
+        <dl *ngIf="showAdvancedOptions">
+          <dt>Before</dt>
+          <dd>
+            <label class="checkbox">
+              <input type="checkbox"
+                     [ngModel]="prerendered"
+                     (ngModelChange)="prerendered = !prerendered; parseUrl()">
+              Prerender in Puppeteer
+            </label>
+          </dd>
+          <dd>
+            <label class="checkbox">
+              <input type="checkbox"
+                     [ngModel]="strictMode"
+                     (ngModelChange)="strictMode = !strictMode; parseUrl()">
+              Strict Mode
+            </label>
+          </dd>
+<!--          <dt>Rule</dt>-->
+        </dl>
+      </div>
 
       <!-- feeds -->
       <div class="field">
-        <label class="label" [ngClass]="{'is-primary': !currentFeedId}">All Feeds</label>
+        <label class="label"
+               [ngClass]="{'is-primary': !currentFeedId}">All Feeds</label>
         <div class="control">
-          <div class="select is-expanded" [ngClass]="{'is-primary': !currentFeedId}">
+          <div class="select is-expanded"
+               [ngClass]="{'is-primary': !currentFeedId}">
             <select
               [(ngModel)]="currentFeedId"
               class="is-expanded"
               (ngModelChange)="applyDebounced()"
             >
               <option value="none"></option>
-              <option *ngFor="let feed of allFeeds" [value]="feed.id">{{feed.name}}</option>
+              <option *ngFor="let feed of allFeeds"
+                      [value]="feed.id">
+                {{feed.name}}
+              </option>
             </select>
           </div>
         </div>
@@ -134,7 +183,9 @@
                   [jsonFeed]="jsonFeed"
                   [header]="false"
                   *ngIf="jsonFeed"></app-feed>
-
+        <em *ngIf="currentFeedId && jsonFeed?.items && jsonFeed.items.length === 0">
+          Empty Feed
+        </em>
       </div>
 
       <div style="flex: 1; ">
@@ -155,10 +206,16 @@
             >
               <option value="none"></option>
               <option value="metadata">Use Page Metadata</option>
-              <option value="full" *ngIf="flags.willExtractFulltext">
+              <option value="full"
+                      *ngIf="flags.willExtractFulltext">
                 Use Page Fulltext
               </option>
             </select>
+          </div>
+          <div *ngIf="articleRecovery !== 'none'"
+               class="notification is-warning">
+            <strong>Note</strong>: To avoid timeouts and host overloading your feed will max. contain <em>four</em> articles, cause the feed is generated is done on the fly (per request).
+            If you self-host you can change that limit.
           </div>
         </div>
       </div>
@@ -195,12 +252,28 @@
 
       <div>
         <button class="button is-expanded is-large"
+                (click)="showFeedUrl()"
                 [ngClass]="{'is-disabled': !jsonFeed, 'is-primary': jsonFeed}">
           Show Feed URL
         </button>
       </div>
 
       <app-footer></app-footer>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; border-left: 2px solid #efefef;">
+      <ul>
+        <li>
+          <div class="notification is-warning">
+            <strong>Page Preview.</strong>
+            Choose a Feed in the "All Feeds" menu or click on an artice in the preview.
+          </div>
+        </li>
+      </ul>
+      <iframe
+        #iframeElement
+        style="flex: 1"
+      ></iframe>
     </div>
   </div>
 </div>

@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { PlaygroundComponent } from './components/playground/playground.component';
 import { AuthService } from './services/auth.service';
 import { PlaygroundStatelessComponent } from './components/playground-stateless/playground-stateless.component';
 

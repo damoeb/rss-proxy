@@ -16,7 +16,7 @@ export class WatchPageChangeComponent implements OnInit {
   body: string;
   @Input()
   siteUrl: SiteUrl;
-  mode = 'readability';
+  mode = 'selector';
 
   constructor() {}
 

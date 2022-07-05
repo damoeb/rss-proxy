@@ -27,6 +27,7 @@
     "bulma": "^0.9.4",
     "lodash": "^4.17.21",
     "rxjs": "~7.5.5",
+    "toastr": "^2.1.4",
     "tslib": "^2.4.0",
     "urijs": "^1.19.11",
     "zone.js": "~0.11.5"
@@ -43,6 +44,7 @@
     "@types/jasmine": "~4.0.3",
     "@types/jasminewd2": "~2.0.10",
     "@types/lodash": "^4.14.182",
+    "@types/toastr": "^2.1.39",
     "@types/urijs": "^1.19.19",
     "codelyzer": "^6.0.2",
     "jasmine-core": "~4.1.1",
