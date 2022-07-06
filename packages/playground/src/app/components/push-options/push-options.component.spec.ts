@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PushOptionsComponent } from './push-options.component';
 import { PushOptionsModule } from './push-options.module';
@@ -7,11 +7,11 @@ describe('PushOptionsComponent', () => {
   let component: PushOptionsComponent;
   let fixture: ComponentFixture<PushOptionsComponent>;
 
-  beforeEach(waitForAsync () => {
+  beforeEach(waitForAsync(async () => {
     await TestBed.configureTestingModule({
       imports: [PushOptionsModule],
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PushOptionsComponent);

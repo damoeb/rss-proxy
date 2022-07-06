@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GenericFeedsComponent } from './generic-feeds.component';
 import { GenericFeedsModule } from './generic-feeds.module';
@@ -8,11 +8,11 @@ describe('GenericFeedsComponent', () => {
   let component: GenericFeedsComponent;
   let fixture: ComponentFixture<GenericFeedsComponent>;
 
-  beforeEach(waitForAsync () => {
+  beforeEach(waitForAsync(async () => {
     await TestBed.configureTestingModule({
       imports: [GenericFeedsModule, HttpClientTestingModule],
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GenericFeedsComponent);

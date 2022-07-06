@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { FeedComponent } from './feed.component';
 import { FeedModule } from './feed.module';
@@ -7,11 +7,11 @@ describe('FeedComponent', () => {
   let component: FeedComponent;
   let fixture: ComponentFixture<FeedComponent>;
 
-  beforeEach(waitForAsync () => {
+  beforeEach(waitForAsync(async () => {
     await TestBed.configureTestingModule({
       imports: [FeedModule],
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FeedComponent);

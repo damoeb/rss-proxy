@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  Input,
   OnInit,
 } from '@angular/core';
 import { build } from '../../../environments/build';
@@ -20,6 +21,8 @@ export class FooterComponent implements OnInit {
   buildInfo: { date: string; version: string; revision: string };
   flags: FeatureFlags;
   showHelp: boolean;
+  @Input()
+  showCredits: boolean;
 
   constructor(
     private readonly settings: AppSettingsService,

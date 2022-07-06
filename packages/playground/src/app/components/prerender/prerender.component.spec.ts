@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PrerenderComponent } from './prerender.component';
 import { PrerenderModule } from './prerender.module';
@@ -10,7 +10,7 @@ describe('PrerenderComponent', () => {
   let component: PrerenderComponent;
   let fixture: ComponentFixture<PrerenderComponent>;
 
-  beforeEach(waitForAsync () => {
+  beforeEach(waitForAsync(async () => {
     await TestBed.configureTestingModule({
       imports: [PrerenderModule, HttpClientTestingModule],
       providers: [
@@ -23,7 +23,7 @@ describe('PrerenderComponent', () => {
         },
       ],
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PrerenderComponent);

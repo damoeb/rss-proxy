@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RefineFeedComponent } from './refine-feed.component';
 import { RefineFeedModule } from './refine-feed.module';
@@ -10,7 +10,7 @@ describe('RefineFeedComponent', () => {
   let component: RefineFeedComponent;
   let fixture: ComponentFixture<RefineFeedComponent>;
 
-  beforeEach(waitForAsync () => {
+  beforeEach(waitForAsync(async () => {
     await TestBed.configureTestingModule({
       imports: [RefineFeedModule, HttpClientTestingModule],
       providers: [
@@ -23,7 +23,7 @@ describe('RefineFeedComponent', () => {
         },
       ],
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RefineFeedComponent);

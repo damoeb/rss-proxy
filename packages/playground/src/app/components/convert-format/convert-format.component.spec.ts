@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ConvertFormatComponent } from './convert-format.component';
 import { ConvertFormatModule } from './convert-format.module';
@@ -7,11 +7,11 @@ describe('ConvertFormatComponent', () => {
   let component: ConvertFormatComponent;
   let fixture: ComponentFixture<ConvertFormatComponent>;
 
-  beforeEach(waitForAsync () => {
+  beforeEach(waitForAsync(async () => {
     await TestBed.configureTestingModule({
       imports: [ConvertFormatModule],
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ConvertFormatComponent);
