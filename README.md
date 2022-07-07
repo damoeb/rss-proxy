@@ -2,8 +2,8 @@
 
 [![Build Status](https://app.travis-ci.com/damoeb/rss-proxy.svg?branch=master)](https://app.travis-ci.com/damoeb/rss-proxy)
 
-RSS-proxy 2+ allows you to do create an ATOM or JSON feed of almost static/dynamic websites or feeds, 
-purely by analyzing just the HTML structure. Try the [live demo](https://rssproxy.migor.org/).
+RSS-proxy 2+ allows you to do create an ATOM or JSON feed of almost static/dynamic websites or feeds (web to feed), 
+just by analyzing just the HTML structure. Try the [live rss-proxy](https://rssproxy.migor.org/).
 The server is completely stateless - it does not store anything - everything is part of the url.
 
 It is a UI for [richRSS](https://github.com/damoeb/rich-rss) middleware with the no-database profile.
@@ -22,25 +22,23 @@ docker-compose up
 
 Then open [localhost:8080](http://localhost:8080) in the browser.
 
-## Consumer Features
+## Features
 - Web to Feed
-- Dynamic rendering using headless chromium
+- Dynamic Rendering using headless chromium
 - Content Recovery using [JSON-LD](http://json-ld.org/), [OpenGraph](https://ogp.me/) 
 - Fulltext extraction
 - Filters
-- Alerts into your feed if the feed transformation encounters problems
+- _Maintenance Alerts_ if your feed has problems
 - Privacy: Nothing is persisted by the server
 - Feed Format Conversion Any -> ATOM/JSON
 
-## Self-Hosting Features
+## Other Features
 - Request Throttling and Host Flooding Protection
 - Caching
 - Monitoring
 
 ## Migration from version 1
 Version 2 supports the old version 1 urls, though this is optional. You can deactivate this feature by removing the 'legacy' profile in docker-compose.yml.
-
-
 
 ## Changelog
 

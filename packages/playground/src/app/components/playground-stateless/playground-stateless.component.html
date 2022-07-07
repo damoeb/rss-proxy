@@ -72,21 +72,33 @@
             />
           </div>
           <div class="control">
-            <button class="button is-primary is-outlined"
-                    (click)="parseUrl()">Show Feeds</button>
+            <button class="button is-primary is-outlined" (click)="parseUrl()">
+              Show Feeds
+            </button>
           </div>
         </div>
       </form>
-      <div class="content mt-6 ml-6 mr-6" style="color: #888888;">
+      <div class="content mt-6 ml-6 mr-6" style="color: #888888">
         <p>
-          <a href="https://github.com/damoeb/rss-proxy" style="color: black">rss-proxy</a> helps you
-          to
+          <a href="https://github.com/damoeb/rss-proxy" style="color: black"
+            >rss-proxy</a
+          >
+          can
         </p>
         <ul>
           <li>transform webpages to RSS feeds</li>
           <li>filter</li>
           <li>improve feeds with metadata or fulltext</li>
+          <li>be self-hosted (open source)</li>
         </ul>
+
+        <h4 class="pt-5">Why rss-proxy exists</h4>
+        <p>
+          It's quite absurd that after 30 years us humans are still the primary
+          consumers of internet content build to distract and occupy all of our
+          attention, while it should be automated to free our minds and inspire
+          us with relevant things.
+        </p>
       </div>
     </div>
 
@@ -115,9 +127,7 @@
       </p>
       <p>{{ response.results.errorMessage }}</p>
       <p class="mt-4">
-        <a (click)="phase = 'welcome'">
-          Back
-        </a>
+        <a (click)="phase = 'welcome'"> Back </a>
       </p>
     </div>
     <div
@@ -154,49 +164,51 @@
           />
         </div>
         <div class="control">
-          <button class="button is-primary is-outlined" (click)="clear()">Clear</button>
+          <button class="button is-primary is-outlined" (click)="clear()">
+            Clear
+          </button>
         </div>
       </div>
 
-<!--      <div>-->
-<!--        <button-->
-<!--          class="button is-expanded is-small"-->
-<!--          (click)="showAdvancedOptions = !showAdvancedOptions"-->
-<!--        >-->
-<!--          <span *ngIf="!showAdvancedOptions">Show &nbsp;</span>-->
-<!--          <span *ngIf="showAdvancedOptions">Hide &nbsp;</span>-->
-<!--          Nerd Options-->
-<!--        </button>-->
-<!--        <dl *ngIf="showAdvancedOptions">-->
-<!--          <dt>Before</dt>-->
-<!--          <dd>-->
-<!--            <label class="checkbox">-->
-<!--              <input-->
-<!--                type="checkbox"-->
-<!--                [ngModel]="prerendered"-->
-<!--                (ngModelChange)="prerendered = !prerendered; parseUrl()"-->
-<!--              />-->
-<!--              Prerender in Puppeteer-->
-<!--            </label>-->
-<!--          </dd>-->
-<!--          <dd>-->
-<!--            <label class="checkbox">-->
-<!--              <input-->
-<!--                type="checkbox"-->
-<!--                [ngModel]="strictMode"-->
-<!--                (ngModelChange)="strictMode = !strictMode; parseUrl()"-->
-<!--              />-->
-<!--              Strict Mode-->
-<!--            </label>-->
-<!--          </dd>-->
-<!--          &lt;!&ndash;          <dt>Rule</dt>&ndash;&gt;-->
-<!--        </dl>-->
-<!--      </div>-->
+      <!--      <div>-->
+      <!--        <button-->
+      <!--          class="button is-expanded is-small"-->
+      <!--          (click)="showAdvancedOptions = !showAdvancedOptions"-->
+      <!--        >-->
+      <!--          <span *ngIf="!showAdvancedOptions">Show &nbsp;</span>-->
+      <!--          <span *ngIf="showAdvancedOptions">Hide &nbsp;</span>-->
+      <!--          Nerd Options-->
+      <!--        </button>-->
+      <!--        <dl *ngIf="showAdvancedOptions">-->
+      <!--          <dt>Before</dt>-->
+      <!--          <dd>-->
+      <!--            <label class="checkbox">-->
+      <!--              <input-->
+      <!--                type="checkbox"-->
+      <!--                [ngModel]="prerendered"-->
+      <!--                (ngModelChange)="prerendered = !prerendered; parseUrl()"-->
+      <!--              />-->
+      <!--              Prerender in Puppeteer-->
+      <!--            </label>-->
+      <!--          </dd>-->
+      <!--          <dd>-->
+      <!--            <label class="checkbox">-->
+      <!--              <input-->
+      <!--                type="checkbox"-->
+      <!--                [ngModel]="strictMode"-->
+      <!--                (ngModelChange)="strictMode = !strictMode; parseUrl()"-->
+      <!--              />-->
+      <!--              Strict Mode-->
+      <!--            </label>-->
+      <!--          </dd>-->
+      <!--          &lt;!&ndash;          <dt>Rule</dt>&ndash;&gt;-->
+      <!--        </dl>-->
+      <!--      </div>-->
 
       <!-- feeds -->
       <div class="field">
         <label class="label" [ngClass]="{ 'is-primary': !currentFeedId }"
-          >All Feeds ({{allFeeds?.length}})</label
+          >All Feeds ({{ allFeeds?.length }})</label
         >
         <div class="control">
           <div
@@ -209,10 +221,13 @@
               (ngModelChange)="applyDebounced()"
             >
               <option value="none"></option>
-              <option *ngFor="let feed of allFeeds; let i = index" [value]="feed.id">
+              <option
+                *ngFor="let feed of allFeeds; let i = index"
+                [value]="feed.id"
+              >
                 {{ feed.name }}
                 {{ i == 0 ? ' [BEST]' : '' }}
-                {{ i == allFeeds.length -1 ? ' [WORST]' : '' }}
+                {{ i == allFeeds.length - 1 ? ' [WORST]' : '' }}
               </option>
             </select>
           </div>
@@ -246,7 +261,8 @@
           "
           *ngIf="!currentFeedId"
         >
-          Choose a feed using the "All Feeds" menu or by clicking in the "Page Preview".
+          Choose a feed using the "All Feeds" menu or by clicking in the "Page
+          Preview".
         </div>
 
         <app-spinner *ngIf="currentFeedId && !jsonFeed"></app-spinner>
@@ -273,8 +289,10 @@
           >Improve Article</label
         >
         <div class="control">
-          <div class="select is-expanded"
-               [ngClass]="{ 'is-primary': jsonFeed }">
+          <div
+            class="select is-expanded"
+            [ngClass]="{ 'is-primary': jsonFeed }"
+          >
             <select
               [(ngModel)]="articleRecovery"
               class="is-expanded"
@@ -291,10 +309,7 @@
             *ngIf="articleRecovery !== 'none'"
             class="notification is-warning"
           >
-            <strong>Note</strong>: To avoid timeouts and host overloading your
-            feed will max. contain <em>four</em> articles, cause the feed is
-            generated is done on the fly (per request). If you self-host you can
-            change that limit.
+            <strong>Note</strong>: Feed limited due to performance.
           </div>
         </div>
       </div>
@@ -355,7 +370,8 @@
       <ul>
         <li>
           <div class="notification is-warning">
-            <strong>Page Preview.</strong> Click to choose a generated feed by luck.
+            <strong>Page Preview.</strong> Click to choose a generated feed by
+            luck.
           </div>
         </li>
       </ul>
