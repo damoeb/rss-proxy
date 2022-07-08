@@ -1,0 +1,15 @@
+<div class="flex">
+  <app-section title="Push Notification" [active]="!hasChosen">
+    <ul class="menu-list">
+      <li>
+        <a [ngClass]="{ 'is-active': web }" (click)="useWeb()">Web</a>
+      </li>
+      <li>
+        <a [ngClass]="{ 'is-active': mobile }" (click)="useMobile()">Mobile</a>
+      </li>
+    </ul>
+  </app-section>
+
+  <app-push-to-web *ngIf="web"></app-push-to-web>
+  <app-push-to-mobile *ngIf="mobile"></app-push-to-mobile>
+</div>

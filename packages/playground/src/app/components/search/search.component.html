@@ -1,0 +1,30 @@
+<form (ngSubmit)="callTrigger()">
+  <div class="field has-addons is-expanded ml-3 mr-3">
+    <div class="control is-expanded">
+      <input
+        class="input is-expanded"
+        type="url"
+        [ngClass]="{ 'is-active': !url }"
+        [placeholder]="placeholder"
+        [(ngModel)]="url"
+        (ngModelChange)="callChange($event)"
+        autocomplete="off"
+        autofocus
+        name="url"
+        required
+      />
+    </div>
+<!--    <div class="control" *ngIf="url">-->
+<!--      <button class="button is-dark" (click)="clear()">Clear</button>-->
+<!--    </div>-->
+    <div class="control" *ngIf="showSubmit">
+      <button
+        class="button is-dark"
+        (click)="callTrigger()"
+        [ngClass]="{ 'is-disabled': isLoading }"
+      >
+        {{ buttonText }}
+      </button>
+    </div>
+  </div>
+</form>

@@ -7,10 +7,16 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
 async function createVersionsFile(filename: string) {
-  const revision = (await exec('git rev-parse --short HEAD')).stdout.toString().trim();
-  const branch = (await exec('git rev-parse --abbrev-ref HEAD')).stdout.toString().trim();
+  const revision = (await exec('git rev-parse --short HEAD')).stdout
+    .toString()
+    .trim();
+  const branch = (await exec('git rev-parse --abbrev-ref HEAD')).stdout
+    .toString()
+    .trim();
 
-  console.log(`version: '${process.env.npm_package_version}', revision: '${revision}', branch: '${branch}'`);
+  console.log(
+    `version: '${process.env.npm_package_version}', revision: '${revision}', branch: '${branch}'`,
+  );
 
   const content = dedent`
       export const build = {
@@ -19,7 +25,7 @@ async function createVersionsFile(filename: string) {
         date: '${new Date().getTime()}'
       };`;
 
-  writeFileSync(filename, content, {encoding: 'utf8'});
+  writeFileSync(filename, content, { encoding: 'utf8' });
 }
 
 createVersionsFile('src/environments/build.ts');

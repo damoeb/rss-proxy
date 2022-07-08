@@ -1,0 +1,99 @@
+<!-- -- GENERIC ---------------------------------------------------------------------------------------------------- -->
+
+<div class="flex" *ngIf="!isNativeFeed">
+  <app-section title="Static Content" [active]="!hasChosen">
+    <ul class="menu-list">
+      <li>
+        <app-help-message *ngIf="!hasChosen">
+          You operate on a <strong>static source</strong>. If your target
+          website is a SPA, consider the option "Dynamic Rendering" to extract a
+          feed.
+        </app-help-message>
+      </li>
+      <li>
+        <a
+          [ngClass]="{
+            'is-active': nativeFeeds,
+            'is-disabled': response.results.nativeFeeds.length === 0
+          }"
+          (click)="useNativeFeeds()"
+          ><strong>{{ response.results.nativeFeeds.length }}</strong> Native
+          Feeds</a
+        >
+      </li>
+      <li>
+        <a
+          [ngClass]="{
+            'is-disabled': response.results.genericFeedRules.length === 0,
+            'is-active': genericFeedRules
+          }"
+          (click)="useGenericFeeds()"
+          ><strong *ngIf="!isNativeFeed">{{
+            response.results.genericFeedRules.length
+          }}</strong>
+          Generic Feeds</a
+        >
+      </li>
+      <li *ngIf="!flags.stateless">
+        <a
+          [ngClass]="{
+            'is-active': watchPageChanges
+          }"
+          (click)="useWatchPageChanges()"
+          >Watch page changes</a
+        >
+      </li>
+      <li>
+        <a
+          [ngClass]="{
+            'is-disabled': !flags.canPrerender,
+            'is-active': prerender
+          }"
+          (click)="useDynamicRendering()"
+          >Dynamic Rendering
+        </a>
+      </li>
+      <li>
+        <a
+          [ngClass]="{
+            'is-disabled': !flags.stateless,
+            'is-active': watchPageChanges
+          }"
+          (click)="useWatchPageChanges()"
+          >Watch Page Changes
+        </a>
+      </li>
+    </ul>
+  </app-section>
+
+  <app-generic-feeds
+    *ngIf="genericFeedRules"
+    class="flex"
+    [genericFeedRules]="genericFeedRules"
+    [url]="response.options.harvestUrl"
+    [body]="response.results.body"
+  ></app-generic-feeds>
+  <app-native-feeds
+    *ngIf="nativeFeeds"
+    class="flex"
+    [nativeFeeds]="nativeFeeds"
+  ></app-native-feeds>
+  <app-watch-page-change
+    *ngIf="watchPageChanges"
+    class="flex"
+    [siteUrl]="response.options.harvestUrl"
+    [body]="response.results.body"
+  ></app-watch-page-change>
+  <app-prerender
+    *ngIf="prerender"
+    class="flex"
+    [siteUrl]="response.options.harvestUrl"
+  ></app-prerender>
+</div>
+
+<!-- -- NATIVE ----------------------------------------------------------------------------------------------------- -->
+
+<app-native-options
+  *ngIf="isNativeFeed"
+  [nativeFeed]="createNativeFeed()"
+></app-native-options>

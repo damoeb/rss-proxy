@@ -1,0 +1,22 @@
+<div style="display: flex">
+  <app-section title="Native Feeds" [active]="!hasChosen">
+    <ul class="menu-list">
+      <li *ngFor="let feed of nativeFeeds">
+        <a
+          href="javascript:void(0)"
+          [ngClass]="{ 'is-active': currentNativeFeed == feed }"
+          (click)="useFeed(feed)"
+          style="white-space: nowrap"
+        >
+          {{ feed.title }}
+        </a>
+      </li>
+    </ul>
+  </app-section>
+
+  <app-native-options
+    *ngIf="currentNativeFeed"
+    class="flex"
+    [nativeFeed]="withParams()"
+  ></app-native-options>
+</div>

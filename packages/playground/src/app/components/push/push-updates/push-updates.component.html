@@ -1,0 +1,42 @@
+<div class="flex">
+  <app-section title="Push Updates" [active]="!hasChosen">
+    <ul class="menu-list">
+      <li>
+        <a [ngClass]="{ 'is-active': webhook }" (click)="useWebhook()"
+          >Webhook</a
+        >
+      </li>
+      <li>
+        <a
+          [ngClass]="{ 'is-active': pushNotification }"
+          (click)="usePushNotification()"
+          >Push Notification</a
+        >
+      </li>
+      <li>
+        <a [ngClass]="{ 'is-active': email }" (click)="useEmail()">Email</a>
+      </li>
+      <li>
+        <a [ngClass]="{ 'is-active': calendar }" (click)="useCalendar()"
+          >Calendar</a
+        >
+      </li>
+    </ul>
+  </app-section>
+
+  <app-push-as-notification
+    *ngIf="pushNotification"
+    [nativeFeed]="nativeFeed"
+    [genericFeedRule]="genericFeedRule"
+  ></app-push-as-notification>
+  <app-push-as-webhook
+    *ngIf="webhook"
+    [nativeFeed]="nativeFeed"
+    [genericFeedRule]="genericFeedRule"
+  ></app-push-as-webhook>
+  <app-push-as-email
+    *ngIf="email"
+    [nativeFeed]="nativeFeed"
+    [genericFeedRule]="genericFeedRule"
+  ></app-push-as-email>
+</div>

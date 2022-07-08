@@ -1,0 +1,39 @@
+version: '3.4'
+
+# envs https://medium.com/softonic-eng/docker-compose-from-development-to-production-88000124a57c
+
+services:
+
+  rich-puppeteer:
+    image: damoeb/rich-rss:puppeteer-0.1
+    restart: always
+    security_opt:
+      - seccomp=./docker/chrome.json
+    networks:
+      - puppeteer
+
+  rss-proxy:
+    image: damoeb/rss-proxy:2
+    restart: always
+#    healthcheck:
+#      test: curl --fail http://localhost:8080/health || exit 1
+#      interval: 10s
+#      retries: 3
+#      start_period: 10s
+#      timeout: 10s
+
+    depends_on:
+      - rich-puppeteer
+    ports:
+      - "8080:8080"
+    environment:
+      - LOG_LEVEL=info
+      - TOKEN_SECRET=1234_top_secret
+      - APP_PUBLIC_URL=http://localhost:8080
+      - PUPPETEER_HOST=http://rich-puppeteer:3000
+    networks:
+      - puppeteer
+
+networks:
+  puppeteer:
+    driver: bridge

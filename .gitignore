@@ -3,4 +3,9 @@ package-lock.json
 dist
 .build-cache
 .idea
-tasks
+.gradle
+
+# Ignore Gradle build output directory
+build
+*.iml
+

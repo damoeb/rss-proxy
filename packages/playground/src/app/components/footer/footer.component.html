@@ -1,0 +1,35 @@
+<div class="rp-footer">
+  <div>
+    <a
+      href="https://github.com/damoeb/rss-proxy/issues"
+      referrerpolicy="no-referrer"
+      target="_blank"
+      >Submit an Bug</a
+    >
+    <span> - </span>
+    <a
+      href="https://twitter.com/damoeb"
+      referrerpolicy="no-referrer"
+      target="_blank"
+      >Contact</a
+    >
+
+<!--    <span *ngIf="!showHelp">-->
+<!--      - -->
+<!--      <button class="is-success button is-small" (click)="help()">-->
+<!--        Show Guidance-->
+<!--      </button></span-->
+<!--    >-->
+    <span>
+      -
+      <a [routerLink]="'/sf/'">
+        Stateful
+      </a></span
+    >
+  </div>
+  <div>
+    <a href="https://github.com/damoeb/rss-proxy" target="_blank">rss-proxy</a>
+    v{{ buildInfo.version }}
+    @{{ buildInfo.revision }}
+  </div>
+</div>

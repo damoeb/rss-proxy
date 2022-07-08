@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.0 - 03.06.2022
+- Full rewrite in kotlin
+
 ## 1.0.3 - 16.01.2021
 - Remove using ids in xpaths, cause they are not abstract enough
 - Bugfixes
