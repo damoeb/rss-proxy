@@ -3,7 +3,7 @@
 [![Build Status](https://app.travis-ci.com/damoeb/rss-proxy.svg?branch=master)](https://app.travis-ci.com/damoeb/rss-proxy)
 
 RSS-proxy 2+ allows you to do create an ATOM or JSON feed of almost static/dynamic websites or feeds (web to feed), 
-just by analyzing just the HTML structure. Try the [live rss-proxy](https://rssproxy.migor.org/).
+just by analyzing just the HTML structure. Try the [live rss-proxy](https://rssproxy.migor.org/), keep in mind its still a beta. The prototypical version 1 [is also available](https://rssproxy-v1.migor.org/), but the algorithm had some known issues.
 The server is completely stateless - it does not store anything - everything is part of the url.
 
 It is a UI for [richRSS](https://github.com/damoeb/rich-rss) middleware with the no-database profile.
