@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ExportOptionsComponent } from './export-options.component';
 import { ExportOptionsModule } from './export-options.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -9,7 +9,7 @@ describe('ExportOptionsComponent', () => {
   let component: ExportOptionsComponent;
   let fixture: ComponentFixture<ExportOptionsComponent>;
 
-  beforeEach(waitForAsync () => {
+  beforeEach(waitForAsync(async () => {
     await TestBed.configureTestingModule({
       imports: [ExportOptionsModule, HttpClientTestingModule],
       providers: [
@@ -22,7 +22,7 @@ describe('ExportOptionsComponent', () => {
         },
       ],
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ExportOptionsComponent);

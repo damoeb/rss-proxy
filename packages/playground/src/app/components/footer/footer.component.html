@@ -14,22 +14,29 @@
       >Contact</a
     >
 
-<!--    <span *ngIf="!showHelp">-->
-<!--      - -->
-<!--      <button class="is-success button is-small" (click)="help()">-->
-<!--        Show Guidance-->
-<!--      </button></span-->
-<!--    >-->
-    <span>
+    <!--    <span *ngIf="!showHelp">-->
+    <!--      - -->
+    <!--      <button class="is-success button is-small" (click)="help()">-->
+    <!--        Show Guidance-->
+    <!--      </button></span-->
+    <!--    >-->
+    <!--    <span>-->
+    <!--      - -->
+    <!--      <a [routerLink]="'/sf/'"> Stateful </a></span-->
+    <!--    >-->
+    <span *ngIf="showCredits">
       -
-      <a [routerLink]="'/sf/'">
-        Stateful
+      <a
+        href="https://www.iconfinder.com/WHCompare"
+        target="_blank"
+        referrerpolicy="no-referrer"
+      >
+        Icons Credits
       </a></span
     >
   </div>
   <div>
     <a href="https://github.com/damoeb/rss-proxy" target="_blank">rss-proxy</a>
-    v{{ buildInfo.version }}
-    @{{ buildInfo.revision }}
+    v{{ buildInfo.version }} @{{ buildInfo.revision }}
   </div>
 </div>

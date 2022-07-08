@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { FeedUrlComponent } from './feed-url.component';
 import { FeedUrlModule } from './feed-url.module';
@@ -10,7 +10,7 @@ describe('FeedUrlComponent', () => {
   let component: FeedUrlComponent;
   let fixture: ComponentFixture<FeedUrlComponent>;
 
-  beforeEach(waitForAsync () => {
+  beforeEach(waitForAsync(async () => {
     await TestBed.configureTestingModule({
       imports: [FeedUrlModule, HttpClientTestingModule],
       providers: [
@@ -23,7 +23,7 @@ describe('FeedUrlComponent', () => {
         },
       ],
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FeedUrlComponent);

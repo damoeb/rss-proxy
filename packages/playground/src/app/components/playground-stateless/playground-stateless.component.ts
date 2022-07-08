@@ -274,7 +274,7 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.phase = 'playground';
           this.changeDetectorRef.detectChanges();
-        }, 2000);
+        }, 1500);
       }
 
       this.assignToIframe(this.response.results.body);
@@ -438,6 +438,7 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
     this.prerendered = false;
     this.currentFeedId = null;
     this.changeDetectorRef.detectChanges();
+    return this.router.navigateByUrl('/');
   }
 
   private setUrlParams() {

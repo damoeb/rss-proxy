@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { NativeOptionsComponent } from './native-options.component';
 import { NativeOptionsModule } from './native-options.module';
@@ -10,7 +10,7 @@ describe('NativeOptionsComponent', () => {
   let component: NativeOptionsComponent;
   let fixture: ComponentFixture<NativeOptionsComponent>;
 
-  beforeEach(waitForAsync () => {
+  beforeEach(waitForAsync(async () => {
     await TestBed.configureTestingModule({
       imports: [NativeOptionsModule, HttpClientTestingModule],
       providers: [
@@ -23,7 +23,7 @@ describe('NativeOptionsComponent', () => {
         },
       ],
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NativeOptionsComponent);

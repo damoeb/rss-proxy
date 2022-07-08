@@ -15,13 +15,6 @@ services:
   rss-proxy:
     image: damoeb/rss-proxy:2
     restart: always
-#    healthcheck:
-#      test: curl --fail http://localhost:8080/health || exit 1
-#      interval: 10s
-#      retries: 3
-#      start_period: 10s
-#      timeout: 10s
-
     depends_on:
       - rich-puppeteer
     ports:

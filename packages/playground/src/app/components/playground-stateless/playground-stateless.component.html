@@ -1,45 +1,63 @@
-<div class="modal"
-     [ngClass]="{'is-active': showFeedUrlModal}">
-  <div class="modal-background"
-       (click)="showFeedUrlModal = false"></div>
-  <div class="modal-content p-4"
-       style="background: white">
+<div class="modal" [ngClass]="{ 'is-active': showFeedUrlModal }">
+  <div class="modal-background" (click)="showFeedUrlModal = false"></div>
+  <div class="modal-content p-4" style="background: white">
     <h2 class="is-primary mb-2">
       Your Feed is ready. Copy it and add it to the feed reader of your choice.
     </h2>
-    <textarea class="textarea is-primary"
-              style="height: 240px;"
-              readonly
-              [innerText]="effectiveFeedUrl?.feedUrl">
+    <textarea
+      class="textarea is-primary"
+      style="height: 240px"
+      readonly
+      [innerText]="effectiveFeedUrl?.feedUrl"
+    >
     </textarea>
-    <button class="button mt-2 is-expanded is-large"
-            [ngClass]="{'is-primary': !isFeedUrlCopied, 'is-success': isFeedUrlCopied}"
-            (click)="copyFeedUrl()">
+    <button
+      class="button mt-2 is-expanded is-large"
+      [ngClass]="{
+        'is-primary': !isFeedUrlCopied,
+        'is-success': isFeedUrlCopied
+      }"
+      (click)="copyFeedUrl()"
+    >
       {{ copyFeedUrlButtonText }}
     </button>
   </div>
-  <button class="modal-close is-large"
-          aria-label="close"></button>
+  <button class="modal-close is-large" aria-label="close"></button>
 </div>
 
-<div class="loading"
-     *ngIf="isLoadingDiscovery">
+<div class="loading" *ngIf="isLoadingDiscovery">
   <app-spinner></app-spinner>
 </div>
 
-<div style="display: flex; height: 100vh; width: 100vw; flex-direction: column"
-     [ngClass]="{'hidden': isLoadingDiscovery}">
-
-  <div style="flex: 1; display: flex; align-items: center; justify-content: center; flex-direction: column"
-       *ngIf="phase == 'welcome'">
+<div
+  style="display: flex; height: 100vh; width: 100vw; flex-direction: column"
+  [ngClass]="{ hidden: isLoadingDiscovery }"
+>
+  <div
+    style="
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    "
+    *ngIf="phase == 'welcome'"
+  >
     <div style="width: 50%; margin: auto">
-      <pre style="background: white; font-size: 10px; color: black">
-       __   ______ _______ _______
-     _|  |_|   __ \     __|     __|
-    |_    _|      <__ |__ |
-      |__| |___|__|_______|_______|
-      </pre>
-      <form (ngSubmit)="parseUrl();">
+      <div class="images">
+        <div class="browser">
+          <img src="/assets/browser.png" alt="browser" />
+        </div>
+        <div class="arrow">
+          <div>
+            <img src="/assets/arrow.png" alt="->" />
+          </div>
+        </div>
+        <div class="rss">
+          <img src="/assets/rss_icon.png" alt="rss" />
+        </div>
+      </div>
+      <form (ngSubmit)="parseUrl()">
         <div class="field has-addons is-expanded">
           <div class="control is-expanded">
             <input
@@ -54,44 +72,83 @@
             />
           </div>
           <div class="control">
-            <button
-              class="button"
-              (click)="parseUrl()"
-            >
+            <button class="button is-primary is-outlined" (click)="parseUrl()">
               Show Feeds
             </button>
           </div>
         </div>
       </form>
+      <div class="content mt-6 ml-6 mr-6" style="color: #888888">
+        <p>
+          <a href="https://github.com/damoeb/rss-proxy" style="color: black"
+            >rss-proxy</a
+          >
+          can
+        </p>
+        <ul>
+          <li>transform webpages to RSS feeds</li>
+          <li>filter</li>
+          <li>improve feeds with metadata or fulltext</li>
+          <li>be self-hosted (open source)</li>
+        </ul>
+
+        <h4 class="pt-5">Why rss-proxy exists</h4>
+        <p>
+          It's quite absurd that after 30 years us humans are still the primary
+          consumers of internet content build to distract and occupy all of our
+          attention, while it should be automated to free our minds and inspire
+          us with relevant things.
+        </p>
+      </div>
     </div>
 
-    <app-footer></app-footer>
+    <app-footer [showCredits]="true"></app-footer>
   </div>
 
-  <div style="flex: 1; display: flex; flex-direction: row; align-items: center; justify-content: center;"
-       *ngIf="phase == 'status'">
-    <div *ngIf="response.results.nativeFeeds.length + response.results.genericFeedRules.length == 0">
+  <div
+    style="
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    "
+    *ngIf="phase == 'status'"
+  >
+    <div
+      *ngIf="
+        response.results.nativeFeeds.length +
+          response.results.genericFeedRules.length ==
+        0
+      "
+    >
       <p>
         <strong>That's unfortunate :(</strong>
       </p>
-      <p>{{response.results.errorMessage}}</p>
+      <p>{{ response.results.errorMessage }}</p>
       <p class="mt-4">
-        If you think this is a bug you can
-        <a href="https://github.com/damoeb/rss-proxy/issues"
-           referrerpolicy="no-referrer"
-           target="_blank">
-          file a ticket
-        </a>.</p>
+        <a (click)="phase = 'welcome'"> Back </a>
+      </p>
     </div>
-    <div *ngIf="response.results.nativeFeeds.length + response.results.genericFeedRules.length > 0">
+    <div
+      *ngIf="
+        response.results.nativeFeeds.length +
+          response.results.genericFeedRules.length >
+        0
+      "
+    >
       <p>Done :)</p>
     </div>
   </div>
 
-  <div style="flex: 1; display: flex; flex-direction: row;"
-       [ngClass]="{'hidden': phase != 'playground'}">
-    <div style="width: 350px; padding: 10px; display: flex; flex-direction: column"
-         class="mt-4">
+  <div
+    style="flex: 1; display: flex; flex-direction: row"
+    [ngClass]="{ hidden: phase != 'playground' }"
+  >
+    <div
+      style="width: 350px; padding: 10px; display: flex; flex-direction: column"
+      class="mt-4"
+    >
       <!-- URL -->
       <div class="field has-addons is-expanded">
         <div class="control is-expanded">
@@ -107,60 +164,70 @@
           />
         </div>
         <div class="control">
-          <button
-            class="button"
-            (click)="clear()"
-          >
+          <button class="button is-primary is-outlined" (click)="clear()">
             Clear
           </button>
         </div>
       </div>
 
-      <div>
-        <button class="button is-expanded is-small"
-                (click)="showAdvancedOptions = !showAdvancedOptions">
-          <span *ngIf="!showAdvancedOptions">Show &nbsp;</span>
-          <span *ngIf="showAdvancedOptions">Hide &nbsp;</span>
-          Nerd Options
-        </button>
-        <dl *ngIf="showAdvancedOptions">
-          <dt>Before</dt>
-          <dd>
-            <label class="checkbox">
-              <input type="checkbox"
-                     [ngModel]="prerendered"
-                     (ngModelChange)="prerendered = !prerendered; parseUrl()">
-              Prerender in Puppeteer
-            </label>
-          </dd>
-          <dd>
-            <label class="checkbox">
-              <input type="checkbox"
-                     [ngModel]="strictMode"
-                     (ngModelChange)="strictMode = !strictMode; parseUrl()">
-              Strict Mode
-            </label>
-          </dd>
-<!--          <dt>Rule</dt>-->
-        </dl>
-      </div>
+      <!--      <div>-->
+      <!--        <button-->
+      <!--          class="button is-expanded is-small"-->
+      <!--          (click)="showAdvancedOptions = !showAdvancedOptions"-->
+      <!--        >-->
+      <!--          <span *ngIf="!showAdvancedOptions">Show &nbsp;</span>-->
+      <!--          <span *ngIf="showAdvancedOptions">Hide &nbsp;</span>-->
+      <!--          Nerd Options-->
+      <!--        </button>-->
+      <!--        <dl *ngIf="showAdvancedOptions">-->
+      <!--          <dt>Before</dt>-->
+      <!--          <dd>-->
+      <!--            <label class="checkbox">-->
+      <!--              <input-->
+      <!--                type="checkbox"-->
+      <!--                [ngModel]="prerendered"-->
+      <!--                (ngModelChange)="prerendered = !prerendered; parseUrl()"-->
+      <!--              />-->
+      <!--              Prerender in Puppeteer-->
+      <!--            </label>-->
+      <!--          </dd>-->
+      <!--          <dd>-->
+      <!--            <label class="checkbox">-->
+      <!--              <input-->
+      <!--                type="checkbox"-->
+      <!--                [ngModel]="strictMode"-->
+      <!--                (ngModelChange)="strictMode = !strictMode; parseUrl()"-->
+      <!--              />-->
+      <!--              Strict Mode-->
+      <!--            </label>-->
+      <!--          </dd>-->
+      <!--          &lt;!&ndash;          <dt>Rule</dt>&ndash;&gt;-->
+      <!--        </dl>-->
+      <!--      </div>-->
 
       <!-- feeds -->
       <div class="field">
-        <label class="label"
-               [ngClass]="{'is-primary': !currentFeedId}">All Feeds</label>
+        <label class="label" [ngClass]="{ 'is-primary': !currentFeedId }"
+          >All Feeds ({{ allFeeds?.length }})</label
+        >
         <div class="control">
-          <div class="select is-expanded"
-               [ngClass]="{'is-primary': !currentFeedId}">
+          <div
+            class="select is-expanded"
+            [ngClass]="{ 'is-primary': !currentFeedId }"
+          >
             <select
               [(ngModel)]="currentFeedId"
               class="is-expanded"
               (ngModelChange)="applyDebounced()"
             >
               <option value="none"></option>
-              <option *ngFor="let feed of allFeeds"
-                      [value]="feed.id">
-                {{feed.name}}
+              <option
+                *ngFor="let feed of allFeeds; let i = index"
+                [value]="feed.id"
+              >
+                {{ feed.name }}
+                {{ i == 0 ? ' [BEST]' : '' }}
+                {{ i == allFeeds.length - 1 ? ' [WORST]' : '' }}
               </option>
             </select>
           </div>
@@ -170,65 +237,93 @@
       <p>
         <strong>Feed Preview</strong>
       </p>
-      <div style="flex: 5; min-height: 300px; overflow-y: auto; display: flex; background: #efefef; max-height: 40vh; flex-direction: column; overflow-x: hidden; padding: 10px"
-           [ngClass]="{'is-primary': !currentFeedId}">
-        <div style="flex: 1; display: flex; justify-content: center; align-items: center; text-align: center"
-             *ngIf="!currentFeedId">
-          Click in the website to choose a feed
-          or use the drop-down "All Feeds"
+      <div
+        style="
+          flex: 5;
+          min-height: 300px;
+          overflow-y: auto;
+          display: flex;
+          background: #efefef;
+          max-height: 40vh;
+          flex-direction: column;
+          overflow-x: hidden;
+          padding: 10px;
+        "
+        [ngClass]="{ 'is-primary': !currentFeedId }"
+      >
+        <div
+          style="
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+          "
+          *ngIf="!currentFeedId"
+        >
+          Choose a feed using the "All Feeds" menu or by clicking in the "Page
+          Preview".
         </div>
 
         <app-spinner *ngIf="currentFeedId && !jsonFeed"></app-spinner>
-        <app-feed style="transform: scale(0.8); transform-origin: 0 0; width: 120%;"
-                  [jsonFeed]="jsonFeed"
-                  [header]="false"
-                  *ngIf="jsonFeed"></app-feed>
-        <em *ngIf="currentFeedId && jsonFeed?.items && jsonFeed.items.length === 0">
+        <app-feed
+          style="transform: scale(0.8); transform-origin: 0 0; width: 120%"
+          [jsonFeed]="jsonFeed"
+          [header]="false"
+          *ngIf="jsonFeed"
+        ></app-feed>
+        <em
+          *ngIf="
+            currentFeedId && jsonFeed?.items && jsonFeed.items.length === 0
+          "
+        >
           Empty Feed
         </em>
       </div>
 
-      <div style="flex: 1; ">
-
-      </div>
+      <div style="flex: 1"></div>
 
       <!-- recovery -->
       <div class="field">
-        <label class="label"
-               [ngClass]="{'is-primary': jsonFeed}">Improve Article</label>
+        <label class="label" [ngClass]="{ 'is-primary': jsonFeed }"
+          >Improve Article</label
+        >
         <div class="control">
-          <div class="select is-expanded">
+          <div
+            class="select is-expanded"
+            [ngClass]="{ 'is-primary': jsonFeed }"
+          >
             <select
               [(ngModel)]="articleRecovery"
               class="is-expanded"
-              [ngClass]="{ 'is-primary': !jsonFeed }"
               (ngModelChange)="applyDebounced()"
             >
               <option value="none"></option>
               <option value="metadata">Use Page Metadata</option>
-              <option value="full"
-                      *ngIf="flags.willExtractFulltext">
+              <option value="full" *ngIf="flags.willExtractFulltext">
                 Use Page Fulltext
               </option>
             </select>
           </div>
-          <div *ngIf="articleRecovery !== 'none'"
-               class="notification is-warning">
-            <strong>Note</strong>: To avoid timeouts and host overloading your feed will max. contain <em>four</em> articles, cause the feed is generated is done on the fly (per request).
-            If you self-host you can change that limit.
+          <div
+            *ngIf="articleRecovery !== 'none'"
+            class="notification is-warning"
+          >
+            <strong>Note</strong>: Feed limited due to performance.
           </div>
         </div>
       </div>
 
       <!-- Must include filter -->
       <div class="field">
-        <label class="label"
-               [ngClass]="{'is-primary': jsonFeed}">Articles Must Contain</label>
+        <label class="label" [ngClass]="{ 'is-primary': jsonFeed }"
+          >Articles Must Contain</label
+        >
         <div class="control">
           <input
             class="input"
             placeholder="Space separated keywords"
-            [ngClass]="{ 'is-primary': !jsonFeed }"
+            [ngClass]="{ 'is-primary': jsonFeed }"
             [(ngModel)]="includeFilter"
             (ngModelChange)="applyDebounced()"
           />
@@ -237,13 +332,14 @@
 
       <!-- Must not include filter -->
       <div class="field">
-        <label class="label"
-               [ngClass]="{'is-primary': jsonFeed}">Articles Must Not Contain</label>
+        <label class="label" [ngClass]="{ 'is-primary': jsonFeed }"
+          >Articles Must Not Contain</label
+        >
         <div class="control">
           <input
             class="input"
             placeholder="Space separated keywords"
-            [ngClass]="{ 'is-primary': !jsonFeed }"
+            [ngClass]="{ 'is-primary': jsonFeed }"
             [(ngModel)]="excludeFilter"
             (ngModelChange)="applyDebounced()"
           />
@@ -251,9 +347,11 @@
       </div>
 
       <div>
-        <button class="button is-expanded is-large"
-                (click)="showFeedUrl()"
-                [ngClass]="{'is-disabled': !jsonFeed, 'is-primary': jsonFeed}">
+        <button
+          class="button is-expanded is-large"
+          (click)="showFeedUrl()"
+          [ngClass]="{ 'is-disabled': !jsonFeed, 'is-primary': jsonFeed }"
+        >
           Show Feed URL
         </button>
       </div>
@@ -261,19 +359,23 @@
       <app-footer></app-footer>
     </div>
 
-    <div style="flex: 1; display: flex; flex-direction: column; border-left: 2px solid #efefef;">
+    <div
+      style="
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        border-left: 2px solid #efefef;
+      "
+    >
       <ul>
         <li>
           <div class="notification is-warning">
-            <strong>Page Preview.</strong>
-            Choose a Feed in the "All Feeds" menu or click on an artice in the preview.
+            <strong>Page Preview.</strong> Click to choose a generated feed by
+            luck.
           </div>
         </li>
       </ul>
-      <iframe
-        #iframeElement
-        style="flex: 1"
-      ></iframe>
+      <iframe #iframeElement style="flex: 1"></iframe>
     </div>
   </div>
 </div>

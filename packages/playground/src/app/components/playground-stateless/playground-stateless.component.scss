@@ -11,8 +11,47 @@
 }
 
 .hidden {
-  display: none!important;
+  display: none !important;
 }
 .is-expanded {
   width: 100%;
+}
+
+.images {
+  display: flex;
+  justify-content: center;
+  height: 200px;
+  > * {
+    position: relative;
+  }
+  img {
+    max-height: 100%;
+    max-width: 100%;
+    height: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+  .rss {
+    width: 100px;
+  }
+  .arrow {
+    width: 50px;
+  }
+  .browser {
+    width: 150px;
+  }
+}
+
+::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+  opacity: 1;
+}
+
+.is-primary::placeholder {
+  color: rgba(0, 0, 255, 0.3);
+  opacity: 1;
 }
