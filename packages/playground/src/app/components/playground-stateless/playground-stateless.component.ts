@@ -204,6 +204,7 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
       return;
     }
     this.phase = 'status';
+    this.fixtUrl();
     await this.setUrlParams();
     this.busy = true;
     this.isLoadingDiscovery = true;
@@ -283,6 +284,12 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
       this.isLoadingDiscovery = false;
       this.busy = false;
       this.changeDetectorRef.detectChanges();
+    }
+  }
+
+  fixtUrl() {
+    if (!this.url.startsWith('http://') && !this.url.startsWith('https://')) {
+      this.url = `https://${this.url}`;
     }
   }
 
