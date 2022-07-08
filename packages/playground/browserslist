@@ -6,7 +6,12 @@
 #   npx browserslist
 
 > 0.5%
-last 2 versions
-Firefox ESR
-not dead
+last 2 Chrome versions
+last 2 Firefox versions
+last 2 Safari major versions
+last 2 Edge major versions
+
+not ios_saf 15.2-15.3
+not safari 15.2-15.3
+
 not IE 9-11 # For IE 9-11 support, remove 'not'.

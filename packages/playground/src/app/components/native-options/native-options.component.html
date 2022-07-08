@@ -1,0 +1,49 @@
+<div class="flex">
+  <app-section title="Native Options" [active]="!hasChosen">
+    <ul class="menu-list">
+      <li>
+        <a
+          [ngClass]="{
+            'is-active': export
+          }"
+          (click)="useExport()"
+          >Export</a
+        >
+      </li>
+      <li *ngIf="stateless">
+        <a
+          [ngClass]="{
+            'is-active': merge
+          }"
+          (click)="useMerge()"
+          >Merge with Others</a
+        >
+      </li>
+      <li>
+        <a
+          [ngClass]="{
+            'is-active': refine
+          }"
+          (click)="useRefine()"
+          >Refine</a
+        >
+      </li>
+    </ul>
+  </app-section>
+
+  <app-export-options
+    *ngIf="export"
+    class="flex"
+    [nativeFeed]="nativeFeed"
+  ></app-export-options>
+
+  <app-merge-feeds
+    *ngIf="merge"
+    class="flex"
+    [nativeFeed]="nativeFeed"
+  ></app-merge-feeds>
+  <app-refine-feed
+    *ngIf="refine"
+    [nativeFeedValue]="nativeFeed"
+  ></app-refine-feed>
+</div>

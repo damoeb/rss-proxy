@@ -1,0 +1,98 @@
+<div class="flex">
+  <app-section title="Dynamic Content" [active]="!hasChosen">
+    <aside class="aside">
+      <app-help-message *ngIf="!hasChosen">
+        Dynamic rendering will prerender a website in a headless chrome using
+        puppeteer. You may encounter timeout issues limited by
+        <code>PUPPETEER_TIMEOUT_MS</code>.
+      </app-help-message>
+      <div class="field" [hidden]="hasChosen">
+        <label class="label">Puppeteer Evaluate Script</label>
+        <div class="control">
+          <textarea
+            class="textarea puppeteer-script"
+            [ngClass]="{ 'is-primary': puppeteerScript?.length > 0 }"
+            [placeholder]="placeHolderScript"
+            [(ngModel)]="puppeteerScript"
+          ></textarea>
+        </div>
+        <button
+          class="button is-expanded"
+          [ngClass]="{ 'is-loading': isLoading }"
+          (click)="refresh()"
+        >
+          Reload with Script
+        </button>
+      </div>
+      <div class="field" [hidden]="!hasChosen">
+        <label class="label">Puppeteer Script</label>
+        <p *ngIf="puppeteerScript">{{ puppeteerScript }}</p>
+        <em *ngIf="!puppeteerScript">none</em>
+      </div>
+
+      <label
+        class="label mt-6 is-primary"
+        [ngClass]="{ 'is-hidden': hasChosen }"
+        >Continue</label
+      >
+      <ul class="menu-list">
+        <li>
+          <a
+            [ngClass]="{
+              'is-active': genericFeedRules,
+              'is-disabled':
+                !response || response?.results?.genericFeedRules?.length === 0
+            }"
+            (click)="useGenericFeeds()"
+          >
+            <strong>{{ response?.results?.genericFeedRules?.length }}</strong>
+            Feeds in Markup
+          </a>
+        </li>
+        <li *ngIf="!flags.stateless">
+          <a
+            [ngClass]="{
+              'is-active': watchPageChanges,
+              'is-disabled': !response
+            }"
+            (click)="useWatchPageChanges()"
+            >Watch page changes</a
+          >
+        </li>
+        <li>
+          <a
+            [ngClass]="{ 'is-hidden': !hasChosen }"
+            class="edit"
+            (click)="edit()"
+            ><em>Edit</em></a
+          >
+        </li>
+      </ul>
+    </aside>
+
+    <div class="source" *ngIf="response" [hidden]="hasChosen">
+      <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+      <img [src]="imageUrlSanitizes" alt="Screenshot" />
+    </div>
+    <div class="source" *ngIf="!response">
+      <app-spinner></app-spinner>
+    </div>
+  </app-section>
+
+  <app-generic-feeds
+    *ngIf="genericFeedRules"
+    class="flex"
+    [prerendered]="true"
+    [puppeteerScript]="puppeteerScript"
+    [genericFeedRules]="response.results.genericFeedRules"
+    [url]="response.options.harvestUrl"
+    [body]="response.results.body"
+  ></app-generic-feeds>
+
+  <!--    <app-watch-page-change-->
+  <!--      *ngIf="watchPageChanges"-->
+  <!--      class="flex"-->
+  <!--      [siteUrl]="response.options.harvestUrl"-->
+  <!--      [body]="response.results.body"-->
+  <!--    ></app-watch-page-change>-->
+</div>

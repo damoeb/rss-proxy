@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="f354cf1d-853a-464e-8e85-6575024551e6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/packages/core/.npmignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/core/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/changelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/changelog.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/convert-format/convert-format.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/convert-format/convert-format.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed-url/feed-url.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/feed-url/feed-url.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed/feed.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/feed/feed.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/prerender/prerender.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/prerender/prerender.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/proxy/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/proxy/package.json" afterDir="false" />
     </list>
+    <list id="f638d3ef-7a6d-4052-aad1-f24fc9f0e590" name="ignore" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,12 +43,31 @@
     <expand />
     <select />
   </component>
-  <component name="DefaultGradleProjectSettings">
-    <option name="isMigrated" value="true" />
-  </component>
   <component name="ElmWorkspace">
     <elmProjects />
     <settings elmCompilerPath="" elmFormatPath="" elmTestPath="" isElmFormatOnSaveEnabled="false" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="rss-proxy" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -61,7 +95,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
-    <property name="GO_FMT" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -69,16 +104,21 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="HTML" />
     <property name="editor.config.ad.shown" value="true" />
+    <property name="go.formatter.settings.were.checked" value="true" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/packages/playground/src/app/services" />
+    <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/packages/playground/src/app" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs.mocha.mocha_node_package_dir" value="$PROJECT_DIR$/packages/core/node_modules/mocha" />
+    <property name="nodejs_interpreter_path" value="$USER_HOME$/.nvm/versions/node/v16.13.0/bin/node" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/packages/playground/node_modules/prettier" />
     <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="settings.javascript.prettier" />
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/packages/playground/node_modules/typescript/lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -88,29 +128,29 @@
     </force-push-targets>
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/packages/playground/src/app" />
-      <recent name="$PROJECT_DIR$/packages/proxy/docker/prod/puppeteer" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/modules/rss-it-app" />
-      <recent name="$PROJECT_DIR$/test" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/packages/playground/src/app" />
       <recent name="$PROJECT_DIR$/packages/playground/src/app/services" />
+      <recent name="$PROJECT_DIR$/packages/playground/src/app/components" />
+      <recent name="$PROJECT_DIR$/packages/playground/src/app/components/refine" />
       <recent name="$PROJECT_DIR$/packages/proxy/src/endpoints" />
-      <recent name="$PROJECT_DIR$/packages/core/src/raw-websites" />
-      <recent name="$PROJECT_DIR$/docs" />
-      <recent name="$PROJECT_DIR$/packages/proxy/src/services" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/packages/playground/src/app/components" />
+      <recent name="$PROJECT_DIR$/packages/playground/src/app/components/refine" />
+      <recent name="$PROJECT_DIR$/packages/playground/src/app/components/push" />
+      <recent name="$PROJECT_DIR$/packages/proxy" />
+      <recent name="$PROJECT_DIR$/packages/playground/src/app" />
     </key>
   </component>
   <component name="RunManager" selected="npm.start">
     <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
-      <package-json value="$PROJECT_DIR$/packages/proxy/package.json" />
+      <package-json value="$PROJECT_DIR$/packages/playground/package.json" />
       <command value="run" />
       <scripts>
         <script value="start" />
       </scripts>
-      <node-interpreter value="$USER_HOME$/.nvm/versions/node/v12.14.0/bin/node" />
+      <node-interpreter value="$USER_HOME$/.nvm/versions/node/v16.13.0/bin/node" />
       <envs />
       <method v="2" />
     </configuration>
@@ -160,6 +200,7 @@
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="f354cf1d-853a-464e-8e85-6575024551e6" name="Default Changelist" comment="" />
+      <changelist id="f638d3ef-7a6d-4052-aad1-f24fc9f0e590" name="ignore" comment="" />
       <created>1566491045220</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -232,14 +273,36 @@
       <workItem from="1621236708574" duration="72000" />
       <workItem from="1621237743693" duration="314000" />
       <workItem from="1621243473895" duration="769000" />
-      <workItem from="1627937201288" duration="4818000" />
-    </task>
-    <task id="LOCAL-00016" summary="logging, build info">
-      <created>1585408415444</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1585408415444</updated>
+      <workItem from="1627937201288" duration="4945000" />
+      <workItem from="1627975747951" duration="582000" />
+      <workItem from="1627999341087" duration="123000" />
+      <workItem from="1628105409722" duration="1144000" />
+      <workItem from="1628144485633" duration="253000" />
+      <workItem from="1628155568179" duration="1969000" />
+      <workItem from="1628164120284" duration="633000" />
+      <workItem from="1629205597345" duration="622000" />
+      <workItem from="1629209559848" duration="23000" />
+      <workItem from="1629210393426" duration="62000" />
+      <workItem from="1629274064583" duration="36000" />
+      <workItem from="1635888077549" duration="246000" />
+      <workItem from="1636201777146" duration="1633000" />
+      <workItem from="1636409845845" duration="1243000" />
+      <workItem from="1636466012722" duration="50000" />
+      <workItem from="1636470689734" duration="6230000" />
+      <workItem from="1639516088648" duration="844000" />
+      <workItem from="1639519200422" duration="872000" />
+      <workItem from="1646694810978" duration="33000" />
+      <workItem from="1652522638737" duration="914000" />
+      <workItem from="1652614671734" duration="4276000" />
+      <workItem from="1652635091758" duration="89321000" />
+      <workItem from="1652966229564" duration="1304000" />
+      <workItem from="1652969818351" duration="9793000" />
+      <workItem from="1653986204349" duration="29000" />
+      <workItem from="1653986384993" duration="61000" />
+      <workItem from="1653991946163" duration="692000" />
+      <workItem from="1654030815939" duration="1075000" />
+      <workItem from="1654031907891" duration="26522000" />
+      <workItem from="1654176527908" duration="36670000" />
     </task>
     <task id="LOCAL-00017" summary="better logging">
       <created>1585428585627</created>
@@ -577,7 +640,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627939414326</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="updated dependencies">
+      <created>1627973288325</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1627973288325</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -596,8 +666,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="history" />
-    <MESSAGE value="readme" />
     <MESSAGE value="screenshots" />
     <MESSAGE value="build info, bug fixes" />
     <MESSAGE value="fix broken build" />
@@ -621,7 +689,9 @@
     <MESSAGE value="dyn proxy" />
     <MESSAGE value="js support" />
     <MESSAGE value="updated dependencies" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated dependencies" />
+    <MESSAGE value="basic support" />
+    <MESSAGE value="merge-feeds.component.html" />
+    <option name="LAST_COMMIT_MESSAGE" value="merge-feeds.component.html" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -632,9 +702,9 @@
           <option name="timeStamp" value="41" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/packages/proxy/src/endpoints/feedEndpoint.ts</url>
-          <line>34</line>
-          <option name="timeStamp" value="73" />
+          <url>file://$PROJECT_DIR$/packages/playground/node_modules/@angular-devkit/build-angular/src/utils/webpack-browser-config.js</url>
+          <line>40</line>
+          <option name="timeStamp" value="42" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -644,6 +714,10 @@
       <element expression="//body/center[last()]/table[last()]/tbody[last()]/tr[3]/td[last()]/table[last()]/tbody[last()]/tr" />
     </history>
     <find-history />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
   <component name="masterDetails">
     <states>

@@ -1,0 +1,44 @@
+<app-convert-format
+  class="flex"
+  *ngIf="flags.stateless"
+  [nativeFeedValue]="nativeFeed"
+  [genericFeedValue]="genericFeedRule"
+></app-convert-format>
+
+<div class="flex" *ngIf="!flags.stateless">
+  <app-section title="Export" [active]="!hasChosen">
+    <ul class="menu-list">
+      <li>
+        <a
+          [ngClass]="{
+            'is-active': convert
+          }"
+          (click)="useConvert()"
+          >Feeds</a
+        >
+      </li>
+      <li *ngIf="flags.canPush">
+        <a
+          [ngClass]="{
+            'is-active': push
+          }"
+          (click)="usePush()"
+          >Push</a
+        >
+      </li>
+    </ul>
+  </app-section>
+
+  <app-convert-format
+    *ngIf="convert"
+    class="flex"
+    [nativeFeedValue]="nativeFeed"
+    [genericFeedValue]="genericFeedRule"
+  ></app-convert-format>
+  <app-push-updates
+    *ngIf="push"
+    class="flex"
+    [nativeFeedValue]="nativeFeed"
+    [genericFeedValue]="genericFeedRule"
+  ></app-push-updates>
+</div>

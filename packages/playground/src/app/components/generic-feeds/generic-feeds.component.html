@@ -1,0 +1,158 @@
+<div class="flex">
+  <app-section title="Generated Feeds" [active]="!currentRule">
+    <ul class="menu-list mb-4" *ngIf="hasChosen">
+      <li>
+        <label class="label">Context</label>
+        <p>
+          <em>{{ customContextXPath }}</em>
+        </p>
+
+        <label class="label mt-3">Link</label>
+        <p>
+          <em>{{ customLinkXPath }}</em>
+        </p>
+
+        <label class="label mt-3">Date</label>
+        <p>
+          <em *ngIf="customDateXPath">{{ customDateXPath }}</em>
+          <em *ngIf="!customDateXPath">empty</em>
+        </p>
+      </li>
+      <li class="mt-4">
+        <a class="is-active">Refine Feed</a>
+      </li>
+      <li>
+        <a class="edit" (click)="edit()"><em>Edit</em></a>
+      </li>
+    </ul>
+
+    <aside class="aside" [ngClass]="{ 'is-hidden': hasChosen }">
+      <ul
+        class="menu-list"
+        style="
+          flex: 0 0 auto;
+          max-height: 60vh;
+          overflow-y: auto;
+          overflow-x: hidden;
+        "
+      >
+        <li>
+          <app-help-message>
+            List of feeds derived from markup. Clicking on it will highlight.
+          </app-help-message>
+        </li>
+        <li *ngFor="let rule of genericFeedRules; let i = index">
+          <a
+            href="javascript:void(0)"
+            [ngClass]="{
+              'is-preselected': rule.id == currentRule?.id && !hasChosen,
+              'is-active': rule.id == currentRule?.id && hasChosen
+            }"
+            (click)="applyRule(rule)"
+          >
+            with <strong>{{ rule.count }}</strong> articles
+
+            <div *ngIf="rule.id !== currentRule?.id">
+              <ul *ngFor="let article of rule.samples">
+                <li>{{ article.title }}</li>
+              </ul>
+            </div>
+
+            <ul class="menu-list" *ngIf="rule.id == currentRule?.id">
+              <li>
+                <form (ngSubmit)="applyCustomRule(currentRule)">
+                  <div>
+                    <div>
+                      <label class="label is-small is-secondary"
+                        >Context*</label
+                      >
+                    </div>
+                    <div
+                      class="field has-addons"
+                      aria-label="Elements XPath (e.g. //body//ul[1]/li)"
+                    >
+                      <div class="control is-expanded">
+                        <input
+                          [(ngModel)]="customContextXPath"
+                          (ngModelChange)="applyCustomRule(currentRule)"
+                          class="input is-primary"
+                          type="text"
+                          name="context"
+                          placeholder="Elements XPath"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label class="label is-small is-secondary">Link*</label>
+                    </div>
+                    <div
+                      class="field has-addons"
+                      aria-label="Links relative XPath (e.g. ./a[1])"
+                    >
+                      <div class="control is-expanded">
+                        <input
+                          [(ngModel)]="customLinkXPath"
+                          (ngModelChange)="applyCustomRule(currentRule)"
+                          class="input is-primary"
+                          type="text"
+                          name="link"
+                          placeholder="Link XPath"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label class="label is-small is-secondary">Date</label>
+                    </div>
+                    <div
+                      class="field has-addons"
+                      aria-label="Date relative XPath (e.g. ./a[1])"
+                    >
+                      <div class="control is-expanded">
+                        <input
+                          [(ngModel)]="customDateXPath"
+                          (ngModelChange)="applyCustomRule(currentRule)"
+                          class="input is-primary"
+                          type="text"
+                          name="date"
+                          placeholder="Date XPath"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-2">
+                    <button
+                      class="button is-primary is-expanded"
+                      (click)="useRefine()"
+                    >
+                      Refine
+                    </button>
+                  </div>
+                </form>
+              </li>
+            </ul>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <div class="source" [ngClass]="{ 'is-hidden': hasChosen }">
+      <div class="iframe-wrapper">
+        <iframe
+          #iframeElement
+          (load)="onIframeLoad()"
+          width="142.857143%"
+          height="120%"
+          sandbox="allow-same-origin"
+        ></iframe>
+      </div>
+    </div>
+  </app-section>
+
+  <app-refine-feed
+    *ngIf="refine"
+    class="flex"
+    [genericFeedValue]="currentRule"
+  ></app-refine-feed>
+</div>

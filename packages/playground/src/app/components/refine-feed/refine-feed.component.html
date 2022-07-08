@@ -1,0 +1,237 @@
+<div class="flex">
+  <app-section title="Refine Feed" [active]="!hasChosen">
+    <aside class="aside">
+      <div>
+        <app-help-message *ngIf="!hasChosen">
+          Now you can improve the feed
+        </app-help-message>
+        <!-- !hasChosen -->
+        <div *ngIf="!hasChosen" class="mb-4">
+          <!-- feed -->
+          <div class="mb-4">
+            <!-- native -->
+            <!--            <div class="field" *ngIf="nativeFeed">-->
+            <!--              <label class="label">Feed URL</label>-->
+            <!--              <a [href]="feedUrl" referrerpolicy="no-referrer" target="_blank"-->
+            <!--                >Feed</a-->
+            <!--              >-->
+            <!--            </div>-->
+
+            <!-- generic -->
+            <div class="field" *ngIf="genericFeed">
+              <label class="label">URL</label>
+              <div>
+                <a
+                  [href]="genericFeed.harvestUrl"
+                  referrerpolicy="no-referrer"
+                  target="_blank"
+                  >Website</a
+                >
+              </div>
+              <!--              <div>-->
+              <!--                <a [href]="feedUrl" referrerpolicy="no-referrer" target="_blank"-->
+              <!--                  >Generic Feed</a-->
+              <!--                >-->
+              <!--              </div>-->
+            </div>
+          </div>
+
+          <!-- recovery -->
+          <div class="field">
+            <label class="label">Content Recovery</label>
+            <div class="control">
+              <div class="select is-expanded">
+                <select
+                  [(ngModel)]="articleRecovery"
+                  class="is-expanded"
+                  [ngClass]="{
+                    'is-primary': articleRecovery !== 'none',
+                    'is-disabled': loading
+                  }"
+                  (ngModelChange)="apply()"
+                >
+                  <option value="none">none</option>
+                  <option value="metadata">Page Metadata</option>
+                  <option value="full" *ngIf="flags.willExtractFulltext">
+                    Page Fulltext
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="!hasChosen">
+            <app-help-message *ngIf="articleRecovery === 'metadata'">
+              Recover data from referenced page using json-ld, OpenGraph and
+              microtags. This can be helpful to recover the correct
+              <em>published</em> date. Feed size will be limited by
+              <code>MAX_RECOVERY_PER_FEED</code>
+            </app-help-message>
+            <app-help-message *ngIf="articleRecovery === 'full'">
+              Like 'Page Metadata' with fulltext extraction.
+            </app-help-message>
+          </div>
+
+          <!-- filter -->
+          <div class="field">
+            <label class="label">Filter</label>
+            <div class="select is-expanded">
+              <select
+                class="is-expanded"
+                [(ngModel)]="currentSample"
+                (ngModelChange)="filter = $event"
+              >
+                <option
+                  *ngFor="let filterSample of filterSamples"
+                  [value]="filterSample.value"
+                >
+                  {{ filterSample.name }}
+                </option>
+              </select>
+            </div>
+            <div class="control">
+              <textarea
+                class="textarea"
+                [ngClass]="{ 'is-primary': filter.length > 0 }"
+                [(ngModel)]="filter"
+              ></textarea>
+            </div>
+            <button
+              class="button is-expanded"
+              (click)="apply()"
+              [ngClass]="{ 'is-disabled': loading }"
+            >
+              Update
+            </button>
+          </div>
+
+          <!-- digest -->
+          <div class="field" *ngIf="!flags.stateless">
+            <label class="label">Throughput Control</label>
+            <div class="control">
+              <div class="select is-expanded">
+                <select [(ngModel)]="digestWindow" class="is-expanded">
+                  <option value="">none</option>
+                  <option value="day">daily</option>
+                  <option value="week">weekly</option>
+                  <option value="month">monthly</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="digestWindow">
+            <!-- throttle -->
+            <ul class="menu-list">
+              <li>
+                <a
+                  [ngClass]="{ 'is-active': useThrottling }"
+                  (click)="useThrottling = !useThrottling"
+                  >Limit Article per {{ digestWindow }}</a
+                >
+              </li>
+            </ul>
+            <div class="field" *ngIf="useThrottling">
+              <div class="control">
+                <input
+                  type="range"
+                  min="1"
+                  max="20"
+                  [(ngModel)]="throttleMaxArticles"
+                  class="is-expanded"
+                />
+                max. {{ throttleMaxArticles }} Artiles
+              </div>
+            </div>
+            <div class="field" *ngIf="useThrottling">
+              <label class="label">Pick By</label>
+              <div class="control">
+                <div class="select is-expanded">
+                  <select [(ngModel)]="throttleSortBy" class="is-expanded">
+                    <option value="score">score</option>
+                    <option value="length">length</option>
+                    <option value="links">link Count</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- digest -->
+            <ul class="menu-list">
+              <li>
+                <a
+                  [ngClass]="{ 'is-active': useDigest }"
+                  (click)="useDigest = !useDigest"
+                  >Digest</a
+                >
+              </li>
+            </ul>
+            <div class="field" *ngIf="useDigest">
+              <label class="label">Digest Starting at</label>
+              <div class="control">
+                <input
+                  class="input"
+                  type="datetime-local"
+                  [(ngModel)]="digestStartingAt"
+                  name="startingAt"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- chosen  -->
+        <div *ngIf="hasChosen" class="mb-4">
+          <div class="field" *ngIf="hasChosen">
+            <label class="label">Content Recovery</label>
+            <div class="control">
+              <em>{{ articleRecovery }}</em>
+            </div>
+          </div>
+
+          <div class="field" *ngIf="hasChosen">
+            <label class="label">Filter</label>
+            <div class="control">
+              <em *ngIf="filter">{{ filter }}</em>
+              <em *ngIf="!filter">no filter</em>
+            </div>
+          </div>
+        </div>
+
+        <ul class="menu-list">
+          <li>
+            <button
+              *ngIf="!export"
+              class="button is-primary is-expanded"
+              [ngClass]="{ 'is-disabled': loading }"
+              (click)="useExport()"
+            >
+              Export
+            </button>
+            <a *ngIf="export" class="is-active">Export</a>
+          </li>
+          <li>
+            <a
+              [ngClass]="{ 'is-hidden': !hasChosen }"
+              class="edit"
+              (click)="edit()"
+              ><em>Edit</em></a
+            >
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="feed source" [ngClass]="{ 'is-hidden': hasChosen }">
+      <app-spinner *ngIf="!jsonFeed"></app-spinner>
+      <app-feed [jsonFeed]="jsonFeed" *ngIf="jsonFeed"></app-feed>
+    </div>
+  </app-section>
+
+  <app-export-options
+    *ngIf="export"
+    class="flex"
+    [nativeFeed]="nativeFeed"
+    [genericFeedRule]="genericFeed"
+  ></app-export-options>
+</div>

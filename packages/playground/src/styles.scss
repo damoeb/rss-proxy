@@ -1,8 +1,88 @@
 @import 'variables.scss';
-@import '~mini.css/src/flavors/mini-default.scss';
+@import '~bulma/bulma';
+@import "~toastr";
 
 body {
   margin: 0;
   padding: 0;
   height: 100vh;
+}
+
+html {
+  overflow-y: hidden;
+}
+
+//a {
+//  color: blue;
+//  //border-bottom: 2px solid black;
+//
+//  &:hover {
+//    text-decoration: none;
+//    border-bottom-style: hidden;
+//  }
+//}
+.menu-list {
+  flex: 1;
+}
+app-section {
+  display: flex;
+  flex: 1;
+}
+app-generic-feeds {
+}
+app-native-feeds {
+}
+app-refine-feed {
+}
+app-options {
+  li {
+    a {
+      white-space: nowrap;
+    }
+  }
+}
+
+.flex {
+  display: flex;
+  flex: 1;
+}
+
+.is-disabled {
+  color: #cccccc !important;
+  pointer-events: none;
+}
+
+.aside {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.source {
+  max-height: 80vh;
+}
+.is-primary {
+  color: $primary;
+}
+
+app-spinner {
+  display: flex;
+  justify-content: center;
+}
+
+li {
+  a.is-active {
+    background-color: #363644 !important;
+  }
+  a.edit {
+    color: blue;
+  }
+}
+
+app-feed-url {
+  width: 300px;
+}
+
+a {
+  color: blue;
 }

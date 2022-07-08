@@ -1,11 +1,16 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {RouterModule} from '@angular/router';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
-import {PlaygroundComponent} from './playground.component';
-import {PanelModule} from '../panel/panel.module';
-
+import { PlaygroundComponent } from './playground.component';
+import { GenericFeedsModule } from '../generic-feeds/generic-feeds.module';
+import { NativeFeedsModule } from '../native-feeds/native-feeds.module';
+import { OptionsModule } from '../options/options.module';
+import { FooterModule } from '../footer/footer.module';
+import { SpinnerModule } from '../spinner/spinner.module';
+import { SearchModule } from '../search/search.module';
+import { HeaderModule } from '../header/header.module';
 
 @NgModule({
   declarations: [PlaygroundComponent],
@@ -15,8 +20,13 @@ import {PanelModule} from '../panel/panel.module';
     CommonModule,
     FormsModule,
     RouterModule,
-    PanelModule
-  ]
+    GenericFeedsModule,
+    NativeFeedsModule,
+    OptionsModule,
+    FooterModule,
+    SpinnerModule,
+    SearchModule,
+    HeaderModule,
+  ],
 })
-export class PlaygroundModule {
-}
+export class PlaygroundModule {}

@@ -1,171 +1,47 @@
-<div class="playground">
+<div class="playground is-size-6">
+  <app-header></app-header>
 
-  <div style="flex:1; display: flex; flex-direction: column">
-    <div style="flex:1; display: flex;">
-      <div style="width: 500px; display: flex; flex-direction: column">
-        <a (click)="resetAll()" class="button" style="text-align: center">Reset Changes</a>
-        <div style="flex: 1 100px; overflow-y: auto">
-          <p class="wizard_section"><strong>1.</strong> Please enter the URL of the website you want an RSS Feed from.
-          </p>
-          <div class="form">
-            <ng-form (ngSubmit)="parseFromUrl()">
-              <div class="row" style="text-align: left">
-                <div aria-label="The URL you want to RSSify" class="tooltip bottom col-lg-8">
-                  <input (keyup.enter)="parseFromUrl()"
-                         [(ngModel)]="url"
-                         [autofocus]="true"
-                         [ngClass]="{'active': !hasResults}"
-                         autocomplete="off"
-                         autofocus
-                         name="url"
-                         placeholder="Enter the Url to convert into RSS"
-                         required="true"
-                         style="width: 100%"
-                         type="url">
-                </div>
-                <div class="col-lg-4">
-                  <a (click)="parseFromUrl()" class="button secondary" href="javascript:void(0)">
-                    Show Feeds
-                  </a>
-                </div>
-              </div>
-              <div *ngIf="hasJsSupport"
-                   style="border-bottom: 1px solid #cccccc; padding-bottom: 10px; margin-bottom: 20px">
-                <label><input [(ngModel)]="options.js" name="jsSupport" type="checkbox">Enable JavaScript Support</label>
-              </div>
-              <div>
+  <div style="padding-bottom: 5px">
+    <app-search
+      [url]="url"
+      placeholder="Enter a website or feed URL"
+      (submitUrl)="parseFromUrl($event)"
+      (clearResults)="clearResults()"
+    ></app-search>
 
-                <div *ngIf="(url?.length === 0 || !isLoading && !hasResults) && history.length > 0">
-                  <p><strong>Previous Queries</strong></p>
-                  <p *ngFor="let url of history">
-                    <a (click)="parseFromHistoryUrl(url)" href="javascript:void(0)">{{ url }}</a>
-                  </p>
-                </div>
-              </div>
-            </ng-form>
-          </div>
-
-          <div *ngIf="feeds?.length > 0">
-            <p class="wizard_section"><strong>2.</strong> Choose a feed</p>
-            <p>Native Feeds Found in DOM:</p>
-            <ul class="list-of-feeds">
-              <li *ngFor="let feed of feeds"><a [href]="feed.url" target="_blank">{{ feed.name || 'Feed' }}</a></li>
-            </ul>
-          </div>
-
-          <div *ngIf="rules?.length > 0" style="margin-top: 10px">
-            <p>There are {{rules?.length}} feeds in this site, pick one:</p>
-            <ol class="list-of-feeds">
-              <li (click)="applyRule(rule)"
-                  *ngFor="let rule of rules?.slice(0, 15); let i = index "
-                  [ngClass]="{'active': isCurrentRule(rule)}"
-                  aria-label="Try to visualize and scroll to articles in website"
-                  class="rule tooltip"
-                  style="display: block">
-                <a href="javascript:void(0)">Feed with <strong>{{ rule.count }}</strong> articles</a>
-                <span *ngIf="i === 0">
-                <strong> - highest score</strong>
-              </span>
-              </li>
-            </ol>
-          </div>
-
-          <div *ngIf="isGenerated">
-            <p>Or enter custom rule:</p>
-            <ng-form (ngSubmit)="applyCustomRule()">
-              <div class="row" style="text-align: left">
-                <div aria-label="Elements XPath (e.g. //body//ul[1]/li)" class="tooltip bottom col-lg-8">
-                  <input [(ngModel)]="customContextXPath" autocomplete="off" autofocus name="context"
-                    style="width: 100%" placeholder="Elements XPath">
-                </div>
-                <div aria-label="Links relative XPath (e.g. ./a[1])" class="tooltip bottom col-lg-8">
-                  <input [(ngModel)]="customLinkXPath" autocomplete="off" name="link" style="width: 100%"
-                    placeholder="Links relative XPath">
-                </div>
-                <div class="col-lg-4">
-                  <a (click)="applyCustomRule()" class="button secondary" href="javascript:void(0)">
-                    Apply
-                  </a>
-                </div>
-              </div>
-            </ng-form>
-          </div>
-
-          <div *ngIf="currentRule">
-            <p class="wizard_section"><strong>2.</strong> Advanced Settings</p>
-            <ul style="list-style: none">
-              <!--            todo mag enable -->
-              <!--            <li><input type="checkbox" [(ngModel)]="excludeItemsThatContain"> Remove items that contain <a href="https://github.com/damoeb/rss-proxy/wiki/Filters#text-filter" target="_blank">one of</a> (comma separated) <input type="text" name="excludeItemsThatContainTexts" [(ngModel)]="excludeItemsThatContainTexts"></li>-->
-              <li>
-                <p>Output Format</p>
-                <label><input [(ngModel)]="options.o" name="feedType" type="radio" value="ATOM"><strong>ATOM</strong>
-                  (default)</label>
-                <label><input [(ngModel)]="options.o" name="feedType" type="radio" value="RSS">RSS</label>
-                <label><input [(ngModel)]="options.o" name="feedType" type="radio" value="JSON">JSON</label>
-              </li>
-              <li>
-                <p>Feed Entry Content</p>
-                <label><input [(ngModel)]="options.c" name="entryContent" type="radio" value="RAW"><strong>Raw</strong>
-                  (default)</label>
-                <label><input [(ngModel)]="options.c" name="entryContent" type="radio" value="TEXT">Text</label>
-                <label><input [(ngModel)]="options.c" name="entryContent" type="radio" value="NONE">Empty</label>
-              </li>
-            </ul>
-
-          </div>
-
-          <div *ngIf="isLoading"
-               style="display:flex;justify-content:center; align-items:center;">
-            <div class="spinner"></div>
-          </div>
-        </div>
-      </div>
-
-      <div style="flex: 1; display: flex; flex-direction: column; border-left: 1px solid black; background: white">
-
-        <div *ngIf="isLoading"
-             style="display:flex;justify-content:center; align-items:center;">
-          <div class="spinner"></div>
-        </div>
-
-        <div *ngIf="error" style="margin: 10px">
-          <h2 class="error">{{error}}</h2>
-          Most likely the website is JavaScript generated, which is not supported by rss-proxy directly.
-          Check the <a href="https://github.com/damoeb/rss-proxy/wiki">documentation</a> for further help.
-        </div>
-
-        <div class="playground__panels">
-
-          <!-- Visualization --------------------------------------------------------------------------------------------- -->
-
-          <iframe #iframeElement
-                  (load)="onIframeLoad()"
-                  [hidden]="isLoading"
-                  sandbox="allow-same-origin"
-                  style="flex: 1; border: none"></iframe>
-
-        </div>
-      </div>
-    </div>
-    <div style="padding: 10px; display: flex; border-top: 1px solid black;"
-         [ngClass]="{'feed-specified': currentRule, 'unsupported-website': error}">
-<!--      todo mag subsribe -->
-<!--      <div>-->
-<!--        <a href="" class="button secondary large">Subscribe for more</a>-->
-<!--      </div>-->
-      <div style="flex: 1; text-align: center; line-height: 50px">
-        <a href="https://github.com/damoeb/rss-proxy">rss-proxy</a> v. {{ getVersions().version }}
-        @{{ getVersions().revision }} build on {{ getBuildDate() }}
-        <a href="https://twitter.com/damoeb">contact</a>
-      </div>
-      <div>
-        <a *ngIf="currentRule"
-           [href]="getFeedUrl()"
-           class="button secondary large"
-           target="_blank">Your {{ options.o }} Feed</a>
-        <h3 *ngIf="!currentRule && !error">Your RSS Feed not yet specified</h3>
-        <h3 *ngIf="error">Errors processing website</h3>
+    <div *ngIf="!actualUrl">
+      <div *ngIf="!isLoading && history.length > 0">
+        <p>
+          <strong>Previous URLs</strong>
+        </p>
+        <p *ngFor="let url of history">
+          <a (click)="parseFromHistoryUrl(url)" href="javascript:void(0)">{{
+            url
+          }}</a>
+        </p>
       </div>
     </div>
   </div>
+
+  <app-spinner *ngIf="isLoading"></app-spinner>
+
+  <article *ngIf="response?.results?.errorMessage" class="message is-danger">
+    <div class="message-body">
+      {{ errorMessage }}
+    </div>
+  </article>
+
+  <div
+    *ngIf="response && !response?.results?.errorMessage"
+    style="display: flex; flex-direction: row; flex: 1; overflow-x: auto"
+  >
+    <app-options
+      *ngIf="response"
+      [response]="response"
+      [static]="true"
+      style="display: flex; margin-right: 200px"
+    ></app-options>
+  </div>
+
+  <app-footer></app-footer>
 </div>

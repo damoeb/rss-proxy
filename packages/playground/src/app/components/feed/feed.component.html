@@ -1,0 +1,18 @@
+<div style="margin: 5px">
+  <div class="block" *ngIf="header">
+    <h2>{{ jsonFeed.title }}</h2>
+    <p>{{ jsonFeed.description }}</p>
+    <p>{{ jsonFeed.home_page_url }}</p>
+    <p>{{ jsonFeed.date_published }}</p>
+  </div>
+
+  <div class="content" *ngFor="let item of jsonFeed.items; let i = index">
+    <h3 class="title">{{ i + 1 }}. {{ item.title }}</h3>
+    <a class="url"
+       [href]="item.url"
+       referrerpolicy="no-referrer"
+       target="_blank">{{ item.url }}</a>
+    <p class="date">{{ item.date_published }}</p>
+    <p class="body">{{ item.content_text }}</p>
+  </div>
+</div>

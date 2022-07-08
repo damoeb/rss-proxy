@@ -1,60 +1,46 @@
-# RSS-proxy
+# RSS-proxy 
 
-RSS-proxy is a tool that allows you to do create an RSS/ATOM or JSON feed of almost any website, 
-purely by analyzing just the static HTML structure. Try the [live demo](https://rssproxy-v1.migor.org/). 
+[![Build Status](https://app.travis-ci.com/damoeb/rss-proxy.svg?branch=master)](https://app.travis-ci.com/damoeb/rss-proxy)
+
+RSS-proxy 2+ allows you to do create an ATOM or JSON feed of almost static/dynamic websites or feeds, 
+purely by analyzing just the HTML structure. Try the [live demo](https://rssproxy.migor.org/).
+The server is completely stateless - it does not store anything - everything is part of the url.
+
+It is a UI for [richRSS](https://github.com/damoeb/rich-rss) middleware with the no-database profile.
 
 ![Playground](https://github.com/damoeb/rss-proxy/raw/master/docs/rssproxy-candidates.png "Playground")
 
-## Quickstart using docker
+## Quickstart using docker-compose
 
-The simplest way to use RSS-proxy is using [docker](https://docs.docker.com/install/)
-
-```
-docker pull damoeb/rss-proxy
-docker run -p 3000:3000 -it damoeb/rss-proxy
-```
-
-Then open [localhost:3000](http://localhost:3000) in the browser.
-
-## JavaScript Support
-`rss-proxy` supports dynamic webapps in a separate docker image `damoeb/rss-proxy:js` cause it is with 1GB quite large. Running this image will [render a checkbox](https://github.com/damoeb/rss-proxy/blob/master/docs/js-support.png) in the User Interface to pre-render a website in a headless browser, rather than using the static response.
+If you have [docker](https://docs.docker.com/install/) or [podman](https://podman.io/getting-started/installation) installed,
+Start rss-proxy and puppeteer like this.
 
 ```
-docker pull damoeb/rss-proxy:js
-docker run -p 3000:3000 -it damoeb/rss-proxy:js
+wget https://raw.githubusercontent.com/damoeb/rss-proxy/master/docker-compose.yml
+docker-compose up
 ```
 
-## Developing RSS-proxy
+Then open [localhost:8080](http://localhost:8080) in the browser.
 
-The project is separated into three modules
-- [core](packages/core/README.md): the feed parser logic, plain JavaScript
-- [playground](packages/playground/README.md): the web app to visualize and explore feed generation
-- [proxy](packages/proxy/README.md): the expressjs server
+## Consumer Features
+- Web to Feed
+- Dynamic rendering using headless chromium
+- Content Recovery using [JSON-LD](http://json-ld.org/), [OpenGraph](https://ogp.me/) 
+- Fulltext extraction
+- Filters
+- Alerts into your feed if the feed transformation encounters problems
+- Privacy: Nothing is persisted by the server
+- Feed Format Conversion Any -> ATOM/JSON
 
-For local development you need [node 12+](https://nodejs.org/en/). Then follow these steps:
+## Self-Hosting Features
+- Request Throttling and Host Flooding Protection
+- Caching
+- Monitoring
 
-- Install all npm dependencies
-```
-npm run install
-
-```
-
-- Start server
-```
-cd packages/proxy && npm run start
-
-```
-
-- Start client
-```
-cd packages/playground && npm run start
-
-```
+## Migration from version 1
+Version 2 supports the old version 1 urls, though this is optional. You can deactivate this feature by removing the 'legacy' profile in docker-compose.yml.
 
 
-## Troubleshooting
-
-See [troubleshooting](troubleshooting.md).
 
 ## Changelog
 

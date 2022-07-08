@@ -1,17 +1,20 @@
-import {async, TestBed} from '@angular/core/testing';
-import {PlaygroundComponent} from './playground.component';
-import {PlaygroundModule} from './playground.module';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {RouterTestingModule} from '@angular/router/testing';
+import { waitForAsync, TestBed } from '@angular/core/testing';
+import { PlaygroundComponent } from './playground.component';
+import { PlaygroundModule } from './playground.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { AppSettingsService } from '../../services/app-settings.service';
 
-describe('AppComponent', () => {
-  beforeEach(async(() => {
+describe('PlaygroundComponent', () => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        PlaygroundModule,
-        HttpClientTestingModule,
-        RouterTestingModule
-      ]
+      imports: [PlaygroundModule, HttpClientTestingModule, RouterTestingModule],
+      providers: [
+        {
+          provide: AppSettingsService,
+          useValue: { get: () => ({ flags: {}, publicUrl: '' }) },
+        },
+      ],
     }).compileComponents();
   }));
 
@@ -21,5 +24,4 @@ describe('AppComponent', () => {
 
     expect(app).toBeTruthy();
   });
-
 });
