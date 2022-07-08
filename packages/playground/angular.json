@@ -22,7 +22,13 @@
             "sourceMap": true,
             "progress": false,
             "buildOptimizer": false,
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/robots.txt",
+              "src/ads.txt",
+              "src/sitemap.xml",
+              "src/assets"
+            ],
             "styles": ["src/styles.scss"],
             "scripts": []
           },
