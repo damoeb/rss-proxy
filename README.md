@@ -10,17 +10,17 @@ It is a UI for [richRSS](https://github.com/damoeb/rich-rss) middleware with the
 
 ![Playground](https://github.com/damoeb/rss-proxy/raw/master/docs/rssproxy-candidates.png "Playground")
 
-## Quickstart using docker-compose
+## Quickstart using docker
 
-If you have [docker](https://docs.docker.com/install/) or [podman](https://podman.io/getting-started/installation) installed,
-Start rss-proxy and puppeteer like this.
+Since v2 is still beta, this is the quickstart for version 1. If you have [docker](https://docs.docker.com/install/) or [podman](https://podman.io/getting-started/installation) installed,
+Start rss-proxy like this.
 
 ```
-wget https://raw.githubusercontent.com/damoeb/rss-proxy/master/docker-compose.yml
-docker-compose up
+docker pull damoeb/rss-proxy
+docker run -p 3000:3000 -it damoeb/rss-proxy
 ```
 
-Then open [localhost:8080](http://localhost:8080) in the browser.
+Then open [localhost:3000](http://localhost:3000) in the browser.
 
 ## Features
 - Web to Feed
