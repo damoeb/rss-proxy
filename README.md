@@ -10,7 +10,7 @@ It is a UI for [richRSS](https://github.com/damoeb/rich-rss) middleware with the
 
 ![Playground](https://github.com/damoeb/rss-proxy/raw/master/docs/rssproxy-candidates.png "Playground")
 
-## Quickstart using docker
+## Quickstart Version 1 using docker
 
 Since v2 is still beta, this is the quickstart for version 1. If you have [docker](https://docs.docker.com/install/) or [podman](https://podman.io/getting-started/installation) installed,
 Start rss-proxy like this.
@@ -21,6 +21,21 @@ docker run -p 3000:3000 -it damoeb/rss-proxy
 ```
 
 Then open [localhost:3000](http://localhost:3000) in the browser.
+
+## Quickstart Version 2 using docker-compose (Experimental)
+
+Version 2 comes with more complexity so its easier to run it from [docker-compose](https://docs.docker.com/compose/install/). If you run the proxy behind a reverse proxy, 
+make sure you set the request header "X-Real-IP" (see [nginx.con](docs/nginx.conf)) for IP throttling.  
+
+In `docker-compose.yml` change `APP_PUBLIC_URL` accordingly which is the outfacing public url.
+
+```
+wget https://raw.githubusercontent.com/damoeb/rss-proxy/master/chrome.json
+wget https://raw.githubusercontent.com/damoeb/rss-proxy/master/docker-compose.yml
+docker-compose up
+```
+
+Then open [localhost:8080](http://localhost:8080) in the browser.
 
 ## Features
 - Web to Feed

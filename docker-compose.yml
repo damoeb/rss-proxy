@@ -8,12 +8,12 @@ services:
     image: damoeb/rich-rss:puppeteer-0.1
     restart: always
     security_opt:
-      - seccomp=./docker/chrome.json
+      - seccomp=chrome.json
     networks:
       - puppeteer
 
   rss-proxy:
-    image: damoeb/rss-proxy:2
+    image: damoeb/rss-proxy:2.0.0-beta
     restart: always
     depends_on:
       - rich-puppeteer
@@ -21,8 +21,9 @@ services:
       - "8080:8080"
     environment:
       - LOG_LEVEL=info
-      - TOKEN_SECRET=1234_top_secret
+      # -- CHANGE THIS --
       - APP_PUBLIC_URL=http://localhost:8080
+      - TOKEN_SECRET=1234_top_secret
       - PUPPETEER_HOST=http://rich-puppeteer:3000
     networks:
       - puppeteer
