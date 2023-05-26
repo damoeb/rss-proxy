@@ -168,7 +168,8 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
     private readonly router: Router,
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.appSettings.waitForInit;
     this.flags = this.appSettings.get().flags;
     this.applyDebounced = debounce(this.apply.bind(this), 500);
 

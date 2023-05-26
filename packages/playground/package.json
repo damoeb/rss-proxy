@@ -1,6 +1,6 @@
 {
   "name": "@rss-proxy/playground",
-  "version": "2.0.0-beta",
+  "version": "2.0.0",
   "scripts": {
     "ng": "ng",
     "prestart": "npm run gen-build-info",
@@ -46,7 +46,6 @@
     "@types/lodash": "^4.14.182",
     "@types/toastr": "^2.1.39",
     "@types/urijs": "^1.19.19",
-    "codelyzer": "^6.0.2",
     "jasmine-core": "~4.1.1",
     "jasmine-spec-reporter": "~7.0.0",
     "karma": "^6.3.20",

@@ -41,6 +41,7 @@ export class OptionsComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    await this.settings.waitForInit;
     this.flags = this.settings.get().flags;
     this.isNativeFeed =
       this.response.results.mimeType.toLowerCase().indexOf('xml') > -1;

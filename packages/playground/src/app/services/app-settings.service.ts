@@ -51,7 +51,7 @@ export class AppSettingsService {
   }
   private async init() {
     this.appSettings = await firstValueFrom(
-      this.httpClient.get<AppSettings>(`api/settings`),
+      this.httpClient.get<AppSettings>(`api/legacy/settings`),
     );
   }
 

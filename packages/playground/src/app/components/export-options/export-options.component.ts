@@ -29,7 +29,8 @@ export class ExportOptionsComponent implements OnInit {
 
   constructor(private appSettings: AppSettingsService) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.appSettings.waitForInit;
     this.flags = this.appSettings.get().flags;
   }
 
