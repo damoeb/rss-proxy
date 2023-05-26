@@ -8,19 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/changelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/changelog.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/convert-format/convert-format.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/convert-format/convert-format.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed-url/feed-url.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/feed-url/feed-url.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed/feed.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/feed/feed.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/merge-feeds/merge-feeds.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/prerender/prerender.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/prerender/prerender.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" afterDir="false" />
     </list>
     <list id="f638d3ef-7a6d-4052-aad1-f24fc9f0e590" name="ignore" comment="" />
@@ -93,35 +80,12 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="false" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="android.sdk.path" value="$USER_HOME$/Android/Sdk" />
-    <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="HTML" />
-    <property name="editor.config.ad.shown" value="true" />
-    <property name="go.formatter.settings.were.checked" value="true" />
-    <property name="go.gopath.indexing.explicitly.defined" value="true" />
-    <property name="go.import.settings.migrated" value="true" />
-    <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/packages/playground/src/app" />
-    <property name="node.js.path.for.package.tslint" value="project" />
-    <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="nodejs.mocha.mocha_node_package_dir" value="$PROJECT_DIR$/packages/core/node_modules/mocha" />
-    <property name="nodejs_interpreter_path" value="$USER_HOME$/.nvm/versions/node/v16.13.0/bin/node" />
-    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
-    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="nodejs_package_manager_path" value="npm" />
-    <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/packages/playground/node_modules/prettier" />
-    <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="settings.javascript.prettier" />
-    <property name="ts.external.directory.path" value="$PROJECT_DIR$/packages/playground/node_modules/typescript/lib" />
-    <property name="vue.rearranger.settings.migration" value="true" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "SONARLINT_PRECOMMIT_ANALYSIS": "false",
+    "node.js.selected.package.tslint": "(autodetect)"
+  }
+}]]></component>
   <component name="Push.Settings">
     <force-push-targets>
       <force-push-target remote-path="origin" branch="feature/viz" />
@@ -666,7 +630,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="screenshots" />
     <MESSAGE value="build info, bug fixes" />
     <MESSAGE value="fix broken build" />
     <MESSAGE value="fix docker layers" />
@@ -691,7 +654,8 @@
     <MESSAGE value="updated dependencies" />
     <MESSAGE value="basic support" />
     <MESSAGE value="merge-feeds.component.html" />
-    <option name="LAST_COMMIT_MESSAGE" value="merge-feeds.component.html" />
+    <MESSAGE value="upgrade to latest feedless-core backend" />
+    <option name="LAST_COMMIT_MESSAGE" value="upgrade to latest feedless-core backend" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -703,7 +667,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/packages/playground/node_modules/@angular-devkit/build-angular/src/utils/webpack-browser-config.js</url>
-          <line>40</line>
+          <line>38</line>
           <option name="timeStamp" value="42" />
         </line-breakpoint>
       </breakpoints>

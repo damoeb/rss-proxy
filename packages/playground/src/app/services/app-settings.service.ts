@@ -24,9 +24,8 @@ export interface FeatureFlags {
 
 export interface ApiUrls {
   webToFeed: string;
-  standaloneFeed: string;
+  host: string;
   transformFeed: string;
-  explainFeed: string;
   discoverFeeds: string;
 }
 

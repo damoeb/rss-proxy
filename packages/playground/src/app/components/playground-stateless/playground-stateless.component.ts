@@ -142,6 +142,7 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
   phase: PlaygroundPhase;
   private busy = false;
   articleRecovery: ArticleRecovery = 'none';
+  showDebugMessages: boolean = false;
   includeFilter = '';
   excludeFilter = '';
   currentFeedId: string;
@@ -153,7 +154,6 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
   flags: FeatureFlags;
   applyDebounced: () => void;
   strictMode = true;
-  showAdvancedOptions = false;
   showFeedUrlModal: boolean;
   effectiveFeedUrl: PermanentFeed;
   copyFeedUrlButtonText = 'Copy Feed URL';
@@ -395,8 +395,8 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
     }
 
     const filter = [
-      ...parse(this.includeFilter).map((t) => `contains('${t}')`),
-      ...parse(this.excludeFilter).map((t) => `!(contains('${t}'))`),
+      ...parse(this.includeFilter).map((t) => `contains(#any, "${t}")`),
+      ...parse(this.excludeFilter).map((t) => `not(contains(#any, "${t}"))`),
     ].reduce((expr, query) => {
       if (expr) {
         return `and(${query}, ${expr})`;
@@ -411,7 +411,7 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
     };
   }
   private getCurrentFeed(): AnyFeed {
-    return find(this.allFeeds, { id: this.currentFeedId });
+    return find<AnyFeed>(this.allFeeds, { id: this.currentFeedId });
   }
   private getGenericParams(): GenericFeedWithParams {
     const currentFeed = this.getCurrentFeed();
@@ -419,6 +419,7 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
       ...currentFeed.genericFeed,
       ...this.getFeedWizardParams(),
       harvestUrl: this.url,
+      debug: this.showDebugMessages,
     };
   }
   private getNativeParams(): NativeFeedWithParams {
@@ -426,6 +427,7 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
     return {
       ...this.getFeedWizardParams(),
       feedUrl: currentFeed.nativeFeed.url,
+      debug: this.showDebugMessages,
     };
   }
   private handleResponse(response: any) {
@@ -469,18 +471,16 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
     if (currentFeed.genericFeed) {
       const genericParams = this.getGenericParams();
       genericParams.targetFormat = 'atom';
-      const url = this.feedService.createFeedUrlForGeneric(genericParams);
-      this.effectiveFeedUrl = await this.feedService.requestStandaloneFeedUrl(
-        url,
-      );
+      this.effectiveFeedUrl =
+        this.appSettings.get().urls.host +
+        this.feedService.createFeedUrlForGeneric(genericParams);
     }
     if (currentFeed.nativeFeed) {
       const nativeParams = this.getNativeParams();
       nativeParams.targetFormat = 'atom';
-      const url = this.feedService.createFeedUrlForNative(nativeParams);
-      this.effectiveFeedUrl = await this.feedService.requestStandaloneFeedUrl(
-        url,
-      );
+      this.effectiveFeedUrl =
+        this.appSettings.get().urls.host +
+        this.feedService.createFeedUrlForNative(nativeParams);
     }
     this.changeDetectorRef.detectChanges();
   }
@@ -495,6 +495,6 @@ export class PlaygroundStatelessComponent implements OnInit, OnDestroy {
       this.changeDetectorRef.detectChanges();
     }, 3000);
     this.changeDetectorRef.detectChanges();
-    return navigator.clipboard.writeText(this.effectiveFeedUrl.feedUrl);
+    return navigator.clipboard.writeText(this.effectiveFeedUrl);
   }
 }

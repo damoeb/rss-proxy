@@ -57,25 +57,17 @@ export class FeedUrlComponent implements OnInit, OnChanges {
 
   private async requestFeedUrl(): Promise<void> {
     this.loading = true;
-    const permanentFeedUrl = await this.requestPermanentFeedUrl();
-    this.actualFeedUrl = permanentFeedUrl.feedUrl;
+    this.actualFeedUrl = await this.requestPermanentFeedUrl();
     // this.message = permanentFeedUrl.message;
-    try {
-      this.feed = await this.feedService.explainFeed(this.actualFeedUrl);
-    } catch (e) {
-      console.error(e);
-    }
     this.loading = false;
   }
 
-  private requestPermanentFeedUrl(): Promise<PermanentFeed> {
+  private async requestPermanentFeedUrl(): Promise<PermanentFeed> {
     if (this.genericFeed) {
-      const url = this.feedService.createFeedUrlForGeneric(this.genericFeed);
-      return this.feedService.requestStandaloneFeedUrl(url);
+      return this.feedService.createFeedUrlForGeneric(this.genericFeed);
     }
     if (this.nativeFeed) {
-      const url = this.feedService.createFeedUrlForNative(this.nativeFeed);
-      return this.feedService.requestStandaloneFeedUrl(url);
+      return this.feedService.createFeedUrlForNative(this.nativeFeed);
     }
   }
 

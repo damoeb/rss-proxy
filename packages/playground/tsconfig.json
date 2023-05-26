@@ -10,15 +10,10 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "ES2022",
+    "target": "es2015",
     "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom",
-      "esnext.asynciterable"
-    ],
-    "allowSyntheticDefaultImports": true,
-    "useDefineForClassFields": false
+    "lib": ["es2018", "dom", "esnext.asynciterable"],
+    "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

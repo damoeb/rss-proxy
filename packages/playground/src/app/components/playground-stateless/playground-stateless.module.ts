@@ -10,16 +10,16 @@ import { FeedModule } from '../feed/feed.module';
 import { HeaderModule } from '../header/header.module';
 
 @NgModule({
-    declarations: [PlaygroundStatelessComponent],
-    exports: [PlaygroundStatelessComponent],
-    imports: [
-        CommonModule,
-        FormsModule,
-        RouterModule,
-        FooterModule,
-        SpinnerModule,
-        FeedModule,
-        HeaderModule,
-    ]
+  declarations: [PlaygroundStatelessComponent],
+  exports: [PlaygroundStatelessComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    FooterModule,
+    SpinnerModule,
+    FeedModule,
+    HeaderModule,
+  ],
 })
 export class PlaygroundStatelessModule {}

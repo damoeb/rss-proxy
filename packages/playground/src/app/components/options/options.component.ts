@@ -88,6 +88,7 @@ export class OptionsComponent implements OnInit {
   createNativeFeed(): NativeFeedWithParams {
     return {
       feedUrl: this.response.options.harvestUrl,
+      debug: false,
     };
   }
 }

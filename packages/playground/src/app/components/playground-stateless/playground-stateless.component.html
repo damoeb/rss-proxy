@@ -8,7 +8,7 @@
       class="textarea is-primary"
       style="height: 240px"
       readonly
-      [innerText]="effectiveFeedUrl?.feedUrl"
+      [innerText]="effectiveFeedUrl"
     >
     </textarea>
     <button
@@ -170,40 +170,26 @@
         </div>
       </div>
 
-      <!--      <div>-->
-      <!--        <button-->
-      <!--          class="button is-expanded is-small"-->
-      <!--          (click)="showAdvancedOptions = !showAdvancedOptions"-->
-      <!--        >-->
-      <!--          <span *ngIf="!showAdvancedOptions">Show &nbsp;</span>-->
-      <!--          <span *ngIf="showAdvancedOptions">Hide &nbsp;</span>-->
-      <!--          Nerd Options-->
-      <!--        </button>-->
-      <!--        <dl *ngIf="showAdvancedOptions">-->
-      <!--          <dt>Before</dt>-->
-      <!--          <dd>-->
-      <!--            <label class="checkbox">-->
-      <!--              <input-->
-      <!--                type="checkbox"-->
-      <!--                [ngModel]="prerendered"-->
-      <!--                (ngModelChange)="prerendered = !prerendered; parseUrl()"-->
-      <!--              />-->
-      <!--              Prerender in Puppeteer-->
-      <!--            </label>-->
-      <!--          </dd>-->
-      <!--          <dd>-->
-      <!--            <label class="checkbox">-->
-      <!--              <input-->
-      <!--                type="checkbox"-->
-      <!--                [ngModel]="strictMode"-->
-      <!--                (ngModelChange)="strictMode = !strictMode; parseUrl()"-->
-      <!--              />-->
-      <!--              Strict Mode-->
-      <!--            </label>-->
-      <!--          </dd>-->
-      <!--          &lt;!&ndash;          <dt>Rule</dt>&ndash;&gt;-->
-      <!--        </dl>-->
-      <!--      </div>-->
+      <div>
+        <div style="margin-bottom: 10px">
+          <label class="checkbox">
+            <input
+              type="checkbox"
+              [ngModel]="prerendered"
+              (ngModelChange)="prerendered = !prerendered"
+            />
+            Support JavaScript
+          </label>
+        </div>
+        <div *ngIf="prerendered" class="notification is-warning">
+          This feature is only available in feedless, please
+          <a
+            href="https://github.com/damoeb/feedless/blob/master/docs/third-party-migration.md"
+            target="_blank"
+            >migrate</a
+          >
+        </div>
+      </div>
 
       <!-- feeds -->
       <div class="field">
@@ -283,6 +269,21 @@
 
       <div style="flex: 1"></div>
 
+      <div class="field">
+        <label class="label" [ngClass]="{ 'is-primary': jsonFeed }"
+          >Debug</label
+        >
+        <div class="control">
+          <label
+            class="checkbox is-expanded"
+            [ngClass]="{ 'is-primary': jsonFeed }"
+          >
+            <input type="checkbox" [(ngModel)]="showDebugMessages" />
+            Include Error Messages
+          </label>
+        </div>
+      </div>
+
       <!-- recovery -->
       <div class="field">
         <label class="label" [ngClass]="{ 'is-primary': jsonFeed }"
@@ -300,16 +301,19 @@
             >
               <option value="none"></option>
               <option value="metadata">Use Page Metadata</option>
-              <option value="full" *ngIf="flags?.willExtractFulltext">
-                Use Page Fulltext
-              </option>
+              <option value="full">Use Page Fulltext</option>
             </select>
           </div>
           <div
             *ngIf="articleRecovery !== 'none'"
             class="notification is-warning"
           >
-            <strong>Note</strong>: Feed limited due to performance.
+            This feature needs a database, please
+            <a
+              href="https://github.com/damoeb/feedless/blob/master/docs/third-party-migration.md"
+              target="_blank"
+              >migrate to feedless</a
+            >
           </div>
         </div>
       </div>

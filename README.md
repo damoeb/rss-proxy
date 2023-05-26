@@ -2,58 +2,52 @@
 
 [![Build Status](https://app.travis-ci.com/damoeb/rss-proxy.svg?branch=master)](https://app.travis-ci.com/damoeb/rss-proxy)
 
-RSS-proxy 2+ allows you to do create an ATOM or JSON feed of almost static/dynamic websites or feeds (web to feed), 
-just by analyzing just the HTML structure. It is an alternative UI to [feedless](https://github.com/damoeb/feedless) with the intent for minimalistic self-hosting with a reduced feature set of feedless.
-If you want feature like fulltext feeds, aggregation, persistence, authentication and others, checkout [feedless](https://github.com/damoeb/feedless/blob/master/docs/third-party-migration.md)
+RSS-proxy allows you to do create an ATOM or JSON feed of any static website or feeds (web to feed), 
+just by analyzing just the HTML structure. It is an alternative UI to [feedless](https://github.com/damoeb/feedless) with a reduced feature set.
+If you want advanced features like fulltext feeds, aggregation, persistence, authentication and others, checkout [feedless](https://github.com/damoeb/feedless/blob/master/docs/third-party-migration.md)
 
 ![Playground](https://github.com/damoeb/rss-proxy/raw/master/docs/rssproxy-candidates.png "Playground")
 
-## Quickstart using docker-compose
+## Features
+- Web to Feed
+- Feed to Feed: pipe existing native feeds through `rss-proxy` to filter them
+- [Filters](https://github.com/damoeb/feedless/blob/master/docs/filters.md)
+- Self Hosting
 
-Version 2 comes with more complexity so its easier to run it from [docker-compose](https://docs.docker.com/compose/install/). If you run the proxy behind a reverse proxy,
-make sure you set the request header "X-Real-IP" (see [nginx.con](docs/nginx.conf)) for IP throttling.
+## Advanced Features
+If you look for features below, you have to use [feedless](https://github.com/damoeb/feedless), the successor of `rss-proxy`
+- Feed Aggregation
+- Authentication and multi-tenancy
+- JavaScript Support (prerendering)
+- Fulltext Feeds and other content enrichments
+- Persistence
+- CLI
+- GraphQL API
+- Plugins
 
-In `docker-compose.yml` change `APP_PUBLIC_URL` accordingly which is the outfacing public url.
+
+## Quickstart using docker
+If you have [docker](https://docs.docker.com/install/) or [podman](https://podman.io/getting-started/installation) installed, do this
 
 ```
-wget https://raw.githubusercontent.com/damoeb/rss-proxy/master/chrome.json
-wget https://raw.githubusercontent.com/damoeb/rss-proxy/master/docker-compose.yml
-docker-compose up
+docker pull damoeb/rss-proxy:2
+docker run -p 3000:3000 -e APP_API_GATEWAY_URL=https://foo.bar -it damoeb/rss-proxy
 ```
+
+`APP_API_GATEWAY_URL` is your outfacing url, which will be used as host for feeds you create.
 
 Then open [localhost:8080](http://localhost:8080) in the browser.
 
 
-## Quickstart Version 1 using docker
-
-Since v2 is still beta, this is the quickstart for version 1. If you have [docker](https://docs.docker.com/install/) or [podman](https://podman.io/getting-started/installation) installed,
-Start rss-proxy like this.
+## Legacy Version 1
+If you are interested in running the first prototype, this is how you do it.
 
 ```
-docker pull damoeb/rss-proxy
-docker run -p 3000:3000 -it damoeb/rss-proxy
+docker pull damoeb/rss-proxy:1
+docker run -p 3000:3000 -it damoeb/rss-proxy:1
 ```
 
 Then open [localhost:3000](http://localhost:3000) in the browser.
-
-## Features
-- Web to Feed
-- Dynamic Rendering using headless chromium
-- Filters
-- Feed Format Conversion Any -> ATOM/JSON
-
-## Migration from version 1
-Version 2 supports the old version 1 urls, though this is optional. You can deactivate this feature by removing the 'legacy' profile in docker-compose.yml.
-
-## Changelog
-
-See [changelog](changelog.md).
-
-
-## Related Projects
-
-* [rss-bridge](https://github.com/RSS-Bridge/rss-bridge)
-* [rss-guard](https://github.com/martinrotter/rssguard)
 
 ## License
 

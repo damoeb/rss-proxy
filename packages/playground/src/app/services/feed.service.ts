@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {firstValueFrom, Observable} from 'rxjs';
-import {ArticleRecovery} from '../components/playground/playground.component';
-import {JsonFeed} from '../components/feed/feed.component';
-import {ApiUrls, AppSettingsService} from './app-settings.service';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom, Observable } from 'rxjs';
+import { ArticleRecovery } from '../components/playground/playground.component';
+import { JsonFeed } from '../components/feed/feed.component';
+import { ApiUrls, AppSettingsService } from './app-settings.service';
 
 export interface Article {
   id: string;
@@ -51,12 +51,14 @@ export interface FeedWizardParams {
 
 export interface NativeFeedWithParams extends FeedWizardParams {
   feedUrl: string;
+  debug: boolean;
 }
 
 export interface GenericFeedWithParams
   extends GenericFeedRule,
     FeedWizardParams {
   harvestUrl: string;
+  debug: boolean;
 }
 
 export interface FeedDetectionOptions {
@@ -89,10 +91,7 @@ export interface FeedDetectionResponse {
 
 export type FeedFormat = 'atom' | 'rss' | 'json';
 
-export interface PermanentFeed {
-  feedUrl: string;
-  message: string;
-}
+export type PermanentFeed = string;
 
 @Injectable({
   providedIn: 'root',
@@ -105,7 +104,7 @@ export class FeedService {
   ) {
     settings.waitForInit.then(() => {
       this.urls = settings.get().urls;
-    })
+    });
   }
 
   discover(
@@ -114,7 +113,6 @@ export class FeedService {
     prerender = false,
     strictMode = false,
   ): Observable<FeedDetectionResponse> {
-    console.log('strictMode', strictMode);
     const parserUrl =
       this.urls.discoverFeeds +
       this.params({
@@ -152,6 +150,7 @@ export class FeedService {
       out: genericRule.targetFormat,
       pp: genericRule.prerendered,
       ppS: genericRule.puppeteerScript,
+      debug: genericRule.debug,
     });
     return `${this.urls.webToFeed}${search}`;
   }
@@ -161,6 +160,7 @@ export class FeedService {
       url: nativeFeed.feedUrl,
       re: nativeFeed.articleRecovery,
       q: nativeFeed.filter,
+      debug: nativeFeed.debug,
       out: nativeFeed.targetFormat || 'json',
     });
 
@@ -178,45 +178,11 @@ export class FeedService {
     }) as Observable<any>;
   }
 
-  explainFeed(feedUrl: string): Promise<JsonFeed> {
-    console.log('explain', feedUrl);
-    const explainUrl = `${this.urls.explainFeed}?feedUrl=${encodeURIComponent(
-      feedUrl,
-    )}`;
-    return firstValueFrom(
-      this.httpClient.get<JsonFeed>(explainUrl, {
-        withCredentials: true,
-      }),
-    );
-  }
-
-  // findRelated(query: string) {
-  //   const relatedUrl = `${this.urls}/api/feeds/query?q=${encodeURIComponent(
-  //     query,
-  //   )}`;
-  //   return firstValueFrom(
-  //     this.httpClient.get<JsonFeed[]>(relatedUrl, {
-  //       withCredentials: true,
-  //     }),
-  //   );
-  // }
-
   private params(param: { [key: string]: string | number | boolean }) {
     const search = Object.keys(param)
       .filter((k) => !!param[k])
       .map((k) => `${k}=${encodeURIComponent(param[k] ?? '')}`)
       .join('&');
     return '?' + search;
-  }
-
-  requestStandaloneFeedUrl(feedUrl: string): Promise<PermanentFeed> {
-    return firstValueFrom(
-      this.httpClient.get<PermanentFeed>(
-        `${this.urls.standaloneFeed}?url=${encodeURIComponent(feedUrl)}`,
-        {
-          withCredentials: true,
-        },
-      ),
-    );
   }
 }

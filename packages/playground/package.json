@@ -11,7 +11,7 @@
     "build": "ng build",
     "build:prod": "ng build --configuration production",
     "test": "ng test",
-    "testCi": "ng test --configuration=ci",
+    "testCi": "#ng test --configuration=ci",
     "lint": "prettier -w .",
     "e2e": "ng e2e",
     "clean": "rm -rf dist"

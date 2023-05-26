@@ -26,7 +26,6 @@ tasks.register("buildDockerImage", Exec::class) {
   // docker buildx ls
 //  commandLine("docker", "buildx", "build",
   commandLine("docker", "build",
-    "--build-arg", "PROXY_VERSION=${majorMinorPatch}-${gitHash}",
 //    "--platform=linux/amd64",
 //    "--platform=arm64v8",
     "-t", "${imageName}:${majorMinorPatch}",

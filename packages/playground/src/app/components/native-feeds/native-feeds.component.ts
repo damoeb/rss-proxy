@@ -27,6 +27,7 @@ export class NativeFeedsComponent implements OnInit {
   withParams(): NativeFeedWithParams {
     return {
       feedUrl: this.currentNativeFeed.url,
+      debug: false,
     };
   }
 }
