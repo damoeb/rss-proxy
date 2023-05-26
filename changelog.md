@@ -1,5 +1,11 @@
 # Changelog
 
+# 2.1.0 - 25.05.2023
+- Migrated to [feedless-core-0.1.1](./Dockerfile)
+- All endpoints changed from `/api/` to `/api/legacy`
+- Maintenance messages can be opted-in by passing `debug=true` in the url
+- No tokens are used anymore, just throttling, caching and [host protection](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429)
+
 ## 2.0.0 - 03.06.2022
 - Full rewrite in kotlin
 

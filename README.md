@@ -25,19 +25,23 @@ If you look for features below, you have to use [feedless](https://github.com/da
 - GraphQL API
 - Plugins
 
+# Changelog
+See [here](./changelog.md)
 
 ## Quickstart using docker
 If you have [docker](https://docs.docker.com/install/) or [podman](https://podman.io/getting-started/installation) installed, do this
 
 ```
-docker pull damoeb/rss-proxy:2
-docker run -p 3000:3000 -e APP_API_GATEWAY_URL=https://foo.bar -it damoeb/rss-proxy
+docker pull damoeb/rss-proxy:2.1
+docker run -p 3000:3000 -e APP_API_GATEWAY_URL=https://foo.bar -it damoeb/rss-proxy:2.1
 ```
 
 `APP_API_GATEWAY_URL` is your outfacing url, which will be used as host for feeds you create.
 
 Then open [localhost:8080](http://localhost:8080) in the browser.
 
+# Release Notes for Version 2
+- 
 
 ## Legacy Version 1
 If you are interested in running the first prototype, this is how you do it.

@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="f354cf1d-853a-464e-8e85-6575024551e6" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/changelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/changelog.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" afterDir="false" />
     </list>
     <list id="f638d3ef-7a6d-4052-aad1-f24fc9f0e590" name="ignore" comment="" />
