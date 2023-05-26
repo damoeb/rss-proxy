@@ -40,9 +40,6 @@ docker run -p 8080:8080 -e APP_API_GATEWAY_URL=https://foo.bar -it damoeb/rss-pr
 
 Then open [localhost:8080](http://localhost:8080) in the browser.
 
-# Release Notes for Version 2
-- 
-
 ## Legacy Version 1
 If you are interested in running the first prototype, this is how you do it.
 
