@@ -33,7 +33,7 @@ If you have [docker](https://docs.docker.com/install/) or [podman](https://podma
 
 ```
 docker pull damoeb/rss-proxy:2.1
-docker run -p 3000:3000 -e APP_API_GATEWAY_URL=https://foo.bar -it damoeb/rss-proxy:2.1
+docker run -p 8080:8080 -e APP_API_GATEWAY_URL=https://foo.bar -it damoeb/rss-proxy:2.1
 ```
 
 `APP_API_GATEWAY_URL` is your outfacing url, which will be used as host for feeds you create.
