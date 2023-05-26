@@ -3,7 +3,7 @@
 [![Build Status](https://app.travis-ci.com/damoeb/rss-proxy.svg?branch=master)](https://app.travis-ci.com/damoeb/rss-proxy)
 
 RSS-proxy allows you to do create an ATOM or JSON feed of any static website or feeds (web to feed), 
-just by analyzing just the HTML structure. It is an alternative UI to [feedless](https://github.com/damoeb/feedless) with a reduced feature set.
+just by analyzing just the HTML structure. [Try the demo](https://rssproxy.migor.org). It is an alternative UI to [feedless](https://github.com/damoeb/feedless) with a reduced feature set.
 If you want advanced features like fulltext feeds, aggregation, persistence, authentication and others, checkout [feedless](https://github.com/damoeb/feedless/blob/master/docs/third-party-migration.md)
 
 ![Playground](https://github.com/damoeb/rss-proxy/raw/master/docs/rssproxy-candidates.png "Playground")
@@ -33,7 +33,7 @@ If you have [docker](https://docs.docker.com/install/) or [podman](https://podma
 
 ```
 docker pull damoeb/rss-proxy:2.1
-docker run -p 3000:3000 -e APP_API_GATEWAY_URL=https://foo.bar -it damoeb/rss-proxy:2.1
+docker run -p 8080:8080 -e APP_API_GATEWAY_URL=https://foo.bar -it damoeb/rss-proxy:2.1
 ```
 
 `APP_API_GATEWAY_URL` is your outfacing url, which will be used as host for feeds you create.
