@@ -22,7 +22,8 @@ export class NativeOptionsComponent extends WizardComponent implements OnInit {
     super();
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.settings.waitForInit;
     this.stateless = this.settings.get().flags.stateless;
   }
 

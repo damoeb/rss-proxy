@@ -1,10 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { firstValueFrom, Observable } from 'rxjs';
-import { ArticleRecovery } from '../components/playground/playground.component';
-import { AuthService } from './auth.service';
-import { JsonFeed } from '../components/feed/feed.component';
-import { ApiUrls, AppSettingsService } from './app-settings.service';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {firstValueFrom, Observable} from 'rxjs';
+import {ArticleRecovery} from '../components/playground/playground.component';
+import {JsonFeed} from '../components/feed/feed.component';
+import {ApiUrls, AppSettingsService} from './app-settings.service';
 
 export interface Article {
   id: string;
@@ -99,13 +98,14 @@ export interface PermanentFeed {
   providedIn: 'root',
 })
 export class FeedService {
-  private readonly urls: ApiUrls;
+  private urls: ApiUrls;
   constructor(
     private readonly httpClient: HttpClient,
-    private readonly auth: AuthService,
     settings: AppSettingsService,
   ) {
-    this.urls = settings.get().urls;
+    settings.waitForInit.then(() => {
+      this.urls = settings.get().urls;
+    })
   }
 
   discover(

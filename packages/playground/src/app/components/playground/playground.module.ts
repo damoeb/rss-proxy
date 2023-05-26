@@ -13,20 +13,19 @@ import { SearchModule } from '../search/search.module';
 import { HeaderModule } from '../header/header.module';
 
 @NgModule({
-  declarations: [PlaygroundComponent],
-  exports: [PlaygroundComponent],
-  entryComponents: [PlaygroundComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    GenericFeedsModule,
-    NativeFeedsModule,
-    OptionsModule,
-    FooterModule,
-    SpinnerModule,
-    SearchModule,
-    HeaderModule,
-  ],
+    declarations: [PlaygroundComponent],
+    exports: [PlaygroundComponent],
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterModule,
+        GenericFeedsModule,
+        NativeFeedsModule,
+        OptionsModule,
+        FooterModule,
+        SpinnerModule,
+        SearchModule,
+        HeaderModule,
+    ]
 })
 export class PlaygroundModule {}

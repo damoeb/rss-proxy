@@ -31,6 +31,7 @@ export class FooterComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.buildInfo = build;
+    await this.settings.waitForInit;
     this.flags = this.settings.get().flags;
     this.changeDetectorRef.detectChanges();
 

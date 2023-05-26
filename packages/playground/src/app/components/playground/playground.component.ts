@@ -56,7 +56,7 @@ export class PlaygroundComponent implements OnInit {
     return localHistory ? JSON.parse(localHistory) : [];
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.resetAll();
     this.activatedRoute.queryParams.subscribe((params) => {
       if (params.url) {
@@ -65,6 +65,7 @@ export class PlaygroundComponent implements OnInit {
       }
     });
 
+    await this.settings.waitForInit;
     this.flags = this.settings.get().flags;
     this.changeDetectorRef.detectChanges();
   }

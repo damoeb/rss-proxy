@@ -53,7 +53,8 @@ export class PrerenderComponent implements OnInit, OnDestroy {
     window.URL.revokeObjectURL(this.imageUrl);
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.appSettings.waitForInit;
     this.flags = this.appSettings.get().flags;
     this.refresh();
   }

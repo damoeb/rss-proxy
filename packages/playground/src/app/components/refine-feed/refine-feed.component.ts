@@ -90,10 +90,11 @@ export class RefineFeedComponent implements OnInit {
     private readonly appSettings: AppSettingsService,
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.nativeFeed = clone(this.nativeFeedValue);
     this.genericFeed = clone(this.genericFeedValue);
 
+    await this.appSettings.waitForInit;
     this.flags = this.appSettings.get().flags;
     this.apply();
   }
