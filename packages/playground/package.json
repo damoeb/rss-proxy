@@ -1,6 +1,6 @@
 {
   "name": "@rss-proxy/playground",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "scripts": {
     "ng": "ng",
     "prestart": "npm run gen-build-info",
