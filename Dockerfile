@@ -1,5 +1,5 @@
-FROM damoeb/feedless:core-0.1.1
-ENV APP_AUTHENTICATION=root \
+FROM damoeb/feedless:core-0.1.3
+ENV APP_AUTHENTICATION=authRoot \
     APP_JWT_SECRET=password \
     APP_HOST_URL=http://localhost:8080 \
     APP_ACTUATOR_PASSWORD=password \
