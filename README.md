@@ -1,34 +1,31 @@
 # RSS-proxy 
 
-[![Build Status](https://app.travis-ci.com/damoeb/rss-proxy.svg?branch=master)](https://app.travis-ci.com/damoeb/rss-proxy)
-
 RSS-proxy allows you to do create an ATOM or JSON feed of any static website or feeds (web to feed), 
-just by analyzing just the HTML structure. [Try the demo](https://rssproxy.migor.org). It is an alternative UI to [feedless](https://github.com/damoeb/feedless) with a reduced feature set.
-If you want advanced features like fulltext feeds, aggregation, persistence, authentication and others, checkout [feedless](https://github.com/damoeb/feedless/blob/master/docs/third-party-migration.md)
+just by analyzing just the HTML structure. [Try the demo](https://rssproxy.migor.org). It is a vertical of [feedless](https://github.com/damoeb/feedless), hence for simplicity all sources are co-located in the [feedless repository](https://github.com/damoeb/feedless/tree/develop/packages/app-web/src/app/products/rss-builder.
 
-![Playground](https://github.com/damoeb/rss-proxy/raw/master/docs/rssproxy-candidates.png "Playground")
+[![Watch the video](screenshot.png)](https://www.youtube.com/watch?v=PolMYwBVmzc)
 
 ## Features
 - Web to Feed
-- Feed to Feed: pipe existing native feeds through `rss-proxy` to filter them
 - [Filters](https://github.com/damoeb/feedless/blob/master/docs/filters.md)
+- Custom feed parser rules
+- Pre-rendering in chromium
 - Self Hosting
 
-## Advanced Features
-If you look for features below, you have to use [feedless](https://github.com/damoeb/feedless), the successor of `rss-proxy`
-- Feed Aggregation
-- Authentication and multi-tenancy
-- JavaScript Support (prerendering)
-- Fulltext Feeds and other content enrichments
-- Persistence
-- CLI
-- GraphQL API
-- Plugins
+## Version 3.x (Latest)
 
-# Changelog
-See [here](./changelog.md)
+```
+wget https://raw.githubusercontent.com/damoeb/rss-proxy/master/selfhosting.env \
+     https://raw.githubusercontent.com/damoeb/rss-proxy/master/docker-compose.yml \
+     https://raw.githubusercontent.com/damoeb/rss-proxy/master/chrome.json
 
-## Quickstart using docker
+docker-compose up
+
+```
+
+## Version 2.x
+This version was written in kotlin and angular.
+
 If you have [docker](https://docs.docker.com/install/) or [podman](https://podman.io/getting-started/installation) installed, do this
 
 ```
@@ -40,7 +37,9 @@ docker run -p 8080:8080 -e APP_API_GATEWAY_URL=https://foo.bar -it damoeb/rss-pr
 
 Then open [localhost:8080](http://localhost:8080) in the browser.
 
-## Legacy Version 1
+## Version 1.x
+This was the prototype, written in node and angular. 
+
 If you are interested in running the first prototype, this is how you do it.
 
 ```
@@ -52,4 +51,4 @@ Then open [localhost:3000](http://localhost:3000) in the browser.
 
 ## License
 
-This project uses the following license: [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html).
+This project is licenced under [FSL](https://fsl.software) according to [feedless](https://github.com/damoeb/feedless)

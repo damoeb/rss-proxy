@@ -5,10 +5,220 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f354cf1d-853a-464e-8e85-6575024551e6" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/docker/feedless/config.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rss-proxy-selfhosted.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/screenshot.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dockerignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.editorconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/changelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/changelog.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-info.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/changelog.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/loki/loki.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/prometheus/prometheus.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/js-support.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/nginx.conf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/rssproxy-candidates.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/text filter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/yahoo pipes.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/.prettierignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/.prettierrc.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/angular.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/browserslist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/build-info.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/build.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/e2e/protractor.conf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/e2e/src/app.e2e-spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/e2e/src/app.po.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/e2e/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/karma.conf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/proxy.conf.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/ads.txt" beforeDir="false" afterPath="$PROJECT_DIR$/meta.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app-routing.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/app.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/convert-format/convert-format.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/convert-format/convert-format.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/convert-format/convert-format.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/convert-format/convert-format.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/convert-format/convert-format.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/dot/dot.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/dot/dot.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/dot/dot.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/dot/dot.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/dot/dot.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/export-options/export-options.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/export-options/export-options.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/export-options/export-options.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/export-options/export-options.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/export-options/export-options.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed-url/feed-url.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed-url/feed-url.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed-url/feed-url.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed-url/feed-url.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed-url/feed-url.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed/feed.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed/feed.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed/feed.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed/feed.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/feed/feed.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/footer/footer.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/footer/footer.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/footer/footer.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/footer/footer.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/footer/footer.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/generic-feeds/generic-feeds.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/generic-feeds/generic-feeds.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/generic-feeds/generic-feeds.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/generic-feeds/generic-feeds.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/generic-feeds/generic-feeds.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/header/header.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/header/header.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/header/header.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/header/header.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/header/header.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/help-message/help-message.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/help-message/help-message.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/help-message/help-message.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/help-message/help-message.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/help-message/help-message.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/native-feeds/native-feeds.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/native-feeds/native-feeds.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/native-feeds/native-feeds.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/native-feeds/native-feeds.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/native-feeds/native-feeds.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/native-options/native-options.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/options/options.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground-stateless/playground-stateless.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground-stateless/playground-stateless.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground-stateless/playground-stateless.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground-stateless/playground-stateless.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground-stateless/playground-stateless.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/playground/playground.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/prerender/prerender.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/prerender/prerender.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/prerender/prerender.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/prerender/prerender.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/prerender/prerender.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/publish-feed/publish-feed.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/publish-feed/publish-feed.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/publish-feed/publish-feed.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/publish-feed/publish-feed.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/publish-feed/publish-feed.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push-options/push-options.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push-options/push-options.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push-options/push-options.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push-options/push-options.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push-options/push-options.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-as-email/push-as-email.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-as-email/push-as-email.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-as-email/push-as-email.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-as-email/push-as-email.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-as-email/push-as-email.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-as-webhook/push-as-webhook.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-as-webhook/push-as-webhook.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-as-webhook/push-as-webhook.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-as-webhook/push-as-webhook.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-as-webhook/push-as-webhook.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-to-mobile/push-to-mobile.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-to-mobile/push-to-mobile.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-to-mobile/push-to-mobile.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-to-mobile/push-to-mobile.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-to-mobile/push-to-mobile.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-to-web/push-to-web.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-to-web/push-to-web.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-to-web/push-to-web.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-to-web/push-to-web.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-to-web/push-to-web.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-updates/push-updates.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-updates/push-updates.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-updates/push-updates.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-updates/push-updates.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/push/push-updates/push-updates.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/refine-feed/refine-feed.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/refine-feed/refine-feed.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/refine-feed/refine-feed.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/refine-feed/refine-feed.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/refine-feed/refine-feed.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/search/search.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/section/section.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/section/section.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/section/section.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/section/section.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/section/section.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/spinner/spinner.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/spinner/spinner.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/spinner/spinner.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/spinner/spinner.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/spinner/spinner.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/watch-page-change/watch-page-change.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/watch-page-change/watch-page-change.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/watch-page-change/watch-page-change.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/watch-page-change/watch-page-change.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/components/watch-page-change/watch-page-change.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/services/app-settings.service.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/services/app-settings.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/services/feed.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/app/wizard.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/assets/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/assets/arrow.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/assets/browser.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/assets/rss_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/assets/rssproxy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/assets/x.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/build.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/environment.prod.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/environment.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/environments/rss-proxy-environment.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/main.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/polyfills.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/robots.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/sitemap.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/styles.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/test.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/src/variables.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/tsconfig.app.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/tsconfig.spec.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/tslint.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/playground/yarn.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tasks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tokenSecret.txt" beforeDir="false" />
     </list>
     <list id="f638d3ef-7a6d-4052-aad1-f24fc9f0e590" name="ignore" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -72,6 +282,12 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="GoLibraries">
+    <option name="indexEntireGoPath" value="true" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="1bAP1fgOtOgpSalYPrtIlKkRt5d" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="false" id="Update" />
@@ -80,12 +296,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "SONARLINT_PRECOMMIT_ANALYSIS": "false",
-    "node.js.selected.package.tslint": "(autodetect)"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/damoeb/dev/private/rss-it&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="Push.Settings">
     <force-push-targets>
       <force-push-target remote-path="origin" branch="feature/viz" />
@@ -93,11 +318,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/docker/feedless" />
       <recent name="$PROJECT_DIR$/packages/playground/src/app" />
       <recent name="$PROJECT_DIR$/packages/playground/src/app/services" />
       <recent name="$PROJECT_DIR$/packages/playground/src/app/components" />
-      <recent name="$PROJECT_DIR$/packages/playground/src/app/components/refine" />
-      <recent name="$PROJECT_DIR$/packages/proxy/src/endpoints" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/packages/playground/src/app/components" />
@@ -267,6 +492,15 @@
       <workItem from="1654030815939" duration="1075000" />
       <workItem from="1654031907891" duration="26522000" />
       <workItem from="1654176527908" duration="36670000" />
+      <workItem from="1686128157541" duration="569000" />
+      <workItem from="1688465615820" duration="34000" />
+      <workItem from="1711317321816" duration="829000" />
+      <workItem from="1711375866498" duration="896000" />
+      <workItem from="1711378159099" duration="814000" />
+      <workItem from="1711440117621" duration="267000" />
+      <workItem from="1711543270329" duration="237000" />
+      <workItem from="1711543768061" duration="82000" />
+      <workItem from="1711628482736" duration="350000" />
     </task>
     <task id="LOCAL-00017" summary="better logging">
       <created>1585428585627</created>
@@ -656,6 +890,10 @@
     <MESSAGE value="merge-feeds.component.html" />
     <MESSAGE value="upgrade to latest feedless-core backend" />
     <option name="LAST_COMMIT_MESSAGE" value="upgrade to latest feedless-core backend" />
+  </component>
+  <component name="VgoProject">
+    <integration-enabled>false</integration-enabled>
+    <settings-migrated>true</settings-migrated>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
