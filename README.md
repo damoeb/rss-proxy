@@ -1,9 +1,10 @@
 # RSS-proxy 
 
 RSS-proxy allows you to do create an ATOM or JSON feed of any static website or feeds (web to feed), 
-just by analyzing just the HTML structure. [Try the demo](https://rssproxy.migor.org). It is a vertical of [feedless](https://github.com/damoeb/feedless), hence for simplicity all sources are co-located in the [feedless repository](https://github.com/damoeb/feedless/tree/develop/packages/app-web/src/app/products/rss-builder.
+just by analyzing just the HTML structure.
+[Try the demo](https://rssproxy.migor.org). It is based on [feedless](https://github.com/damoeb/feedless), hence for simplicity all sources are co-located in the [feedless repository](https://github.com/damoeb/feedless/tree/develop/packages/app-web/src/app/products/rss-builder).
 
-[![Watch the video](screenshot.png)](https://www.youtube.com/watch?v=PolMYwBVmzc)
+[![Watch the video](screenshot.png)]()
 
 ## Features
 - Web to Feed
@@ -11,16 +12,18 @@ just by analyzing just the HTML structure. [Try the demo](https://rssproxy.migor
 - Custom feed parser rules
 - Pre-rendering in chromium
 - Self Hosting
+- Source Available
 
 ## Version 3.x (Latest)
 
-```
-wget https://raw.githubusercontent.com/damoeb/rss-proxy/master/selfhosting.env \
-     https://raw.githubusercontent.com/damoeb/rss-proxy/master/docker-compose.yml \
-     https://raw.githubusercontent.com/damoeb/rss-proxy/master/chrome.json
+Once you have [docker-compose](https://docs.docker.com/compose/install/) or [podman-compose](https://docs.podman.io/en/latest/markdown/podman-compose.1.html), here is the basic setup.
+It will start a database and feedless serving the RSS Proxy user interface.
+```bash
+wget https://raw.githubusercontent.com/damoeb/rss-proxy/master/selfhosting.env \ 
+https://raw.githubusercontent.com/damoeb/rss-proxy/master/docker-compose.yml \ 
+https://raw.githubusercontent.com/damoeb/rss-proxy/master/chrome.json
 
 docker-compose up
-
 ```
 
 ## Version 2.x
@@ -51,4 +54,4 @@ Then open [localhost:3000](http://localhost:3000) in the browser.
 
 ## License
 
-This project is licenced under [FSL](https://fsl.software) according to [feedless](https://github.com/damoeb/feedless)
+RSS-proxy is released under non-competitive FSL license, that falls back to Open Source Apache 2 after two years ([FSL-1.0-Apache-2.0](https://fsl.software/)).
