@@ -1,9 +1,9 @@
 # {{apps.rss-proxy.title}} 
 
-{{ apps.rss-proxy.description }}
+{{ apps.rss-proxy.descriptionMarkdown }}
 [Try the demo](https://rssproxy.migor.org). It is based on [feedless](https://github.com/damoeb/feedless), hence for simplicity all sources are co-located in the [feedless repository](https://github.com/damoeb/feedless/tree/develop/packages/app-web/src/app/products/rss-builder).
 
-[![Watch the video](screenshot.png)]({{{videoUrl}}})
+[![Watch the video](screenshot.png)]({{{apps.rss-proxy.videoUrl}}})
 
 ## Features
 {{#apps.rss-proxy.features}}
