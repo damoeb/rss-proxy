@@ -6,26 +6,28 @@ services:
 
   postgres:
     image: postgres:15
-    container_name: postgres
     restart: unless-stopped
     env_file:
-      - rss-proxy-selfhosted.env
+      - selfhosting.env
     expose:
       - 5432
     networks:
       - postgres
 
-  rss-proxy:
-    image: damoeb/feedless:aio-chromium-0.3
+  feedless-aio-chromium:
+    image: damoeb/feedless:aio-chromium-94064b6fb68a0fd55af2eb689812d4a71f01cfa2
     restart: unless-stopped
     depends_on:
       - postgres
     ports:
       - "8080:8080"
+    volumes:
+      - ./docker/feedless/ui-config.json:/usr/feedless/public/config.json
+      - ./your-license.key:/usr/feedless/license.key:rw
     security_opt:
       - seccomp=./chrome.json
     env_file:
-      - rss-proxy-selfhosted.env
+      - selfhosting.env
     networks:
       - postgres
 

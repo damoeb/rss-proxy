@@ -9,3 +9,5 @@ dist
 build
 *.iml
 
+teaser
+your-license.key
