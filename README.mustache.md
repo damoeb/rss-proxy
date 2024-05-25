@@ -13,7 +13,11 @@
 ## Version 3.x (Latest)
 
 {{{localSetup}}}
-{{{apps.rss-proxy.localSetup}}}
+{{{apps.rss-proxy.localSetupBeforeMarkup}}}
+```bash
+{{{apps.rss-proxy.localSetupBash}}}
+```
+{{{apps.rss-proxy.localSetupAfterMarkup}}}
 
 ## Version 2.x
 This version was written in kotlin and angular.

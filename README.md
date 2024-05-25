@@ -20,14 +20,13 @@ just by analyzing just the HTML structure. Usually the structuring to a feed wor
 Once you have [docker-compose](https://docs.docker.com/compose/install/) or [podman-compose](https://docs.podman.io/en/latest/markdown/podman-compose.1.html), here is the basic setup.
 It will start a database and feedless serving the RSS Proxy user interface.
 ```bash
-
 wget https://raw.githubusercontent.com/damoeb/rss-proxy/develop/selfhosting.env \
   https://raw.githubusercontent.com/damoeb/rss-proxy/develop/docker-compose.yml \
+  https://raw.githubusercontent.com/damoeb/rss-proxy/develop/ui-config.json \
   https://raw.githubusercontent.com/damoeb/rss-proxy/develop/chrome.json
 touch your-license.key
 docker-compose up
 ```
-
 Then, open http://localhost:8080 in your browser
 
 ## Version 2.x

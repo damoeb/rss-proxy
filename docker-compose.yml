@@ -15,7 +15,7 @@ services:
       - postgres
 
   feedless-aio-chromium:
-    image: damoeb/feedless:aio-chromium-94064b6fb68a0fd55af2eb689812d4a71f01cfa2
+    image: damoeb/feedless:aio-chromium-8d4c166c87866e022154952e644de992645d32ae
     restart: unless-stopped
     depends_on:
       - postgres
