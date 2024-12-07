@@ -28,7 +28,7 @@ If you look for features below, you have to use [feedless](https://github.com/da
 # Changelog
 See [here](./changelog.md)
 
-## Quickstart using docker
+## Quickstart installation using docker
 If you have [docker](https://docs.docker.com/install/) or [podman](https://podman.io/getting-started/installation) installed, do this
 
 ```
@@ -39,6 +39,12 @@ docker run -p 8080:8080 -e APP_API_GATEWAY_URL=https://foo.bar -it damoeb/rss-pr
 `APP_API_GATEWAY_URL` is your outfacing url, which will be used as host for feeds you create.
 
 Then open [localhost:8080](http://localhost:8080) in the browser.
+
+## Understanding Docker requirements
+For RSS-Proxy to work with your Docker environment, you must ensure :
+- that you expose port 8080 on the container
+- that the rss-proxy container share a common network with the RSS reader app you are (probably self-hosting). The Docker `bridge` network is native to Docker in order to allow you to connect two containers on the same network.
+- then you need to personalize the `APP_API_GATEWAY_URL` : it must point to the IP of rss-proxy on the shared network selected and the container opened port (e.g : 192.172.0.3:8080). If you have a your rss-proxy runs under a named address you can simply point to that named address
 
 ## Legacy Version 1
 If you are interested in running the first prototype, this is how you do it.
